@@ -1,0 +1,123 @@
+FUNCTION Init
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION OpenUrl
+ ARG url
+  TYPE string
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION ExecuteUrl
+ ARG url
+  TYPE string
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION ButtonOrder
+ ARG order
+  TYPE int
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION RunAsUser
+ ARG user
+  TYPE string
+ ENDARG
+ ARG command
+  TYPE string
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION SuspendScreensaving
+ ARG suspend
+  TYPE bool
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION MailTo
+ ARG subject
+  TYPE string
+ ENDARG
+ ARG body
+  TYPE string
+ ENDARG
+ ARG to
+  TYPE string
+ ENDARG
+ ARG cc
+  TYPE string
+ ENDARG
+ ARG bcc
+  TYPE string
+ ENDARG
+ ARG attachments
+  TYPE stringlist
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION LocalFile
+ ARG remote
+  TYPE string
+ ENDARG
+ ARG local
+  TYPE string
+ ENDARG
+ ARG allow_download
+  TYPE bool
+ ENDARG
+ ARG result
+  TYPE string
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION UploadFile
+ ARG local
+  TYPE string
+ ENDARG
+ ARG file
+  TYPE string
+ ENDARG
+ ARG remove_local
+  TYPE bool
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
+FUNCTION RemoveTemporaryLocalFile
+ ARG local
+  TYPE string
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION

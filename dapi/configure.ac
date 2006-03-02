@@ -1,0 +1,32 @@
+AC_INIT([DAPI], [0.01], [l.lunak@suse.cz], [dapi])
+AC_CONFIG_SRCDIR([doc/API.txt])
+AC_CONFIG_HEADER(config.h)
+AM_INIT_AUTOMAKE
+AM_MAINTAINER_MODE
+
+AC_PROG_CC
+AC_HEADER_STDC
+AC_PROG_CXX
+AC_PROG_LIBTOOL
+AC_PROG_INSTALL
+
+CFLAGS="$CFLAGS -Werror"
+CXXFLAGS="$CXXFLAGS -Werror"
+
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(CPPFLAGS)
+AC_SUBST(LDFLAGS)
+
+AC_PATH_XTRA
+AC_CHECK_HEADERS(X11/extensions/dpms.h,
+    AC_DEFINE(HAVE_DPMS, 1, [Set if DPMS is available]),,
+    [#include <X11/Xlib.h>])
+
+AC_CONFIG_FILES([
+Makefile
+lib/Makefile
+tests/Makefile
+generic/Makefile
+])
+AC_OUTPUT

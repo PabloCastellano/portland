@@ -1,0 +1,16 @@
+DESIGN:
+- mit nejake cislo verze protokolu?
+    - kdyz ne, nepujde potom vubec zmenit protokol
+    - kdyz ano, jak se bude resit novejsi klient nez daemon?
+- popsat v nejakem doc wire format
+- docs: DESIGN, HOWTO, API, WIRE, C-API
+- generator zatim nechat jak je, jestli se nekomu chce, at ho predela
+    - ty generovane veci asi dat do CVS
+
+CODE:
+- podivat se na ty TODO
+- pridat WId okna do nekterych callu? nebo user timestamp?
+- asi by to chtelo ty zapisy do sockety bud atomicky, nebo nejak resit cteni po castech?
+    - nejspis mit delku cele zpravy v hlavicce a precist ten blok do bufferu, zbytek cist odtamtud
+- pouzit nejaky caching pro cteni settings - at neni roundtrip pro kazde nastaveni
+    - plus updates budou muset byt reseny pomoci daemon->app zprav

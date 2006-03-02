@@ -1,0 +1,107 @@
+Init() -> ( bool ok )
+=====================
+Needs to be the very first call performed. If the call fails, no API can be used.
+
+ok: if false, initialization failed
+
+
+OpenUrl( string url ) -> ( bool ok )
+====================================
+
+Opens the given URL in the default web browser.
+
+url: UTF8-encoded url to open
+ok: if false, the url wasn't opened
+
+
+ExecuteUrl( string url ) -> ( bool ok )
+=======================================
+
+Opens the given url in the default application for the file (image viewer for image, etc.)
+
+url: UTF8-encoded url to open
+ok: if false, the file wasn't opened
+
+
+ButtonOrder() -> ( int order )
+==============================
+
+Returns the system button order.
+
+order: 0 - error
+       1 - Ok/Cancel
+       2 - Cancel/Ok
+
+
+RunAsUser( string user, string command ) -> ( bool ok )
+=======================================================
+
+Executes the given command as a different user.
+
+user: username as UTF8-encoded string or empty for superuser
+command: UTF8-encoded command to execute
+ok: if false, the command wasn't executed
+
+
+SuspendScreensaving( bool suspend ) -> ( bool ok )
+==================================================
+
+Suspends or resumes screensaving.
+
+suspend: whether to suspend screensaving
+ok: if false, suspending failed
+
+
+MailTo( string subject, string body, string to, string cc, string bcc, stringlist attachments ) -> ( bool ok )
+===============================================================================================
+
+Opens a window for composing mail in the default mail client.
+
+subject: mail subject or empty
+body: mail body or empty
+to: mail's To:, multiple entries are separated using commas, may be empty
+to: mail's CC:, multiple entries are separated using commas, may be empty
+to: mail's BCC:, multiple entries are separated using commas, may be empty
+attachments: a list of UTF8-encoded files to be attached to the mail
+
+
+LocalFile( string url, string local, bool allow_download ) -> ( string result )
+=================================================================
+
+Converts a file URL to a local file location, downloading the remote file
+if necessary and allowed. The URL may be already a local file in which
+case it will be simply returned.
+
+file: UTF8-encoded URL or path of the file to convert to local file
+allow_download: If the file URL doesn't point to a local file, it will be downloaded
+    to a temporary local file if allow_download is true
+local: UTF8-encoded filename of a local file that should be used as a temporary file
+    in case of downloading; if empty, then a random temporary file is used and it needs
+    to be eventually removed using RemoveTemporaryLocalFile; note that if the source
+    file already is a local file, then its path will be returned and this field will
+    be ignored
+result: UTF8-encoded filename of the resulting local file, may be equal to the source file
+
+
+UploadFile( string local, string file, bool remove_local ) -> ( bool ok )
+=========================================================================
+
+Uploads local file to its URL location. This function is a complement for LocalFile
+to save a temporary file to its real location after it's been changed. In case
+the destination is a local file then this call successfully returns without doing anything.
+
+local: UTF8-encoded filename of a temporary file obtained from LocalFile
+file: UTF8-encoded URL or path of the location where to save the file to
+remove_local: if true, equivalent to calling RemoveTemporaryLocalFile with the local
+    file after this call
+ok: if false, the upload failed
+
+RemoveTemporaryLocalFile( string local ) -> ( bool ok )
+=======================================================
+
+Removes a temporary local file created by LocalFile (only works it LocalFile had
+to create a random temporary file itself). This call doesn't affect files that
+haven't been created by LocalFile.
+
+local: UTF8-encoded filename of a temporary file to be removed
+ok: if false, the removal failed
