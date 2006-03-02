@@ -1,6 +1,6 @@
 AC_INIT([DAPI], [0.01], [l.lunak@suse.cz], [dapi])
 AC_CONFIG_SRCDIR([doc/API.txt])
-AC_CONFIG_HEADER(config.h)
+AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
 AM_MAINTAINER_MODE
 
