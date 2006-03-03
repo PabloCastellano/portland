@@ -188,7 +188,9 @@ void dapi_close( DapiConnection* conn )
 
 static int getNextSeq( DapiConnection* conn )
     {
-    return ++conn->last_seq;
+    if( ++conn->last_seq == 0 ) // 0 means invalid
+        ++conn->last_seq;
+    return conn->last_seq;
     }
 
 static char* readString( DapiConnection* conn, int len )
