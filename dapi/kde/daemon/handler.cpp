@@ -167,27 +167,31 @@ void KDapiHandler::processCommandCapabilities( ConnectionData& conn, int seq )
 void KDapiHandler::processCommandOpenUrl( ConnectionData& conn, int seq )
     {
     char* url;
-    if( !dapi_readCommandOpenUrl( conn.conn, &url ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandOpenUrl( conn.conn, &url, &winfo ))
         {
         closeSocket( conn );
         return;
         }
-    kapp->invokeBrowser( url );
+    kapp->invokeBrowser( url, makeStartupInfo( winfo ));
     dapi_writeReplyOpenUrl( conn.conn, seq, 1 );
     free( url );
+    dapi_freeWindowInfo( winfo );
     }
 
 void KDapiHandler::processCommandExecuteUrl( ConnectionData& conn, int seq )
     {
     char* url;
-    if( !dapi_readCommandExecuteUrl( conn.conn, &url ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandExecuteUrl( conn.conn, &url, &winfo ))
         {
         closeSocket( conn );
         return;
         }
-    new KRun( url );
+    new KRun( url ); // TODO startup info
     dapi_writeReplyExecuteUrl( conn.conn, seq, 1 );
     free( url );
+    dapi_freeWindowInfo( winfo );
     }
 
 void KDapiHandler::processCommandButtonOrder( ConnectionData& conn, int seq )
@@ -206,12 +210,13 @@ void KDapiHandler::processCommandRunAsUser( ConnectionData& conn, int seq )
     {
     char* user;
     char* command;
-    if( !dapi_readCommandRunAsUser( conn.conn, &user, &command ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandRunAsUser( conn.conn, &user, &command, &winfo ))
         {
         closeSocket( conn );
         return;
         }
-    KProcess proc;
+    KProcess proc; // TODO startup info
     proc.setUseShell( true ); // TODO quoting
     proc << "kdesu";
     if( user[ 0 ] != '\0' )
@@ -221,6 +226,7 @@ void KDapiHandler::processCommandRunAsUser( ConnectionData& conn, int seq )
     dapi_writeReplyRunAsUser( conn.conn, seq, ret ? 1 : 0 );
     free( user );
     free( command );
+    dapi_freeWindowInfo( winfo );
     }
 
 void KDapiHandler::processCommandSuspendScreensaving( ConnectionData& conn, int seq )
@@ -267,7 +273,8 @@ void KDapiHandler::processCommandMailTo( ConnectionData& conn, int seq )
     char* cc;
     char* bcc;
     stringarr attachments;
-    if( !dapi_readCommandMailTo( conn.conn, &subject, &body, &to, &cc, &bcc, &attachments ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandMailTo( conn.conn, &subject, &body, &to, &cc, &bcc, &attachments, &winfo ))
         {
         closeSocket( conn );
         return;
@@ -278,7 +285,7 @@ void KDapiHandler::processCommandMailTo( ConnectionData& conn, int seq )
          ++i )
         attachurls.append( QString::fromUtf8( attachments.data[ i ] ));
     kapp->invokeMailer( QString::fromUtf8( to ), QString::fromUtf8( cc ), QString::fromUtf8( bcc ),
-        QString::fromUtf8( subject ), QString::fromUtf8( body ), QString(), attachurls );
+        QString::fromUtf8( subject ), QString::fromUtf8( body ), QString(), attachurls, makeStartupInfo( winfo ));
     dapi_writeReplyMailTo( conn.conn, seq, 1 );
     free( subject );
     free( body );
@@ -286,6 +293,7 @@ void KDapiHandler::processCommandMailTo( ConnectionData& conn, int seq )
     free( cc );
     free( bcc );
     dapi_freestringarr( attachments );
+    dapi_freeWindowInfo( winfo );
     }
 
 void KDapiHandler::processCommandLocalFile( ConnectionData& conn, int seq )
@@ -293,7 +301,8 @@ void KDapiHandler::processCommandLocalFile( ConnectionData& conn, int seq )
     char* file;
     char* local;
     int allow_download;
-    if( !dapi_readCommandLocalFile( conn.conn, &file, &local, &allow_download ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandLocalFile( conn.conn, &file, &local, &allow_download, &winfo ))
         {
         closeSocket( conn );
         return;
@@ -313,6 +322,7 @@ void KDapiHandler::processCommandLocalFile( ConnectionData& conn, int seq )
             result = target;
         }
     dapi_writeReplyLocalFile( conn.conn, seq, result.utf8());
+    dapi_freeWindowInfo( winfo );
     }
 
 void KDapiHandler::processCommandUploadFile( ConnectionData& conn, int seq )
@@ -320,7 +330,8 @@ void KDapiHandler::processCommandUploadFile( ConnectionData& conn, int seq )
     char* local;
     char* file;
     int remove_local;
-    if( !dapi_readCommandUploadFile( conn.conn, &local, &file, &remove_local ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandUploadFile( conn.conn, &local, &file, &remove_local, &winfo ))
         {
         closeSocket( conn );
         return;
@@ -346,6 +357,7 @@ void KDapiHandler::processCommandUploadFile( ConnectionData& conn, int seq )
             }
         }
     dapi_writeReplyUploadFile( conn.conn, seq, ok );
+    dapi_freeWindowInfo( winfo );
     }
 
 void KDapiHandler::processCommandRemoveTemporaryLocalFile( ConnectionData& conn, int seq )
@@ -359,4 +371,20 @@ void KDapiHandler::processCommandRemoveTemporaryLocalFile( ConnectionData& conn,
     KIO::NetAccess::removeTempFile( QString::fromUtf8( file ));
     dapi_writeReplyRemoveTemporaryLocalFile( conn.conn, seq, 1 );
     free( file );
+    }
+
+QCString KDapiHandler::makeStartupInfo( const DapiWindowInfo& winfo )
+    {
+    WId window = winfo.window;
+    if( window != 0 )
+        {
+        // TODO for the window !=0 case KStartupInfo API needs to be extended to accept
+        // external timestamp for creating new startup info
+        kapp->updateUserTimestamp();
+        }
+    else
+        {
+        kapp->updateUserTimestamp();
+        }
+    return KStartupInfo::createNewStartupId();
     }

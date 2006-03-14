@@ -34,11 +34,12 @@ int dapi_callbackCapabilities( DapiConnection* conn, dapi_Capabilities_callback 
     return seq;
     }
 
-int dapi_callbackOpenUrl( DapiConnection* conn, const char* url, dapi_OpenUrl_callback callback )
+int dapi_callbackOpenUrl( DapiConnection* conn, const char* url, DapiWindowInfo winfo,
+    dapi_OpenUrl_callback callback )
     {
     int seq;
     DapiCallbackData* call;
-    seq = dapi_writeCommandOpenUrl( conn, url );
+    seq = dapi_writeCommandOpenUrl( conn, url, winfo );
     if( seq == 0 )
         return 0;
     call = malloc( sizeof( *call ));
@@ -52,11 +53,12 @@ int dapi_callbackOpenUrl( DapiConnection* conn, const char* url, dapi_OpenUrl_ca
     return seq;
     }
 
-int dapi_callbackExecuteUrl( DapiConnection* conn, const char* url, dapi_ExecuteUrl_callback callback )
+int dapi_callbackExecuteUrl( DapiConnection* conn, const char* url, DapiWindowInfo winfo,
+    dapi_ExecuteUrl_callback callback )
     {
     int seq;
     DapiCallbackData* call;
-    seq = dapi_writeCommandExecuteUrl( conn, url );
+    seq = dapi_writeCommandExecuteUrl( conn, url, winfo );
     if( seq == 0 )
         return 0;
     call = malloc( sizeof( *call ));
@@ -89,11 +91,11 @@ int dapi_callbackButtonOrder( DapiConnection* conn, dapi_ButtonOrder_callback ca
     }
 
 int dapi_callbackRunAsUser( DapiConnection* conn, const char* user, const char* command,
-    dapi_RunAsUser_callback callback )
+    DapiWindowInfo winfo, dapi_RunAsUser_callback callback )
     {
     int seq;
     DapiCallbackData* call;
-    seq = dapi_writeCommandRunAsUser( conn, user, command );
+    seq = dapi_writeCommandRunAsUser( conn, user, command, winfo );
     if( seq == 0 )
         return 0;
     call = malloc( sizeof( *call ));
@@ -126,11 +128,12 @@ int dapi_callbackSuspendScreensaving( DapiConnection* conn, int suspend, dapi_Su
     }
 
 int dapi_callbackMailTo( DapiConnection* conn, const char* subject, const char* body,
-    const char* to, const char* cc, const char* bcc, stringarr attachments, dapi_MailTo_callback callback )
+    const char* to, const char* cc, const char* bcc, stringarr attachments, DapiWindowInfo winfo,
+    dapi_MailTo_callback callback )
     {
     int seq;
     DapiCallbackData* call;
-    seq = dapi_writeCommandMailTo( conn, subject, body, to, cc, bcc, attachments );
+    seq = dapi_writeCommandMailTo( conn, subject, body, to, cc, bcc, attachments, winfo );
     if( seq == 0 )
         return 0;
     call = malloc( sizeof( *call ));
@@ -145,11 +148,11 @@ int dapi_callbackMailTo( DapiConnection* conn, const char* subject, const char* 
     }
 
 int dapi_callbackLocalFile( DapiConnection* conn, const char* remote, const char* local,
-    int allow_download, dapi_LocalFile_callback callback )
+    int allow_download, DapiWindowInfo winfo, dapi_LocalFile_callback callback )
     {
     int seq;
     DapiCallbackData* call;
-    seq = dapi_writeCommandLocalFile( conn, remote, local, allow_download );
+    seq = dapi_writeCommandLocalFile( conn, remote, local, allow_download, winfo );
     if( seq == 0 )
         return 0;
     call = malloc( sizeof( *call ));
@@ -164,11 +167,11 @@ int dapi_callbackLocalFile( DapiConnection* conn, const char* remote, const char
     }
 
 int dapi_callbackUploadFile( DapiConnection* conn, const char* local, const char* file,
-    int remove_local, dapi_UploadFile_callback callback )
+    int remove_local, DapiWindowInfo winfo, dapi_UploadFile_callback callback )
     {
     int seq;
     DapiCallbackData* call;
-    seq = dapi_writeCommandUploadFile( conn, local, file, remove_local );
+    seq = dapi_writeCommandUploadFile( conn, local, file, remove_local, winfo );
     if( seq == 0 )
         return 0;
     call = malloc( sizeof( *call ));
@@ -285,3 +288,64 @@ static void genericCallbackDispatch( DapiConnection* conn, DapiCallbackData* dat
             }
         }
     }
+int dapi_callbackOpenUrl_Window( DapiConnection* conn, const char* url, long winfo,
+    dapi_OpenUrl_callback callback )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int seq = dapi_callbackOpenUrl( conn, url, winfo_, callback );
+    dapi_freeWindowInfo( winfo_ );
+    return seq;
+    }
+
+int dapi_callbackExecuteUrl_Window( DapiConnection* conn, const char* url, long winfo,
+    dapi_ExecuteUrl_callback callback )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int seq = dapi_callbackExecuteUrl( conn, url, winfo_, callback );
+    dapi_freeWindowInfo( winfo_ );
+    return seq;
+    }
+
+int dapi_callbackRunAsUser_Window( DapiConnection* conn, const char* user, const char* command,
+    long winfo, dapi_RunAsUser_callback callback )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int seq = dapi_callbackRunAsUser( conn, user, command, winfo_, callback );
+    dapi_freeWindowInfo( winfo_ );
+    return seq;
+    }
+
+int dapi_callbackMailTo_Window( DapiConnection* conn, const char* subject, const char* body,
+    const char* to, const char* cc, const char* bcc, stringarr attachments, long winfo,
+    dapi_MailTo_callback callback )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int seq = dapi_callbackMailTo( conn, subject, body, to, cc, bcc, attachments, winfo_, callback );
+    dapi_freeWindowInfo( winfo_ );
+    return seq;
+    }
+
+int dapi_callbackLocalFile_Window( DapiConnection* conn, const char* remote, const char* local,
+    int allow_download, long winfo, dapi_LocalFile_callback callback )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int seq = dapi_callbackLocalFile( conn, remote, local, allow_download, winfo_, callback );
+    dapi_freeWindowInfo( winfo_ );
+    return seq;
+    }
+
+int dapi_callbackUploadFile_Window( DapiConnection* conn, const char* local, const char* file,
+    int remove_local, long winfo, dapi_UploadFile_callback callback )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int seq = dapi_callbackUploadFile( conn, local, file, remove_local, winfo_, callback );
+    dapi_freeWindowInfo( winfo_ );
+    return seq;
+    }
+

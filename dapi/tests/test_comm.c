@@ -6,6 +6,7 @@ int main( int argc, char* argv[] )
     {
     int command, seq, seq2;
     int ok;
+    DapiWindowInfo winfo;
     DapiConnection* conn = dapi_connect();
     if( conn == NULL )
         {
@@ -28,12 +29,14 @@ int main( int argc, char* argv[] )
         fprintf( stderr, "Initialization failed!\n" );
         return 2;
         }
-    seq = dapi_writeCommandOpenUrl( conn, "http://kde.org" );
+    dapi_windowInfoInitWindow( &winfo, 0 ); /* no mainwindow */
+    seq = dapi_writeCommandOpenUrl( conn, "http://kde.org", winfo );
     if( !dapi_readCommand( conn, &command, &seq2 ) || seq != seq2 )
         {
         fprintf( stderr, "Incorrect open url reply!\n" );
         return 2;
         }
+    dapi_freeWindowInfo( winfo );
     if( !dapi_readReplyOpenUrl( conn, &ok ))
         {
         fprintf( stderr, "Incorrect open url reply data!\n" );

@@ -20,6 +20,9 @@ FUNCTION OpenUrl
  ARG url
   TYPE string
  ENDARG
+ ARG winfo
+  TYPE windowinfo
+ ENDARG
  ARG ok
   TYPE bool
   RETURN
@@ -29,6 +32,9 @@ ENDFUNCTION
 FUNCTION ExecuteUrl
  ARG url
   TYPE string
+ ENDARG
+ ARG winfo
+  TYPE windowinfo
  ENDARG
  ARG ok
   TYPE bool
@@ -49,6 +55,9 @@ FUNCTION RunAsUser
  ENDARG
  ARG command
   TYPE string
+ ENDARG
+ ARG winfo
+  TYPE windowinfo
  ENDARG
  ARG ok
   TYPE bool
@@ -85,6 +94,9 @@ FUNCTION MailTo
  ARG attachments
   TYPE string[]
  ENDARG
+ ARG winfo
+  TYPE windowinfo
+ ENDARG
  ARG ok
   TYPE bool
   RETURN
@@ -101,6 +113,9 @@ FUNCTION LocalFile
  ARG allow_download
   TYPE bool
  ENDARG
+ ARG winfo
+  TYPE windowinfo
+ ENDARG
  ARG result
   TYPE string
   RETURN
@@ -116,6 +131,9 @@ FUNCTION UploadFile
  ENDARG
  ARG remove_local
   TYPE bool
+ ENDARG
+ ARG winfo
+  TYPE windowinfo
  ENDARG
  ARG ok
   TYPE bool

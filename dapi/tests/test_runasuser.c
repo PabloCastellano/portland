@@ -17,7 +17,7 @@ int main()
         fprintf( stderr, "Initialization failed!\n" );
         return 2;
         }
-    ok = dapi_RunAsUser( conn, "", "xterm -title test" );
+    ok = dapi_RunAsUser_Window( conn, "", "xterm -title test", 0 ); /* no mainwindow */
     printf( "Result: %s\n", ok == 1 ? "Ok" : "Failed" );
     dapi_close( conn );
     return 0;

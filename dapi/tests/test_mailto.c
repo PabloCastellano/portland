@@ -23,8 +23,9 @@ int main()
     system( "touch /tmp/mailtotest.txt" );
     attachments.count = 1;
     attachments.data = attachments_data;
-    ok = dapi_MailTo( conn, "Test mail", "Hi,\n\nthis is a test mail.\n",
-        "l.lunak@suse.cz, l.lunak@kde.org", NULL, "portland@lists.freedesktop.org", attachments );
+    ok = dapi_MailTo_Window( conn, "Test mail", "Hi,\n\nthis is a test mail.\n",
+        "l.lunak@suse.cz, l.lunak@kde.org", NULL, "portland@lists.freedesktop.org", attachments,
+        0 ); /* no mainwindow */
     printf( "Result: %s\n", ok == 1 ? "Ok" : "Failed" );
     dapi_close( conn );
     return 0;

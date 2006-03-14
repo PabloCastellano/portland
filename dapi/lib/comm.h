@@ -16,6 +16,12 @@ int dapi_bindSocket( void );
 int dapi_namedBindSocket( const char* name );
 DapiConnection* dapi_acceptSocket( int sock );
 
+typedef struct DapiWindowInfo
+    {
+    int flags;
+    long window;
+    } DapiWindowInfo;
+
 /* TODO generovat? */
 typedef struct
     {
@@ -29,6 +35,9 @@ typedef struct
     char** data;
     } stringarr;
 
+void dapi_windowInfoInitWindow( DapiWindowInfo* winfo, long window );
+
+void dapi_freeWindowInfo( DapiWindowInfo winfo );
 void dapi_freestringarr( stringarr arr );
 void dapi_freeintarr( intarr arr );
 

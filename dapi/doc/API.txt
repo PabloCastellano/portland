@@ -6,6 +6,19 @@ otherwise.
 
 All filenames and paths must be absolute.
 
+Window relations:
+-----------------
+
+Many calls take 'windowinfo' argument that specifies a window related to the call.
+This argument is necessary for maintaining proper window relations so that e.g.
+a dialog opened from the call is properly associated with a window from the application
+to which it logically belongs. Missing or incorrect data may result in focus problems.
+
+Applications should specify the toplevel window related to the request. If the application
+has only one main window then this is the window, if it has more then the relevant
+one should be used (e.g. for the OpenUrl call the window should be the toplevel window
+in which the user clicked on the link). See bindings documentation for further details.
+
 
 API calls list:
 ===============
@@ -27,21 +40,23 @@ bindings documentation for details on command id's.
 capabilities: a list of capabilities
 
 
-OpenUrl( string url ) -> ( bool ok )
-------------------------------------
+OpenUrl( string url, windowinfo winfo ) -> ( bool ok )
+------------------------------------------------------
 
 Opens the given URL or filename in the default web browser.
 
 url: URL or filename to open
+winfo: window related to this request (see conventions)
 ok: if false, the url wasn't opened
 
 
-ExecuteUrl( string url ) -> ( bool ok )
----------------------------------------
+ExecuteUrl( string url, windowinfo winfo ) -> ( bool ok )
+---------------------------------------------------------
 
 Opens the given URL or filename in the default application for the file (image viewer for image, etc.)
 
 url: URL or filename to open
+winfo: window related to this request (see conventions)
 ok: if false, the URL/file wasn't opened
 
 
@@ -55,13 +70,14 @@ order: 0 - error
        2 - Cancel/Ok
 
 
-RunAsUser( string user, string command ) -> ( bool ok )
--------------------------------------------------------
+RunAsUser( string user, string command, windowinfo winfo ) -> ( bool ok )
+-------------------------------------------------------------------------
 
 Executes the given command as a different user.
 
 user: username or empty for superuser
 command: command to execute
+winfo: window related to this request (see conventions)
 ok: if false, the command wasn't executed
 
 
@@ -74,8 +90,8 @@ suspend: whether to suspend screensaving
 ok: if false, suspending failed
 
 
-MailTo( string subject, string body, string to, string cc, string bcc, string[] attachments ) -> ( bool ok )
-------------------------------------------------------------------------------------------------------------
+MailTo( string subject, string body, string to, string cc, string bcc, string[] attachments, windowinfo winfo ) -> ( bool ok )
+------------------------------------------------------------------------------------------------------------------------------
 
 Opens a window for composing mail in the default mail client.
 
@@ -85,10 +101,11 @@ to: mail's To:, multiple entries are separated using commas, may be empty
 to: mail's CC:, multiple entries are separated using commas, may be empty
 to: mail's BCC:, multiple entries are separated using commas, may be empty
 attachments: a list of filenames to be attached to the mail
+winfo: window related to this request (see conventions)
 
 
-LocalFile( string url, string local, bool allow_download ) -> ( string result )
--------------------------------------------------------------------------------
+LocalFile( string url, string local, bool allow_download, windowinfo winfo ) -> ( string result )
+-------------------------------------------------------------------------------------------------
 
 Converts an URL to a local file location, downloading the remote file
 if necessary and allowed. The URL may be already a local file in which
@@ -102,11 +119,12 @@ local: filename of a local file that should be used as a temporary file
     to be eventually removed using RemoveTemporaryLocalFile; note that if the source
     file already is a local file, then its path will be returned and this field will
     be ignored
+winfo: window related to this request (see conventions)
 result: filename of the resulting local file, may be equal to the source file
 
 
-UploadFile( string local, string file, bool remove_local ) -> ( bool ok )
--------------------------------------------------------------------------
+UploadFile( string local, string file, bool remove_local, windowinfo winfo ) -> ( bool ok )
+-------------------------------------------------------------------------------------------
 
 Uploads local file to its URL location. This function is a complement for LocalFile
 to save a temporary file to its real location after it's been changed. In case
@@ -116,6 +134,7 @@ local: filename of a temporary file obtained from LocalFile
 file: URL or path of the location where to save the file to
 remove_local: if true, equivalent to calling RemoveTemporaryLocalFile with the local
     file after this call
+winfo: window related to this request (see conventions)
 ok: if false, the upload failed
 
 RemoveTemporaryLocalFile( string local ) -> ( bool ok )

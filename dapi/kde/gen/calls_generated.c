@@ -40,11 +40,11 @@ int dapi_Capabilities( DapiConnection* conn, intarr* capabitilies )
     return ret;
     }
 
-int dapi_OpenUrl( DapiConnection* conn, const char* url )
+int dapi_OpenUrl( DapiConnection* conn, const char* url, DapiWindowInfo winfo )
     {
     int seq;
     int ret;
-    seq = dapi_writeCommandOpenUrl( conn, url );
+    seq = dapi_writeCommandOpenUrl( conn, url, winfo );
     if( seq == 0 )
         return 0;
     for(;;)
@@ -61,11 +61,11 @@ int dapi_OpenUrl( DapiConnection* conn, const char* url )
     return ret;
     }
 
-int dapi_ExecuteUrl( DapiConnection* conn, const char* url )
+int dapi_ExecuteUrl( DapiConnection* conn, const char* url, DapiWindowInfo winfo )
     {
     int seq;
     int ret;
-    seq = dapi_writeCommandExecuteUrl( conn, url );
+    seq = dapi_writeCommandExecuteUrl( conn, url, winfo );
     if( seq == 0 )
         return 0;
     for(;;)
@@ -103,11 +103,11 @@ int dapi_ButtonOrder( DapiConnection* conn )
     return ret;
     }
 
-int dapi_RunAsUser( DapiConnection* conn, const char* user, const char* command )
+int dapi_RunAsUser( DapiConnection* conn, const char* user, const char* command, DapiWindowInfo winfo )
     {
     int seq;
     int ret;
-    seq = dapi_writeCommandRunAsUser( conn, user, command );
+    seq = dapi_writeCommandRunAsUser( conn, user, command, winfo );
     if( seq == 0 )
         return 0;
     for(;;)
@@ -146,11 +146,11 @@ int dapi_SuspendScreensaving( DapiConnection* conn, int suspend )
     }
 
 int dapi_MailTo( DapiConnection* conn, const char* subject, const char* body, const char* to,
-    const char* cc, const char* bcc, stringarr attachments )
+    const char* cc, const char* bcc, stringarr attachments, DapiWindowInfo winfo )
     {
     int seq;
     int ret;
-    seq = dapi_writeCommandMailTo( conn, subject, body, to, cc, bcc, attachments );
+    seq = dapi_writeCommandMailTo( conn, subject, body, to, cc, bcc, attachments, winfo );
     if( seq == 0 )
         return 0;
     for(;;)
@@ -168,11 +168,11 @@ int dapi_MailTo( DapiConnection* conn, const char* subject, const char* body, co
     }
 
 char* dapi_LocalFile( DapiConnection* conn, const char* remote, const char* local,
-    int allow_download )
+    int allow_download, DapiWindowInfo winfo )
     {
     int seq;
     char* ret;
-    seq = dapi_writeCommandLocalFile( conn, remote, local, allow_download );
+    seq = dapi_writeCommandLocalFile( conn, remote, local, allow_download, winfo );
     if( seq == 0 )
         return 0;
     for(;;)
@@ -194,11 +194,12 @@ char* dapi_LocalFile( DapiConnection* conn, const char* remote, const char* loca
     return ret;
     }
 
-int dapi_UploadFile( DapiConnection* conn, const char* local, const char* file, int remove_local )
+int dapi_UploadFile( DapiConnection* conn, const char* local, const char* file, int remove_local,
+    DapiWindowInfo winfo )
     {
     int seq;
     int ret;
-    seq = dapi_writeCommandUploadFile( conn, local, file, remove_local );
+    seq = dapi_writeCommandUploadFile( conn, local, file, remove_local, winfo );
     if( seq == 0 )
         return 0;
     for(;;)
@@ -233,6 +234,64 @@ int dapi_RemoveTemporaryLocalFile( DapiConnection* conn, const char* local )
         }
     if( !dapi_readReplyRemoveTemporaryLocalFile( conn, &ret ))
         return 0;
+    return ret;
+    }
+
+int dapi_OpenUrl_Window( DapiConnection* conn, const char* url, long winfo )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int ret = dapi_OpenUrl( conn, url, winfo_ );
+    dapi_freeWindowInfo( winfo_ );
+    return ret;
+    }
+
+int dapi_ExecuteUrl_Window( DapiConnection* conn, const char* url, long winfo )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int ret = dapi_ExecuteUrl( conn, url, winfo_ );
+    dapi_freeWindowInfo( winfo_ );
+    return ret;
+    }
+
+int dapi_RunAsUser_Window( DapiConnection* conn, const char* user, const char* command,
+    long winfo )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int ret = dapi_RunAsUser( conn, user, command, winfo_ );
+    dapi_freeWindowInfo( winfo_ );
+    return ret;
+    }
+
+int dapi_MailTo_Window( DapiConnection* conn, const char* subject, const char* body,
+    const char* to, const char* cc, const char* bcc, stringarr attachments, long winfo )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int ret = dapi_MailTo( conn, subject, body, to, cc, bcc, attachments, winfo_ );
+    dapi_freeWindowInfo( winfo_ );
+    return ret;
+    }
+
+char* dapi_LocalFile_Window( DapiConnection* conn, const char* remote, const char* local,
+    int allow_download, long winfo )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    char* ret = dapi_LocalFile( conn, remote, local, allow_download, winfo_ );
+    dapi_freeWindowInfo( winfo_ );
+    return ret;
+    }
+
+int dapi_UploadFile_Window( DapiConnection* conn, const char* local, const char* file,
+    int remove_local, long winfo )
+    {
+    DapiWindowInfo winfo_;
+    dapi_windowInfoInitWindow( &winfo_, winfo );
+    int ret = dapi_UploadFile( conn, local, file, remove_local, winfo_ );
+    dapi_freeWindowInfo( winfo_ );
     return ret;
     }
 

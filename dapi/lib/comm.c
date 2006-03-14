@@ -300,6 +300,16 @@ static stringarr readstringarr( DapiConnection* conn )
     return ret;        
     }
 
+static DapiWindowInfo readWindowInfo( DapiConnection* conn )
+    {
+    DapiWindowInfo ret;
+    readSocket( conn, &ret.flags, sizeof( ret.flags ));
+    if( ret.flags == 0 )
+        return ret;
+    readSocket( conn, &ret.window, sizeof( ret.window ));
+    return ret;
+    }
+
 static void writeintarr( DapiConnection* conn, intarr arr )
     {
     int i;
@@ -320,6 +330,12 @@ static void writestringarr( DapiConnection* conn, stringarr arr )
         writeString( conn, arr.data[ i ] );
     }
 
+static void writeWindowInfo( DapiConnection* conn, DapiWindowInfo winfo )
+    {
+    writeSocket( conn, &winfo.flags, sizeof( winfo.flags ));
+    writeSocket( conn, &winfo.window, sizeof( winfo.window ));
+    }
+
 void dapi_freeintarr( intarr arr )
     {
     free( arr.data );
@@ -333,6 +349,17 @@ void dapi_freestringarr( stringarr arr )
          ++i )
         free( arr.data[ i ] );
     free( arr.data );
+    }
+
+void dapi_freeWindowInfo( DapiWindowInfo winfo )
+    {
+    ( void ) winfo; /* nothing for now */
+    }
+
+void dapi_windowInfoInitWindow( DapiWindowInfo* winfo, long window )
+    {
+    winfo->flags = 1;
+    winfo->window = window;
     }
 
 #include "../kde/gen/comm_generated.c"

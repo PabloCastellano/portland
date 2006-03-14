@@ -76,15 +76,18 @@ static void processCommandOpenUrl( DapiConnection* conn, int seq )
     {
     int ok;
     char* url;
-    if( !dapi_readCommandOpenUrl( conn, &url ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandOpenUrl( conn, &url, &winfo ))
         {
         closeConnection( conn );
         return;
         }
     debug( "Open url %d: %s", dapi_socket( conn ), url );
+    /* winfo ? */
     ok = openUrl( url );
     dapi_writeReplyOpenUrl( conn, seq, ok ? 1 : 0 );
     free( url );
+    dapi_freeWindowInfo( winfo );
     }
 
 static void processCommandButtonOrder( DapiConnection* conn, int seq )
@@ -101,7 +104,8 @@ static void processCommandButtonOrder( DapiConnection* conn, int seq )
 static void processCommandExecuteUrl( DapiConnection* conn, int seq )
     {
     char* url;
-    if( !dapi_readCommandExecuteUrl( conn, &url ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandExecuteUrl( conn, &url, &winfo ))
         {
         closeConnection( conn );
         return;
@@ -109,13 +113,15 @@ static void processCommandExecuteUrl( DapiConnection* conn, int seq )
     debug( "Execute url %d: %s", dapi_socket( conn ), url );
     dapi_writeReplyExecuteUrl( conn, seq, 0 ); /* TODO failure ??? */
     free( url );
+    dapi_freeWindowInfo( winfo );
     }
 
 static void processCommandRunAsUser( DapiConnection* conn, int seq )
     {
     char* user;
     char* command;
-    if( !dapi_readCommandRunAsUser( conn, &user, &command ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandRunAsUser( conn, &user, &command, &winfo ))
         {
         closeConnection( conn );
         return;
@@ -124,6 +130,7 @@ static void processCommandRunAsUser( DapiConnection* conn, int seq )
     dapi_writeReplyRunAsUser( conn, seq, 0 ); /* TODO failure ??? */
     free( user );
     free( command );
+    dapi_freeWindowInfo( winfo );
     }
 
 static void processCommandSuspendScreensaving( DapiConnection* conn, int seq )
@@ -157,12 +164,14 @@ static void processCommandMailTo( DapiConnection* conn, int seq )
     char* cc;
     char* bcc;
     stringarr attachments;
-    if( !dapi_readCommandMailTo( conn, &subject, &body, &to, &cc, &bcc, &attachments ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandMailTo( conn, &subject, &body, &to, &cc, &bcc, &attachments, &winfo ))
         {
         closeConnection( conn );
         return;
         }
     debug( "Mail to %d: %s", dapi_socket( conn ), subject );
+    /* winfo ? */
     ok = mailTo( subject, body, to, cc, bcc, ( const char** ) attachments.data, attachments.count );
     dapi_writeReplyMailTo( conn, seq, ok ? 1 : 0 );
     free( subject );
@@ -171,6 +180,7 @@ static void processCommandMailTo( DapiConnection* conn, int seq )
     free( cc );
     free( bcc );
     dapi_freestringarr( attachments );
+    dapi_freeWindowInfo( winfo );
     }
 
 static void processCommandLocalFile( DapiConnection* conn, int seq )
@@ -179,7 +189,8 @@ static void processCommandLocalFile( DapiConnection* conn, int seq )
     char* local;
     int allow_download;
     const char* result = NULL;
-    if( !dapi_readCommandLocalFile( conn, &file, &local, &allow_download ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandLocalFile( conn, &file, &local, &allow_download, &winfo ))
         {
         closeConnection( conn );
         return;
@@ -194,6 +205,7 @@ static void processCommandLocalFile( DapiConnection* conn, int seq )
     /* local is unused, no real downloading */
     dapi_writeReplyLocalFile( conn, seq, result );
     free( file );
+    dapi_freeWindowInfo( winfo );
     }
 
 static void processCommandUploadFile( DapiConnection* conn, int seq )
@@ -202,7 +214,8 @@ static void processCommandUploadFile( DapiConnection* conn, int seq )
     char* file;
     int remove_local;
     int ok;
-    if( !dapi_readCommandUploadFile( conn, &local, &file, &remove_local ))
+    DapiWindowInfo winfo;
+    if( !dapi_readCommandUploadFile( conn, &local, &file, &remove_local, &winfo ))
         {
         closeConnection( conn );
         return;
@@ -219,6 +232,7 @@ static void processCommandUploadFile( DapiConnection* conn, int seq )
     dapi_writeReplyUploadFile( conn, seq, ok );
     free( local );
     free( file );
+    dapi_freeWindowInfo( winfo );
     }
 
 static void processCommandRemoveTemporaryLocalFile( DapiConnection* conn, int seq )

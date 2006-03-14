@@ -47,6 +47,8 @@ struct Function
     QString name;
     ArgList args;
     void generateC( QTextStream& stream, int indent, FunctionType type ) const;
+    bool hasWindowInfo() const;
+    Function convertWindowInfo( Arg& warg ) const;
     };
 
 QValueList< Function > functions;
@@ -85,6 +87,8 @@ QString Arg::cType( const QString& type, bool out )
         return "int";
     else if( type == "string" )
         return out ? "char*" : "const char*";
+    else if( type == "windowinfo" )
+        return "DapiWindowInfo";
     else
         return type;
     }
@@ -126,6 +130,7 @@ ArgList Arg::stripSimpleArguments( const ArgList& args )
         {
         const Arg& arg = (*it);
         if( arg.type == "string"
+            || arg.type == "windowinfo"
             || arg.type.contains( "[]" ))
             new_args.append( arg );
         }
@@ -159,8 +164,8 @@ void Arg::readCommand( QTextStream& stream ) const
         stream << "    *" << name << " = read" << cType( false ) << "( conn );\n";
     else if( type == "string" )
         stream << "    *" << name << " = readString( conn );\n";
-    else if( type == "stringlist" )
-        stream << "    *" << name << " = readStringList( conn );\n";
+    else if( type == "windowinfo" )
+        stream << "    *" << name << " = readWindowInfo( conn );\n";
     else
         stream << "    readSocket( conn, " << name << ", sizeof( *" << name << " ));\n";
     }
@@ -171,8 +176,8 @@ void Arg::writeCommand( QTextStream& stream ) const
         stream << "    write" << cType( false ) << "( conn, " << name << " );\n";
     else if( type == "string" )
         stream << "    writeString( conn, " << name << " );\n";
-    else if( type == "stringlist" )
-        stream << "    writeStringList( conn, " << name << " );\n";
+    else if( type == "windowinfo" )
+        stream << "    writeWindowInfo( conn, " << name << " );\n";
     else
         stream << "    writeSocket( conn, &" << name << ", sizeof( " << name << " ));\n";
     }
@@ -252,7 +257,7 @@ void Function::generateC( QTextStream& stream, int indent, FunctionType type ) c
             }
         else
             line += ", ";
-        line += "dapi_" + name + "_callback callback";
+        line += "dapi_" + QString( name ).remove( "_Window" ) + "_callback callback";
         }
     line += " )";
     stream << line;
@@ -269,6 +274,39 @@ QString Function::returnType() const
             return arg.type;
         }
     return "void";
+    }
+
+bool Function::hasWindowInfo() const
+    {
+    for( ArgList::ConstIterator it = args.begin();
+         it != args.end();
+         ++it )
+        {
+        const Arg& arg = (*it);
+        if( arg.type == "windowinfo" && !arg.out )
+            return true;
+        }
+    return false;
+    }
+
+Function Function::convertWindowInfo( Arg& warg ) const
+    {
+    if( !hasWindowInfo())
+        error();
+    Function ret = *this;
+    ret.name += "_Window";
+    for( ArgList::Iterator it = ret.args.begin();
+         it != ret.args.end();
+         ++it )
+        {
+        Arg& arg = (*it);
+        if( arg.type == "windowinfo" && !arg.out )
+            {
+            warg = arg;
+            arg.type = "long";
+            }
+        }
+    return ret;
     }
 
 void openInputFile( const QString& filename )
@@ -396,6 +434,13 @@ void generateSharedCommH()
         stream << ";\n";
         function.generateC( stream, 0, WriteCommand );
         stream << ";\n";
+        if( function.hasWindowInfo())
+            {
+            Arg dummy;
+            Function f2 = function.convertWindowInfo( dummy );
+            f2.generateC( stream, 0, WriteCommand );
+            stream << ";\n";
+            }
         function.generateC( stream, 0, ReadReply );
         stream << ";\n";
         function.generateC( stream, 0, WriteReply );
@@ -502,6 +547,42 @@ void generateSharedCommCWriteFunctions( QTextStream& stream, FunctionType type )
         }
     }
 
+static void generateSharedCommCWindow( QTextStream& stream )
+    {
+    for( QValueList< Function >::ConstIterator it = functions.begin();
+         it != functions.end();
+         ++it )
+        {
+        const Function& function = *it;
+        if( !function.hasWindowInfo())
+            continue;
+        Arg warg;
+        Function f2 = function.convertWindowInfo( warg );
+        f2.generateC( stream, 0, WriteCommand );
+        stream << "\n    {\n"
+               << "    DapiWindowInfo winfo_;\n"
+               << "    dapi_windowInfoInitWindow( &winfo_, " << warg.name << " );\n"
+               << "    int seq = dapi_writeCommand" << function.name << "( conn";
+        ArgList args = Arg::stripOutArguments( function.args );
+        for( ArgList::ConstIterator it = args.begin();
+             it != args.end();
+             ++it )
+            {
+            const Arg& argument = *it;
+            if( argument.type == "windowinfo" )
+                {
+                stream << ", winfo_";
+                continue;
+                }
+            stream << ", " << argument.name;
+            }
+        stream << " );\n"
+               << "    dapi_freeWindowInfo( winfo_ );\n"
+               << "    return seq;\n"
+               << "    }\n\n";
+        }
+    }
+
 void generateSharedCommC()
     {
     QFile file( "comm_generated.c" );
@@ -512,6 +593,7 @@ void generateSharedCommC()
     generateSharedCommCReadFunctions( stream, ReadReply );
     generateSharedCommCWriteFunctions( stream, WriteCommand );
     generateSharedCommCWriteFunctions( stream, WriteReply );
+    generateSharedCommCWindow( stream );
     }
 
 void generateSharedCallsH()
@@ -527,6 +609,49 @@ void generateSharedCallsH()
         const Function& function = *it;
         function.generateC( stream, 0, HighLevel );
         stream << ";\n";
+        if( function.hasWindowInfo())
+            {
+            Arg dummy;
+            Function f2 = function.convertWindowInfo( dummy );
+            f2.generateC( stream, 0, HighLevel );
+            stream << ";\n";
+            }
+        }
+    }
+
+static void generateSharedCallsCWindow( QTextStream& stream )
+    {
+    for( QValueList< Function >::ConstIterator it = functions.begin();
+         it != functions.end();
+         ++it )
+        {
+        const Function& function = *it;
+        if( !function.hasWindowInfo())
+            continue;
+        Arg warg;
+        Function f2 = function.convertWindowInfo( warg );
+        f2.generateC( stream, 0, HighLevel );
+        stream << "\n    {\n"
+               << "    DapiWindowInfo winfo_;\n"
+               << "    dapi_windowInfoInitWindow( &winfo_, " << warg.name << " );\n"
+               << "    " << Arg::cType( function.returnType(), true ) << " ret = dapi_" << function.name << "( conn";
+        ArgList args = Arg::stripReturnArgument( function.args );
+        for( ArgList::ConstIterator it = args.begin();
+             it != args.end();
+             ++it )
+            {
+            const Arg& argument = *it;
+            if( argument.type == "windowinfo" )
+                {
+                stream << ", winfo_";
+                continue;
+                }
+            stream << ", " << argument.name;
+            }
+        stream << " );\n"
+               << "    dapi_freeWindowInfo( winfo_ );\n"
+               << "    return ret;\n"
+               << "    }\n\n";
         }
     }
 
@@ -594,6 +719,7 @@ void generateSharedCallsC()
         stream << "    return ret;\n"
                << "    }\n\n";
         }
+    generateSharedCallsCWindow( stream );
     }
 
 void generateSharedCallbacksH()
@@ -611,6 +737,49 @@ void generateSharedCallbacksH()
         stream << ";\n";
         function.generateC( stream, 0, HighLevelCallback );
         stream << ";\n";
+        if( function.hasWindowInfo())
+            {
+            Arg dummy;
+            Function f2 = function.convertWindowInfo( dummy );
+            f2.generateC( stream, 0, HighLevelCallback );
+            stream << ";\n";
+            }
+        }
+    }
+
+static void generateSharedCallbacksCWindow( QTextStream& stream )
+    {
+    for( QValueList< Function >::ConstIterator it = functions.begin();
+         it != functions.end();
+         ++it )
+        {
+        const Function& function = *it;
+        if( !function.hasWindowInfo())
+            continue;
+        Arg warg;
+        Function f2 = function.convertWindowInfo( warg );
+        f2.generateC( stream, 0, HighLevelCallback );
+        stream << "\n    {\n"
+               << "    DapiWindowInfo winfo_;\n"
+               << "    dapi_windowInfoInitWindow( &winfo_, " << warg.name << " );\n"
+               << "    int seq = dapi_callback" << function.name << "( conn";
+        ArgList args = Arg::stripOutArguments( function.args );
+        for( ArgList::ConstIterator it = args.begin();
+             it != args.end();
+             ++it )
+            {
+            const Arg& argument = *it;
+            if( argument.type == "windowinfo" )
+                {
+                stream << ", winfo_";
+                continue;
+                }
+            stream << ", " << argument.name;
+            }
+        stream << ", callback );\n"
+               << "    dapi_freeWindowInfo( winfo_ );\n"
+               << "    return seq;\n"
+               << "    }\n\n";
         }
     }
 
@@ -698,6 +867,7 @@ void generateSharedCallbacksC()
         }
     stream << "        }\n"
            << "    }\n";
+    generateSharedCallbacksCWindow( stream );
     }
 
 void generateShared()

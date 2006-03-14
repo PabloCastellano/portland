@@ -8,20 +8,26 @@ int dapi_writeCommandCapabilities( DapiConnection* conn );
 int dapi_readReplyCapabilities( DapiConnection* conn, intarr* capabitilies, int* ok );
 void dapi_writeReplyCapabilities( DapiConnection* conn, int seq, intarr capabitilies,
     int ok );
-int dapi_readCommandOpenUrl( DapiConnection* conn, char** url );
-int dapi_writeCommandOpenUrl( DapiConnection* conn, const char* url );
+int dapi_readCommandOpenUrl( DapiConnection* conn, char** url, DapiWindowInfo* winfo );
+int dapi_writeCommandOpenUrl( DapiConnection* conn, const char* url, DapiWindowInfo winfo );
+int dapi_writeCommandOpenUrl_Window( DapiConnection* conn, const char* url, long winfo );
 int dapi_readReplyOpenUrl( DapiConnection* conn, int* ok );
 void dapi_writeReplyOpenUrl( DapiConnection* conn, int seq, int ok );
-int dapi_readCommandExecuteUrl( DapiConnection* conn, char** url );
-int dapi_writeCommandExecuteUrl( DapiConnection* conn, const char* url );
+int dapi_readCommandExecuteUrl( DapiConnection* conn, char** url, DapiWindowInfo* winfo );
+int dapi_writeCommandExecuteUrl( DapiConnection* conn, const char* url, DapiWindowInfo winfo );
+int dapi_writeCommandExecuteUrl_Window( DapiConnection* conn, const char* url, long winfo );
 int dapi_readReplyExecuteUrl( DapiConnection* conn, int* ok );
 void dapi_writeReplyExecuteUrl( DapiConnection* conn, int seq, int ok );
 int dapi_readCommandButtonOrder( DapiConnection* conn );
 int dapi_writeCommandButtonOrder( DapiConnection* conn );
 int dapi_readReplyButtonOrder( DapiConnection* conn, int* order );
 void dapi_writeReplyButtonOrder( DapiConnection* conn, int seq, int order );
-int dapi_readCommandRunAsUser( DapiConnection* conn, char** user, char** command );
-int dapi_writeCommandRunAsUser( DapiConnection* conn, const char* user, const char* command );
+int dapi_readCommandRunAsUser( DapiConnection* conn, char** user, char** command,
+    DapiWindowInfo* winfo );
+int dapi_writeCommandRunAsUser( DapiConnection* conn, const char* user, const char* command,
+    DapiWindowInfo winfo );
+int dapi_writeCommandRunAsUser_Window( DapiConnection* conn, const char* user, const char* command,
+    long winfo );
 int dapi_readReplyRunAsUser( DapiConnection* conn, int* ok );
 void dapi_writeReplyRunAsUser( DapiConnection* conn, int seq, int ok );
 int dapi_readCommandSuspendScreensaving( DapiConnection* conn, int* suspend );
@@ -29,20 +35,27 @@ int dapi_writeCommandSuspendScreensaving( DapiConnection* conn, int suspend );
 int dapi_readReplySuspendScreensaving( DapiConnection* conn, int* ok );
 void dapi_writeReplySuspendScreensaving( DapiConnection* conn, int seq, int ok );
 int dapi_readCommandMailTo( DapiConnection* conn, char** subject, char** body, char** to,
-    char** cc, char** bcc, stringarr* attachments );
+    char** cc, char** bcc, stringarr* attachments, DapiWindowInfo* winfo );
 int dapi_writeCommandMailTo( DapiConnection* conn, const char* subject, const char* body,
-    const char* to, const char* cc, const char* bcc, stringarr attachments );
+    const char* to, const char* cc, const char* bcc, stringarr attachments, DapiWindowInfo winfo );
+int dapi_writeCommandMailTo_Window( DapiConnection* conn, const char* subject, const char* body,
+    const char* to, const char* cc, const char* bcc, stringarr attachments, long winfo );
 int dapi_readReplyMailTo( DapiConnection* conn, int* ok );
 void dapi_writeReplyMailTo( DapiConnection* conn, int seq, int ok );
 int dapi_readCommandLocalFile( DapiConnection* conn, char** remote, char** local,
-    int* allow_download );
+    int* allow_download, DapiWindowInfo* winfo );
 int dapi_writeCommandLocalFile( DapiConnection* conn, const char* remote, const char* local,
-    int allow_download );
+    int allow_download, DapiWindowInfo winfo );
+int dapi_writeCommandLocalFile_Window( DapiConnection* conn, const char* remote, const char* local,
+    int allow_download, long winfo );
 int dapi_readReplyLocalFile( DapiConnection* conn, char** result );
 void dapi_writeReplyLocalFile( DapiConnection* conn, int seq, const char* result );
-int dapi_readCommandUploadFile( DapiConnection* conn, char** local, char** file, int* remove_local );
+int dapi_readCommandUploadFile( DapiConnection* conn, char** local, char** file, int* remove_local,
+    DapiWindowInfo* winfo );
 int dapi_writeCommandUploadFile( DapiConnection* conn, const char* local, const char* file,
-    int remove_local );
+    int remove_local, DapiWindowInfo winfo );
+int dapi_writeCommandUploadFile_Window( DapiConnection* conn, const char* local, const char* file,
+    int remove_local, long winfo );
 int dapi_readReplyUploadFile( DapiConnection* conn, int* ok );
 void dapi_writeReplyUploadFile( DapiConnection* conn, int seq, int ok );
 int dapi_readCommandRemoveTemporaryLocalFile( DapiConnection* conn, char** local );

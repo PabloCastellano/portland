@@ -40,6 +40,7 @@ class KDapiHandler
         void processCommandUploadFile( ConnectionData& conn, int seq );
         void processCommandRemoveTemporaryLocalFile( ConnectionData& conn, int seq );
         void updateScreensaving();
+        static QCString makeStartupInfo( const DapiWindowInfo& winfo );
         int mainsocket;
         typedef QValueList< ConnectionData > ConnectionList;
         ConnectionList connections;
