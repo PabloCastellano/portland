@@ -7,7 +7,7 @@
 
 FUNCTION <name>
  ARG <name>
-  TYPE <type> - string, stringlist, int, ...
+  TYPE <type> - string, string[], int, ...
   OUT         - is used in reply
   RETURN      - this OUT argument is return value of high-level call
  ENDARG
@@ -18,8 +18,8 @@ ENDFUNCTION
 struct Arg
     {
     Arg() : out( false ), ret( false ) {}
-    QString cType() const;
-    static QString cType( const QString& type );
+    QString cType( bool out ) const;
+    static QString cType( const QString& type, bool out );
     void readCommand( QTextStream& stream ) const;
     void writeCommand( QTextStream& stream ) const;
     QString name;
@@ -68,19 +68,19 @@ void my_check( const char* file, int line, bool arg )
         my_error( file, line );
     }
 
-QString Arg::cType() const
+QString Arg::cType( bool out ) const
     {
-    return cType( type );
+    return cType( type, out );
     }
 
-QString Arg::cType( const QString& type )
+QString Arg::cType( const QString& type, bool out )
     {
+    if( type.contains( "[]" ))
+        return QString( type ).replace( "[]", "arr" );
     if( type == "bool" )
         return "int";
     else if( type == "string" )
-        return "const char*";
-    else if( type == "stringlist" )
-        return "const char**";
+        return out ? "char*" : "const char*";
     else
         return type;
     }
@@ -122,7 +122,7 @@ ArgList Arg::stripSimpleArguments( const ArgList& args )
         {
         const Arg& arg = (*it);
         if( arg.type == "string"
-            || arg.type == "stringlist" )
+            || arg.type.contains( "[]" ))
             new_args.append( arg );
         }
     return new_args;
@@ -151,7 +151,9 @@ ArgList Arg::stripReturnArgument( const ArgList& args )
 
 void Arg::readCommand( QTextStream& stream ) const
     {
-    if( type == "string" )
+    if( type.endsWith( "[]" ))
+        stream << "    *" << name << " = read" << cType( false ) << "( conn );\n";
+    else if( type == "string" )
         stream << "    *" << name << " = readString( conn );\n";
     else if( type == "stringlist" )
         stream << "    *" << name << " = readStringList( conn );\n";
@@ -161,7 +163,9 @@ void Arg::readCommand( QTextStream& stream ) const
 
 void Arg::writeCommand( QTextStream& stream ) const
     {
-    if( type == "string" )
+    if( type.endsWith( "[]" ))
+        stream << "    write" << cType( false ) << "( conn, " << name << " );\n";
+    else if( type == "string" )
         stream << "    writeString( conn, " << name << " );\n";
     else if( type == "stringlist" )
         stream << "    writeStringList( conn, " << name << " );\n";
@@ -181,10 +185,7 @@ void Function::generateC( QTextStream& stream, int indent, FunctionType type ) c
     if( type == HighLevel )
         {
         QString rettype = returnType();
-        if( rettype == "string" )
-            line += "char*";
-        else
-            line += Arg::cType( rettype );
+        line += Arg::cType( rettype, true );
         }
     else
         line += type != WriteReply ? "int" : "void";
@@ -218,14 +219,8 @@ void Function::generateC( QTextStream& stream, int indent, FunctionType type ) c
             }
         else
             line += " ";
-        if( arg.type == "string" )
-            line += type == ReadCommand || type == ReadReply  ||
-                ( type == HighLevel && arg.out ) ? "char*" : "const char*";
-        else if( arg.type == "stringlist" )
-            line += type == ReadCommand || type == ReadReply  ||
-                ( type == HighLevel && arg.out ) ? "char**" : "const char**";
-        else
-            line += arg.cType();
+        line += arg.cType( type == ReadCommand || type == ReadReply
+            || ( type == HighLevel && arg.out ));
         if( type == ReadCommand || type == ReadReply || ( type == HighLevel && arg.out ))
             line += "*";
         line += " " + arg.name;
@@ -412,6 +407,8 @@ void generateSharedCommCReadFunctions( QTextStream& stream, FunctionType type )
             arg.readCommand( stream );
             }
         // TODO tady chybi kontrola, ze nebyla chyba pri cteni
+        // a udelat to nejak vic genericky
+#if 0
         ArgList args_extra = Arg::stripSimpleArguments( args );
         if( !args_extra.isEmpty())
             {
@@ -437,6 +434,7 @@ void generateSharedCommCReadFunctions( QTextStream& stream, FunctionType type )
                 }
             stream << "        return 0;\n        }\n";
             }
+#endif
         stream << "    return 1;\n"
                << "    }\n\n";
         }
@@ -523,10 +521,7 @@ void generateSharedCallsC()
                << "        fprintf( stderr, \"DAPI sync callback not set!\\n\" );\n"
                << "        abort();\n"
                << "        }\n";
-        if( rettype == "string" )
-            stream << "    char* ret;\n";
-        else
-            stream << "    " << Arg::cType( rettype ) << " ret;\n";
+        stream << "    " << Arg::cType( rettype, true ) << " ret;\n";
         stream << "    seq = dapi_writeCommand" << function.name << "( conn";
         ArgList args = Arg::stripReturnArgument( function.args );
         ArgList args1 = Arg::stripOutArguments( args );

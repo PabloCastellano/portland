@@ -126,21 +126,21 @@ static void processCommandMailTo( DapiConnection* conn, int seq )
     char* to;
     char* cc;
     char* bcc;
-    char** attachments;
+    stringarr attachments;
     if( !dapi_readCommandMailTo( conn, &subject, &body, &to, &cc, &bcc, &attachments ))
         {
         closeConnection( conn );
         return;
         }
     debug( "Mail to %d: %s", dapi_socket( conn ), subject );
-    ok = mailTo( subject, body, to, cc, bcc, ( const char** ) attachments );
+    ok = mailTo( subject, body, to, cc, bcc, ( const char** ) attachments.data, attachments.count );
     dapi_writeReplyMailTo( conn, seq, ok ? 1 : 0 );
     free( subject );
     free( body );
     free( to );
     free( cc );
     free( bcc );
-    free( attachments );
+    dapi_freestringarr( attachments );
     }
 
 static void processCommandLocalFile( DapiConnection* conn, int seq )

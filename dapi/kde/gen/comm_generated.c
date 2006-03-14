@@ -3,25 +3,20 @@ int dapi_readCommandInit( DapiConnection* conn )
     return 1;
     }
 
+int dapi_readCommandcapabilities( DapiConnection* conn )
+    {
+    return 1;
+    }
+
 int dapi_readCommandOpenUrl( DapiConnection* conn, char** url )
     {
     *url = readString( conn );
-    if( *url == NULL )
-        {
-        free( *url );
-        return 0;
-        }
     return 1;
     }
 
 int dapi_readCommandExecuteUrl( DapiConnection* conn, char** url )
     {
     *url = readString( conn );
-    if( *url == NULL )
-        {
-        free( *url );
-        return 0;
-        }
     return 1;
     }
 
@@ -34,12 +29,6 @@ int dapi_readCommandRunAsUser( DapiConnection* conn, char** user, char** command
     {
     *user = readString( conn );
     *command = readString( conn );
-    if( *user == NULL || *command == NULL )
-        {
-        free( *user );
-        free( *command );
-        return 0;
-        }
     return 1;
     }
 
@@ -50,24 +39,14 @@ int dapi_readCommandSuspendScreensaving( DapiConnection* conn, int* suspend )
     }
 
 int dapi_readCommandMailTo( DapiConnection* conn, char** subject, char** body, char** to,
-    char** cc, char** bcc, char*** attachments )
+    char** cc, char** bcc, stringarr* attachments )
     {
     *subject = readString( conn );
     *body = readString( conn );
     *to = readString( conn );
     *cc = readString( conn );
     *bcc = readString( conn );
-    *attachments = readStringList( conn );
-    if( *subject == NULL || *body == NULL || *to == NULL || *cc == NULL || *bcc == NULL || *attachments == NULL )
-        {
-        free( *subject );
-        free( *body );
-        free( *to );
-        free( *cc );
-        free( *bcc );
-        free( *attachments );
-        return 0;
-        }
+    *attachments = readstringarr( conn );
     return 1;
     }
 
@@ -77,12 +56,6 @@ int dapi_readCommandLocalFile( DapiConnection* conn, char** remote, char** local
     *remote = readString( conn );
     *local = readString( conn );
     readSocket( conn, allow_download, sizeof( *allow_download ));
-    if( *remote == NULL || *local == NULL )
-        {
-        free( *remote );
-        free( *local );
-        return 0;
-        }
     return 1;
     }
 
@@ -91,28 +64,24 @@ int dapi_readCommandUploadFile( DapiConnection* conn, char** local, char** file,
     *local = readString( conn );
     *file = readString( conn );
     readSocket( conn, remove_local, sizeof( *remove_local ));
-    if( *local == NULL || *file == NULL )
-        {
-        free( *local );
-        free( *file );
-        return 0;
-        }
     return 1;
     }
 
 int dapi_readCommandRemoveTemporaryLocalFile( DapiConnection* conn, char** local )
     {
     *local = readString( conn );
-    if( *local == NULL )
-        {
-        free( *local );
-        return 0;
-        }
     return 1;
     }
 
 int dapi_readReplyInit( DapiConnection* conn, int* ok )
     {
+    readSocket( conn, ok, sizeof( *ok ));
+    return 1;
+    }
+
+int dapi_readReplycapabilities( DapiConnection* conn, intarr* capabitilies, int* ok )
+    {
+    *capabitilies = readintarr( conn );
     readSocket( conn, ok, sizeof( *ok ));
     return 1;
     }
@@ -156,11 +125,6 @@ int dapi_readReplyMailTo( DapiConnection* conn, int* ok )
 int dapi_readReplyLocalFile( DapiConnection* conn, char** result )
     {
     *result = readString( conn );
-    if( *result == NULL )
-        {
-        free( *result );
-        return 0;
-        }
     return 1;
     }
 
@@ -180,6 +144,13 @@ int dapi_writeCommandInit( DapiConnection* conn )
     {
     int seq = getNextSeq( conn );
     writeCommand( conn, DAPI_COMMAND_INIT, seq );
+    return seq;
+    }
+
+int dapi_writeCommandcapabilities( DapiConnection* conn )
+    {
+    int seq = getNextSeq( conn );
+    writeCommand( conn, DAPI_COMMAND_CAPABILITIES, seq );
     return seq;
     }
 
@@ -224,7 +195,7 @@ int dapi_writeCommandSuspendScreensaving( DapiConnection* conn, int suspend )
     }
 
 int dapi_writeCommandMailTo( DapiConnection* conn, const char* subject, const char* body,
-    const char* to, const char* cc, const char* bcc, const char** attachments )
+    const char* to, const char* cc, const char* bcc, stringarr attachments )
     {
     int seq = getNextSeq( conn );
     writeCommand( conn, DAPI_COMMAND_MAILTO, seq );
@@ -233,7 +204,7 @@ int dapi_writeCommandMailTo( DapiConnection* conn, const char* subject, const ch
     writeString( conn, to );
     writeString( conn, cc );
     writeString( conn, bcc );
-    writeStringList( conn, attachments );
+    writestringarr( conn, attachments );
     return seq;
     }
 
@@ -270,6 +241,14 @@ int dapi_writeCommandRemoveTemporaryLocalFile( DapiConnection* conn, const char*
 void dapi_writeReplyInit( DapiConnection* conn, int seq, int ok )
     {
     writeCommand( conn, DAPI_REPLY_INIT, seq );
+    writeSocket( conn, &ok, sizeof( ok ));
+    }
+
+void dapi_writeReplycapabilities( DapiConnection* conn, int seq, intarr capabitilies,
+    int ok )
+    {
+    writeCommand( conn, DAPI_REPLY_CAPABILITIES, seq );
+    writeintarr( conn, capabitilies );
     writeSocket( conn, &ok, sizeof( ok ));
     }
 

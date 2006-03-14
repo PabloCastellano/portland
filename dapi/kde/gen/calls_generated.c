@@ -24,6 +24,32 @@ int dapi_Init( DapiConnection* conn )
     return ret;
     }
 
+int dapi_capabilities( DapiConnection* conn, intarr* capabitilies )
+    {
+    int seq;
+    if( conn->sync_callback == NULL )
+        {
+        fprintf( stderr, "DAPI sync callback not set!\n" );
+        abort();
+        }
+    int ret;
+    seq = dapi_writeCommandcapabilities( conn );
+    if( seq == 0 )
+        return 0;
+    for(;;)
+        {
+        int comm, seq2;
+        if( !dapi_readCommand( conn, &comm, &seq2 ))
+            return 0;
+        if( seq2 == seq && comm == DAPI_REPLY_CAPABILITIES )
+            break; /* --> */
+        conn->sync_callback( conn, comm, seq2 );
+        }
+    if( !dapi_readReplycapabilities( conn, capabitilies, &ret ))
+        return 0;
+    return ret;
+    }
+
 int dapi_OpenUrl( DapiConnection* conn, const char* url )
     {
     int seq;
@@ -155,7 +181,7 @@ int dapi_SuspendScreensaving( DapiConnection* conn, int suspend )
     }
 
 int dapi_MailTo( DapiConnection* conn, const char* subject, const char* body, const char* to,
-    const char* cc, const char* bcc, const char** attachments )
+    const char* cc, const char* bcc, stringarr attachments )
     {
     int seq;
     if( conn->sync_callback == NULL )

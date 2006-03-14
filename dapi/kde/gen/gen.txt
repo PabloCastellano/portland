@@ -5,6 +5,17 @@ FUNCTION Init
  ENDARG
 ENDFUNCTION
 
+FUNCTION capabilities
+ ARG capabitilies
+  TYPE int[]
+  OUT
+ ENDARG
+ ARG ok
+  TYPE bool
+  RETURN
+ ENDARG
+ENDFUNCTION
+
 FUNCTION OpenUrl
  ARG url
   TYPE string
@@ -72,7 +83,7 @@ FUNCTION MailTo
   TYPE string
  ENDARG
  ARG attachments
-  TYPE stringlist
+  TYPE string[]
  ENDARG
  ARG ok
   TYPE bool

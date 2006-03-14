@@ -54,7 +54,7 @@ int suspendScreensaving( Display* dpy, int suspend )
     }
 
 int mailTo( const char* subject, const char* body, const char* to,
-    const char* cc, const char* bcc, const char** attachments )
+    const char* cc, const char* bcc, const char** attachments, int att_count )
     {
     ( void ) subject;
     ( void ) body;
@@ -62,6 +62,7 @@ int mailTo( const char* subject, const char* body, const char* to,
     ( void ) cc;
     ( void ) bcc;
     ( void ) attachments;
+    ( void ) att_count;
     /* TODO */
     return 0;
     }

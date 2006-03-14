@@ -234,17 +234,17 @@ void KDapiHandler::processCommandMailTo( ConnectionData& conn, int seq )
     char* to;
     char* cc;
     char* bcc;
-    char** attachments;
+    stringarr attachments;
     if( !dapi_readCommandMailTo( conn.conn, &subject, &body, &to, &cc, &bcc, &attachments ))
         {
         closeSocket( conn );
         return;
         }
     QStringList attachurls;
-    for( char** at = attachments;
-         *at != NULL;
-         ++at )
-        attachurls.append( QString::fromUtf8( *at ));
+    for( int i = 0;
+         i < attachments.count;
+         ++i )
+        attachurls.append( QString::fromUtf8( attachments.data[ i ] ));
     kapp->invokeMailer( QString::fromUtf8( to ), QString::fromUtf8( cc ), QString::fromUtf8( bcc ),
         QString::fromUtf8( subject ), QString::fromUtf8( body ), QString(), attachurls );
     dapi_writeReplyMailTo( conn.conn, seq, 1 );
@@ -253,7 +253,7 @@ void KDapiHandler::processCommandMailTo( ConnectionData& conn, int seq )
     free( to );
     free( cc );
     free( bcc );
-    free( attachments );
+    dapi_freestringarr( attachments );
     }
 
 void KDapiHandler::processCommandLocalFile( ConnectionData& conn, int seq )

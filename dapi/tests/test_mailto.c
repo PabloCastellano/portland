@@ -15,7 +15,8 @@ static void callback( DapiConnection* a1, int a2, int a3 )
 int main()
     {
     int ok;
-    const char* attachments[] = { "/tmp/mailtotest.txt", NULL };
+    stringarr attachments;
+    char* attachments_data[] = { "/tmp/mailtotest.txt" };
     DapiConnection* conn = dapi_connect();
     if( conn == NULL )
         {
@@ -29,6 +30,8 @@ int main()
         return 2;
         }
     system( "touch /tmp/mailtotest.txt" );
+    attachments.count = 1;
+    attachments.data = attachments_data;
     ok = dapi_MailTo( conn, "Test mail", "Hi,\n\nthis is a test mail.\n",
         "l.lunak@suse.cz, l.lunak@kde.org", NULL, "portland@lists.freedesktop.org", attachments );
     printf( "Result: %s\n", ok == 1 ? "Ok" : "Failed" );

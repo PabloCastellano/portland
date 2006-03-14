@@ -3,6 +3,11 @@ int dapi_readCommandInit( DapiConnection* conn );
 int dapi_writeCommandInit( DapiConnection* conn );
 int dapi_readReplyInit( DapiConnection* conn, int* ok );
 void dapi_writeReplyInit( DapiConnection* conn, int seq, int ok );
+int dapi_readCommandcapabilities( DapiConnection* conn );
+int dapi_writeCommandcapabilities( DapiConnection* conn );
+int dapi_readReplycapabilities( DapiConnection* conn, intarr* capabitilies, int* ok );
+void dapi_writeReplycapabilities( DapiConnection* conn, int seq, intarr capabitilies,
+    int ok );
 int dapi_readCommandOpenUrl( DapiConnection* conn, char** url );
 int dapi_writeCommandOpenUrl( DapiConnection* conn, const char* url );
 int dapi_readReplyOpenUrl( DapiConnection* conn, int* ok );
@@ -24,9 +29,9 @@ int dapi_writeCommandSuspendScreensaving( DapiConnection* conn, int suspend );
 int dapi_readReplySuspendScreensaving( DapiConnection* conn, int* ok );
 void dapi_writeReplySuspendScreensaving( DapiConnection* conn, int seq, int ok );
 int dapi_readCommandMailTo( DapiConnection* conn, char** subject, char** body, char** to,
-    char** cc, char** bcc, char*** attachments );
+    char** cc, char** bcc, stringarr* attachments );
 int dapi_writeCommandMailTo( DapiConnection* conn, const char* subject, const char* body,
-    const char* to, const char* cc, const char* bcc, const char** attachments );
+    const char* to, const char* cc, const char* bcc, stringarr attachments );
 int dapi_readReplyMailTo( DapiConnection* conn, int* ok );
 void dapi_writeReplyMailTo( DapiConnection* conn, int seq, int ok );
 int dapi_readCommandLocalFile( DapiConnection* conn, char** remote, char** local,
@@ -48,6 +53,8 @@ enum
     {
     DAPI_COMMAND_INIT,
     DAPI_REPLY_INIT,
+    DAPI_COMMAND_CAPABILITIES,
+    DAPI_REPLY_CAPABILITIES,
     DAPI_COMMAND_OPENURL,
     DAPI_REPLY_OPENURL,
     DAPI_COMMAND_EXECUTEURL,

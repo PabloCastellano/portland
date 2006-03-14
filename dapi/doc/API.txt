@@ -18,6 +18,15 @@ Needs to be the very first call performed. If the call fails, no API can be used
 ok: if false, initialization failed
 
 
+Capabilities() -> ( int[] capabilities )
+----------------------------------------
+
+Returns a list of all commands that the desktop supports. Refer to your
+bindings documentation for details on command id's.
+
+capabilities: a list of capabilities
+
+
 OpenUrl( string url ) -> ( bool ok )
 ------------------------------------
 
@@ -65,8 +74,8 @@ suspend: whether to suspend screensaving
 ok: if false, suspending failed
 
 
-MailTo( string subject, string body, string to, string cc, string bcc, stringlist attachments ) -> ( bool ok )
---------------------------------------------------------------------------------------------------------------
+MailTo( string subject, string body, string to, string cc, string bcc, string[] attachments ) -> ( bool ok )
+------------------------------------------------------------------------------------------------------------
 
 Opens a window for composing mail in the default mail client.
 
