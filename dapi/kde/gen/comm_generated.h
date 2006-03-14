@@ -3,10 +3,10 @@ int dapi_readCommandInit( DapiConnection* conn );
 int dapi_writeCommandInit( DapiConnection* conn );
 int dapi_readReplyInit( DapiConnection* conn, int* ok );
 void dapi_writeReplyInit( DapiConnection* conn, int seq, int ok );
-int dapi_readCommandcapabilities( DapiConnection* conn );
-int dapi_writeCommandcapabilities( DapiConnection* conn );
-int dapi_readReplycapabilities( DapiConnection* conn, intarr* capabitilies, int* ok );
-void dapi_writeReplycapabilities( DapiConnection* conn, int seq, intarr capabitilies,
+int dapi_readCommandCapabilities( DapiConnection* conn );
+int dapi_writeCommandCapabilities( DapiConnection* conn );
+int dapi_readReplyCapabilities( DapiConnection* conn, intarr* capabitilies, int* ok );
+void dapi_writeReplyCapabilities( DapiConnection* conn, int seq, intarr capabitilies,
     int ok );
 int dapi_readCommandOpenUrl( DapiConnection* conn, char** url );
 int dapi_writeCommandOpenUrl( DapiConnection* conn, const char* url );

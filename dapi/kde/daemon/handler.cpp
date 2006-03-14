@@ -77,6 +77,9 @@ void KDapiHandler::processCommand( ConnectionData& conn )
         case DAPI_COMMAND_INIT:
             processCommandInit( conn, seq );
             return;
+        case DAPI_COMMAND_CAPABILITIES:
+            processCommandCapabilities( conn, seq );
+            return;
         case DAPI_COMMAND_OPENURL:
             processCommandOpenUrl( conn, seq );
             return;
@@ -130,6 +133,35 @@ void KDapiHandler::processCommandInit( ConnectionData& conn, int seq )
         return;
         }
     dapi_writeReplyInit( conn.conn, seq, 1 );
+    }
+
+/* TODO */
+static int caps[] =
+    {    
+    DAPI_COMMAND_INIT,
+    DAPI_COMMAND_CAPABILITIES,
+    DAPI_COMMAND_OPENURL,
+    DAPI_COMMAND_EXECUTEURL,
+    DAPI_COMMAND_BUTTONORDER,
+    DAPI_COMMAND_RUNASUSER,
+    DAPI_COMMAND_SUSPENDSCREENSAVING,
+    DAPI_COMMAND_MAILTO,
+    DAPI_COMMAND_LOCALFILE,
+    DAPI_COMMAND_UPLOADFILE,
+    DAPI_COMMAND_REMOVETEMPORARYLOCALFILE
+    };
+
+void KDapiHandler::processCommandCapabilities( ConnectionData& conn, int seq )
+    {
+    intarr capabilities;
+    if( !dapi_readCommandInit( conn.conn ))
+        {
+        closeSocket( conn );
+        return;
+        }
+    capabilities.count = sizeof( caps ) / sizeof( caps[ 0 ] );
+    capabilities.data = caps;
+    dapi_writeReplyCapabilities( conn.conn, seq, capabilities, 1 );
     }
 
 void KDapiHandler::processCommandOpenUrl( ConnectionData& conn, int seq )

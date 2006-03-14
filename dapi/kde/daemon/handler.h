@@ -29,6 +29,7 @@ class KDapiHandler
         void closeSocket( ConnectionData& conn );
         void processCommand( ConnectionData& conn );
         void processCommandInit( ConnectionData& conn, int seq );
+        void processCommandCapabilities( ConnectionData& conn, int seq );
         void processCommandOpenUrl( ConnectionData& conn, int seq );
         void processCommandExecuteUrl( ConnectionData& conn, int seq );
         void processCommandButtonOrder( ConnectionData& conn, int seq );

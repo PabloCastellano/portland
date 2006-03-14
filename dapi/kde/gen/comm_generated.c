@@ -3,7 +3,7 @@ int dapi_readCommandInit( DapiConnection* conn )
     return 1;
     }
 
-int dapi_readCommandcapabilities( DapiConnection* conn )
+int dapi_readCommandCapabilities( DapiConnection* conn )
     {
     return 1;
     }
@@ -79,7 +79,7 @@ int dapi_readReplyInit( DapiConnection* conn, int* ok )
     return 1;
     }
 
-int dapi_readReplycapabilities( DapiConnection* conn, intarr* capabitilies, int* ok )
+int dapi_readReplyCapabilities( DapiConnection* conn, intarr* capabitilies, int* ok )
     {
     *capabitilies = readintarr( conn );
     readSocket( conn, ok, sizeof( *ok ));
@@ -147,7 +147,7 @@ int dapi_writeCommandInit( DapiConnection* conn )
     return seq;
     }
 
-int dapi_writeCommandcapabilities( DapiConnection* conn )
+int dapi_writeCommandCapabilities( DapiConnection* conn )
     {
     int seq = getNextSeq( conn );
     writeCommand( conn, DAPI_COMMAND_CAPABILITIES, seq );
@@ -244,7 +244,7 @@ void dapi_writeReplyInit( DapiConnection* conn, int seq, int ok )
     writeSocket( conn, &ok, sizeof( ok ));
     }
 
-void dapi_writeReplycapabilities( DapiConnection* conn, int seq, intarr capabitilies,
+void dapi_writeReplyCapabilities( DapiConnection* conn, int seq, intarr capabitilies,
     int ok )
     {
     writeCommand( conn, DAPI_REPLY_CAPABILITIES, seq );

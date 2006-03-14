@@ -24,7 +24,7 @@ int dapi_Init( DapiConnection* conn )
     return ret;
     }
 
-int dapi_capabilities( DapiConnection* conn, intarr* capabitilies )
+int dapi_Capabilities( DapiConnection* conn, intarr* capabitilies )
     {
     int seq;
     if( conn->sync_callback == NULL )
@@ -33,7 +33,7 @@ int dapi_capabilities( DapiConnection* conn, intarr* capabitilies )
         abort();
         }
     int ret;
-    seq = dapi_writeCommandcapabilities( conn );
+    seq = dapi_writeCommandCapabilities( conn );
     if( seq == 0 )
         return 0;
     for(;;)
@@ -45,7 +45,7 @@ int dapi_capabilities( DapiConnection* conn, intarr* capabitilies )
             break; /* --> */
         conn->sync_callback( conn, comm, seq2 );
         }
-    if( !dapi_readReplycapabilities( conn, capabitilies, &ret ))
+    if( !dapi_readReplyCapabilities( conn, capabitilies, &ret ))
         return 0;
     return ret;
     }

@@ -5,7 +5,7 @@ FUNCTION Init
  ENDARG
 ENDFUNCTION
 
-FUNCTION capabilities
+FUNCTION Capabilities
  ARG capabitilies
   TYPE int[]
   OUT

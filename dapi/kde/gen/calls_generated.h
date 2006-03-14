@@ -1,5 +1,5 @@
 int dapi_Init( DapiConnection* conn );
-int dapi_capabilities( DapiConnection* conn, intarr* capabitilies );
+int dapi_Capabilities( DapiConnection* conn, intarr* capabitilies );
 int dapi_OpenUrl( DapiConnection* conn, const char* url );
 int dapi_ExecuteUrl( DapiConnection* conn, const char* url );
 int dapi_ButtonOrder( DapiConnection* conn );

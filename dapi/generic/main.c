@@ -41,6 +41,36 @@ static void processCommandInit( DapiConnection* conn, int seq )
     debug( "Init %d", dapi_socket( conn ));
     dapi_writeReplyInit( conn, seq, 1 );
     }
+
+/* TODO */
+static int caps[] =
+    {    
+    DAPI_COMMAND_INIT,
+    DAPI_COMMAND_CAPABILITIES,
+    DAPI_COMMAND_OPENURL,
+/*    DAPI_COMMAND_EXECUTEURL,*/
+    DAPI_COMMAND_BUTTONORDER,
+/*    DAPI_COMMAND_RUNASUSER,*/
+    DAPI_COMMAND_SUSPENDSCREENSAVING,
+/*    DAPI_COMMAND_MAILTO,*/
+    DAPI_COMMAND_LOCALFILE,
+    DAPI_COMMAND_UPLOADFILE,
+    DAPI_COMMAND_REMOVETEMPORARYLOCALFILE
+    };
+
+static void processCommandCapabilities( DapiConnection* conn, int seq )
+    {
+    intarr capabilities;
+    if( !dapi_readCommandInit( conn ))
+        {
+        closeConnection( conn );
+        return;
+        }
+    debug( "Capabilities %d", dapi_socket( conn ));
+    capabilities.count = sizeof( caps ) / sizeof( caps[ 0 ] );
+    capabilities.data = caps;
+    dapi_writeReplyCapabilities( conn, seq, capabilities, 1 );
+    }
     
 static void processCommandOpenUrl( DapiConnection* conn, int seq )
     {
@@ -219,6 +249,9 @@ static void processCommand( DapiConnection* conn )
         {
         case DAPI_COMMAND_INIT:
             processCommandInit( conn, seq );
+            return;
+        case DAPI_COMMAND_CAPABILITIES:
+            processCommandCapabilities( conn, seq );
             return;
         case DAPI_COMMAND_OPENURL:
             processCommandOpenUrl( conn, seq );

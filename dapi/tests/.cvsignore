@@ -9,3 +9,4 @@ test_mailto
 test_remotefile
 test_runasuser
 test_screensaving
+test_capabilities
