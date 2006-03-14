@@ -20,6 +20,8 @@ struct Arg
     Arg() : out( false ), ret( false ) {}
     QString cType() const;
     static QString cType( const QString& type );
+    void readCommand( QTextStream& stream ) const;
+    void writeCommand( QTextStream& stream ) const;
     QString name;
     QString type;
     bool out;
@@ -145,6 +147,26 @@ ArgList Arg::stripReturnArgument( const ArgList& args )
             }
         }
     return new_args;
+    }
+
+void Arg::readCommand( QTextStream& stream ) const
+    {
+    if( type == "string" )
+        stream << "    *" << name << " = readString( conn );\n";
+    else if( type == "stringlist" )
+        stream << "    *" << name << " = readStringList( conn );\n";
+    else
+        stream << "    readSocket( conn, " << name << ", sizeof( *" << name << " ));\n";
+    }
+
+void Arg::writeCommand( QTextStream& stream ) const
+    {
+    if( type == "string" )
+        stream << "    writeString( conn, " << name << " );\n";
+    else if( type == "stringlist" )
+        stream << "    writeStringList( conn, " << name << " );\n";
+    else
+        stream << "    writeSocket( conn, &" << name << ", sizeof( " << name << " ));\n";
     }
 
 QString makeIndent( int indent )
@@ -371,67 +393,6 @@ void generateSharedCommH()
     stream << "\n    };\n";
     }
 
-void generateSharedCommHInternal()
-    {
-    QFile file( "comm_internal_generated.h" );
-    if( !file.open( IO_WriteOnly ))
-        error();
-    QTextStream stream( &file );
-    stream <<
-        "typedef struct command_header\n"
-        "    {\n"
-        "    int magic;\n"
-        "    int seq;\n"
-        "    int command;\n"
-        "    } command_header;\n";
-    for( QValueList< Function >::ConstIterator it = functions.begin();
-         it != functions.end();
-         ++it )
-        {
-        const Function& function = *it;
-        stream << "typedef struct command_" << function.name.lower() << "\n    {\n";
-        ArgList args = Arg::stripOutArguments( function.args );
-        for( ArgList::ConstIterator it = args.begin();
-             it != args.end();
-             ++it )
-            {
-            const Arg& arg = (*it);
-            if( arg.type == "string" )
-                stream << "    int " << arg.name << "_len; /*   char* " << arg.name << "   */\n";
-            else if( arg.type == "stringlist" )
-                stream << "    int " << arg.name << "_count; /*   char** " << arg.name << "   */\n";
-            else
-                stream << "    " << arg.cType() << " " << arg.name << ";\n";
-            }
-        if( args.isEmpty())
-            stream << "    int dummy;\n";
-        stream << "    } command_" << function.name.lower() << ";\n";
-        }
-    for( QValueList< Function >::ConstIterator it = functions.begin();
-         it != functions.end();
-         ++it )
-        {
-        const Function& function = *it;
-        stream << "typedef struct reply_" << function.name.lower() << "\n    {\n";
-        ArgList args = Arg::stripNonOutArguments( function.args );
-        for( ArgList::ConstIterator it = args.begin();
-             it != args.end();
-             ++it )
-            {
-            const Arg& arg = (*it);
-            if( arg.type == "string" )
-                stream << "    int " << arg.name << "_len; /*   char* " << arg.name << "   */\n";
-            else if( arg.type == "stringlist" )
-                stream << "    int " << arg.name << "_count; /*   char* " << arg.name << "   */\n";
-            else
-                stream << "    " << arg.cType() << " " << arg.name << ";\n";
-            }
-        if( args.isEmpty())
-            stream << "    int dummy;\n";
-        stream << "    } reply_" << function.name.lower() << ";\n";
-        }
-    }
-
 void generateSharedCommCReadFunctions( QTextStream& stream, FunctionType type )
     {
     for( QValueList< Function >::ConstIterator it = functions.begin();
@@ -441,12 +402,6 @@ void generateSharedCommCReadFunctions( QTextStream& stream, FunctionType type )
         const Function& function = *it;
         function.generateC( stream, 0, type );
         stream << "\n    {\n";
-        if( type == ReadCommand )
-            stream << "    command_" << function.name.lower() << " command_;\n";
-        else
-            stream << "    reply_" << function.name.lower() << " command_;\n";
-        stream << "    if( readSocket( conn, ( char* ) &command_, sizeof( command_ )) <= 0 )\n"
-               << "        return 0;\n";
         ArgList args = type == ReadCommand ? Arg::stripOutArguments( function.args )
             : Arg::stripNonOutArguments( function.args );
         for( ArgList::ConstIterator it = args.begin();
@@ -454,25 +409,12 @@ void generateSharedCommCReadFunctions( QTextStream& stream, FunctionType type )
              ++it )
             {
             const Arg& arg = (*it);
-            if( arg.type == "string" || arg.type == "stringlist" )
-                continue;
-            stream << "    *" << arg.name << " = command_." << arg.name << ";\n";
+            arg.readCommand( stream );
             }
+        // TODO tady chybi kontrola, ze nebyla chyba pri cteni
         ArgList args_extra = Arg::stripSimpleArguments( args );
         if( !args_extra.isEmpty())
             {
-            for( ArgList::ConstIterator it = args_extra.begin();
-                 it != args_extra.end();
-                 ++it )
-                {
-                const Arg& arg = (*it);
-                if( arg.type == "string" )
-                    stream << "    *" << arg.name << " = readString( conn, command_." << arg.name << "_len );\n";
-                else if( arg.type == "stringlist" )
-                    stream << "    *" << arg.name << " = readStringList( conn, command_." << arg.name << "_count );\n";
-                else
-                    abort();
-                }
             stream << "    if(";
             bool need_op = false;
             for( ArgList::ConstIterator it = args_extra.begin();
@@ -511,14 +453,12 @@ void generateSharedCommCWriteFunctions( QTextStream& stream, FunctionType type )
         stream << "\n    {\n";
         if( type == WriteCommand )
             {
-            stream << "    command_" << function.name.lower() << " command_;\n"
-                   << "    int seq = getNextSeq( conn );\n"
+            stream << "    int seq = getNextSeq( conn );\n"
                    << "    writeCommand( conn, DAPI_COMMAND_" << function.name.upper() << ", seq );\n";
             }
         else
             {
-            stream << "    reply_" << function.name.lower() << " command_;\n"
-                   << "    writeCommand( conn, DAPI_REPLY_" << function.name.upper() << ", seq );\n";
+            stream << "    writeCommand( conn, DAPI_REPLY_" << function.name.upper() << ", seq );\n";
             }
         ArgList args2 = type == WriteCommand ? Arg::stripOutArguments( function.args ) : Arg::stripNonOutArguments( function.args );
         for( ArgList::ConstIterator it = args2.begin();
@@ -526,25 +466,9 @@ void generateSharedCommCWriteFunctions( QTextStream& stream, FunctionType type )
              ++it )
             {
             const Arg& arg = (*it);
-            if( arg.type == "string" )
-                stream << "    command_." << arg.name << "_len = "
-                    << arg.name << " != NULL ? strlen( " << arg.name << " ) : 0;\n";
-            else if( arg.type == "stringlist" )
-                stream << "    command_." << arg.name << "_count = stringSize( " << arg.name << " );\n";
-            else
-                stream << "    command_." << arg.name << " = " << arg.name << ";\n";
+            arg.writeCommand( stream );
             }
-        stream << "    writeSocket( conn, ( char* ) &command_, sizeof( command_ ));\n";
-        for( ArgList::ConstIterator it = args2.begin();
-             it != args2.end();
-             ++it )
-            {
-            const Arg& arg = (*it);
-            if( arg.type == "string" )
-                stream << "    writeString( conn, " << arg.name << " );\n";
-            else if( arg.type == "stringlist" )
-                stream << "    writeStringList( conn, " << arg.name << " );\n";
-            }
+        // TODO kontrola, ze nebyla chyba pri zapisu?
         if( type == WriteCommand )
             stream << "    return seq;\n";
         stream << "    }\n\n";
@@ -557,29 +481,8 @@ void generateSharedCommC()
     if( !file.open( IO_WriteOnly ))
         error();
     QTextStream stream( &file );
-    stream <<
-        "int dapi_readCommand( DapiConnection* conn, int* comm, int* seq )\n"
-        "    {\n"
-        "    command_header command;\n"
-        "    if( readSocket( conn, ( char* ) &command, sizeof( command )) <= 0 )\n"
-        "        return 0;\n"
-        "    if( command.magic != MAGIC )\n"
-        "        return 0;\n"
-        "    *comm = command.command;\n" // TODO check range?
-        "    *seq = command.seq;\n"
-        "    return 1;\n"
-        "    }\n\n";
     generateSharedCommCReadFunctions( stream, ReadCommand );
     generateSharedCommCReadFunctions( stream, ReadReply );
-    stream <<
-        "static void writeCommand( DapiConnection* conn, int com, int seq )\n"
-        "    {\n"
-        "    command_header command;\n"
-        "    command.magic = MAGIC;\n"
-        "    command.seq = seq;\n"
-        "    command.command = com;\n"
-        "    writeSocket( conn, ( char* ) &command, sizeof( command ));\n"
-        "    }\n\n";
     generateSharedCommCWriteFunctions( stream, WriteCommand );
     generateSharedCommCWriteFunctions( stream, WriteReply );
     }
@@ -677,7 +580,6 @@ void generateSharedCallsC()
 void generateShared()
     {
     generateSharedCommH();
-    generateSharedCommHInternal();
     generateSharedCommC();
     generateSharedCallsH();
     generateSharedCallsC();

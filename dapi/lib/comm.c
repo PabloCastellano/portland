@@ -127,12 +127,12 @@ int dapi_socket( DapiConnection* conn )
     return conn->sock;
     }
 
-static int writeSocket( DapiConnection* conn, const char* data, int size )
+static int writeSocket( DapiConnection* conn, const void* data, int size )
     {
     int written = 0;
     for(;;)
         {
-        int len = write( conn->sock, data + written, size - written );
+        int len = write( conn->sock, ( const char* ) data + written, size - written );
         if( len < 0 && errno != EINTR && errno != EAGAIN )
             return -1;
         if( len > 0 )
@@ -142,12 +142,12 @@ static int writeSocket( DapiConnection* conn, const char* data, int size )
         }
     }
 
-static int readSocket( DapiConnection* conn, char* data, int size )
+static int readSocket( DapiConnection* conn, void* data, int size )
     {
     int rd = 0;
     for(;;)
         {
-        int len = read( conn->sock, data + rd, size - rd );
+        int len = read( conn->sock, ( char* ) data + rd, size - rd );
         if( len < 0 && errno != EINTR && errno != EAGAIN )
             return -1;
         if( len == 0 )
@@ -193,109 +193,115 @@ static int getNextSeq( DapiConnection* conn )
     return conn->last_seq;
     }
 
-static char* readString( DapiConnection* conn, int len )
+static char* readString( DapiConnection* conn )
     {
+    int len;
+    if( readSocket( conn, &len, sizeof( len )) <= 0 )
+        return NULL;
     char* ret = malloc( len + 1 );
     if( ret == NULL )
         return NULL;
-    if( readSocket( conn, ret, len + 1 ) > 0 )
+    if( len > 0 )
         {
-        ret[ len ] = '\0';
-        return ret;
+        if( readSocket( conn, ret, len ) <= 0 )
+            {
+            free( ret );
+            return NULL;
+            }
         }
-    free( ret );
-    return NULL;
+    ret[ len ] = '\0';
+    return ret;
     }
 
 static void writeString( DapiConnection* conn, const char* str )
     {
-    if( str == NULL )
+    int len = ( str == NULL ? 0 : strlen( str ));
+    writeSocket( conn, &len, sizeof( len ));
+    if( len > 0 )
+        writeSocket( conn, str, len );
+    }
+
+void dapi_freeStringList( char** strs )
+    {
+    if( strs != NULL )
         {
-        char c = '\0';
-        writeSocket( conn, &c, 1 );
-        return;
+        char** pos;
+        for( pos = strs;
+             *pos != NULL;
+             ++pos )
+            free( *pos );
+        free( strs );
         }
-    writeSocket( conn, str, strlen( str ) + 1 );
     }
 
-static int stringSize( const char** strs )
+static char** readStringList( DapiConnection* conn )
     {
-    int cnt = 0;
-    if( strs == NULL || *strs == NULL )
-        return 0;
-    for(;
-         *strs != NULL;
-         ++strs )
-        cnt += strlen( *strs ) + 1;
-    return cnt;
-    }
-
-static char** readStringList( DapiConnection* conn, int len )
-    {
-    char* buf;
+    int count;
     char** ret;
-    int cnt;
     int i;
-    int pos;
-    int set;
-    if( len == 0 )
-        {
-        ret = malloc( sizeof( char* ));
-        if( ret == NULL )
-            return NULL;
-        *ret = NULL;
-        return ret;
-        }
-    buf = malloc( len );
-    if( buf == NULL )
+    if( readSocket( conn, &count, sizeof( count )) <= 0 )
         return NULL;
-    if( readSocket( conn, buf, len ) <= 0 )
-        {
-        free( buf );
-        return NULL;
-        }
-    cnt = 1; /* extra for terminating NULL */
-    for( i = 0;
-         i < len;
-         ++i )
-        if( buf[ i ] == '\0' )
-            ++cnt;
-    if( cnt == 0 )
-        {
-        free( buf );
-        return NULL;
-        }
-    ret = malloc( sizeof( char* ) * cnt + len );
+    ret = malloc(( count + 1 ) * sizeof( char** ));
     if( ret == NULL )
-        {
-        free( buf );
         return NULL;
-        }
-    memcpy( ret + cnt, buf, len ); /* place string data right after the pointers */
-    free( buf );
-    buf = ( char* )( ret + cnt );
-    pos = 0;
-    set = 1;
     for( i = 0;
-         i < len;
+         i < count;
+         ++i )
+        ret[ i ] = NULL;
+    for( i = 0;
+         i < count;
          ++i )
         {
-        if( set )
-            ret[ pos++ ] = buf + i;
-        set = buf[ i ] == '\0';
+        ret[ i ] = readString( conn );
+        if( ret[ i ] == NULL )
+            {
+            dapi_freeStringList( ret );
+            return NULL;
+            }
         }
-    ret[ pos ] = NULL; /* terminating NULL */
+    ret[ count ] = NULL; /* terminating NULL */
     return ret;
     }
 
 static void writeStringList( DapiConnection* conn, const char** strs )
     {
+    int count = 0;
+    const char** pos;
     if( strs == NULL || *strs == NULL )
+        {
+        int count = 0;
+        writeSocket( conn, &count, sizeof( count ));
         return;
-    for(;
-         *strs != NULL;
-         ++strs )
-        writeSocket( conn, *strs, strlen( *strs ) + 1 );
+        }
+    for( pos = strs;
+         *pos != NULL;
+         ++pos )
+        ++count;
+    writeSocket( conn, &count, sizeof( count ));
+    for( pos = strs;
+         *pos != NULL;
+         ++pos )
+        writeString( conn, *pos );
+    }
+
+int dapi_readCommand( DapiConnection* conn, int* comm, int* seq )
+    {
+    int magic;
+    /* TODO kontrola failure */
+    readSocket( conn, &magic, sizeof( magic ));
+    readSocket( conn, comm, sizeof( *comm ));
+    readSocket( conn, seq, sizeof( *seq ));
+    if( magic != MAGIC )
+        return 0;
+    return 1;
+    }
+
+static void writeCommand( DapiConnection* conn, int comm, int seq )
+    {
+    int magic = MAGIC;
+    writeSocket( conn, &magic, sizeof( magic ));
+    writeSocket( conn, &comm, sizeof( comm ));
+    writeSocket( conn, &seq, sizeof( seq ));
     }
 
 #include "../kde/gen/comm_generated.c"
