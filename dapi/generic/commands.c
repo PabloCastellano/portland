@@ -30,6 +30,9 @@ int openUrl( const char* url )
     sigaction( SIGCHLD, &sa, &saold );
     if( fork() == 0 )
         {
+        const char* browser = getenv( "BROWSER" );
+        if( browser != NULL )
+            execlp( browser, browser, url, NULL );
         execlp( "firefox", "firefox", url, NULL );
         execlp( "mozilla", "mozilla", url, NULL );
         execlp( "netscape", "netscape", url, NULL );
