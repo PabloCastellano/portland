@@ -1,0 +1,11 @@
+.deps
+.libs
+Makefile
+Makefile.in
+test_async
+test_calls
+test_comm
+test_mailto
+test_remotefile
+test_runasuser
+test_screensaving
