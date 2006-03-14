@@ -3,6 +3,8 @@
 
 #include <qobject.h>
 #include <qmap.h>
+#include <kio/job.h>
+#include <qwidget.h>
 
 #include "comm.h"
 
@@ -45,5 +47,57 @@ class KDapiHandler
         typedef QValueList< ConnectionData > ConnectionList;
         ConnectionList connections;
     };
+
+class KDapiFakeWidget
+    : public QWidget
+    {
+    Q_OBJECT
+    public:
+        KDapiFakeWidget( WId window );
+        virtual ~KDapiFakeWidget();
+    };
+
+class KDapiDownloadJob
+    : public QObject
+    {
+    Q_OBJECT
+    public:
+        KDapiDownloadJob( KIO::FileCopyJob* j, DapiConnection* c, int s, QWidget* w );
+    private slots:
+        void done();
+    private:
+        KIO::FileCopyJob* job;
+        DapiConnection* conn;
+        int seq;
+        QWidget* widget;
+    };
+
+class KDapiUploadJob
+    : public QObject
+    {
+    Q_OBJECT
+    public:
+        KDapiUploadJob( KIO::FileCopyJob* j, DapiConnection* c, int s, bool r, QWidget* w );
+    private slots:
+        void done();
+    private:
+        KIO::FileCopyJob* job;
+        DapiConnection* conn;
+        int seq;
+        bool remove_local;
+        QWidget* widget;
+    };
+
+inline
+KDapiDownloadJob::KDapiDownloadJob( KIO::FileCopyJob* j, DapiConnection* c, int s, QWidget* w )
+    : job( j ), conn( c ), seq( s ), widget( w )
+    {
+    }
+
+inline
+KDapiUploadJob::KDapiUploadJob( KIO::FileCopyJob* j, DapiConnection* c, int s, bool r, QWidget* w )
+    : job( j ), conn( c ), seq( s ), remove_local( r ), widget( w )
+    {
+    }
 
 #endif

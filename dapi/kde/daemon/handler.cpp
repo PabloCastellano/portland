@@ -12,6 +12,7 @@
 #include <kprocess.h>
 #include <krun.h>
 #include <stdlib.h>
+#include <ktempfile.h>
 
 #include <X11/Xlib.h>
 #ifdef HAVE_DPMS
@@ -296,6 +297,21 @@ void KDapiHandler::processCommandMailTo( ConnectionData& conn, int seq )
     dapi_freeWindowInfo( winfo );
     }
 
+static QValueList< KTempFile* > tempfiles;
+
+static void removeTempFile( const QString file )
+    {
+    for( QValueList< KTempFile* >::Iterator it = tempfiles.begin();
+         it != tempfiles.end();
+         ++it )
+        if( (*it)->name() == file )
+            {
+            delete *it;
+            tempfiles.remove( it );
+            return;
+            }
+    }
+
 void KDapiHandler::processCommandLocalFile( ConnectionData& conn, int seq )
     {
     char* file;
@@ -314,15 +330,40 @@ void KDapiHandler::processCommandLocalFile( ConnectionData& conn, int seq )
         ; // result is empty
     else if( url.isLocalFile())
         result = url.path();
-    else
+    else if( allow_download )
         {
         QString target = QString::fromUtf8( local );
-        // TODO use KIO directly instead of NetAccess
-        if( allow_download && KIO::NetAccess::download( url, target, 0 )) // TODO window
-            result = target;
+        KTempFile* tmp = NULL;
+        KURL dest;
+        if( !target.isEmpty())
+            dest.setPath( target );
+        else
+            {
+            tmp = new KTempFile;
+            dest.setPath( tmp->name());
+            tempfiles.append( tmp );
+            }
+        KIO::FileCopyJob* job = KIO::file_copy( url, dest, -1, true, false );
+        KDapiFakeWidget* widget = winfo.window != 0 ? new KDapiFakeWidget( winfo.window ) : NULL;
+        job->setWindow( widget );
+        KDapiDownloadJob* upload = new KDapiDownloadJob( job, conn.conn, seq, widget );
+        connect( job, SIGNAL( result( KIO::Job* )), upload, SLOT( done()));
+        dapi_freeWindowInfo( winfo );
+        // will write reply asynchronously
+        return;
         }
     dapi_writeReplyLocalFile( conn.conn, seq, result.utf8());
     dapi_freeWindowInfo( winfo );
+    }
+
+void KDapiDownloadJob::done()
+    {
+    if( job->error() == 0 )
+        dapi_writeReplyLocalFile( conn, seq, job->destURL().path().utf8());
+    else
+        dapi_writeReplyLocalFile( conn, seq, NULL );
+    delete widget;
+    deleteLater();
     }
 
 void KDapiHandler::processCommandUploadFile( ConnectionData& conn, int seq )
@@ -343,21 +384,32 @@ void KDapiHandler::processCommandUploadFile( ConnectionData& conn, int seq )
     int ok = 0;
     if( !url.isValid())
         ok = 0;
-    else if( url.isLocalFile())
+    else if( url.isLocalFile() && url.path() == localfile )
         ok = 1; // no-op
     else
         {
-        // TODO use KIO directly instead of NetAccess
-        if( KIO::NetAccess::upload( localfile, url, 0 )) // TODO window
-        // TODO this apparently returns success even with e.g. http - check somehow
-            {
-            if( remove_local )
-                KIO::NetAccess::removeTempFile( localfile );
-            ok = 1;
-            }
+        KURL src;
+        src.setPath( localfile );
+        KIO::FileCopyJob* job = KIO::file_copy( src, url, -1, true, false );
+        KDapiFakeWidget* widget = winfo.window != 0 ? new KDapiFakeWidget( winfo.window ) : NULL;
+        job->setWindow( widget );
+        KDapiUploadJob* upload = new KDapiUploadJob( job, conn.conn, seq, remove_local, widget );
+        connect( job, SIGNAL( result( KIO::Job* )), upload, SLOT( done()));
+        dapi_freeWindowInfo( winfo );
+        // will write reply asynchronously
+        return;
         }
     dapi_writeReplyUploadFile( conn.conn, seq, ok );
     dapi_freeWindowInfo( winfo );
+    }
+
+void KDapiUploadJob::done()
+    {
+    // TODO this apparently returns success even with e.g. http - check somehow
+    dapi_writeReplyUploadFile( conn, seq, job->error() == 0 );
+    if( job->error() == 0 && remove_local )
+        removeTempFile( job->srcURL().path());
+    delete widget;
     }
 
 void KDapiHandler::processCommandRemoveTemporaryLocalFile( ConnectionData& conn, int seq )
@@ -368,7 +420,7 @@ void KDapiHandler::processCommandRemoveTemporaryLocalFile( ConnectionData& conn,
         closeSocket( conn );
         return;
         }
-    KIO::NetAccess::removeTempFile( QString::fromUtf8( file ));
+    removeTempFile( QString::fromUtf8( file ));
     dapi_writeReplyRemoveTemporaryLocalFile( conn.conn, seq, 1 );
     free( file );
     }
@@ -387,4 +439,15 @@ QCString KDapiHandler::makeStartupInfo( const DapiWindowInfo& winfo )
         kapp->updateUserTimestamp();
         }
     return KStartupInfo::createNewStartupId();
+    }
+
+// some KDE APIs accept only QWidget* instead of WId
+KDapiFakeWidget::KDapiFakeWidget( WId window )
+    {
+    create( window, false ); // don't init
+    }
+
+KDapiFakeWidget::~KDapiFakeWidget()
+    {
+    destroy( false ); // no cleanup
     }
