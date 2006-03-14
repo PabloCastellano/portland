@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "comm.h"
-#include "calls.h"
-#include "callbacks.h"
+#include <dapi/comm.h>
+#include <dapi/calls.h>
+#include <dapi/callbacks.h>
 
 static void callback( DapiConnection* conn, int seq, int ord )
     {

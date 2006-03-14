@@ -44,7 +44,7 @@ void dapi_freeWindowInfo( DapiWindowInfo winfo );
 void dapi_freestringarr( stringarr arr );
 void dapi_freeintarr( intarr arr );
 
-#include "../kde/gen/comm_generated.h"
+#include <dapi/comm_generated.h>
 
 #ifdef __cplusplus
 }

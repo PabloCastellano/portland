@@ -1,2 +1,2 @@
-SUBDIRS = lib generic tests
+SUBDIRS = include lib generic tests
 AUTOMAKE_OPTIONS = foreign

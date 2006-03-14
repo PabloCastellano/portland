@@ -6,4 +6,4 @@
 #include "comm.h"
 #include "comm_internal.h"
 
-#include "../kde/gen/calls_generated.c"
+#include <dapi/calls_generated.c>

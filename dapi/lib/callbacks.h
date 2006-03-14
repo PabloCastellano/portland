@@ -5,9 +5,9 @@
 extern "C" {
 #endif
 
-#include "comm.h"
+#include <dapi/comm.h>
 
-#include "../kde/gen/callbacks_generated.h"
+#include <dapi/callbacks_generated.h>
 
 typedef void (*DapiGenericCallback)( DapiConnection* conn, int command, int seq );
 

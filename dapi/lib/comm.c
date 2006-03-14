@@ -380,4 +380,4 @@ DapiConnection* dapi_namedConnectAndInit( const char* name )
     return conn;
     }
 
-#include "../kde/gen/comm_generated.c"
+#include <dapi/comm_generated.c>

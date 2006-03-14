@@ -1,8 +1,8 @@
 #include <stdio.h>
 
-#include "comm.h"
-#include "calls.h"
-#include "callbacks.h"
+#include <dapi/comm.h>
+#include <dapi/calls.h>
+#include <dapi/callbacks.h>
 
 static int seq1;
 

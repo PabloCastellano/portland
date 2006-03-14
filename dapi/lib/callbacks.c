@@ -5,7 +5,7 @@
 
 #include "comm_internal.h"
 
-#include "../kde/gen/callbacks_generated.c"
+#include <dapi/callbacks_generated.c>
 
 DapiGenericCallback dapi_setGenericCallback( DapiConnection* conn, DapiGenericCallback callback )
     {

@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "comm.h"
-#include "calls.h"
+#include <dapi/comm.h>
+#include <dapi/calls.h>
 
 int main()
     {

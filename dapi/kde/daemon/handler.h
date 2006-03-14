@@ -6,7 +6,7 @@
 #include <kio/job.h>
 #include <qwidget.h>
 
-#include "comm.h"
+#include <dapi/comm.h>
 
 class QSocketNotifier;
 

@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -6,8 +7,22 @@
 #include <X11/Xlib.h>
 
 #include "commands.h"
-#include "comm.h"
-#include "utils.h"
+#include <dapi/comm.h>
+
+static void debug( const char* fmt, ... )
+#ifdef __GNUC__
+    __attribute (( format( printf, 1, 2 )))
+#endif
+    ;
+    
+static void debug( const char* fmt, ... )
+    {
+    va_list va;
+    va_start( va, fmt );
+    vfprintf( stderr, fmt, va );
+    va_end( va );
+    fprintf( stderr, "\n" );
+    }
 
 DapiConnection** connections = NULL;
 int num_connections = 0;

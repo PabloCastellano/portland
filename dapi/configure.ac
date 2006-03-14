@@ -29,5 +29,7 @@ Makefile
 lib/Makefile
 tests/Makefile
 generic/Makefile
+include/Makefile
+include/dapi/Makefile
 ])
 AC_OUTPUT

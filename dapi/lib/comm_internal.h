@@ -1,6 +1,6 @@
 enum { MAGIC = 0x152355 };
 
-#include "../kde/gen/comm_internal_generated.h"
+#include <dapi/comm_internal_generated.h>
 
 #include "calls.h"
 #include "callbacks.h"

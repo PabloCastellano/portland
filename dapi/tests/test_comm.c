@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "comm.h"
+#include <dapi/comm.h>
 
 int main( int argc, char* argv[] )
     {
