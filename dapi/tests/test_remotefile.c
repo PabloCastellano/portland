@@ -9,16 +9,11 @@ int main()
     {
     char* local;
     int ok;
-    DapiConnection* conn = dapi_connect();
+    DapiConnection* conn = dapi_connectAndInit();
     if( conn == NULL )
         {
         fprintf( stderr, "Cannot connect!\n" );
         return 1;
-        }
-    if( !dapi_Init( conn ))
-        {
-        fprintf( stderr, "Initialization failed!\n" );
-        return 2;
         }
     local = dapi_LocalFile_Window( conn, "http://kde.org", "",  0, 0 ); /* no download, should fail */
     printf( "Local file1: %s - %s\n", local ? local : "?", local ? "Failed" : "Ok" );

@@ -9,16 +9,11 @@ int main()
     int ok;
     stringarr attachments;
     char* attachments_data[] = { "/tmp/mailtotest.txt" };
-    DapiConnection* conn = dapi_connect();
+    DapiConnection* conn = dapi_connectAndInit();
     if( conn == NULL )
         {
         fprintf( stderr, "Cannot connect!\n" );
         return 1;
-        }
-    if( !dapi_Init( conn ))
-        {
-        fprintf( stderr, "Initialization failed!\n" );
-        return 2;
         }
     system( "touch /tmp/mailtotest.txt" );
     attachments.count = 1;

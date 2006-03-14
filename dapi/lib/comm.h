@@ -12,6 +12,9 @@ DapiConnection* dapi_namedConnect( const char* name );
 void dapi_close( DapiConnection* conn );
 int dapi_socket( DapiConnection* conn );
 
+DapiConnection* dapi_connectAndInit( void );
+DapiConnection* dapi_namedConnectAndInit( const char* name );
+
 int dapi_bindSocket( void );
 int dapi_namedBindSocket( const char* name );
 DapiConnection* dapi_acceptSocket( int sock );

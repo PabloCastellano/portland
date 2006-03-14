@@ -13,16 +13,11 @@ static void callback( DapiConnection* conn, int seq, int ord )
 int main()
     {
     int seq;
-    DapiConnection* conn = dapi_connect();
+    DapiConnection* conn = dapi_connectAndInit();
     if( conn == NULL )
         {
         fprintf( stderr, "Cannot connect!\n" );
         return 1;
-        }
-    if( !dapi_Init( conn ))
-        {
-        fprintf( stderr, "Initialization failed!\n" );
-        return 2;
         }
     seq = dapi_callbackButtonOrder( conn, callback );
     printf( "Order call1: %d\n", seq );

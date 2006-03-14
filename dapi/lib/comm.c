@@ -362,4 +362,22 @@ void dapi_windowInfoInitWindow( DapiWindowInfo* winfo, long window )
     winfo->window = window;
     }
 
+DapiConnection* dapi_connectAndInit()
+    {
+    return dapi_namedConnectAndInit( "" );
+    }
+
+DapiConnection* dapi_namedConnectAndInit( const char* name )
+    {
+    DapiConnection* conn = dapi_namedConnect( name );
+    if( conn == NULL )
+        return NULL;
+    if( !dapi_Init( conn ))
+        {
+        dapi_close( conn );
+        return NULL;
+        }
+    return conn;
+    }
+
 #include "../kde/gen/comm_generated.c"

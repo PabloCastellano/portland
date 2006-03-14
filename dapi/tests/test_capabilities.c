@@ -8,16 +8,11 @@ int main()
     {
     intarr capabilities;
     int i;
-    DapiConnection* conn = dapi_connect();
+    DapiConnection* conn = dapi_connectAndInit();
     if( conn == NULL )
         {
         fprintf( stderr, "Cannot connect!\n" );
         return 1;
-        }
-    if( !dapi_Init( conn ))
-        {
-        fprintf( stderr, "Initialization failed!\n" );
-        return 2;
         }
     if( dapi_Capabilities( conn, &capabilities ))
         {
