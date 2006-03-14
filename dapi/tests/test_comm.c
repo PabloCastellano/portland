@@ -2,7 +2,7 @@
 
 #include "comm.h"
 
-int main()
+int main( int argc, char* argv[] )
     {
     int command, seq, seq2;
     int ok;

@@ -33,22 +33,27 @@ static void getDisplay( char* ret, int max )
         *pos = '\0';
     }
 
-static void socketName( char* name, int max )
+static void socketName( char* sock_file, const char* name, int max )
     {
     const char* home;
     char display[ 256 ];
     home = getenv( "HOME" );
     getDisplay( display, 255 );
-    snprintf( name, max - 1, "%s/.dapi-%s", home, display );
+    snprintf( sock_file, max - 1, "%s/.dapi-%s%s%s", home, display, name != NULL ? "-" : "", name );
     }
 
 DapiConnection* dapi_connect()
+    {
+    return dapi_namedConnect( "" );
+    }
+    
+DapiConnection* dapi_namedConnect( const char* name )
     {
     char sock_file[ 256 ];
     int sock;
     struct sockaddr_un addr;
     DapiConnection* ret;
-    socketName( sock_file, 255 );
+    socketName( sock_file, name, 255 );
     sock = socket( PF_UNIX, SOCK_STREAM, 0 );
     if( sock < 0 )
         {
@@ -77,10 +82,15 @@ DapiConnection* dapi_connect()
 
 int dapi_bindSocket()
     {
+    return dapi_namedBindSocket( "" );
+    }
+
+int dapi_namedBindSocket( const char* name )
+    {
     char sock_file[ 256 ];
     int sock;
     struct sockaddr_un addr;
-    socketName( sock_file, 255 );
+    socketName( sock_file, name, 255 );
     sock = socket( PF_UNIX, SOCK_STREAM, 0 );
     if( sock < 0 )
         {

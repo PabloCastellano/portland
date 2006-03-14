@@ -11,3 +11,4 @@ test_runasuser
 test_screensaving
 test_capabilities
 test_callbacks
+test_fallback
