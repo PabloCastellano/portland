@@ -34,7 +34,11 @@ struct Arg
 
 typedef QValueList< Arg > ArgList;
 
-enum FunctionType { ReadCommand, WriteCommand, ReadReply, WriteReply, HighLevel };
+enum FunctionType
+    {
+    ReadCommand, WriteCommand, ReadReply, WriteReply,
+    HighLevel, HighLevelCallback, Callback
+    };
 
 struct Function
     {
@@ -182,26 +186,40 @@ void Function::generateC( QTextStream& stream, int indent, FunctionType type ) c
     {
     QString line;
     line += makeIndent( indent );
+    if( type == Callback )
+        line += "typedef ";
     if( type == HighLevel )
         {
         QString rettype = returnType();
         line += Arg::cType( rettype, true );
         }
     else
-        line += type != WriteReply ? "int" : "void";
+        line += type != WriteReply && type != Callback ? "int" : "void";
+    if( type == Callback )
+        line += "( *";
     line += " dapi_";
-    if( type != HighLevel )
+    if( type == HighLevel || type == Callback )
+        ; // nothing
+    else if( type == HighLevelCallback )
+        line += "callback";
+    else
         {
         line += type == ReadCommand || type == ReadReply ? "read" : "write";
         line += type == ReadCommand || type == WriteCommand ? "Command" : "Reply";
         }
     line += name;
+    if( type == Callback )
+        line += "_callback )";
     line += "( DapiConnection* conn";
-    if( type == WriteReply )
+    if( type == WriteReply || type == Callback )
         line += ", int seq";
     ArgList args2;
     if( type == HighLevel )
         args2 = Arg::stripReturnArgument( args );
+    else if( type == HighLevelCallback )
+        args2 = Arg::stripOutArguments( args );
+    else if( type == Callback )
+        args2 = Arg::stripNonOutArguments( args );
     else if( type == ReadReply || type == WriteReply )
         args2 = Arg::stripNonOutArguments( args );
     else
@@ -224,6 +242,17 @@ void Function::generateC( QTextStream& stream, int indent, FunctionType type ) c
         if( type == ReadCommand || type == ReadReply || ( type == HighLevel && arg.out ))
             line += "*";
         line += " " + arg.name;
+        }
+    if( type == HighLevelCallback )
+        {
+        if( line.length() > 80 )
+            {
+            stream << line << ",\n";
+            line = makeIndent( indent + 4 );
+            }
+        else
+            line += ", ";
+        line += "dapi_" + name + "_callback callback";
         }
     line += " )";
     stream << line;
@@ -515,12 +544,7 @@ void generateSharedCallsC()
         QString rettype = function.returnType();
         function.generateC( stream, 0, HighLevel );
         stream << "\n    {\n"
-               << "    int seq;\n"
-               << "    if( conn->sync_callback == NULL )\n"
-               << "        {\n"
-               << "        fprintf( stderr, \"DAPI sync callback not set!\\n\" );\n"
-               << "        abort();\n"
-               << "        }\n";
+               << "    int seq;\n";
         stream << "    " << Arg::cType( rettype, true ) << " ret;\n";
         stream << "    seq = dapi_writeCommand" << function.name << "( conn";
         ArgList args = Arg::stripReturnArgument( function.args );
@@ -542,7 +566,7 @@ void generateSharedCallsC()
                << "            return 0;\n"
                << "        if( seq2 == seq && comm == DAPI_REPLY_" << function.name.upper() << " )\n"
                << "            break; /* --> */\n"
-               << "        conn->sync_callback( conn, comm, seq2 );\n"
+               << "        conn->generic_callback( conn, comm, seq2 );\n"
                << "        }\n"
                << "    if( !dapi_readReply" << function.name << "( conn";
         ArgList args2 = Arg::stripNonOutArguments( function.args );
@@ -572,12 +596,118 @@ void generateSharedCallsC()
         }
     }
 
+void generateSharedCallbacksH()
+    {
+    QFile file( "callbacks_generated.h" );
+    if( !file.open( IO_WriteOnly ))
+        error();
+    QTextStream stream( &file );
+    for( QValueList< Function >::ConstIterator it = functions.begin();
+         it != functions.end();
+         ++it )
+        {
+        const Function& function = *it;
+        function.generateC( stream, 0, Callback );
+        stream << ";\n";
+        function.generateC( stream, 0, HighLevelCallback );
+        stream << ";\n";
+        }
+    }
+
+void generateSharedCallbacksC()
+    {
+    QFile file( "callbacks_generated.c" );
+    if( !file.open( IO_WriteOnly ))
+        error();
+    QTextStream stream( &file );
+    for( QValueList< Function >::ConstIterator it = functions.begin();
+         it != functions.end();
+         ++it )
+        {
+        const Function& function = *it;
+        function.generateC( stream, 0, HighLevelCallback );
+        stream << "\n"
+               << "    {\n"
+               << "    int seq;\n"
+               << "    DapiCallbackData* call;\n"
+               << "    seq = dapi_writeCommand" << function.name << "( conn";
+        ArgList args2 = Arg::stripOutArguments( function.args );
+        for( ArgList::ConstIterator it = args2.begin();
+             it != args2.end();
+             ++it )
+            {
+            const Arg& arg = *it;
+            stream << ", " << arg.name;
+            }
+        stream << " );\n";
+        stream << "    if( seq == 0 )\n"
+               << "        return 0;\n"
+               << "    call = malloc( sizeof( *call ));\n"
+               << "    if( call == NULL )\n"
+               << "        return 0;\n"
+               << "    call->seq = seq;\n"
+               << "    call->callback = callback;\n"
+               << "    call->command = DAPI_COMMAND_" << function.name.upper() << ";\n"
+               << "    call->next = conn->callbacks;\n"
+               << "    conn->callbacks = call;\n"
+               << "    return seq;\n"
+               << "    }\n\n";
+        }
+    stream << "static void genericCallbackDispatch( DapiConnection* conn, DapiCallbackData* data, int command, int seq )\n"
+           << "    {\n"
+           << "    switch( command )\n"
+           << "        {\n";
+    for( QValueList< Function >::ConstIterator it = functions.begin();
+         it != functions.end();
+         ++it )
+        {
+        const Function& function = *it;
+        stream << "        case DAPI_REPLY_" << function.name.upper() << ":\n"
+               << "            {\n";
+        ArgList args = Arg::stripNonOutArguments( function.args );
+        for( ArgList::ConstIterator it = args.begin();
+             it != args.end();
+             ++it )
+            {
+            const Arg& arg = *it;
+            stream << makeIndent( 12 ) << arg.cType( true ) << " " << arg.name << ";\n";
+            }
+        // TODO check that command "matches" data->command? i.e. that the reply matches the expected reply
+        // for the sent command
+        stream << makeIndent( 12 ) << "dapi_readReply" << function.name << "( conn";
+        for( ArgList::ConstIterator it = args.begin();
+             it != args.end();
+             ++it )
+            {
+            const Arg& arg = *it;
+            stream << ", &" << arg.name;
+            }
+        stream << " );\n"
+               << makeIndent( 12 ) << "(( dapi_" << function.name << "_callback ) data->callback )( conn, data->seq";
+        for( ArgList::ConstIterator it = args.begin();
+             it != args.end();
+             ++it )
+            {
+            const Arg& arg = *it;
+            stream << ", " << arg.name;
+            }
+        // TODO tady cleanup, stejne jako u calls.c - udelat nejak genericky
+        stream << " );\n"
+               << makeIndent( 12 ) << "break;\n"
+               << makeIndent( 12 ) << "}\n";
+        }
+    stream << "        }\n"
+           << "    }\n";
+    }
+
 void generateShared()
     {
     generateSharedCommH();
     generateSharedCommC();
     generateSharedCallsH();
     generateSharedCallsC();
+    generateSharedCallbacksH();
+    generateSharedCallbacksC();
     }
 
 void generate()

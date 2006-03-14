@@ -9,10 +9,6 @@ extern "C" {
 
 #include "../kde/gen/calls_generated.h"
 
-typedef void (*DapiSyncCallback)( DapiConnection* conn, int command, int seq );
-
-void dapi_setSyncCallback( DapiConnection* conn, DapiSyncCallback callback );
-
 #ifdef __cplusplus
 }
 #endif

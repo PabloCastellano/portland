@@ -2,6 +2,7 @@
 
 #include "comm.h"
 #include "calls.h"
+#include "callbacks.h"
 
 static int seq1;
 
@@ -35,7 +36,7 @@ int main()
         fprintf( stderr, "Cannot connect!\n" );
         return 1;
         }
-    dapi_setSyncCallback( conn, callback );
+    dapi_setGenericCallback( conn, callback );
     if( !dapi_Init( conn ))
         {
         fprintf( stderr, "Initialization failed!\n" );

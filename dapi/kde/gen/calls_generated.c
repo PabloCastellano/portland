@@ -1,11 +1,6 @@
 int dapi_Init( DapiConnection* conn )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandInit( conn );
     if( seq == 0 )
@@ -17,7 +12,7 @@ int dapi_Init( DapiConnection* conn )
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_INIT )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyInit( conn, &ret ))
         return 0;
@@ -27,11 +22,6 @@ int dapi_Init( DapiConnection* conn )
 int dapi_Capabilities( DapiConnection* conn, intarr* capabitilies )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandCapabilities( conn );
     if( seq == 0 )
@@ -43,7 +33,7 @@ int dapi_Capabilities( DapiConnection* conn, intarr* capabitilies )
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_CAPABILITIES )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyCapabilities( conn, capabitilies, &ret ))
         return 0;
@@ -53,11 +43,6 @@ int dapi_Capabilities( DapiConnection* conn, intarr* capabitilies )
 int dapi_OpenUrl( DapiConnection* conn, const char* url )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandOpenUrl( conn, url );
     if( seq == 0 )
@@ -69,7 +54,7 @@ int dapi_OpenUrl( DapiConnection* conn, const char* url )
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_OPENURL )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyOpenUrl( conn, &ret ))
         return 0;
@@ -79,11 +64,6 @@ int dapi_OpenUrl( DapiConnection* conn, const char* url )
 int dapi_ExecuteUrl( DapiConnection* conn, const char* url )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandExecuteUrl( conn, url );
     if( seq == 0 )
@@ -95,7 +75,7 @@ int dapi_ExecuteUrl( DapiConnection* conn, const char* url )
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_EXECUTEURL )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyExecuteUrl( conn, &ret ))
         return 0;
@@ -105,11 +85,6 @@ int dapi_ExecuteUrl( DapiConnection* conn, const char* url )
 int dapi_ButtonOrder( DapiConnection* conn )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandButtonOrder( conn );
     if( seq == 0 )
@@ -121,7 +96,7 @@ int dapi_ButtonOrder( DapiConnection* conn )
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_BUTTONORDER )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyButtonOrder( conn, &ret ))
         return 0;
@@ -131,11 +106,6 @@ int dapi_ButtonOrder( DapiConnection* conn )
 int dapi_RunAsUser( DapiConnection* conn, const char* user, const char* command )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandRunAsUser( conn, user, command );
     if( seq == 0 )
@@ -147,7 +117,7 @@ int dapi_RunAsUser( DapiConnection* conn, const char* user, const char* command 
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_RUNASUSER )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyRunAsUser( conn, &ret ))
         return 0;
@@ -157,11 +127,6 @@ int dapi_RunAsUser( DapiConnection* conn, const char* user, const char* command 
 int dapi_SuspendScreensaving( DapiConnection* conn, int suspend )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandSuspendScreensaving( conn, suspend );
     if( seq == 0 )
@@ -173,7 +138,7 @@ int dapi_SuspendScreensaving( DapiConnection* conn, int suspend )
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_SUSPENDSCREENSAVING )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplySuspendScreensaving( conn, &ret ))
         return 0;
@@ -184,11 +149,6 @@ int dapi_MailTo( DapiConnection* conn, const char* subject, const char* body, co
     const char* cc, const char* bcc, stringarr attachments )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandMailTo( conn, subject, body, to, cc, bcc, attachments );
     if( seq == 0 )
@@ -200,7 +160,7 @@ int dapi_MailTo( DapiConnection* conn, const char* subject, const char* body, co
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_MAILTO )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyMailTo( conn, &ret ))
         return 0;
@@ -211,11 +171,6 @@ char* dapi_LocalFile( DapiConnection* conn, const char* remote, const char* loca
     int allow_download )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     char* ret;
     seq = dapi_writeCommandLocalFile( conn, remote, local, allow_download );
     if( seq == 0 )
@@ -227,7 +182,7 @@ char* dapi_LocalFile( DapiConnection* conn, const char* remote, const char* loca
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_LOCALFILE )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyLocalFile( conn, &ret ))
         return 0;
@@ -242,11 +197,6 @@ char* dapi_LocalFile( DapiConnection* conn, const char* remote, const char* loca
 int dapi_UploadFile( DapiConnection* conn, const char* local, const char* file, int remove_local )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandUploadFile( conn, local, file, remove_local );
     if( seq == 0 )
@@ -258,7 +208,7 @@ int dapi_UploadFile( DapiConnection* conn, const char* local, const char* file, 
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_UPLOADFILE )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyUploadFile( conn, &ret ))
         return 0;
@@ -268,11 +218,6 @@ int dapi_UploadFile( DapiConnection* conn, const char* local, const char* file, 
 int dapi_RemoveTemporaryLocalFile( DapiConnection* conn, const char* local )
     {
     int seq;
-    if( conn->sync_callback == NULL )
-        {
-        fprintf( stderr, "DAPI sync callback not set!\n" );
-        abort();
-        }
     int ret;
     seq = dapi_writeCommandRemoveTemporaryLocalFile( conn, local );
     if( seq == 0 )
@@ -284,7 +229,7 @@ int dapi_RemoveTemporaryLocalFile( DapiConnection* conn, const char* local )
             return 0;
         if( seq2 == seq && comm == DAPI_REPLY_REMOVETEMPORARYLOCALFILE )
             break; /* --> */
-        conn->sync_callback( conn, comm, seq2 );
+        conn->generic_callback( conn, comm, seq2 );
         }
     if( !dapi_readReplyRemoveTemporaryLocalFile( conn, &ret ))
         return 0;

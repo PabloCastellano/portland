@@ -1,5 +1,5 @@
 bin_PROGRAMS = test_comm test_calls test_runasuser test_screensaving test_mailto test_remotefile test_async \
-    test_capabilities
+    test_capabilities test_callbacks
 
 test_comm_SOURCES = test_comm.c
 test_comm_LDADD = ../lib/libdapi.la
@@ -32,5 +32,9 @@ test_async_LDFLAGS = $(all_libraries)
 test_capabilities_SOURCES = test_capabilities.c
 test_capabilities_LDADD = ../lib/libdapi.la
 test_capabilities_LDFLAGS = $(all_libraries)
+
+test_callbacks_SOURCES = test_callbacks.c
+test_callbacks_LDADD = ../lib/libdapi.la
+test_callbacks_LDFLAGS = $(all_libraries)
 
 INCLUDES = $(all_includes) -I$(top_srcdir)/lib

@@ -12,6 +12,7 @@
 #include <unistd.h>
 
 #include "comm_internal.h"
+#include "callbacks.h"
 
 static void getDisplay( char* ret, int max )
     {
@@ -66,9 +67,10 @@ DapiConnection* dapi_connect()
     if( ret != NULL )
         {
         ret->sock = sock;
-        ret->sync_callback = NULL;
+        ret->generic_callback = dapi_genericCallback;
         ret->in_server = 0;
         ret->last_seq = 0;
+        ret->callbacks = NULL;
         }
     return ret;
     }
@@ -171,9 +173,10 @@ DapiConnection* dapi_acceptSocket( int sock )
         if( ret != NULL )
             {
             ret->sock = sock2;
-            ret->sync_callback = NULL;
+            ret->generic_callback = dapi_genericCallback;
             ret->in_server = 1;
             ret->last_seq = 0;
+            ret->callbacks = NULL;
             }
         else
             close( sock2 );
@@ -184,6 +187,17 @@ DapiConnection* dapi_acceptSocket( int sock )
 void dapi_close( DapiConnection* conn )
     {
     close( conn->sock );
+    }
+
+int dapi_hasData( DapiConnection* conn )
+    {
+    fd_set fd;
+    struct timeval tm = { 0, 0 };
+    FD_ZERO( &fd );
+    FD_SET( conn->sock, &fd );
+    if( select( conn->sock + 1, &fd, NULL, NULL, &tm ) > 0 )
+        return FD_ISSET( conn->sock, &fd );
+    return 0;
     }
 
 static int getNextSeq( DapiConnection* conn )
