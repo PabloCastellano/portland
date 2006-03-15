@@ -24,7 +24,7 @@ int main()
     seq = dapi_callbackButtonOrder( conn, callback );
     printf( "Order call2: %d\n", seq );
     sleep( 1 ); /* give time to process */
-    dapi_processCallbacks( conn );
+    dapi_processData( conn );
     dapi_close( conn );
     return 0;
     }

@@ -14,7 +14,7 @@ DapiGenericCallback dapi_setGenericCallback( DapiConnection* conn, DapiGenericCa
     return ret;
     }
 
-void dapi_processCallbacks( DapiConnection* conn )
+void dapi_processData( DapiConnection* conn )
     {
     while( dapi_hasData( conn ))
         {

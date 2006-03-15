@@ -1,0 +1,204 @@
+==============================================================================
+                           C API bindings HOWTO
+==============================================================================
+
+This file contains HOWTO information specific to the C bindings. Refer to the generic
+API documentation for information that is not specific to C bindings and to
+C-API.txt for description of C bindings.
+
+
+Note: Most test programs in tests/ can be also used as examples.
+
+
+Linking with the library
+========================
+
+
+Use #include <dapi/headerfile.h> and add proper include path flags for the compiler
+if necessary.
+
+Add -ldapi and proper library path flags for the linker if necessary.
+
+
+
+Handling the DAPI connection
+============================
+
+
+Before using any API calls it is necessary to initialize the DAPI connection first.
+
+static DapiConnection* my_dapi_connection = NULL;
+...
+int initializeDapi()
+    {
+    my_dapi_connection = dapi_connectAndInit();
+    if( my_dapi_connection == NULL )
+        return 0; /* oops, failure */
+    return 1;
+    }
+
+If you want to do more than just perform a simple blocking call, you need to watch
+the connection for activity. Use dapi_socket() to get the file descriptor to watch
+and call dapi_processData().
+
+void mainloop()
+   {
+   fd_set in;
+   FD_ZERO( &in );
+   ... all file descriptors the app wants to watch
+   FD_SET( dapi_socket( my_dapi_connection ), &in );
+   ... select() call here
+   if( FD_ISSET( dapi_socket( my_dapi_connection ), &in ))
+       dapi_processData( my_dapi_connection );
+   ...
+   }
+
+Closing of the connection is done using dapi_close();
+
+
+
+Blocking calls
+==============
+
+
+For blocking calls, just simply call the matching API function. For example, to open
+URL in a browser:
+
+int openURL( const char* url )
+    {
+    if( dapi_OpenUrl_Window( my_dapi_connection, url, XWINDOW_HANDLE( toplevel_widget )))
+        return 1;
+    ... failure
+    }
+
+
+OpenUrl call needs a toplevel window in which the request originated (to handle properly
+window relations and focus). It is strongly discouraged to omit this information.
+If the application has no window at all, use 0. Note a convenience _Window function is
+used instead of DapiWindowInfo and dapi_windowInfoInitWindow().
+
+
+Functions are responsible for freeing resources allocated by the call. For example
+when converting KDE's media:/ URL to a local file:
+
+void handle_media_url( const char* url )
+    {
+    char* local;
+    /* convert to local file, don't allow download to a temporary file */
+    local = dapi_LocalFile_Window( my_dapi_connection, url, NULL, 0, XWINDOW_HANDLE( toplevel_widget ));
+    if( local != NULL ) /* success */
+        {
+        handle_local_file( local );
+        free( local );
+        return;
+        }
+    }
+
+
+Callbacks
+=========
+
+
+Some calls such as downloading a remote file to a temporary local file may take long time
+and as such should be processed asynchronously. It is possible to do so using the lowlevel
+dapi_read/write function or using callbacks.
+
+int start_downloading_remote_url( const char* url )
+    {
+    int seq = dapi_callbackLocalFile_Window( my_dapi_connection, url, NULL, 1, XWINDOW_HANDLE( toplevel_widget ),
+        download_remote_url_callback );
+    if( seq != 0 )
+        return seq;
+    ... failure
+    }
+
+void download_remote_url_callback( DapiConnection* conn, int seq, const char* result )
+    {
+    /* if this callback is used for more calls, use seq and the value returned from dapi_callbackLocalFile_Window
+       to identify matching command and reply */
+    if( result[ 0 ] != '\0' )
+        ... success
+    else
+        ... failed to download
+    }
+
+
+NOTE: Callbacks should not deallocate any of its arguments, callback handling will perform this
+automatically after the callback returns.
+
+
+Fallbacks
+=========
+
+
+API calls may fail for various reasons: No backend daemon is running or it doesn't implement
+the required functionality.
+
+No backend daemon running
+-------------------------
+
+A backend daemon should be provided by the desktop environment in which the application is running.
+If dapi_connectAndInit() call fails, it is most probably because the daemon is not available.
+In such case the application may consider shipping its own fallback daemon.
+
+
+int initializeDapi()
+    {
+    my_dapi_connection = dapi_connectAndInit();
+    if( my_dapi_connection == NULL )
+        { /* failure, try a fallback */
+        run_fallback_daemon();
+        my_dapi_connection = dapi_namedConnectAndInit( "MyAppFooInc" );
+        if( my_dapi_connection == NULL )
+            return 0; /* still no luck */
+        }
+    return 1;
+    }
+
+This approach allows silently expecting all following calls to succeed and not caring about fallback
+code at all. (NOTE: still experimental, not sure if it's worth it)
+
+The provided generic daemon accepts --dapiname argument that specifies the fallback name it should
+use. In this specific case run_fallback_daemon() could run "dapi_generic --dapiname MyAppFooInc".
+
+
+Some functionality not available
+--------------------------------
+
+It is possible to query functionality provided by the backend daemon.
+
+int is_openurl_supported()
+    {
+    intarr capabilities;
+    int i;
+    if( dapi_Capabilities( conn, &capabilities ))
+        {
+        int has_openurl = 0;
+        for( i = 0;
+             i < capabilities.count;
+             ++i )
+            {
+            if( capabilities.data[ i ] == DAPI_COMMAND_OPENURL )
+                has_openurl = 1;
+            }
+        }
+    return has_openurl;
+    }
+
+See dapi/comm_generated.h for list of command ids (DAPI_COMMAND_MAILTO for MailTo call etc.)
+
+Applications may perform one Capabilities call after initializing connection and query for all
+required functionality. If they don't find it available they may as well close this connection
+and use a fallback daemon in order to expect all calls to succeed.
+
+
+Fallback code
+-------------
+
+Another approach is to just initialize connection and test for failure after every call.
+
+void openURL( const char* url )
+    {
+    if( !dapi_OpenUrl_Window( my_dapi_connection, url, XWINDOW_HANDLE( toplevel_widget )))
+        openInHardcodedBrowser( url );
+    }

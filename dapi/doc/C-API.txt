@@ -1,0 +1,214 @@
+==============================================================================
+                           Description of C API bindings
+==============================================================================
+
+This file contains information specific to the C bindings. Refer to the generic
+API documentation for information that is not specific to C bindings. See also
+C-HOWTO.txt .
+
+
+
+
+Data types
+==========
+
+
+C allows only a limited set of data types. Types from the abstract API that
+are not available in C are used as follows:
+
+bool - int with values 1 for true and 0 for false
+
+string - char* NUL-terminated string; calls that return char* allocate it dynamically
+and the caller must deallocate it by calling free()
+
+arrays ( int[], string[] ) - intarr, stringarr (see below)
+
+windowinfo - DapiWindowInfo (see below)
+
+
+DapiConnection
+--------------
+
+Opaque data type that contains all internal data. Most calls require it
+as the first argument.
+
+
+DapiWindowInfo
+--------------
+
+Some call require information about a window related to the call. This structure
+holds data about such window. Call dapi_windowInfoInitWindow() to fill in the info
+or use the convenience _Window functions.
+
+
+void dapi_windowInfoInitWindow( DapiWindowInfo* winfo, long window )
+--------------------------------------------------------------------
+
+Initializes DapiWindowInfo with data about given window.
+
+winfo: DapiWindowInfo data structure to initialize
+window: Window handle (as used with X Window System)
+
+
+void dapi_freeWindowInfo( DapiWindowInfo winfo )
+------------------------------------------------
+
+Frees DapiWindowInfo structure data.
+
+winfo: DapiWindowInfo data structure to free data from.
+
+
+intarr
+------
+
+A structure representing an integer array.
+typedef struct
+    {
+    int count;
+    int* data;
+    } intarr;
+'count' is number of elements, 'data' is array of elements.    
+
+
+void dapi_freeintarr( intarr arr )
+----------------------------------
+
+Convenience function that frees dynamically allocated data from intarr.
+All DAPI functions that return intarr allocate the data dynamically
+and the caller must free it.
+
+
+stringarr
+---------
+
+A structure representing a string array.
+typedef struct
+    {
+    int count;
+    char** data;
+    } stringarr;
+'count' is number of elements, 'data' is array of char* strings.
+
+
+void dapi_freestringarr( stringarr arr )
+----------------------------------------
+
+Convenience function that frees dynamically allocated data from stringarr.
+All DAPI functions that return stringarr allocate the data dynamically
+and the caller must free it.
+
+
+
+
+
+
+Utility functions
+=================
+
+
+DapiConnection* dapi_connect( void )
+------------------------------------
+
+Tries to connect to a running backend daemon.
+
+Returns: NULL if failed, opaque connection handle if success.
+
+
+DapiConnection* dapi_connectAndInit( void )
+-------------------------------------------
+
+Convenience function that calls dapi_connect() and if successful
+also performs initialization by calling dapi_Init() (see later).
+
+
+DapiConnection* dapi_namedConnect( const char* name )
+-----------------------------------------------------
+
+Tries to connect to a named fallback daemon.
+
+name: name of the fallback daemon
+Returns: NULL if failed, opaque connection handle if success.
+
+
+DapiConnection* dapi_namedConnectAndInit( const char* name )
+------------------------------------------------------------
+
+Convenience function that calls dapi_namedConnect() and if successful
+also performs initialization by calling dapi_Init() (see later).
+
+
+void dapi_close( DapiConnection* conn )
+---------------------------------------
+
+Closes a connection to a backend daemon.
+
+conn: Opaque connection handle.
+
+
+int dapi_socket( DapiConnection* conn )
+---------------------------------------
+
+Returns a file descriptor that can be used with system functions such as select()
+to watch activity.
+
+conn: Opaque connection handle.
+Returns: file descriptor
+
+
+void dapi_processData( DapiConnection* conn )
+---------------------------------------------
+
+Processes pending incoming data on the connection socket.
+
+conn: Opaque connection handle.
+
+
+int dapi_readCommand( DapiConnection* conn, int* comm, int* seq )
+-----------------------------------------------------------------
+
+Reads a command header of the next incoming command request/reply.
+
+conn: Opaque connection handle.
+comm: Id number of the incomming command.
+seq: Sequence number of the incoming command.
+Returns: 1 if successful, 0 if failure
+
+
+TBD:
+typedef void (*DapiGenericCallback)( DapiConnection* conn, int command, int seq );
+DapiGenericCallback dapi_setGenericCallback( DapiConnection* conn, DapiGenericCallback callback );
+void dapi_genericCallback( DapiConnection* conn, int command, int seq );
+
+
+
+
+
+
+Calls functions
+===============
+
+
+There are several ways to invoke the API calls. For call XYZ there is:
+
+- lowlevel dapi_writeCommandXYZ(), dapi_readReplyXYZ() calls that write a command
+  request resp. read a command reply.
+  
+  dapi_writeCommandXYZ() writes a command header and all command arguments and
+  returns either 0 if failure or sequence number of the command. Each command request
+  has a specific sequence number assigned and is used to identify replies.
+  
+  dapi_readCommandXYZ() reads all reply arguments. It doesn't read command header,
+  dapi_readCommand() must be called first to identify a command. Returns 1 if success
+  or 0 if failure.
+
+  Include file dapi/comm_generated.h contains all function prototypes.
+
+- blocking dapi_XYZ() call that writes a command request and waits for a reply.
+  Include file dapi/calls_generated.h contains all function prototypes.
+
+- non-blocking dapi_callbackXYZ() call that writes a command and invokes the passed
+  callback when a reply comes.
+  
+  dapi_callbackXYZ() returns a sequence number if success or 0 if failure
+
+  Include file dapi/callbacks_generated.h contains all function prototypes.

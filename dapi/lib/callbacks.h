@@ -13,7 +13,7 @@ typedef void (*DapiGenericCallback)( DapiConnection* conn, int command, int seq 
 
 DapiGenericCallback dapi_setGenericCallback( DapiConnection* conn, DapiGenericCallback callback );
 
-void dapi_processCallbacks( DapiConnection* conn );
+void dapi_processData( DapiConnection* conn );
 
 void dapi_genericCallback( DapiConnection* conn, int command, int seq );
 

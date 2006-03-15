@@ -8,6 +8,7 @@ cd kde
 make -f Makefile.cvs
 ./configure
 make
+make install
 
 If you have a serious problem with the -Werror flag, edit configure.ac
 and kde/configure.in.in (sorry, but plain C accepts unbelievable nonsense
