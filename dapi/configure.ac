@@ -1,4 +1,4 @@
-AC_INIT([DAPI], [0.01], [l.lunak@suse.cz], [dapi])
+AC_INIT([DAPI], [0.1], [l.lunak@suse.cz], [dapi])
 AC_CONFIG_SRCDIR([doc/API.txt])
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE
