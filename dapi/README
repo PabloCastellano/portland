@@ -1,0 +1,57 @@
+The Portland Project Desktop API (DAPI)
+=======================================
+DAPI is a general purpose desktop API that allows uniform access to
+desktop functionality like sending email, turning screensavers on/off,
+opening urls, and so forth.  These are done in different ways, depending
+on the user's distro and desktop environment; DAPI gives software
+developers a single, uniform way to perform them.
+
+The main motivation for DAPI is to simplify ISV's lives.  We want to see
+more commercial-class software available for the Linux desktop, but
+recognize that the vast array of choices available to the Linux user
+presents the ISV with the problem of how to support all these different
+ways of doing things?  With DAPI, we plan to address this problem by
+giving the ISV a convenience library that wrappers common functionality
+they need, that is not yet standardized across desktop environments.
+
+DAPI is implemented as a daemon that runs on the user's desktop and
+allows applications to invoke desktop functions through an API.  
+
+
+Usage
+=====
+DAPI consists of two components: A daemon, and a library (libdapi.la)
+that links to the application.  The library handles the IPC
+(socket) communication with the daemon and implements the API.
+
+There are several different "flavors" of daemons, each particular to a
+given desktop environment (dapi_kde, dapi_generic, etc.), but they all
+provide the same API.  This way, once you link the library in, you can
+communicate with any daemon.
+
+ISV is expected to statically link the DAPI library. Daemon should
+be provided by the desktop environment in which the application runs.
+Currently (March 2006) no distros ship DAPI, so it may be necessary
+to ship separately daemons for these desktop environments. ISVs may
+also consider shipping a generic daemon together with the application
+as a fallback.
+
+The doc/ directory contains a description of the implemented calls
+and other developer documentation. Also, the tests/ directory will serve
+as a set of basic examples on using the library.  Other directories contain
+the library and daemon implementations.
+
+
+Future
+======
+DAPI is very much an early work in progress, and is still in 'prototype'
+stage, so please expect that lots *will* change.  We hope to expand the
+functionality to include much more of what ISV's need, so if something
+appears to be missing, please let us know (patches welcome too!)
+
+The plan is for the desktop environments to provide their own daemon
+implementations, with applications including only the generic daemon to
+use if no other daemon is already running.
+
+Web: http://freedesktop.org/wiki/Portland
+Mailing list: http://lists.freedesktop.org/mailman/listinfo/portland
