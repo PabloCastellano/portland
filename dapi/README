@@ -55,3 +55,5 @@ use if no other daemon is already running.
 
 Web: http://freedesktop.org/wiki/Portland
 Mailing list: http://lists.freedesktop.org/mailman/listinfo/portland
+Source code: cvs -d :pserver:anoncvs@cvs.freedesktop.org:/cvs/portland co portland
+Online repository: http://cvs.freedesktop.org/portland/portland
