@@ -41,4 +41,4 @@ test_fallback_SOURCES = test_fallback.c
 test_fallback_LDADD = ../lib/libdapi.la
 test_fallback_LDFLAGS = $(all_libraries)
 
-INCLUDES = -I$(top_srcdir)/include $(all_includes)
+INCLUDES = -I$(top_builddir)/include $(all_includes)
