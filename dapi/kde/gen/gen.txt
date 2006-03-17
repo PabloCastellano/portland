@@ -150,3 +150,90 @@ FUNCTION RemoveTemporaryLocalFile
   RETURN
  ENDARG
 ENDFUNCTION
+
+FUNCTION AddressBookList
+  ARG idlist
+    TYPE string[]
+    OUT
+  ENDARG
+  ARG ok
+    TYPE bool
+    RETURN
+  ENDARG
+ENDFUNCTION
+
+FUNCTION AddressBookGetName
+  ARG id
+    TYPE string
+  ENDARG
+  ARG givenname
+    TYPE string
+    OUT
+  ENDARG
+  ARG familyname
+    TYPE string
+    OUT
+  ENDARG
+  ARG fullname
+    TYPE string
+    OUT
+  ENDARG
+  ARG ok
+    TYPE bool
+    RETURN
+  ENDARG
+ENDFUNCTION
+
+FUNCTION AddressBookGetEmails
+  ARG id
+    TYPE string
+  ENDARG
+  ARG emaillist
+    TYPE string[]
+    OUT
+  ENDARG
+  ARG ok
+    TYPE bool
+    RETURN
+  ENDARG
+ENDFUNCTION
+
+FUNCTION AddressBookFindByName
+  ARG name
+    TYPE string
+  ENDARG
+  ARG idlist
+    TYPE string[]
+    OUT
+  ENDARG
+  ARG ok
+    TYPE bool
+    RETURN
+  ENDARG
+ENDFUNCTION
+
+FUNCTION AddressBookOwner
+  ARG id
+    TYPE string
+    OUT
+  ENDARG
+  ARG ok
+    TYPE bool
+    RETURN
+  ENDARG
+ENDFUNCTION
+
+FUNCTION AddressBookGetVCard30
+  ARG id
+    TYPE string
+  ENDARG
+  ARG vcard
+    TYPE string
+    OUT
+  ENDARG
+  ARG ok
+    TYPE bool
+    RETURN
+  ENDARG
+ENDFUNCTION
+

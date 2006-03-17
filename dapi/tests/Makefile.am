@@ -1,5 +1,5 @@
 noinst_PROGRAMS = test_comm test_calls test_runasuser test_screensaving test_mailto test_remotefile test_async \
-    test_capabilities test_callbacks test_fallback
+    test_capabilities test_callbacks test_fallback test_addressbook
 
 test_comm_SOURCES = test_comm.c
 test_comm_LDADD = ../lib/libdapi.la
@@ -40,5 +40,9 @@ test_callbacks_LDFLAGS = $(all_libraries)
 test_fallback_SOURCES = test_fallback.c
 test_fallback_LDADD = ../lib/libdapi.la
 test_fallback_LDFLAGS = $(all_libraries)
+
+test_addressbook_SOURCES = test_addressbook.c
+test_addressbook_LDADD = ../lib/libdapi.la
+test_addressbook_LDFLAGS = $(all_libraries)
 
 INCLUDES = -I$(top_builddir)/include $(all_includes)

@@ -204,6 +204,114 @@ int dapi_callbackRemoveTemporaryLocalFile( DapiConnection* conn, const char* loc
     return seq;
     }
 
+int dapi_callbackAddressBookList( DapiConnection* conn, dapi_AddressBookList_callback callback )
+    {
+    int seq;
+    DapiCallbackData* call;
+    seq = dapi_writeCommandAddressBookList( conn );
+    if( seq == 0 )
+        return 0;
+    call = malloc( sizeof( *call ));
+    if( call == NULL )
+        return 0;
+    call->seq = seq;
+    call->callback = callback;
+    call->command = DAPI_COMMAND_ADDRESSBOOKLIST;
+    call->next = conn->callbacks;
+    conn->callbacks = call;
+    return seq;
+    }
+
+int dapi_callbackAddressBookGetName( DapiConnection* conn, const char* id, dapi_AddressBookGetName_callback callback )
+    {
+    int seq;
+    DapiCallbackData* call;
+    seq = dapi_writeCommandAddressBookGetName( conn, id );
+    if( seq == 0 )
+        return 0;
+    call = malloc( sizeof( *call ));
+    if( call == NULL )
+        return 0;
+    call->seq = seq;
+    call->callback = callback;
+    call->command = DAPI_COMMAND_ADDRESSBOOKGETNAME;
+    call->next = conn->callbacks;
+    conn->callbacks = call;
+    return seq;
+    }
+
+int dapi_callbackAddressBookGetEmails( DapiConnection* conn, const char* id, dapi_AddressBookGetEmails_callback callback )
+    {
+    int seq;
+    DapiCallbackData* call;
+    seq = dapi_writeCommandAddressBookGetEmails( conn, id );
+    if( seq == 0 )
+        return 0;
+    call = malloc( sizeof( *call ));
+    if( call == NULL )
+        return 0;
+    call->seq = seq;
+    call->callback = callback;
+    call->command = DAPI_COMMAND_ADDRESSBOOKGETEMAILS;
+    call->next = conn->callbacks;
+    conn->callbacks = call;
+    return seq;
+    }
+
+int dapi_callbackAddressBookFindByName( DapiConnection* conn, const char* name, dapi_AddressBookFindByName_callback callback )
+    {
+    int seq;
+    DapiCallbackData* call;
+    seq = dapi_writeCommandAddressBookFindByName( conn, name );
+    if( seq == 0 )
+        return 0;
+    call = malloc( sizeof( *call ));
+    if( call == NULL )
+        return 0;
+    call->seq = seq;
+    call->callback = callback;
+    call->command = DAPI_COMMAND_ADDRESSBOOKFINDBYNAME;
+    call->next = conn->callbacks;
+    conn->callbacks = call;
+    return seq;
+    }
+
+int dapi_callbackAddressBookOwner( DapiConnection* conn, dapi_AddressBookOwner_callback callback )
+    {
+    int seq;
+    DapiCallbackData* call;
+    seq = dapi_writeCommandAddressBookOwner( conn );
+    if( seq == 0 )
+        return 0;
+    call = malloc( sizeof( *call ));
+    if( call == NULL )
+        return 0;
+    call->seq = seq;
+    call->callback = callback;
+    call->command = DAPI_COMMAND_ADDRESSBOOKOWNER;
+    call->next = conn->callbacks;
+    conn->callbacks = call;
+    return seq;
+    }
+
+int dapi_callbackAddressBookGetVCard30( DapiConnection* conn, const char* id, dapi_AddressBookGetVCard30_callback callback )
+    {
+    int seq;
+    DapiCallbackData* call;
+    seq = dapi_writeCommandAddressBookGetVCard30( conn, id );
+    if( seq == 0 )
+        return 0;
+    call = malloc( sizeof( *call ));
+    if( call == NULL )
+        return 0;
+    call->seq = seq;
+    call->callback = callback;
+    call->command = DAPI_COMMAND_ADDRESSBOOKGETVCARD30;
+    call->next = conn->callbacks;
+    conn->callbacks = call;
+    return seq;
+    }
+
 static void genericCallbackDispatch( DapiConnection* conn, DapiCallbackData* data, int command, int seq )
     {
     switch( command )
@@ -284,6 +392,56 @@ static void genericCallbackDispatch( DapiConnection* conn, DapiCallbackData* dat
             int ok;
             dapi_readReplyRemoveTemporaryLocalFile( conn, &ok );
             (( dapi_RemoveTemporaryLocalFile_callback ) data->callback )( conn, data->seq, ok );
+            break;
+            }
+        case DAPI_REPLY_ADDRESSBOOKLIST:
+            {
+            stringarr idlist;
+            int ok;
+            dapi_readReplyAddressBookList( conn, &idlist, &ok );
+            (( dapi_AddressBookList_callback ) data->callback )( conn, data->seq, idlist, ok );
+            break;
+            }
+        case DAPI_REPLY_ADDRESSBOOKGETNAME:
+            {
+            char* givenname;
+            char* familyname;
+            char* fullname;
+            int ok;
+            dapi_readReplyAddressBookGetName( conn, &givenname, &familyname, &fullname, &ok );
+            (( dapi_AddressBookGetName_callback ) data->callback )( conn, data->seq, givenname, familyname, fullname, ok );
+            break;
+            }
+        case DAPI_REPLY_ADDRESSBOOKGETEMAILS:
+            {
+            stringarr emaillist;
+            int ok;
+            dapi_readReplyAddressBookGetEmails( conn, &emaillist, &ok );
+            (( dapi_AddressBookGetEmails_callback ) data->callback )( conn, data->seq, emaillist, ok );
+            break;
+            }
+        case DAPI_REPLY_ADDRESSBOOKFINDBYNAME:
+            {
+            stringarr idlist;
+            int ok;
+            dapi_readReplyAddressBookFindByName( conn, &idlist, &ok );
+            (( dapi_AddressBookFindByName_callback ) data->callback )( conn, data->seq, idlist, ok );
+            break;
+            }
+        case DAPI_REPLY_ADDRESSBOOKOWNER:
+            {
+            char* id;
+            int ok;
+            dapi_readReplyAddressBookOwner( conn, &id, &ok );
+            (( dapi_AddressBookOwner_callback ) data->callback )( conn, data->seq, id, ok );
+            break;
+            }
+        case DAPI_REPLY_ADDRESSBOOKGETVCARD30:
+            {
+            char* vcard;
+            int ok;
+            dapi_readReplyAddressBookGetVCard30( conn, &vcard, &ok );
+            (( dapi_AddressBookGetVCard30_callback ) data->callback )( conn, data->seq, vcard, ok );
             break;
             }
         }

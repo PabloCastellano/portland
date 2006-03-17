@@ -22,3 +22,10 @@ int dapi_UploadFile( DapiConnection* conn, const char* local, const char* file, 
 int dapi_UploadFile_Window( DapiConnection* conn, const char* local, const char* file,
     int remove_local, long winfo );
 int dapi_RemoveTemporaryLocalFile( DapiConnection* conn, const char* local );
+int dapi_AddressBookList( DapiConnection* conn, stringarr* idlist );
+int dapi_AddressBookGetName( DapiConnection* conn, const char* id, char** givenname,
+    char** familyname, char** fullname );
+int dapi_AddressBookGetEmails( DapiConnection* conn, const char* id, stringarr* emaillist );
+int dapi_AddressBookFindByName( DapiConnection* conn, const char* name, stringarr* idlist );
+int dapi_AddressBookOwner( DapiConnection* conn, char** id );
+int dapi_AddressBookGetVCard30( DapiConnection* conn, const char* id, char** vcard );

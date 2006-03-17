@@ -3,6 +3,8 @@
 #include "handler.h"
 #include "handler.moc"
 
+#include "kabchandler.h"
+
 #include <dcopref.h>
 #include <qsocketnotifier.h>
 #include <kapplication.h>
@@ -22,6 +24,7 @@
 KDapiHandler::KDapiHandler()
     {
     setupSocket();
+    kabchandler = new KABCHandler(this);
     }
 
 KDapiHandler::~KDapiHandler()
@@ -63,7 +66,7 @@ void KDapiHandler::processSocketData( int sock )
             break;
             }
     }
-    
+
 void KDapiHandler::processCommand( ConnectionData& conn )
     {
     int command;
@@ -108,6 +111,24 @@ void KDapiHandler::processCommand( ConnectionData& conn )
         case DAPI_COMMAND_REMOVETEMPORARYLOCALFILE:
             processCommandRemoveTemporaryLocalFile( conn, seq );
             return;
+        case DAPI_COMMAND_ADDRESSBOOKLIST:
+            processCommandAddressBookList( conn, seq );
+            return;
+        case DAPI_COMMAND_ADDRESSBOOKGETNAME:
+            processCommandAddressBookGetName( conn, seq );
+            return;
+        case DAPI_COMMAND_ADDRESSBOOKGETEMAILS:
+            processCommandAddressBookGetEmails( conn, seq );
+            return;
+        case DAPI_COMMAND_ADDRESSBOOKFINDBYNAME:
+            processCommandAddressBookFindByName( conn, seq );
+            return;
+        case DAPI_COMMAND_ADDRESSBOOKOWNER:
+            processCommandAddressBookOwner( conn, seq );
+            return;
+        case DAPI_COMMAND_ADDRESSBOOKGETVCARD30:
+            processCommandAddressBookGetVCard30( conn, seq );
+            return;
         }
     }
 
@@ -138,7 +159,7 @@ void KDapiHandler::processCommandInit( ConnectionData& conn, int seq )
 
 /* TODO */
 static int caps[] =
-    {    
+    {
     DAPI_COMMAND_INIT,
     DAPI_COMMAND_CAPABILITIES,
     DAPI_COMMAND_OPENURL,
@@ -423,6 +444,165 @@ void KDapiHandler::processCommandRemoveTemporaryLocalFile( ConnectionData& conn,
     removeTempFile( QString::fromUtf8( file ));
     dapi_writeReplyRemoveTemporaryLocalFile( conn.conn, seq, 1 );
     free( file );
+    }
+
+void KDapiHandler::processCommandAddressBookList( ConnectionData& conn, int seq )
+    {
+    if( !dapi_readCommandAddressBookList( conn.conn ) )
+        {
+        closeSocket( conn );
+        return;
+        }
+
+    QStringList kabcUIDs = kabchandler->listUIDs();
+
+    stringarr idList;
+    idList.data = 0;
+    idList.count = 0;
+    if (kabcUIDs.count() > 0)
+        {
+        idList.data = (char**) malloc( sizeof( char* ) * (kabcUIDs.count() + 1 ) );
+        QStringList::const_iterator it    = kabcUIDs.begin();
+        QStringList::const_iterator endIt = kabcUIDs.end();
+        for ( uint i = 0; it != endIt; ++it, ++i )
+            {
+            QCString string = (*it).utf8();
+            idList.data[i] = strndup( string.data(), string.count() );
+            }
+        idList.data[kabcUIDs.count()] = NULL;
+        idList.count = kabcUIDs.count();
+        }
+
+    dapi_writeReplyAddressBookList( conn.conn, seq, idList, kabcUIDs.count() );
+
+    dapi_freestringarr( idList );
+    }
+
+void KDapiHandler::processCommandAddressBookGetName( ConnectionData& conn, int seq )
+    {
+    char* id;
+    if( !dapi_readCommandAddressBookGetName( conn.conn, &id ) )
+        {
+        closeSocket( conn );
+        return;
+        }
+
+    QCString firstname;
+    QCString lastname;
+    QCString fullname;
+
+    bool ok = kabchandler->getNames( QString::fromUtf8( id ),
+                                     firstname, lastname, fullname );
+    free( id );
+
+    dapi_writeReplyAddressBookGetName( conn.conn, seq, firstname.data(), lastname.data(),
+                                       fullname.data(), ok );
+
+    }
+
+void KDapiHandler::processCommandAddressBookGetEmails( ConnectionData& conn, int seq )
+    {
+    char* id;
+    if( !dapi_readCommandAddressBookGetEmails( conn.conn, &id ) )
+        {
+        closeSocket( conn );
+        return;
+        }
+
+    QStringList emails;
+    bool ok = kabchandler->getEmails( QString::fromUtf8( id ), emails );
+
+    free( id );
+
+    stringarr emailList;
+    emailList.data = 0;
+    emailList.count = 0;
+    if (emails.count() > 0)
+        {
+        emailList.data = (char**) malloc( sizeof( char* ) * ( emails.count() + 1 ) );
+        QStringList::const_iterator it    = emails.begin();
+        QStringList::const_iterator endIt = emails.end();
+        for ( uint i = 0; it != endIt; ++it, ++i )
+            {
+            QCString string = (*it).utf8();
+            emailList.data[i] = strdup( string.data() );
+            }
+        emailList.data[emails.count()] = NULL;
+        emailList.count = emails.count();
+        }
+
+    dapi_writeReplyAddressBookGetEmails( conn.conn, seq, emailList, ok );
+
+    dapi_freestringarr( emailList );
+    }
+
+void KDapiHandler::processCommandAddressBookFindByName( ConnectionData& conn, int seq )
+    {
+    char* id;
+    if( !dapi_readCommandAddressBookFindByName( conn.conn, &id ) )
+        {
+        closeSocket( conn );
+        return;
+        }
+
+    QStringList kabcUIDs = kabchandler->findByName( QString::fromUtf8( id ) );
+
+    free( id );
+
+    stringarr idList;
+    idList.data = 0;
+    idList.count = 0;
+    if (kabcUIDs.count() > 0)
+        {
+        idList.data = (char**) malloc( sizeof( char* ) * (kabcUIDs.count() + 1 ) );
+        QStringList::const_iterator it    = kabcUIDs.begin();
+        QStringList::const_iterator endIt = kabcUIDs.end();
+        for ( uint i = 0; it != endIt; ++it, ++i )
+            {
+            QCString string = (*it).utf8();
+            idList.data[i] = strndup( string.data(), string.count() );
+            }
+        idList.data[kabcUIDs.count()] = NULL;
+        idList.count = kabcUIDs.count();
+        }
+
+    dapi_writeReplyAddressBookFindByName( conn.conn, seq, idList, kabcUIDs.count() );
+
+    dapi_freestringarr( idList );
+    }
+
+void KDapiHandler::processCommandAddressBookOwner( ConnectionData& conn, int seq )
+    {
+    if( !dapi_readCommandAddressBookOwner( conn.conn ) )
+        {
+        closeSocket( conn );
+        return;
+        }
+
+    QString ownerUID = kabchandler->owner();
+
+    bool ok = !ownerUID.isEmpty();
+
+    dapi_writeReplyAddressBookOwner( conn.conn, seq, (ok ? ownerUID.utf8().data() : 0), ok );
+    }
+
+void KDapiHandler::processCommandAddressBookGetVCard30( ConnectionData& conn, int seq )
+    {
+    char* id;
+    if( !dapi_readCommandAddressBookGetVCard30( conn.conn, &id ) )
+        {
+        closeSocket( conn );
+        return;
+        }
+
+    QString vcard = kabchandler->vcard30( QString::fromUtf8( id ) );
+
+    free( id );
+
+    bool ok = !vcard.isEmpty();
+
+    dapi_writeReplyAddressBookGetVCard30( conn.conn, seq, (ok ? vcard.utf8().data() : 0), ok );
+
     }
 
 QCString KDapiHandler::makeStartupInfo( const DapiWindowInfo& winfo )

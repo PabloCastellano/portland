@@ -8,6 +8,7 @@
 
 #include <dapi/comm.h>
 
+class KABCHandler;
 class QSocketNotifier;
 
 class KDapiHandler
@@ -41,11 +42,18 @@ class KDapiHandler
         void processCommandLocalFile( ConnectionData& conn, int seq );
         void processCommandUploadFile( ConnectionData& conn, int seq );
         void processCommandRemoveTemporaryLocalFile( ConnectionData& conn, int seq );
+        void processCommandAddressBookList( ConnectionData& conn, int seq );
+        void processCommandAddressBookGetName( ConnectionData& conn, int seq );
+        void processCommandAddressBookGetEmails( ConnectionData& conn, int seq );
+        void processCommandAddressBookFindByName( ConnectionData& conn, int seq );
+        void processCommandAddressBookOwner( ConnectionData& conn, int seq );
+        void processCommandAddressBookGetVCard30( ConnectionData& conn, int seq );
         void updateScreensaving();
         static QCString makeStartupInfo( const DapiWindowInfo& winfo );
         int mainsocket;
         typedef QValueList< ConnectionData > ConnectionList;
         ConnectionList connections;
+        KABCHandler* kabchandler;
     };
 
 class KDapiFakeWidget

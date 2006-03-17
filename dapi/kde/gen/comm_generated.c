@@ -81,6 +81,40 @@ int dapi_readCommandRemoveTemporaryLocalFile( DapiConnection* conn, char** local
     return 1;
     }
 
+int dapi_readCommandAddressBookList( DapiConnection* conn )
+    {
+    return 1;
+    }
+
+int dapi_readCommandAddressBookGetName( DapiConnection* conn, char** id )
+    {
+    *id = readString( conn );
+    return 1;
+    }
+
+int dapi_readCommandAddressBookGetEmails( DapiConnection* conn, char** id )
+    {
+    *id = readString( conn );
+    return 1;
+    }
+
+int dapi_readCommandAddressBookFindByName( DapiConnection* conn, char** name )
+    {
+    *name = readString( conn );
+    return 1;
+    }
+
+int dapi_readCommandAddressBookOwner( DapiConnection* conn )
+    {
+    return 1;
+    }
+
+int dapi_readCommandAddressBookGetVCard30( DapiConnection* conn, char** id )
+    {
+    *id = readString( conn );
+    return 1;
+    }
+
 int dapi_readReplyInit( DapiConnection* conn, int* ok )
     {
     readSocket( conn, ok, sizeof( *ok ));
@@ -144,6 +178,53 @@ int dapi_readReplyUploadFile( DapiConnection* conn, int* ok )
 
 int dapi_readReplyRemoveTemporaryLocalFile( DapiConnection* conn, int* ok )
     {
+    readSocket( conn, ok, sizeof( *ok ));
+    return 1;
+    }
+
+int dapi_readReplyAddressBookList( DapiConnection* conn, stringarr* idlist, int* ok )
+    {
+    *idlist = readstringarr( conn );
+    readSocket( conn, ok, sizeof( *ok ));
+    return 1;
+    }
+
+int dapi_readReplyAddressBookGetName( DapiConnection* conn, char** givenname, char** familyname,
+    char** fullname, int* ok )
+    {
+    *givenname = readString( conn );
+    *familyname = readString( conn );
+    *fullname = readString( conn );
+    readSocket( conn, ok, sizeof( *ok ));
+    return 1;
+    }
+
+int dapi_readReplyAddressBookGetEmails( DapiConnection* conn, stringarr* emaillist,
+    int* ok )
+    {
+    *emaillist = readstringarr( conn );
+    readSocket( conn, ok, sizeof( *ok ));
+    return 1;
+    }
+
+int dapi_readReplyAddressBookFindByName( DapiConnection* conn, stringarr* idlist,
+    int* ok )
+    {
+    *idlist = readstringarr( conn );
+    readSocket( conn, ok, sizeof( *ok ));
+    return 1;
+    }
+
+int dapi_readReplyAddressBookOwner( DapiConnection* conn, char** id, int* ok )
+    {
+    *id = readString( conn );
+    readSocket( conn, ok, sizeof( *ok ));
+    return 1;
+    }
+
+int dapi_readReplyAddressBookGetVCard30( DapiConnection* conn, char** vcard, int* ok )
+    {
+    *vcard = readString( conn );
     readSocket( conn, ok, sizeof( *ok ));
     return 1;
     }
@@ -253,6 +334,52 @@ int dapi_writeCommandRemoveTemporaryLocalFile( DapiConnection* conn, const char*
     return seq;
     }
 
+int dapi_writeCommandAddressBookList( DapiConnection* conn )
+    {
+    int seq = getNextSeq( conn );
+    writeCommand( conn, DAPI_COMMAND_ADDRESSBOOKLIST, seq );
+    return seq;
+    }
+
+int dapi_writeCommandAddressBookGetName( DapiConnection* conn, const char* id )
+    {
+    int seq = getNextSeq( conn );
+    writeCommand( conn, DAPI_COMMAND_ADDRESSBOOKGETNAME, seq );
+    writeString( conn, id );
+    return seq;
+    }
+
+int dapi_writeCommandAddressBookGetEmails( DapiConnection* conn, const char* id )
+    {
+    int seq = getNextSeq( conn );
+    writeCommand( conn, DAPI_COMMAND_ADDRESSBOOKGETEMAILS, seq );
+    writeString( conn, id );
+    return seq;
+    }
+
+int dapi_writeCommandAddressBookFindByName( DapiConnection* conn, const char* name )
+    {
+    int seq = getNextSeq( conn );
+    writeCommand( conn, DAPI_COMMAND_ADDRESSBOOKFINDBYNAME, seq );
+    writeString( conn, name );
+    return seq;
+    }
+
+int dapi_writeCommandAddressBookOwner( DapiConnection* conn )
+    {
+    int seq = getNextSeq( conn );
+    writeCommand( conn, DAPI_COMMAND_ADDRESSBOOKOWNER, seq );
+    return seq;
+    }
+
+int dapi_writeCommandAddressBookGetVCard30( DapiConnection* conn, const char* id )
+    {
+    int seq = getNextSeq( conn );
+    writeCommand( conn, DAPI_COMMAND_ADDRESSBOOKGETVCARD30, seq );
+    writeString( conn, id );
+    return seq;
+    }
+
 void dapi_writeReplyInit( DapiConnection* conn, int seq, int ok )
     {
     writeCommand( conn, DAPI_REPLY_INIT, seq );
@@ -318,6 +445,56 @@ void dapi_writeReplyUploadFile( DapiConnection* conn, int seq, int ok )
 void dapi_writeReplyRemoveTemporaryLocalFile( DapiConnection* conn, int seq, int ok )
     {
     writeCommand( conn, DAPI_REPLY_REMOVETEMPORARYLOCALFILE, seq );
+    writeSocket( conn, &ok, sizeof( ok ));
+    }
+
+void dapi_writeReplyAddressBookList( DapiConnection* conn, int seq, stringarr idlist,
+    int ok )
+    {
+    writeCommand( conn, DAPI_REPLY_ADDRESSBOOKLIST, seq );
+    writestringarr( conn, idlist );
+    writeSocket( conn, &ok, sizeof( ok ));
+    }
+
+void dapi_writeReplyAddressBookGetName( DapiConnection* conn, int seq, const char* givenname,
+    const char* familyname, const char* fullname, int ok )
+    {
+    writeCommand( conn, DAPI_REPLY_ADDRESSBOOKGETNAME, seq );
+    writeString( conn, givenname );
+    writeString( conn, familyname );
+    writeString( conn, fullname );
+    writeSocket( conn, &ok, sizeof( ok ));
+    }
+
+void dapi_writeReplyAddressBookGetEmails( DapiConnection* conn, int seq, stringarr emaillist,
+    int ok )
+    {
+    writeCommand( conn, DAPI_REPLY_ADDRESSBOOKGETEMAILS, seq );
+    writestringarr( conn, emaillist );
+    writeSocket( conn, &ok, sizeof( ok ));
+    }
+
+void dapi_writeReplyAddressBookFindByName( DapiConnection* conn, int seq, stringarr idlist,
+    int ok )
+    {
+    writeCommand( conn, DAPI_REPLY_ADDRESSBOOKFINDBYNAME, seq );
+    writestringarr( conn, idlist );
+    writeSocket( conn, &ok, sizeof( ok ));
+    }
+
+void dapi_writeReplyAddressBookOwner( DapiConnection* conn, int seq, const char* id,
+    int ok )
+    {
+    writeCommand( conn, DAPI_REPLY_ADDRESSBOOKOWNER, seq );
+    writeString( conn, id );
+    writeSocket( conn, &ok, sizeof( ok ));
+    }
+
+void dapi_writeReplyAddressBookGetVCard30( DapiConnection* conn, int seq, const char* vcard,
+    int ok )
+    {
+    writeCommand( conn, DAPI_REPLY_ADDRESSBOOKGETVCARD30, seq );
+    writeString( conn, vcard );
     writeSocket( conn, &ok, sizeof( ok ));
     }
 

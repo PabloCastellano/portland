@@ -44,3 +44,21 @@ typedef void( * dapi_RemoveTemporaryLocalFile_callback )( DapiConnection* conn, 
     int ok );
 int dapi_callbackRemoveTemporaryLocalFile( DapiConnection* conn, const char* local,
     dapi_RemoveTemporaryLocalFile_callback callback );
+typedef void( * dapi_AddressBookList_callback )( DapiConnection* conn, int seq, stringarr idlist,
+    int ok );
+int dapi_callbackAddressBookList( DapiConnection* conn, dapi_AddressBookList_callback callback );
+typedef void( * dapi_AddressBookGetName_callback )( DapiConnection* conn, int seq,
+    const char* givenname, const char* familyname, const char* fullname, int ok );
+int dapi_callbackAddressBookGetName( DapiConnection* conn, const char* id, dapi_AddressBookGetName_callback callback );
+typedef void( * dapi_AddressBookGetEmails_callback )( DapiConnection* conn, int seq,
+    stringarr emaillist, int ok );
+int dapi_callbackAddressBookGetEmails( DapiConnection* conn, const char* id, dapi_AddressBookGetEmails_callback callback );
+typedef void( * dapi_AddressBookFindByName_callback )( DapiConnection* conn, int seq,
+    stringarr idlist, int ok );
+int dapi_callbackAddressBookFindByName( DapiConnection* conn, const char* name, dapi_AddressBookFindByName_callback callback );
+typedef void( * dapi_AddressBookOwner_callback )( DapiConnection* conn, int seq, const char* id,
+    int ok );
+int dapi_callbackAddressBookOwner( DapiConnection* conn, dapi_AddressBookOwner_callback callback );
+typedef void( * dapi_AddressBookGetVCard30_callback )( DapiConnection* conn, int seq,
+    const char* vcard, int ok );
+int dapi_callbackAddressBookGetVCard30( DapiConnection* conn, const char* id, dapi_AddressBookGetVCard30_callback callback );

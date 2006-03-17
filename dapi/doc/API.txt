@@ -10,7 +10,7 @@ contain any information specific to any language bindings.
 Conventions:
 ============
 
-All strings, filenames, urls, etc. are UTF8-encoded, unless specified 
+All strings, filenames, urls, etc. are UTF8-encoded, unless specified
 otherwise.
 
 All filenames and paths must be absolute.
@@ -155,3 +155,62 @@ haven't been created by LocalFile.
 
 local: filename of a temporary file to be removed
 ok: if false, the removal failed
+
+AddressBookList() -> ( stringlist contact_ids, bool ok )
+----------------------------------------------------------
+
+Lists all identifiers for contacts in the user's addressbook. The content of such
+an identifier can vary between daemon implementations.
+
+contact_ids: a list of string IDs, one entry for each contact in the addressbook
+ok: false if listing is not possible or has failed
+
+AddressBookOwner() -> ( string contact_id, bool ok )
+----------------------------------------------------
+
+Returns the identifier of the user's own contact if available.
+
+contact_id: a string identifying the user herself
+ok: true if owner contact is available, otherwise false
+
+AddressBookFindByName( string name ) -> ( stringlist contact_ids, bool ok )
+-----------------------------------------------------------------------------
+
+Finds all contacts in the user's addressbook where the given string is part
+of at least one of the contact's name fields.
+
+name: a string containing the name or part of a name to search for
+contact_ids: a list of string IDs, one entry for each matching contact in
+    the addressbook
+ok: false if no match is found
+
+AddressBookGetName( string contact_id ) -> ( string givenname, string familyname, string fullname, bool ok )
+------------------------------------------------------------------------------------------------------------
+
+Gets the name of a specific contact from the user's addressbook.
+The contact is identified through a backend specific string which is returned by
+query functions such as AddressBookList or AddressBookFindByName.
+
+contact_id: the identifier of the contact to get the name from
+givenname: the given or first name of the contact
+familyname: the family name of the contact
+fullname: a name string containing all avilable name parts, e.g. name plus title
+ok: false if the contact_id is unknown
+
+AddressBookGetEmails( string contact_id ) -> ( stringlist emails, bool ok )
+-----------------------------------------------------------------------------
+
+Gets all emails for the contact with the given identifier.
+
+contact_id: the identifier of the contact to get the email addresses from
+emails: a list of strings, one entry for each email address of the contact
+ok: false if the contact_id is unknown
+
+AddressBookGetVCard30( string contact_id ) -> ( string vcard, bool ok)
+----------------------------------------------------------------------
+
+Gets the full contact information as a VCard version 3.0.
+
+contact_id: the identifier of the contact to get the vcard for
+vcard: a string with the vcard data
+ok: true if contact exists and conversion successfull, otherwise false

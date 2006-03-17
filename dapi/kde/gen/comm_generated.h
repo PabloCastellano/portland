@@ -62,6 +62,39 @@ int dapi_readCommandRemoveTemporaryLocalFile( DapiConnection* conn, char** local
 int dapi_writeCommandRemoveTemporaryLocalFile( DapiConnection* conn, const char* local );
 int dapi_readReplyRemoveTemporaryLocalFile( DapiConnection* conn, int* ok );
 void dapi_writeReplyRemoveTemporaryLocalFile( DapiConnection* conn, int seq, int ok );
+int dapi_readCommandAddressBookList( DapiConnection* conn );
+int dapi_writeCommandAddressBookList( DapiConnection* conn );
+int dapi_readReplyAddressBookList( DapiConnection* conn, stringarr* idlist, int* ok );
+void dapi_writeReplyAddressBookList( DapiConnection* conn, int seq, stringarr idlist,
+    int ok );
+int dapi_readCommandAddressBookGetName( DapiConnection* conn, char** id );
+int dapi_writeCommandAddressBookGetName( DapiConnection* conn, const char* id );
+int dapi_readReplyAddressBookGetName( DapiConnection* conn, char** givenname, char** familyname,
+    char** fullname, int* ok );
+void dapi_writeReplyAddressBookGetName( DapiConnection* conn, int seq, const char* givenname,
+    const char* familyname, const char* fullname, int ok );
+int dapi_readCommandAddressBookGetEmails( DapiConnection* conn, char** id );
+int dapi_writeCommandAddressBookGetEmails( DapiConnection* conn, const char* id );
+int dapi_readReplyAddressBookGetEmails( DapiConnection* conn, stringarr* emaillist,
+    int* ok );
+void dapi_writeReplyAddressBookGetEmails( DapiConnection* conn, int seq, stringarr emaillist,
+    int ok );
+int dapi_readCommandAddressBookFindByName( DapiConnection* conn, char** name );
+int dapi_writeCommandAddressBookFindByName( DapiConnection* conn, const char* name );
+int dapi_readReplyAddressBookFindByName( DapiConnection* conn, stringarr* idlist,
+    int* ok );
+void dapi_writeReplyAddressBookFindByName( DapiConnection* conn, int seq, stringarr idlist,
+    int ok );
+int dapi_readCommandAddressBookOwner( DapiConnection* conn );
+int dapi_writeCommandAddressBookOwner( DapiConnection* conn );
+int dapi_readReplyAddressBookOwner( DapiConnection* conn, char** id, int* ok );
+void dapi_writeReplyAddressBookOwner( DapiConnection* conn, int seq, const char* id,
+    int ok );
+int dapi_readCommandAddressBookGetVCard30( DapiConnection* conn, char** id );
+int dapi_writeCommandAddressBookGetVCard30( DapiConnection* conn, const char* id );
+int dapi_readReplyAddressBookGetVCard30( DapiConnection* conn, char** vcard, int* ok );
+void dapi_writeReplyAddressBookGetVCard30( DapiConnection* conn, int seq, const char* vcard,
+    int ok );
 enum
     {
     DAPI_COMMAND_INIT,
@@ -85,5 +118,17 @@ enum
     DAPI_COMMAND_UPLOADFILE,
     DAPI_REPLY_UPLOADFILE,
     DAPI_COMMAND_REMOVETEMPORARYLOCALFILE,
-    DAPI_REPLY_REMOVETEMPORARYLOCALFILE
+    DAPI_REPLY_REMOVETEMPORARYLOCALFILE,
+    DAPI_COMMAND_ADDRESSBOOKLIST,
+    DAPI_REPLY_ADDRESSBOOKLIST,
+    DAPI_COMMAND_ADDRESSBOOKGETNAME,
+    DAPI_REPLY_ADDRESSBOOKGETNAME,
+    DAPI_COMMAND_ADDRESSBOOKGETEMAILS,
+    DAPI_REPLY_ADDRESSBOOKGETEMAILS,
+    DAPI_COMMAND_ADDRESSBOOKFINDBYNAME,
+    DAPI_REPLY_ADDRESSBOOKFINDBYNAME,
+    DAPI_COMMAND_ADDRESSBOOKOWNER,
+    DAPI_REPLY_ADDRESSBOOKOWNER,
+    DAPI_COMMAND_ADDRESSBOOKGETVCARD30,
+    DAPI_REPLY_ADDRESSBOOKGETVCARD30
     };

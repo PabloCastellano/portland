@@ -237,6 +237,133 @@ int dapi_RemoveTemporaryLocalFile( DapiConnection* conn, const char* local )
     return ret;
     }
 
+int dapi_AddressBookList( DapiConnection* conn, stringarr* idlist )
+    {
+    int seq;
+    int ret;
+    seq = dapi_writeCommandAddressBookList( conn );
+    if( seq == 0 )
+        return 0;
+    for(;;)
+        {
+        int comm, seq2;
+        if( !dapi_readCommand( conn, &comm, &seq2 ))
+            return 0;
+        if( seq2 == seq && comm == DAPI_REPLY_ADDRESSBOOKLIST )
+            break; /* --> */
+        conn->generic_callback( conn, comm, seq2 );
+        }
+    if( !dapi_readReplyAddressBookList( conn, idlist, &ret ))
+        return 0;
+    return ret;
+    }
+
+int dapi_AddressBookGetName( DapiConnection* conn, const char* id, char** givenname,
+    char** familyname, char** fullname )
+    {
+    int seq;
+    int ret;
+    seq = dapi_writeCommandAddressBookGetName( conn, id );
+    if( seq == 0 )
+        return 0;
+    for(;;)
+        {
+        int comm, seq2;
+        if( !dapi_readCommand( conn, &comm, &seq2 ))
+            return 0;
+        if( seq2 == seq && comm == DAPI_REPLY_ADDRESSBOOKGETNAME )
+            break; /* --> */
+        conn->generic_callback( conn, comm, seq2 );
+        }
+    if( !dapi_readReplyAddressBookGetName( conn, givenname, familyname, fullname, &ret ))
+        return 0;
+    return ret;
+    }
+
+int dapi_AddressBookGetEmails( DapiConnection* conn, const char* id, stringarr* emaillist )
+    {
+    int seq;
+    int ret;
+    seq = dapi_writeCommandAddressBookGetEmails( conn, id );
+    if( seq == 0 )
+        return 0;
+    for(;;)
+        {
+        int comm, seq2;
+        if( !dapi_readCommand( conn, &comm, &seq2 ))
+            return 0;
+        if( seq2 == seq && comm == DAPI_REPLY_ADDRESSBOOKGETEMAILS )
+            break; /* --> */
+        conn->generic_callback( conn, comm, seq2 );
+        }
+    if( !dapi_readReplyAddressBookGetEmails( conn, emaillist, &ret ))
+        return 0;
+    return ret;
+    }
+
+int dapi_AddressBookFindByName( DapiConnection* conn, const char* name, stringarr* idlist )
+    {
+    int seq;
+    int ret;
+    seq = dapi_writeCommandAddressBookFindByName( conn, name );
+    if( seq == 0 )
+        return 0;
+    for(;;)
+        {
+        int comm, seq2;
+        if( !dapi_readCommand( conn, &comm, &seq2 ))
+            return 0;
+        if( seq2 == seq && comm == DAPI_REPLY_ADDRESSBOOKFINDBYNAME )
+            break; /* --> */
+        conn->generic_callback( conn, comm, seq2 );
+        }
+    if( !dapi_readReplyAddressBookFindByName( conn, idlist, &ret ))
+        return 0;
+    return ret;
+    }
+
+int dapi_AddressBookOwner( DapiConnection* conn, char** id )
+    {
+    int seq;
+    int ret;
+    seq = dapi_writeCommandAddressBookOwner( conn );
+    if( seq == 0 )
+        return 0;
+    for(;;)
+        {
+        int comm, seq2;
+        if( !dapi_readCommand( conn, &comm, &seq2 ))
+            return 0;
+        if( seq2 == seq && comm == DAPI_REPLY_ADDRESSBOOKOWNER )
+            break; /* --> */
+        conn->generic_callback( conn, comm, seq2 );
+        }
+    if( !dapi_readReplyAddressBookOwner( conn, id, &ret ))
+        return 0;
+    return ret;
+    }
+
+int dapi_AddressBookGetVCard30( DapiConnection* conn, const char* id, char** vcard )
+    {
+    int seq;
+    int ret;
+    seq = dapi_writeCommandAddressBookGetVCard30( conn, id );
+    if( seq == 0 )
+        return 0;
+    for(;;)
+        {
+        int comm, seq2;
+        if( !dapi_readCommand( conn, &comm, &seq2 ))
+            return 0;
+        if( seq2 == seq && comm == DAPI_REPLY_ADDRESSBOOKGETVCARD30 )
+            break; /* --> */
+        conn->generic_callback( conn, comm, seq2 );
+        }
+    if( !dapi_readReplyAddressBookGetVCard30( conn, vcard, &ret ))
+        return 0;
+    return ret;
+    }
+
 int dapi_OpenUrl_Window( DapiConnection* conn, const char* url, long winfo )
     {
     DapiWindowInfo winfo_;
