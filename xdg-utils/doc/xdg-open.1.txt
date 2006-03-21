@@ -1,0 +1,58 @@
+XDG-OPEN(1)
+===========
+
+
+NAME
+----
+xdg-open - opens a given file or URL using the associated default application
+
+
+SYNOPSIS
+--------
+'xdg-open' FILE|URL
+
+
+DESCRIPTION
+-----------
+The xdg-open(1) command wraps desktop environment specific launcher facilities.
+Depending on the running desktop software it will delegate the launching of the
+given file or URL to the desktop's application launcher, i.e. the file or URL
+will be opened with the associated default application according to the
+desktop's configuration.
+
+
+EXAMPLES
+--------
+
+----
+xdg-open http://www.freedesktop.org
+----
+    Opens the Freedesktop.org website in the user's default browser
+
+----
+xdg-open /tmp/foobar.png
+----
+    Opens the PNG image file /tmp/foobar.png in the user's default image
+    viewer
+
+
+RESOURCES
+---------
+Portland project web site: http://portland.freedesktop.org/wiki/Portland[]
+
+
+AUTHOR
+------
+This document was written by Kevin Krammer <mailto:kevin.krammer@gmx.at[]>.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU General Public License, Version 2 or any
+later version published by the Free Software Foundation.
+
+On Debian systems, the complete text of the GNU General Public License
+can be found in /usr/share/common-licenses/GPL.
+
+
+SEE ALSO
+--------
+xdg-mime(1), xdg-su(1)

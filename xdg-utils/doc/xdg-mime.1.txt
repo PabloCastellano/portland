@@ -1,0 +1,67 @@
+XDG-MIME(1)
+===========
+
+
+NAME
+----
+xdg-mime - manages MIME settings
+
+
+SYNOPSIS
+--------
+'xdg-mime' [--info FILE] [--defapp FILE]
+
+
+DESCRIPTION
+-----------
+The xdg-mime(1) command wraps desktop environment specific MIME type handling
+facilities.
+
+*TODO*: capabilities overview
+
+
+OPTIONS
+-------
+--info FILE::
+    Prints the given file's MIME type
+
+--defapp FILE::
+    Prints the filename of the default handler application' .desktop file,
+    also known as the "desktop file name"
+
+
+EXAMPLES
+--------
+
+----
+xdg-mime --info /tmp/foobar.png
+----
+    Prints the MIME type of the file /tmp/foobar.png
+
+----
+xdg-mime --defapp /tmp/foobar.png
+----
+    Prints the name of the .desktop file of the application which is
+    registered to open files of the MIME type /tmp/foobar.png has
+
+
+RESOURCES
+---------
+Portland project web site: http://portland.freedesktop.org/wiki/Portland[]
+Desktop entry specification:
+http://portland.freedesktop.org/wiki/Standards_2fdesktop_2dentry_2dspec[]
+
+AUTHOR
+------
+This document was written by Kevin Krammer <mailto:kevin.krammer@gmx.at[]>.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU General Public License, Version 2 or any
+later version published by the Free Software Foundation.
+
+On Debian systems, the complete text of the GNU General Public License
+can be found in /usr/share/common-licenses/GPL.
+
+SEE ALSO
+--------
+xdg-open(1), xdg-su(1)

@@ -1,0 +1,172 @@
+xdg-utils
+---------
+
+    The xdg-utils package is a set of simple scripts that provide
+basic desktop integration functions for any Free Desktop, such as Linux.
+
+    They are intended to provide a set of defacto standards.  This
+means that:
+    *  Third party software developers can rely on these xdg-utils
+       for all of their simple integration needs.
+
+    *  Developers of desktop environments can make sure that their
+       environments are well supported
+
+       If a desktop developer wants to be certain that their environment
+       functions with all third party software, then can simply
+       make sure that these utilities work properly in their environment.
+
+       This will hopefully mean that 'third tier' window managers
+       such as XFCE and Blackbox can reach full parity with Gnome and KDE
+       in terms of third party ISV support.
+
+    *  Distribution vendors can provide custom versions of these utilities
+
+       If a distribution vendor wishes to have unusual systems,
+       they can provide custom scripts, and the third party software
+       should still continue to work.
+
+
+OVERVIEW:
+---------
+
+    The following scripts are provided at this time.
+This is an early release of xdg-utils, and we hope to rapidly
+add more utilities.
+
+    xdg-menu        Place a menu into the users menu structure
+    xdg-mime        Gather mime information about a file
+    xdg-open        Open a URL in the user's preferred application that
+                    handles the respective URL or file type
+    xdg-email       Open the users preferred email client,
+                    potentially with subject and other info filled in
+    xdg-copy        Copy one URI to another
+    xdg-su          Run a command as a different (usually root) user
+
+
+
+BUILD:
+------
+
+    Building the xdg-utils should be very simple.  First,
+you need to obtain the source and extract it to a directory
+on your system.  Change directories to that directory and
+run the following commands:
+
+        ./configure
+        make
+
+    This will make all of the xdg-utils scripts; they
+will be located in the scripts/ subdirectory and will
+have names such as 'xdg-menu', or 'xdg-mime', and so on.
+
+    You can optionally choose to install the scripts
+to a target directory.  To do this, you could issue
+the following commands:
+         ./configure [--prefix=<your-place-here>]
+        make install
+that would cause the scripts to be installed to
+  <your-place-here>/bin
+
+
+USE:
+----
+
+    To use the scripts, we recommend that you package the scripts
+that you need to use along with your product.  The license for xdg-utils
+is very open, so that will cause you no conflict (see LICENSE
+for the exact license details).
+
+    We recommend that you place these scripts in a directory, and
+then add that directory to the end of the PATH.  So, let's say that
+you're writing your post installation script, and you want to create
+a menu on any xdg-util compliant environment.  Let's further assume
+that you've just installed to $INSTALL_DIR, and that your menu
+desktop file is in $INSTALL_DIR/desktop/icon.desktop.  Finally, let's
+say that you've included the xdg-utils package in your installation
+in $INSTALL_DIR/xdg-utils.
+
+    Then a simple post install script could look like this:
+
+        export PATH=$PATH:$INSTALL_DIR/xdg-utils
+        xdg-menu --create $INSTALL_DIR/icon.desktop
+
+    And now your product has a menu on any XDG compliant desktop!
+
+Note that we strongly recommend using this method - that is,
+putting your copy of the xdg-utils at the end of the path,
+and then invoking them without a specific path name.
+
+That will allow your users and their system providers to
+use custom versions of the xdg-utils which should work better
+for them.
+
+If you wish to absolutely force the issue and only use the versions
+you shipped, you could instead hard code the path to the version
+you bundle with your application.  We strongly recommend against
+this, as it will make your product obsolete more quickly than is necessary.
+
+
+
+DETAILED USAGE STATEMENTS:
+-------------------------
+
+xdg-menu:
+    Usage:
+    xdg-menu [--root|--user] [--create desktop|--delete desktop]
+    Where --user (install only for the current user) is the default.
+    One of --create or --delete must be specified.
+    With --create, the file specified must exist and be a valid XDG .desktop file
+    With --delete, the file must be a pattern that will exist
+    essentially the basename of the file passed in with --create
+
+    xdg-menu --user --create /my/path/to/my.desktop
+    xdg-menu --user --delete my.desktop
+
+
+xdg-email:
+    Opens a given mailto URI registered default application
+    Usage:
+    xdg-email mailto-uri
+
+    xdg-email 'mailto:jwhite@codeweavers.com?subject=This rocks&body=Nice work!&attachment=/tmp/money.png'
+
+
+xdg-mime:
+    Manage MIME settings
+    Usage:
+    xdg-mime [--info file] [--defapp file]
+    FIXME - note that much more is yet to come
+
+    xdg-mime --info /bin/sh
+    xdg-mime --info /tmp/foobar.png
+    xdg-mime --defapp /tmp/foobar.png
+
+
+xdg-su:
+    Run a program as an alternate user, generally the root user
+    Usage:
+    xdg-su command-to-run
+
+    xdg-su xdg-menu --root create <my-global-desktop-file>
+
+
+xdg-open:
+    Opens a given URL or file in the registered default application
+    Usage:
+    xdg-open URL|file
+
+    xdg-open http://www.freedesktop.org
+    xdg-open /tmp/foobar.png
+
+
+xdg-copy:
+    Copies a file from a source URL/path to a destination URL/path
+    Usage:
+    xdg-copy source destination
+
+    xdg-copy http://portland.freedesktop.org/png/freedesktop-logo.png .
+    xdg-copy /tmp/foobar.png /home/user/foobar-copy.png
+
+
+

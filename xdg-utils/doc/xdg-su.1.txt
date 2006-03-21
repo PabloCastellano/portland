@@ -1,0 +1,50 @@
+XDG-SU(1)
+===========
+
+
+NAME
+----
+xdg-su - executes a given command as the system's super user
+
+
+SYNOPSIS
+--------
+'xdg-su' COMMAND
+
+
+DESCRIPTION
+-----------
+The xdg-su(1) command wraps desktop environment specific facilities for gaining
+elevated user rights (i.e. becoming root).
+
+
+EXAMPLES
+--------
+
+----
+xdg-su xdg-menu --root create <my-global-desktop-file>
+----
+    Runs the command xdg-menu with root permissions. All parameters following
+    the command are passed to the command upon execution
+
+
+RESOURCES
+---------
+Portland project web site: http://portland.freedesktop.org/wiki/Portland[]
+
+
+AUTHOR
+------
+This document was written by Kevin Krammer <mailto:kevin.krammer@gmx.at[]>.
+
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU General Public License, Version 2 or any
+later version published by the Free Software Foundation.
+
+On Debian systems, the complete text of the GNU General Public License
+can be found in /usr/share/common-licenses/GPL.
+
+
+SEE ALSO
+--------
+xdg-open(1), xdg-mime(1), su(1)

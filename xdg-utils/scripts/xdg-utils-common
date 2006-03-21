@@ -1,0 +1,16 @@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+detectDE()
+{
+    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
+    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+

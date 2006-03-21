@@ -1,0 +1,12 @@
+AC_PREREQ(2.50)
+AC_INIT(xdg-utils, 1, portland@lists.freedesktop.org)
+
+AC_PROG_MAKE_SET
+AC_PROG_INSTALL
+
+
+AC_CONFIG_FILES([
+    Makefile
+    scripts/Makefile
+])
+AC_OUTPUT

@@ -1,0 +1,71 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-su
+#
+#   Utility script to run a command as an alternate user, generally
+#       the root user
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#
+#   Licenced under MIT licence. See LICENCE files
+#
+#---------------------------------------------
+
+usage()
+{
+    APP=`basename $0`
+    echo "Run a program as an alternate user, generally the root user"
+    echo "Usage:"
+    echo $APP command-to-run
+    echo
+    echo $APP xdg-menu --root create '<my-global-desktop-file>'
+    exit 1
+}
+
+su_kde()
+{
+    kdesu "$*"
+
+    exit $?
+}
+
+su_gnome()
+{
+    gnomesu -c "$*"
+
+    exit $?
+}
+
+su_generic()
+{
+    XSU=`which xsu 2>/dev/null`
+    if [ $? -eq 0 ] ; then
+        $XSU "$*"
+
+        exit $?
+    else
+        echo Sorry, no method available for invoking su "$*"
+        exit 2
+    fi
+}
+
+[ "$1" != "" ] || usage
+
+#@xdg-utils-common@
+
+case "$DE" in
+    kde)
+    su_kde "$*"
+    ;;
+
+    gnome)
+    su_gnome "$*"
+    ;;
+
+    *)
+    su_generic "$*"
+    ;;
+esac

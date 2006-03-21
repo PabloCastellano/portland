@@ -1,0 +1,61 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-copy
+#
+#   Utility script to copy files specified by URLs, including
+#   downloading and uploading from/to remote sites.
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#
+#   Licenced under MIT licence. See LICENCE files
+#
+#---------------------------------------------
+
+usage()
+{
+    APP=`basename $0`
+    echo "Copies a file from a source URL/path to a destination URL/path"
+    echo "Usage:"
+    echo $APP "source destination"
+    echo
+    echo $APP "http://portland.freedesktop.org/png/freedesktop-logo.png" .
+    echo $APP "/tmp/foobar.png" "/home/user/foobar-copy.png"
+    exit 1
+}
+
+copy_kde()
+{
+    kfmclient copy "$1" "$2"
+
+    exit $?
+}
+
+copy_gnome()
+{
+    gnomevfs-copy "$1" "$2"
+
+    exit $?
+}
+
+[ "$1" != "" ] || usage
+[ "$2" != "" ] || usage
+
+#@xdg-utils-common@
+
+case "$DE" in
+    kde)
+    copy_kde "$1" "$2"
+    ;;
+
+    gnome)
+    copy_gnome "$1" "$2"
+    ;;
+
+    *)
+    echo Sorry, no method available for copying "$1" to "$2"
+    exit 2
+    ;;
+esac

@@ -1,0 +1,80 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-open
+#
+#   Utility script to open a URL in the registered default application.
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#
+#   Licenced under MIT licence. See LICENCE files
+#
+#---------------------------------------------
+
+usage()
+{
+    APP=`basename $0`
+    echo "Opens a given URL or file in the registered default application"
+    echo "Usage:"
+    echo $APP "URL|file"
+    echo
+    echo $APP "http://www.freedesktop.org"
+    echo $APP "/tmp/foobar.png"
+    exit 1
+}
+
+open_kde()
+{
+    kfmclient exec "$1"
+
+    exit $?
+}
+
+open_gnome()
+{
+    gnome-open "$1"
+
+    exit $?
+}
+
+open_generic()
+{
+    # should rather iterate over all entries in BROWSER
+    browser=`echo "$BROWSER" | cut -d ':' -f 1`
+
+    if [ "$browser" == "" ]; then exit 2;
+    fi
+
+    browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
+
+    if [ "$browser_with_arg" == "$browser" ]; then "$browser" "$1";
+    else $browser_with_arg;
+    fi
+
+    exit 0
+}
+
+[ "$1" != "" ] || usage
+
+#@xdg-utils-common@
+
+case "$DE" in
+    kde)
+    open_kde "$1"
+    ;;
+
+    gnome)
+    open_gnome "$1"
+    ;;
+
+    generic)
+    open_generic "$1"
+    ;;
+
+    *)
+    echo Sorry, no method available for opening "$1"
+    exit 2
+    ;;
+esac

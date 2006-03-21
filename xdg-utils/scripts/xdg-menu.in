@@ -1,0 +1,162 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-menu
+#
+#   Utility script to create menu icons on a Linux desktop.
+#   Works on most XDG compliant systems; does
+#   not work everywhere.
+#
+#   Refer to the usage() function below for usage.
+#---------------------------------------------
+
+usage()
+{
+    APP=`basename $0`
+    echo Usage:
+    echo  "$APP" "[--root|--user] [--create desktop|--delete desktop]"
+    echo "Where --user (install only for the current user) is the default."
+    echo One of --create or --delete must be specified.
+    echo With --create, the file specified must exist and be a valid XDG .desktop file
+    echo With --delete, the file must be a pattern that will exist;
+    echo      essentially the basename of the file passed in with '--create'
+    echo
+    echo "$APP" --user --create /my/path/to/my.desktop
+    echo "$APP" --user --delete my.desktop
+}
+
+
+
+xdg_user_dir=$XDG_DATA_HOME
+[ -n "$xdg_user_dir" ] || xdg_user_dir=$HOME/.local/share
+
+xdg_data_dirs=$XDG_DATA_DIRS
+[ -n "$xdg_data_dirs" ] || xdg_data_dirs=/usr/local/share/:/usr/share/
+for x in `echo $xdg_data_dirs | sed 's/:/ /g'` ; do
+    if [ -w $x/applications/ ] ; then
+        xdg_global_dir=$x
+        break
+    fi
+done
+[ -w $xdg_global_dir ] || xdg_global_dir=
+
+kde_user_dir=$HOME/.kde/share/applnk
+kde_global_dir=/usr/share/applnk
+[ -w $kde_global_dir ] || kde_global_dir=
+
+gnome_user_dir=$HOME/.gnome/apps
+gnome_global_dir=/usr/share/gnome/apps
+[ -w $gnome_global_dir ] || gnome_global_dir=
+
+mode=user
+action=
+while [ $# -gt 0 ] ; do
+    parm=$1
+    shift
+
+    case $parm in
+      --create)
+        if [ ! -f "$1" ] ; then
+            echo Error:  You must specify a valid desktop file as a paramter to --create.
+            exit 1
+        fi
+        if [ -n "$action" ] ; then
+            echo Error:  You must specify only one of --create or --delete
+            exit 1
+        fi
+
+        action=create
+        desktop_file=$1
+        shift
+        ;;
+
+      --delete)
+        if [ -z "$1" ] ; then
+            echo Error:  You must specify a desktop file name as a paramter to --delete.
+            exit 1
+        fi
+        if [ -n "$action" ] ; then
+            echo Error:  You must specify only one of --create or --delete
+            exit 1
+        fi
+        action=delete
+        desktop_file=$1
+        shift
+        ;;
+
+      --user)
+        mode=user
+        ;;
+
+      --root)
+        mode=root
+        ;;
+
+      *)
+        echo "$parm:  Invalid parameter/option"
+        usage
+        exit 2
+        ;;
+    esac
+done
+
+if [ -z "$action" ] ; then
+    usage
+    exit 2
+fi
+
+desktop_dir=
+if [ "$mode" = "user" ] ; then
+    xdg_dir=$xdg_user_dir/applications
+    kde_dir=$kde_user_dir
+    gnome_dir=$gnome_user_dir
+    my_umask=077
+    if [ -d $HOME/Desktop -a -w $HOME/Desktop ] ; then
+        desktop_dir=$HOME/Desktop
+    fi
+else
+    xdg_dir=$xdg_global_dir/applications
+    kde_dir=$kde_global_dir
+    gnome_dir=$gnome_global_dir
+    my_umask=022
+fi
+
+#echo "[xdg|$xdg_user_dir|$xdg_global_dir]"
+#echo "[kde|$kde_user_dir|$kde_global_dir]"
+#echo "[gnome|$gnome_user_dir|$gnome_global_dir]"
+
+#echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
+
+
+case $action in
+    create)
+        save_umask=`umask`
+        umask $my_umask
+        basefile=`basename $desktop_file`
+
+        for x in $xdg_dir $kde_dir $gnome_dir $desktop_dir ; do
+            mkdir -p $x
+            cp $desktop_file $x
+        done
+
+        if [ -f $kde_dir/$basefile ] ; then
+            echo "OnlyShowIn=Old;" >> $kde_dir/$basefile
+        fi
+
+        if [ -f $gnome_dir/$basefile ] ; then
+            echo "OnlyShowIn=Old;" >> $gnome_dir/$basefile
+        fi
+
+        umask $save_umask
+        ;;
+
+    delete)
+        for x in $xdg_dir $kde_dir $gnome_dir $desktop_dir ; do
+            rm -f $x/$desktop_file
+        done
+
+        ;;
+esac
+
+exit 0
+
+
