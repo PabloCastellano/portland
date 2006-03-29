@@ -1,3 +1,11 @@
+NOTE: This is currently an experimental implementation intended to gather
+feedback. Especially see the DAPI-0.1 announcement mail on the mailing
+list (http://lists.freedesktop.org/archives/portland/2006-March/000267.html)
+for details.
+
+
+
+
 The Portland Project Desktop API (DAPI)
 =======================================
 DAPI is a general purpose desktop API that allows uniform access to
