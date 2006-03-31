@@ -1,0 +1,7 @@
+Release guide for xdg-utils:
+
+cd xdg-utils
+make release
+cd ..
+mv xdg-utils xdg-utils-0.1
+tar -cvzf xdg-utils-0.1.tgz --exclude CVS --exclude .cvsignore xdg-utils-0.1
