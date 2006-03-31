@@ -24,20 +24,24 @@ xdg-su \- run a program as root after prompting for the root password
 .ad l
 .hy 0
 .HP 7
-\fBxdg\-su\fR [\fB\-\-help\fR] [\fB\fIcommand\fR\fR]
+\fBxdg\-su\fR [\fB\-\-help\fR] [\fB\-u\ \fIuser\fR\fR] [\fB\-c\ \fIcommand\fR\fR]
 .ad
 .hy
 
 .SH "DESCRIPTION"
 
 .PP
-xdg\-su runs \fIcommand\fR as root after prompting the user for the root password\&.
+xdg\-su provides a graphical dialog that prompts the user for a password to run \fIcommand\fR as \fIuser\fR or as root if no user was specified\&.
 
 .SH "OPTIONS"
 
 .TP
 \fB\-\-help\fR
 Show this help\&.
+
+.TP
+\fB\-u \fIuser\fR\fR
+run \fIcommand\fR as \fIuser\fR\&. The default is to run as root\&.
 
 .SH "EXAMPLES"
 
@@ -46,10 +50,10 @@ Show this help\&.
 
 .nf
 
-xdg\-su /opt/shinythings/bin/install\-GUI \-\-install fast
+xdg\-su \-u root \-c "/opt/shinythings/bin/install\-GUI \-\-install fast"
 
 .fi
- Runs the /opt/shinythings/bin/install\-GUI command with root permissions\&. All parameters following the command are passed to the command as is\&.
+ Runs the /opt/shinythings/bin/install\-GUI command with root permissions\&.
 
 .SH AUTHORS
 Kevin Krammer, Jeremy White.

@@ -3,7 +3,8 @@
 #   xdg-su
 #
 #   Utility script to run a command as an alternate user, generally
-#       the root user
+#       the root user, with a graphical prompt for the root
+#       password if needed
 #
 #   Refer to the usage() function below for usage.
 #
@@ -39,7 +40,7 @@ xdg-su -- run a program as root after prompting for the root password
 
 Synopsis
 
-   xdg-su [--help] [command]
+   xdg-su [--help] [-u user] [-c command]
 
 _USAGE
     exit 1
@@ -47,34 +48,38 @@ _USAGE
 
 su_kde()
 {
-    kdesu "$*"
+    kdesu "$@"
 
     exit $?
 }
 
 su_gnome()
 {
-    gnomesu -c "$*"
+    GSU=`which gnomesu 2>/dev/null`
+    if [ $? -eq 0 ] ; then
+        $GSU "$@"
 
-    exit $?
+        exit $?
+    else
+        su_generic "$@"
+    fi
 }
 
 su_generic()
 {
     XSU=`which xsu 2>/dev/null`
     if [ $? -eq 0 ] ; then
-        $XSU "$*"
+        $XSU "$@"
 
         exit $?
     else
-        echo Sorry, no method available for invoking su "$*"
+        echo Sorry, no graphical method available for invoking su "$*"
         exit 2
     fi
 }
 
 [ "$1" != "" ] || usage
 [ "$1" != "--help" ] || usage
-[ "${1:0:1}" != "-" ] || usage
 
 #@xdg-utils-common@
 
@@ -96,14 +101,14 @@ detectDE
 
 case "$DE" in
     kde)
-    su_kde "$*"
+    su_kde "$@"
     ;;
 
     gnome)
-    su_gnome "$*"
+    su_gnome "$@"
     ;;
 
     *)
-    su_generic "$*"
+    su_generic "$@"
     ;;
 esac

@@ -37,15 +37,17 @@
     <cmdsynopsis>
       <command>xdg-su</command>
       <arg><option>--help</option></arg>
-      <arg><option><replaceable>command</replaceable></option></arg>
+      <arg><option>-u <replaceable>user</replaceable></option></arg>
+      <arg><option>-c <replaceable>command</replaceable></option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1 id="description">
     <title>Description</title>
     <para>
-      xdg-su runs <replaceable>command</replaceable> as root after prompting 
-      the user for the root password.
+      xdg-su provides a graphical dialog that prompts the user for a password
+      to run <replaceable>command</replaceable> as <replaceable>user</replaceable>
+      or as root if no user was specified.
     </para>
   </refsect1>
   <refsect1 id="options">
@@ -59,16 +61,24 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
+      <varlistentry>
+	<term><option>-u <replaceable>user</replaceable></option></term>
+	<listitem>
+	  <simpara>
+	    run <replaceable>command</replaceable> as
+            <replaceable>user</replaceable>. The default is to run as root.
+	  </simpara>
+	</listitem>
+      </varlistentry>
     </variablelist>
   </refsect1>
   <refsect1 id="examples">
     <title>Examples</title>
     <para>
 <programlisting>
-xdg-su /opt/shinythings/bin/install-GUI --install fast
+xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
 </programlisting>
        Runs the /opt/shinythings/bin/install-GUI command with root permissions.
-       All parameters following the command are passed to the command as is.
     </para>
   </refsect1>
 </refentry>
