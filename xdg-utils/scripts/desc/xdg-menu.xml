@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry>
+  <refentryinfo>
+    <title>xdg-menu Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Kevin</firstname>
+      <surname>Krammer</surname>
+    </author>
+    <address><email>kevin.krammer@gmx.at</email></address>
+    <author>
+      <firstname>Jeremy</firstname>
+      <surname>White</surname>
+    </author>
+    <address><email>jwhite@codeweavers.com</email></address>
+    <author>
+      <firstname>Waldo</firstname>
+      <surname>Bastian</surname>
+    </author>
+    <address><email>waldo.bastian@intel.com</email></address>
+    <releaseinfo>This is release 1.0 of the xdg-menu Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-menu</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-menu</refname>
+    <refpurpose>command line tool for (un)installing desktop menu items</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-menu</command>
+      <arg><option>--help</option></arg>
+      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <arg><option>--noupdate</option></arg>
+      <group>
+	<arg>--user</arg>
+	<arg>--system</arg>
+      </group>
+      <group>
+	<arg>--install <replaceable>desktop-file</replaceable></arg>
+	<arg>--install <replaceable>directory-file</replaceable></arg>
+	<arg>--install <replaceable>menu-file</replaceable></arg>
+	<arg>--uninstall <replaceable>desktop-file</replaceable></arg>
+	<arg>--uninstall <replaceable>directory-file</replaceable></arg>
+	<arg>--uninstall <replaceable>menu-file</replaceable></arg>
+	<arg>--forceupdate</arg>
+      </group>
+  </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id="introduction">
+    <title>Introduction</title>
+    <para>
+      The xdg-menu program can be used to install new items to the
+      desktop's application menu.
+    </para>
+    <para>
+      The application menu works according to the 
+      XDG Desktop Menu Specification at
+      http://www.freedesktop.org/Standards/menu-spec 
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>--help</option></term>
+	<listitem>
+	  <simpara>
+	    Show this help.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--vendor</option> <replaceable>vendor-id</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
+            and directory files.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--noupdate</option></term>
+	<listitem>
+	  <simpara>
+	    Postpone updating the menu system. If multiple updates to the
+            menu system are made in sequence this flag can be used to
+            indicate that additional changes will follow and that it is not
+            necassery to update the menu system right away.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--user</option></term>
+	<listitem>
+	  <simpara>
+	    Installs or uninstalls the file for the current user only.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--system</option></term>
+	<listitem>
+	  <simpara>
+	    Installs or uninstalls the file for all users on the system.
+            Usually only root is allowed to do this.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--install</option> <replaceable>desktop-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Installs the *.desktop file indicated by <replaceable>desktop-file</replaceable>
+            to the menu system. A desktop file represents a single menu item.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--install</option> <replaceable>directory-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Installs the *.directory file indicated by <replaceable>directory-file</replaceable>
+            to the menu system. A directory file provides the name and icon for a submenu.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--install</option> <replaceable>menu-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Installs the *.menu file indicated by <replaceable>menu-file</replaceable>
+            to the menu system. A menu file describes a submenu.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--uninstall</option> <replaceable>desktop-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Removes the *.desktop file indicated by <replaceable>desktop-file</replaceable>
+            from the menu system. 
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--uninstall</option> <replaceable>directory-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Removes the *.directory file indicated by <replaceable>directory-file</replaceable>
+            from the menu system. 
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--uninstall</option> <replaceable>menu-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Removes the *.menu file indicated by <replaceable>menu-file</replaceable>
+            from the menu system.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--forceupdate</option></term>
+	<listitem>
+	  <simpara>
+	    Force an update of the menu system. This is only useful if
+	    the last call to xdg-menu included the <option>--noupdate</option> option.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+</refentry>

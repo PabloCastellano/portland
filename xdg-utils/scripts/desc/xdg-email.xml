@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry>
+  <refentryinfo>
+    <title>xdg-email Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Kevin</firstname>
+      <surname>Krammer</surname>
+    </author>
+    <address><email>kevin.krammer@gmx.at</email></address>
+    <author>
+      <firstname>Jeremy</firstname>
+      <surname>White</surname>
+    </author>
+    <address><email>jwhite@codeweavers.com</email></address>
+    <author>
+      <firstname>Waldo</firstname>
+      <surname>Bastian</surname>
+    </author>
+    <address><email>waldo.bastian@intel.com</email></address>
+    <releaseinfo>This is release 0.5 of the xdg-email Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-email</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-email</refname>
+    <refpurpose>command line tool for sending mail using the user's preferred e-mail composer</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-email</command>
+      <arg><option>--help</option></arg>
+      <arg><option><replaceable>mailto-uri</replaceable></option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id="introduction">
+    <title>Introduction</title>
+    <para>
+      xdg-email opens the user's preferred e-mail composer in order to send
+      a mail to <replaceable>mailto-uri</replaceable>. RFC2368 defines mailto:
+      URIs. <replaceable>mailto-uri</replaceable> may contain fields for to, cc,
+      bcc, subject, body and attachment. 
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>--help</option></term>
+	<listitem>
+	  <simpara>
+	    Show this help.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+<programlisting>
+xdg-email 'mailto:jwhite@codeweavers.com?subject=Logo contest&amp;' \
+          'body=Attached you find the logo for the contest.&amp;' \ 
+          'attachment=/tmp/logo.png'
+</programlisting>
+    </para>
+  </refsect1>
+</refentry>
