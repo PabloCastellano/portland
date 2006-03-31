@@ -73,11 +73,14 @@
 <programlisting>
 xdg-open 'http://www.freedesktop.org/'
 </programlisting>
+      Opens the Freedesktop.org website in the user's default browser
     </para>
     <para>
 <programlisting>
-xdg-open /tmp/FinancialReport.pdf
+xdg-open /tmp/foobar.png
 </programlisting>
+      Opens the PNG image file /tmp/foobar.png in the user's default image
+      viewing application.
     </para>
   </refsect1>
 </refentry>
