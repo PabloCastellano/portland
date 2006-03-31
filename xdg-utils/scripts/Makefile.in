@@ -19,18 +19,22 @@ SCRIPTS		= \
     xdg-open \
     xdg-copy
 
-do_subst = sed -e '/[@]xdg-utils-common[@]/ r xdg-utils-common'
+do_subst = sed -e '/[@]xdg-utils-common[@]/ r xdg-utils-common.in'
 
 all:
 
-scripts:	$(SCRIPTS)
+scripts:	README $(SCRIPTS)
+
+release:	scripts
+	rm -f xdg-*.in *~ HACKING
 
 distclean: clean
 	rm -f Makefile
 
 clean:
-	rm -f $(SCRIPTS)
-	rm -f README
+
+scripts-clean:
+	rm -f $(SCRIPTS) README man/xdg-*.1 html/xdg-*.html
 
 README: $(SCRIPTS)
 	echo > $@
@@ -38,7 +42,7 @@ README: $(SCRIPTS)
 	    sh ./$$x | grep -B 100 Synopsis | head -n-1 >> $@ ; \
 	done
 
-install: $(SCRIPTS)
+install:
 	$(MKDIR) $(bindir)
 	for x in $(SCRIPTS) ; do \
 	    $(INSTALL_SCRIPT) $$x $(bindir) ; \
@@ -54,12 +58,12 @@ uninstall:
 	$(do_subst) < $@.in | sed -e '/<< _USAGE/ r '$@.usage >$@
 	chmod a+x $@
 
-xdg-menu: xdg-menu.in xdg-utils-common
-xdg-email: xdg-email.in xdg-utils-common
-xdg-mime: xdg-mime.in xdg-utils-common
-xdg-su: xdg-su.in xdg-utils-common
-xdg-open: xdg-open.in xdg-utils-common
-xdg-copy: xdg-copy.in xdg-utils-common
+xdg-menu: xdg-menu.in xdg-utils-common.in
+xdg-email: xdg-email.in xdg-utils-common.in
+xdg-mime: xdg-mime.in xdg-utils-common.in
+xdg-su: xdg-su.in xdg-utils-common.in
+xdg-open: xdg-open.in xdg-utils-common.in
+xdg-copy: xdg-copy.in xdg-utils-common.in
 
 %.1: desc/%.xml
 	(cd man;$(XMLTO) man ../$<)

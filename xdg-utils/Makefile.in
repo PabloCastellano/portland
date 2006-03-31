@@ -8,10 +8,10 @@ distclean:	clean $(SUBDIRS:%=%/__distclean__)
 	rm -f config.* Makefile
 	rm -rf autom4te.cache
 
+release:	$(SUBDIRS:%=%/__release__)
+
 help:	
-	@echo "Usage: make [all|install|uninstall|clean|distclean]"
-	@echo ""
-	@echo "The default target is 'all', which will build the files in the scripts/ directory"
+	@echo "Usage: make [install|uninstall|release]"
 
 .PHONY: all install uninstall clean distclean dummy
 dummy:
@@ -27,6 +27,9 @@ $(SUBDIRS:%=%/__install__): dummy
 
 $(SUBDIRS:%=%/__clean__): dummy
 	cd `dirname $@` && $(MAKE) clean
+
+$(SUBDIRS:%=%/__release__): dummy
+	cd `dirname $@` && $(MAKE) release
 
 $(SUBDIRS:%=%/__distclean__): dummy
 	cd `dirname $@` && $(MAKE) distclean
