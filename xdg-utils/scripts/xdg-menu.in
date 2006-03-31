@@ -7,6 +7,12 @@
 #   not work everywhere.
 #
 #   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#
+#   LICENSE:
+#
 #---------------------------------------------
 
 usage()
@@ -201,11 +207,11 @@ else
 fi
 
 
-echo "[xdg|$xdg_user_dir|$xdg_global_dir]"
-echo "[kde|$kde_user_dir|$kde_global_dir]"
-echo "[gnome|$gnome_user_dir|$gnome_global_dir]"
+# echo "[xdg|$xdg_user_dir|$xdg_global_dir]"
+# echo "[kde|$kde_user_dir|$kde_global_dir]"
+# echo "[gnome|$gnome_user_dir|$gnome_global_dir]"
 
-echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
+# echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
 
 basefile=`basename $desktop_file`
 [ -z $vendor ] || basefile=$vendor-$basefile
@@ -233,7 +239,7 @@ case $action in
 
     uninstall)
         for x in $xdg_dir $kde_dir $gnome_dir ; do
-            echo rm -f $x/$basefile
+            rm -f $x/$basefile
         done
 
         ;;

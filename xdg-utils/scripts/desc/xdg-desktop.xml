@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry id="xdg-desktop">
+  <refentryinfo>
+    <title>xdg-desktop Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Kevin</firstname>
+      <surname>Krammer</surname>
+    </author>
+    <address><email>kevin.krammer@gmx.at</email></address>
+    <author>
+      <firstname>Jeremy</firstname>
+      <surname>White</surname>
+    </author>
+    <address><email>jwhite@codeweavers.com</email></address>
+    <releaseinfo>This is release 0.5 of the xdg-desktop Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-desktop</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-desktop</refname>
+    <refpurpose>command line tool for (un)installing icons to the desktop</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-desktop</command>
+      <arg><option>--help</option></arg>
+      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <group>
+	<arg>--install <replaceable>file</replaceable></arg>
+	<arg>--uninstall <replaceable>file</replaceable></arg>
+      </group>
+  </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id="description">
+    <title>Description</title>
+    <para>
+      The xdg-desktop program can be used to install an icon on the desktop
+      of the current user.
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>--help</option></term>
+	<listitem>
+	  <simpara>
+	    Show this help.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--vendor</option> <replaceable>vendor-id</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
+            files.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--install</option> <replaceable>file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Installs <replaceable>file</replaceable> to the desktop of the current user.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--uninstall</option> <replaceable>file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Removes <replaceable>file</replaceable> from the desktop
+            of the current user.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+</refentry>

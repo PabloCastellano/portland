@@ -13,13 +13,14 @@ bindir          = @bindir@
 
 SCRIPTS		= \
     xdg-menu \
+    xdg-desktop \
     xdg-email \
     xdg-mime \
     xdg-su \
     xdg-open \
     xdg-copy
 
-do_subst = sed -e '/[@]xdg-utils-common[@]/ r xdg-utils-common.in'
+do_subst = sed -e '/[@]xdg-utils-common[@]/ r xdg-utils-common.in' | sed -e '/LICENSE:/ r ../LICENSE'
 
 all:
 
@@ -56,10 +57,11 @@ uninstall:
 	-$(RMDIR) $(bindir)
 
 %: %.in %.usage %.1 %.html
-	$(do_subst) < $@.in | sed -e '/<< _USAGE/ r '$@.usage >$@
+	cat $@.in | $(do_subst) | sed -e '/<< _USAGE/ r '$@.usage >$@
 	chmod a+x $@
 
 xdg-menu: xdg-menu.in xdg-utils-common.in
+xdg-desktop: xdg-desktop.in xdg-utils-common.in
 xdg-email: xdg-email.in xdg-utils-common.in
 xdg-mime: xdg-mime.in xdg-utils-common.in
 xdg-su: xdg-su.in xdg-utils-common.in
