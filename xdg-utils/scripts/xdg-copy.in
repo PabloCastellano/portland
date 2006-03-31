@@ -16,13 +16,8 @@
 
 usage()
 {
-    APP=`basename $0`
-    echo "Copies a file from a source URL/path to a destination URL/path"
-    echo "Usage:"
-    echo $APP "source destination"
-    echo
-    echo $APP "http://portland.freedesktop.org/png/freedesktop-logo.png" .
-    echo $APP "/tmp/foobar.png" "/home/user/foobar-copy.png"
+cat << _USAGE
+_USAGE
     exit 1
 }
 
@@ -42,6 +37,7 @@ copy_gnome()
 
 [ "$1" != "" ] || usage
 [ "$2" != "" ] || usage
+[ "$1" != "--help" ] || usage
 
 #@xdg-utils-common@
 

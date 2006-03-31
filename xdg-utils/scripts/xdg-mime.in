@@ -14,21 +14,10 @@
 #
 #---------------------------------------------
 
-
 usage()
 {
-    APP=`basename $0`
-    echo "Manage MIME settings"
-    echo "Usage:"
-    echo $APP [--info file] [--defapp file]
-    echo    FIXME - note that much more is yet to come
-    echo
-    echo "--info:   Tries to determine the given file's MIME type"
-    echo "--defapp: Tries to determine the given file's default handler application"
-    echo
-    echo $APP --info "/bin/sh"
-    echo $APP --info "/tmp/foobar.png"
-    echo $APP --defapp "/tmp/foobar.png"
+cat << _USAGE
+_USAGE
     exit 1
 }
 
@@ -73,6 +62,7 @@ defapp_gnome()
 }
 
 [ "$1" != "" ] || usage
+[ "$1" != "--help" ] || usage
 
 #@xdg-utils-common@
 

@@ -16,12 +16,8 @@
 
 usage()
 {
-    APP=`basename $0`
-    echo "Run a program as an alternate user, generally the root user"
-    echo "Usage:"
-    echo $APP command-to-run
-    echo
-    echo $APP xdg-menu --root create '<my-global-desktop-file>'
+cat << _USAGE
+_USAGE
     exit 1
 }
 
@@ -53,6 +49,8 @@ su_generic()
 }
 
 [ "$1" != "" ] || usage
+[ "$1" != "--help" ] || usage
+[ "${1:0:1}" != "-" ] || usage
 
 #@xdg-utils-common@
 

@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry id="xdg-mime">
+  <refentryinfo>
+    <title>xdg-mime Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Kevin</firstname>
+      <surname>Krammer</surname>
+    </author>
+    <address><email>kevin.krammer@gmx.at</email></address>
+    <author>
+      <firstname>Jeremy</firstname>
+      <surname>White</surname>
+    </author>
+    <address><email>jwhite@codeweavers.com</email></address>
+    <releaseinfo>This is release 0.5 of the xdg-mime Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-mime</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-mime</refname>
+    <refpurpose>command line tool for providing information about file type handling</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-mime</command>
+      <arg><option>--help</option></arg>
+      <arg><option>--info <replaceable>FILE</replaceable></option></arg>
+      <arg><option>--defapp <replaceable>FILE</replaceable></option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id="description">
+    <title>Description</title>
+    <para>
+      The xdg-mime program can be used to query information about file types
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>--help</option></term>
+	<listitem>
+	  <simpara>
+	    Show this help.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--info</option> <replaceable>FILE</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Returns the file type of <replaceable>FILE</replaceable> in the form of a MIME type.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--defapp</option> <replaceable>FILE</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Returns the default application that the desktop environment uses for opening 
+	    <replaceable>FILE</replaceable>. The default applications is
+            identified by its *.desktop file.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+<programlisting>
+xdg-mime --info /tmp/foobar.png
+</programlisting>
+      Prints the MIME type of the file /tmp/foobar.png
+    </para>
+    <para>
+<programlisting>
+xdg-mime --defapp /tmp/foobar.png
+</programlisting>
+      Prints the name of the .desktop file of the application which is
+      registered to open files of the MIME type the file /tmp/foobar.png has
+    </para>
+  </refsect1>
+</refentry>

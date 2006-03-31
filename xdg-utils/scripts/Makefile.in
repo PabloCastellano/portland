@@ -5,7 +5,7 @@ INSTALL_PROGRAM = @INSTALL_PROGRAM@ $(INSTALL_PROGRAM_FLAGS)
 INSTALL_LIBRARY = @INSTALL_PROGRAM@ $(INSTALL_PROGRAM_FLAGS)
 INSTALL_SCRIPT  = @INSTALL_SCRIPT@ $(INSTALL_SCRIPT_FLAGS)
 INSTALL_DATA    = @INSTALL_DATA@ $(INSTALL_DATA_FLAGS)
-
+XMLTO           = @XMLTO@
 
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
@@ -21,7 +21,9 @@ SCRIPTS		= \
 
 do_subst = sed -e '/[@]xdg-utils-common[@]/ r xdg-utils-common'
 
-all:	$(SCRIPTS)
+all:
+
+scripts:	$(SCRIPTS)
 
 distclean: clean
 	rm -f Makefile
@@ -33,10 +35,7 @@ clean:
 README: $(SCRIPTS)
 	echo > $@
 	@for x in $(SCRIPTS) ; do \
-	    echo $$x: >> $@ ; \
-	    sh ./$$x | sed 's/^/    /' >> $@ ; \
-	    echo >> $@ ; \
-	    echo >> $@ ; \
+	    sh ./$$x | grep -B 100 Synopsis | head -n-1 >> $@ ; \
 	done
 
 install: $(SCRIPTS)
@@ -51,8 +50,8 @@ uninstall:
 	done
 	-$(RMDIR) $(bindir)
 
-%: %.in
-	$(do_subst) < $< >$@
+%: %.in %.usage %.1 %.html
+	$(do_subst) < $@.in | sed -e '/<< _USAGE/ r '$@.usage >$@
 	chmod a+x $@
 
 xdg-menu: xdg-menu.in xdg-utils-common
@@ -61,3 +60,16 @@ xdg-mime: xdg-mime.in xdg-utils-common
 xdg-su: xdg-su.in xdg-utils-common
 xdg-open: xdg-open.in xdg-utils-common
 xdg-copy: xdg-copy.in xdg-utils-common
+
+%.1: desc/%.xml
+	(cd man;$(XMLTO) man ../$<)
+
+%.html: desc/%.xml
+	(cd html;$(XMLTO) html-nochunks ../$<)
+
+%.txt: desc/%.xml
+	$(XMLTO) txt $<
+
+%.usage: %.txt
+	grep -B 100 Description $< | (read;read;read a;echo $$a;head -n-1) > $@
+

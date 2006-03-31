@@ -72,10 +72,14 @@ that would cause the scripts to be installed to
 USE:
 ----
 
-    To use the scripts, we recommend that you package the scripts
-that you need to use along with your product.  The license for xdg-utils
-is very open, so that will cause you no conflict (see LICENSE
-for the exact license details).
+    Although we expect that these scripts will generally come as part
+of the operating system, we recommend that you package the scripts
+that your application needs along with your product as a fallback. For
+this purpose please obtain the original version of the xdg-utils from
+http://www.freedesktop.org/wiki/Portland . The xdg-utils scripts that
+are distributed by operating systems vendors may have been tuned for
+their particular operating system and may not work on the same broad
+variety of operating systems as the original version.
 
     We recommend that you place these scripts in a directory, and
 then add that directory to the end of the PATH.  So, let's say that
@@ -104,69 +108,6 @@ for them.
 If you wish to absolutely force the issue and only use the versions
 you shipped, you could instead hard code the path to the version
 you bundle with your application.  We strongly recommend against
-this, as it will make your product obsolete more quickly than is necessary.
-
-
-
-DETAILED USAGE STATEMENTS:
--------------------------
-
-xdg-menu:
-    Usage:
-    xdg-menu [--root|--user] [--create desktop|--delete desktop]
-    Where --user (install only for the current user) is the default.
-    One of --create or --delete must be specified.
-    With --create, the file specified must exist and be a valid XDG .desktop file
-    With --delete, the file must be a pattern that will exist
-    essentially the basename of the file passed in with --create
-
-    xdg-menu --user --create /my/path/to/my.desktop
-    xdg-menu --user --delete my.desktop
-
-
-xdg-email:
-    Opens a given mailto URI registered default application
-    Usage:
-    xdg-email mailto-uri
-
-    xdg-email 'mailto:jwhite@codeweavers.com?subject=This rocks&body=Nice work!&attachment=/tmp/money.png'
-
-
-xdg-mime:
-    Manage MIME settings
-    Usage:
-    xdg-mime [--info file] [--defapp file]
-    FIXME - note that much more is yet to come
-
-    xdg-mime --info /bin/sh
-    xdg-mime --info /tmp/foobar.png
-    xdg-mime --defapp /tmp/foobar.png
-
-
-xdg-su:
-    Run a program as an alternate user, generally the root user
-    Usage:
-    xdg-su command-to-run
-
-    xdg-su xdg-menu --root create <my-global-desktop-file>
-
-
-xdg-open:
-    Opens a given URL or file in the registered default application
-    Usage:
-    xdg-open URL|file
-
-    xdg-open http://www.freedesktop.org
-    xdg-open /tmp/foobar.png
-
-
-xdg-copy:
-    Copies a file from a source URL/path to a destination URL/path
-    Usage:
-    xdg-copy source destination
-
-    xdg-copy http://portland.freedesktop.org/png/freedesktop-logo.png .
-    xdg-copy /tmp/foobar.png /home/user/foobar-copy.png
-
-
+this, as it will make your product obsolete more quickly than is
+necessary.
 
