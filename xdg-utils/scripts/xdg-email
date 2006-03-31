@@ -1,0 +1,73 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-email
+#
+#   Utility script to open the users favorite email program, using the
+#       RFC 2368 mailto: URI spec
+#
+#   Refer to the usage() function below for usage.
+#---------------------------------------------
+usage()
+{
+cat << _USAGE
+xdg-email -- command line tool for sending mail using the user's preferred
+   e-mail composer
+
+Synopsis
+
+   xdg-email [--help] [mailto-uri]
+
+_USAGE
+    exit 1
+}
+
+open_kde()
+{
+    kfmclient exec "$1"
+
+    exit $?
+}
+
+open_gnome()
+{
+    gnome-open "$1"
+
+    exit $?
+}
+
+
+[ "$1" != "" ] || usage
+[ "$1" != "--help" ] || usage
+
+#@xdg-utils-common@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+detectDE()
+{
+    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
+    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+
+
+case "$DE" in
+    kde)
+    open_kde "$1"
+    ;;
+
+    gnome)
+    open_gnome "$1"
+    ;;
+
+    *)
+    echo Sorry, no method available for opening "$1"
+    exit 2
+    ;;
+esac

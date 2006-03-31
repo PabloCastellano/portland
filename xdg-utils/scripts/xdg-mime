@@ -1,0 +1,134 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-mime
+#
+#   Utility script to manipulate MIME related information
+#   on XDG compliant systems.
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#
+#   Licenced under MIT licence. See LICENCE files
+#
+#---------------------------------------------
+
+usage()
+{
+cat << _USAGE
+xdg-mime -- command line tool for providing information about file type
+   handling
+
+Synopsis
+
+   xdg-mime [--help] [--info FILE] [--defapp FILE]
+
+_USAGE
+    exit 1
+}
+
+info_kde()
+{
+    kfile "$1" 2> /dev/null | cut -d "(" -f 2 | cut -d ")" -f 1
+
+    exit 0
+}
+
+info_gnome()
+{
+    gnomevfs-info "$1" 2> /dev/null | grep MIME | cut -d ":" -f 2 | cut -d " " -f 2
+
+    exit 0
+}
+
+info_generic()
+{
+    /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | cut -d " " -f 2
+
+    exit 0
+}
+
+defapp_kde()
+{
+    MIME=`kfile "$1" 2> /dev/null | cut -d "(" -f 2 | cut -d ")" -f 1`
+
+    if [ "$MIME" != "" ]; then
+        ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
+            | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2 | xargs basename
+        exit 0
+    else
+        exit 3;
+    fi
+}
+
+defapp_gnome()
+{
+    gnomevfs-info "$1" 2> /dev/null | grep "Default app" | cut -d ":" -f 2 \
+        | cut -d " " -f 2
+}
+
+[ "$1" != "" ] || usage
+[ "$1" != "--help" ] || usage
+
+#@xdg-utils-common@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+detectDE()
+{
+    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
+    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+
+
+if [ "$1" = "--info" ]; then
+    shift
+    [ "$1" != "" ] || usage
+
+    case "$DE" in
+        kde)
+        info_kde "$1"
+        ;;
+
+        gnome)
+        info_gnome "$1"
+        ;;
+
+        generic)
+        info_generic "$1"
+        ;;
+
+        *)
+        echo Sorry, no method available for quering MIME type of "$1"
+        exit 2
+        ;;
+    esac
+elif [ "$1" = "--defapp" ]; then
+    shift
+    [ "$1" != "" ] || usage
+
+    case "$DE" in
+        kde)
+        defapp_kde "$1"
+        ;;
+
+        gnome)
+        defapp_gnome "$1"
+        ;;
+
+        *)
+        echo Sorry, no method available for quering default application for file "$1"
+        exit 2
+        ;;
+    esac
+else
+    usage
+fi

@@ -1,0 +1,79 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-copy
+#
+#   Utility script to copy files specified by URLs, including
+#   downloading and uploading from/to remote sites.
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#
+#   Licenced under MIT licence. See LICENCE files
+#
+#---------------------------------------------
+
+usage()
+{
+cat << _USAGE
+xdg-copy -- command line tool for copying files between desktop URIs
+
+Synopsis
+
+   xdg-copy [--help] [source] [destination]
+
+_USAGE
+    exit 1
+}
+
+copy_kde()
+{
+    kfmclient copy "$1" "$2"
+
+    exit $?
+}
+
+copy_gnome()
+{
+    gnomevfs-copy "$1" "$2"
+
+    exit $?
+}
+
+[ "$1" != "" ] || usage
+[ "$2" != "" ] || usage
+[ "$1" != "--help" ] || usage
+
+#@xdg-utils-common@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+detectDE()
+{
+    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
+    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+
+
+case "$DE" in
+    kde)
+    copy_kde "$1" "$2"
+    ;;
+
+    gnome)
+    copy_gnome "$1" "$2"
+    ;;
+
+    *)
+    echo Sorry, no method available for copying "$1" to "$2"
+    exit 2
+    ;;
+esac

@@ -1,0 +1,98 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-open
+#
+#   Utility script to open a URL in the registered default application.
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#
+#   Licenced under MIT licence. See LICENCE files
+#
+#---------------------------------------------
+
+usage()
+{
+cat << _USAGE
+xdg-open -- opens a file or URL in the user's preferred application
+
+Synopsis
+
+   xdg-open [--help] [[file] | [URL]]
+
+_USAGE
+    exit 1
+}
+
+open_kde()
+{
+    kfmclient exec "$1"
+
+    exit $?
+}
+
+open_gnome()
+{
+    gnome-open "$1"
+
+    exit $?
+}
+
+open_generic()
+{
+    # should rather iterate over all entries in BROWSER
+    browser=`echo "$BROWSER" | cut -d ':' -f 1`
+
+    if [ "$browser" == "" ]; then exit 2;
+    fi
+
+    browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
+
+    if [ "$browser_with_arg" == "$browser" ]; then "$browser" "$1";
+    else $browser_with_arg;
+    fi
+
+    exit 0
+}
+
+[ "$1" != "" ] || usage
+[ "$1" != "--help" ] || usage
+
+#@xdg-utils-common@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+detectDE()
+{
+    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
+    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+
+
+case "$DE" in
+    kde)
+    open_kde "$1"
+    ;;
+
+    gnome)
+    open_gnome "$1"
+    ;;
+
+    generic)
+    open_generic "$1"
+    ;;
+
+    *)
+    echo Sorry, no method available for opening "$1"
+    exit 2
+    ;;
+esac

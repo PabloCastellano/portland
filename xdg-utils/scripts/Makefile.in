@@ -25,8 +25,9 @@ all:
 
 scripts:	README $(SCRIPTS)
 
-release:	scripts
+release:	scripts distclean
 	rm -f xdg-*.in *~ HACKING
+	rm -rf desc/
 
 distclean: clean
 	rm -f Makefile

@@ -1,0 +1,91 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-su
+#
+#   Utility script to run a command as an alternate user, generally
+#       the root user
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Jeremy White <jwhite@codeweavers.com>
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#
+#   Licenced under MIT licence. See LICENCE files
+#
+#---------------------------------------------
+
+usage()
+{
+cat << _USAGE
+xdg-su -- run a program as root after prompting for the root password
+
+Synopsis
+
+   xdg-su [--help] [command]
+
+_USAGE
+    exit 1
+}
+
+su_kde()
+{
+    kdesu "$*"
+
+    exit $?
+}
+
+su_gnome()
+{
+    gnomesu -c "$*"
+
+    exit $?
+}
+
+su_generic()
+{
+    XSU=`which xsu 2>/dev/null`
+    if [ $? -eq 0 ] ; then
+        $XSU "$*"
+
+        exit $?
+    else
+        echo Sorry, no method available for invoking su "$*"
+        exit 2
+    fi
+}
+
+[ "$1" != "" ] || usage
+[ "$1" != "--help" ] || usage
+[ "${1:0:1}" != "-" ] || usage
+
+#@xdg-utils-common@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+detectDE()
+{
+    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
+    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+
+
+case "$DE" in
+    kde)
+    su_kde "$*"
+    ;;
+
+    gnome)
+    su_gnome "$*"
+    ;;
+
+    *)
+    su_generic "$*"
+    ;;
+esac
