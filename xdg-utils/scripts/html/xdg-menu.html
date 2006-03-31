@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="id2699117"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>  [<code class="option">--help</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] [<code class="option">--noupdate</code>] [[--user] |  [--system]] [[--install <em class="replaceable"><code>desktop-file</code></em>] |  [--install <em class="replaceable"><code>directory-file</code></em>] |  [--install <em class="replaceable"><code>menu-file</code></em>] |  [--uninstall <em class="replaceable"><code>desktop-file</code></em>] |  [--uninstall <em class="replaceable"><code>directory-file</code></em>] |  [--uninstall <em class="replaceable"><code>menu-file</code></em>] |  [--forceupdate]]</p></div></div><div class="refsect1" lang="en"><a name="introduction"></a><h2>Introduction</h2><p>
+      The xdg-menu program can be used to install new items to the
+      desktop's application menu.
+    </p><p>
+      The application menu works according to the 
+      XDG Desktop Menu Specification at
+      http://www.freedesktop.org/Standards/menu-spec 
+    </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--help</code></span></dt><dd>
+	    Show this help.
+	  </dd><dt><span class="term"> <code class="option">--vendor</code> <em class="replaceable"><code>vendor-id</code></em></span></dt><dd>
+	    Adds <em class="replaceable"><code>vendor-id</code></em> as a prefix when installing desktop
+            and directory files.
+	  </dd><dt><span class="term"><code class="option">--noupdate</code></span></dt><dd>
+	    Postpone updating the menu system. If multiple updates to the
+            menu system are made in sequence this flag can be used to
+            indicate that additional changes will follow and that it is not
+            necassery to update the menu system right away.
+	  </dd><dt><span class="term"><code class="option">--user</code></span></dt><dd>
+	    Installs or uninstalls the file for the current user only.
+	  </dd><dt><span class="term"><code class="option">--system</code></span></dt><dd>
+	    Installs or uninstalls the file for all users on the system.
+            Usually only root is allowed to do this.
+	  </dd><dt><span class="term"> <code class="option">--install</code> <em class="replaceable"><code>desktop-file</code></em></span></dt><dd>
+	    Installs the *.desktop file indicated by <em class="replaceable"><code>desktop-file</code></em>
+            to the menu system. A desktop file represents a single menu item.
+	  </dd><dt><span class="term"> <code class="option">--install</code> <em class="replaceable"><code>directory-file</code></em></span></dt><dd>
+	    Installs the *.directory file indicated by <em class="replaceable"><code>directory-file</code></em>
+            to the menu system. A directory file provides the name and icon for a submenu.
+	  </dd><dt><span class="term"> <code class="option">--install</code> <em class="replaceable"><code>menu-file</code></em></span></dt><dd>
+	    Installs the *.menu file indicated by <em class="replaceable"><code>menu-file</code></em>
+            to the menu system. A menu file describes a submenu.
+	  </dd><dt><span class="term"> <code class="option">--uninstall</code> <em class="replaceable"><code>desktop-file</code></em></span></dt><dd>
+	    Removes the *.desktop file indicated by <em class="replaceable"><code>desktop-file</code></em>
+            from the menu system. 
+	  </dd><dt><span class="term"> <code class="option">--uninstall</code> <em class="replaceable"><code>directory-file</code></em></span></dt><dd>
+	    Removes the *.directory file indicated by <em class="replaceable"><code>directory-file</code></em>
+            from the menu system. 
+	  </dd><dt><span class="term"> <code class="option">--uninstall</code> <em class="replaceable"><code>menu-file</code></em></span></dt><dd>
+	    Removes the *.menu file indicated by <em class="replaceable"><code>menu-file</code></em>
+            from the menu system.
+	  </dd><dt><span class="term"><code class="option">--forceupdate</code></span></dt><dd>
+	    Force an update of the menu system. This is only useful if
+	    the last call to xdg-menu included the <code class="option">--noupdate</code> option.
+	  </dd></dl></div></div></div></body></html>
