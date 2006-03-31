@@ -8,7 +8,8 @@ distclean:	clean $(SUBDIRS:%=%/__distclean__)
 	rm -f config.* Makefile
 	rm -rf autom4te.cache
 
-release:	$(SUBDIRS:%=%/__release__)
+release:	$(SUBDIRS:%=%/__release__) distclean
+	rm -f *~
 
 help:	
 	@echo "Usage: make [install|uninstall|release]"

@@ -25,7 +25,7 @@ all:
 
 scripts:	README $(SCRIPTS)
 
-release:	scripts distclean
+release:	scripts
 	rm -f xdg-*.in *~ HACKING
 	rm -rf desc/
 
