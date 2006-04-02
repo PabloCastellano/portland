@@ -61,7 +61,7 @@ The plan is for the desktop environments to provide their own daemon
 implementations, with applications including only the generic daemon to
 use if no other daemon is already running.
 
-Web: http://freedesktop.org/wiki/Portland
+Web: http://portland.freedesktop.org/
 Mailing list: http://lists.freedesktop.org/mailman/listinfo/portland
 Source code: cvs -d :pserver:anoncvs@cvs.freedesktop.org:/cvs/portland co portland/dapi
 Online repository: http://cvs.freedesktop.org/portland/portland/dapi
