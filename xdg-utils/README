@@ -76,10 +76,10 @@ USE:
 of the operating system, we recommend that you package the scripts
 that your application needs along with your product as a fallback. For
 this purpose please obtain the original version of the xdg-utils from
-http://www.freedesktop.org/wiki/Portland . The xdg-utils scripts that
-are distributed by operating systems vendors may have been tuned for
-their particular operating system and may not work on the same broad
-variety of operating systems as the original version.
+http://portland.freedesktop.org. The xdg-utils scripts that are
+distributed by operating systems vendors may have been tuned for their
+particular operating system and may not work on the same broad variety
+of operating systems as the original version.
 
     We recommend that you place these scripts in a directory, and
 then add that directory to the end of the PATH.  So, let's say that
