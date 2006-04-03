@@ -10,6 +10,7 @@ XMLTO           = @XMLTO@
 prefix          = @prefix@
 exec_prefix     = @exec_prefix@
 bindir          = @bindir@
+mandir          = @mandir@
 
 SCRIPTS		= \
     xdg-menu \
@@ -49,8 +50,18 @@ install:
 	for x in $(SCRIPTS) ; do \
 	    $(INSTALL_SCRIPT) $$x $(bindir) ; \
 	done
+	$(MKDIR) $(mandir)
+	$(MKDIR) $(mandir)/man1
+	for x in $(SCRIPTS) ; do \
+	    $(INSTALL_DATA) man/$$x.1 $(mandir)/man1 ; \
+	done
 
 uninstall:
+	for x in $(SCRIPTS) ; do \
+	    rm -f $(mandir)/man1/$$x.1 ; \
+	done
+	-$(RMDIR) $(mandir)/man1
+	-$(RMDIR) $(mandir)
 	for x in $(SCRIPTS) ; do \
 	    rm -f $(bindir)/$$x ; \
 	done
