@@ -192,4 +192,141 @@
 
     </variablelist>
   </refsect1>
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+      The company ShinyThings Inc. has developed an application named
+      "WebMirror" and would like to add it to the application menu. 
+      The company will use "shinythings" as its vendor id.
+      In order to add the application to the menu there needs to be a
+      .desktop file with a suitable <emphasis>Categories</emphasis> entry:
+<programlisting>
+webmirror.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+
+  Categories=Network;WebDevelopment;
+</programlisting>
+    </para>
+    <para>Now the xdg-menu tool can be used to add the webmirror.desktop file
+    to the desktop application menu:
+<programlisting>
+xdg-menu --system --vendor shinythings --install ./webmirror.desktop
+</programlisting>
+    </para>
+    <para>
+      Note that for the purpose of this example the menu items are available
+      in two languages, English and Dutch.
+      The language code for Dutch is nl.
+    </para>
+    <para>
+      In the next example the company ShinyThings Inc. wants to add its own
+      submenu to the desktop application menu consisting of a
+      "WebMirror" menu item and a
+      "WebMirror Admin Tool" menu item.
+    </para>
+    <para>
+      First the company needs to create two .desktop files that describe
+      the two menu items, this time no Categories item is needed:
+<programlisting>
+webmirror.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+
+
+webmirror-admin.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror-admintool
+  Icon=webmirror-admintool
+
+  Name=WebMirror Admin Tool
+  Name[nl]=WebSpiegel Administratie Tool
+</programlisting>
+    </para>
+    <para>
+      The files can be installed with:
+<programlisting>
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.desktop
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror-admin.desktop
+</programlisting>
+    </para>
+    <para>
+      Because multiple items are added the <option>--noupdate</option>
+      option has been used.
+    </para>
+    <para>
+      In addition a .directory file needs to be created to provide a title and icon
+      for the sub-menu itself:
+<programlisting>
+webmirror.directory:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+</programlisting>
+    </para>
+    <para>
+      This webmirror.directorty file can be installed with:
+<programlisting>
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.directory
+</programlisting>
+    </para>
+    <para>
+      The last step is to provide a .menu file that links it all
+      togther:
+<programlisting>
+webmirror.menu:
+
+  &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+     "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+  &lt;Menu&gt;
+    &lt;Menu&gt;
+      &lt;Name&gt;WebMirror&lt;/Name&gt;
+      &lt;Directory&gt;shinythings-webmirror.directory&lt;/Directory&gt;
+      &lt;Include&gt;
+        &lt;Filename&gt;shinythings-webmirror.desktop&lt;/Filename&gt;
+        &lt;Filename&gt;shinythings-webmirror-admin.desktop&lt;/Filename&gt;
+      &lt;/Include&gt;
+    &lt;/Menu&gt;
+  &lt;/Menu&gt;
+</programlisting>
+    </para>
+    <para>
+      The webmirror.menu file can be installed with:
+<programlisting>
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.menu
+</programlisting>
+    </para>
+    <para>
+      After installing multiple files with <option>--noupdate</option> make sure
+      to force an update:
+<programlisting>
+xdg-menu --system --forceupdate
+</programlisting>
+    </para>
+  </refsect1>
 </refentry>

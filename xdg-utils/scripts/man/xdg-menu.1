@@ -86,5 +86,163 @@ Removes the *\&.menu file indicated by \fImenu\-file\fR from the menu system\&.
 \fB\-\-forceupdate\fR
 Force an update of the menu system\&. This is only useful if the last call to xdg\-menu included the \fB\-\-noupdate\fR option\&.
 
+.SH "EXAMPLES"
+
+.PP
+The company ShinyThings Inc\&. has developed an application named "WebMirror" and would like to add it to the application menu\&. The company will use "shinythings" as its vendor id\&. In order to add the application to the menu there needs to be a \&.desktop file with a suitable \fICategories\fR entry: 
+
+.nf
+
+webmirror\&.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF\-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+
+  Categories=Network;WebDevelopment;
+
+.fi
+ 
+
+.PP
+Now the xdg\-menu tool can be used to add the webmirror\&.desktop file to the desktop application menu: 
+
+.nf
+
+xdg\-menu \-\-system \-\-vendor shinythings \-\-install \&./webmirror\&.desktop
+
+.fi
+ 
+
+.PP
+Note that for the purpose of this example the menu items are available in two languages, English and Dutch\&. The language code for Dutch is nl\&.
+
+.PP
+In the next example the company ShinyThings Inc\&. wants to add its own submenu to the desktop application menu consisting of a "WebMirror" menu item and a "WebMirror Admin Tool" menu item\&.
+
+.PP
+First the company needs to create two \&.desktop files that describe the two menu items, this time no Categories item is needed: 
+
+.nf
+
+webmirror\&.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF\-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+
+
+webmirror\-admin\&.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF\-8
+  Type=Application
+
+  Exec=webmirror\-admintool
+  Icon=webmirror\-admintool
+
+  Name=WebMirror Admin Tool
+  Name[nl]=WebSpiegel Administratie Tool
+
+.fi
+ 
+
+.PP
+The files can be installed with: 
+
+.nf
+
+xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\&.desktop
+xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\-admin\&.desktop
+
+.fi
+ 
+
+.PP
+Because multiple items are added the \fB\-\-noupdate\fR option has been used\&.
+
+.PP
+In addition a \&.directory file needs to be created to provide a title and icon for the sub\-menu itself: 
+
+.nf
+
+webmirror\&.directory:
+
+  [Desktop Entry]
+  Encoding=UTF\-8
+
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+
+.fi
+ 
+
+.PP
+This webmirror\&.directorty file can be installed with: 
+
+.nf
+
+xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\&.directory
+
+.fi
+ 
+
+.PP
+The last step is to provide a \&.menu file that links it all togther: 
+
+.nf
+
+webmirror\&.menu:
+
+  <!DOCTYPE Menu PUBLIC "\-//freedesktop//DTD Menu 0\&.8//EN"
+     "http://www\&.freedesktop\&.org/standards/menu\-spec/menu\-0\&.8\&.dtd">
+  <Menu>
+    <Menu>
+      <Name>WebMirror</Name>
+      <Directory>shinythings\-webmirror\&.directory</Directory>
+      <Include>
+        <Filename>shinythings\-webmirror\&.desktop</Filename>
+        <Filename>shinythings\-webmirror\-admin\&.desktop</Filename>
+      </Include>
+    </Menu>
+  </Menu>
+
+.fi
+ 
+
+.PP
+The webmirror\&.menu file can be installed with: 
+
+.nf
+
+xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\&.menu
+
+.fi
+ 
+
+.PP
+After installing multiple files with \fB\-\-noupdate\fR make sure to force an update: 
+
+.nf
+
+xdg\-menu \-\-system \-\-forceupdate
+
+.fi
+ 
+
 .SH AUTHORS
 Kevin Krammer, Jeremy White.

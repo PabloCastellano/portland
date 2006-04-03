@@ -41,4 +41,126 @@
 	  </dd><dt><span class="term"><code class="option">--forceupdate</code></span></dt><dd>
 	    Force an update of the menu system. This is only useful if
 	    the last call to xdg-menu included the <code class="option">--noupdate</code> option.
-	  </dd></dl></div></div></div></body></html>
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
+      The company ShinyThings Inc. has developed an application named
+      "WebMirror" and would like to add it to the application menu. 
+      The company will use "shinythings" as its vendor id.
+      In order to add the application to the menu there needs to be a
+      .desktop file with a suitable <span class="emphasis"><em>Categories</em></span> entry:
+</p><pre class="programlisting">
+webmirror.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+
+  Categories=Network;WebDevelopment;
+</pre><p>
+    </p><p>Now the xdg-menu tool can be used to add the webmirror.desktop file
+    to the desktop application menu:
+</p><pre class="programlisting">
+xdg-menu --system --vendor shinythings --install ./webmirror.desktop
+</pre><p>
+    </p><p>
+      Note that for the purpose of this example the menu items are available
+      in two languages, English and Dutch.
+      The language code for Dutch is nl.
+    </p><p>
+      In the next example the company ShinyThings Inc. wants to add its own
+      submenu to the desktop application menu consisting of a
+      "WebMirror" menu item and a
+      "WebMirror Admin Tool" menu item.
+    </p><p>
+      First the company needs to create two .desktop files that describe
+      the two menu items, this time no Categories item is needed:
+</p><pre class="programlisting">
+webmirror.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+
+
+webmirror-admin.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror-admintool
+  Icon=webmirror-admintool
+
+  Name=WebMirror Admin Tool
+  Name[nl]=WebSpiegel Administratie Tool
+</pre><p>
+    </p><p>
+      The files can be installed with:
+</p><pre class="programlisting">
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.desktop
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror-admin.desktop
+</pre><p>
+    </p><p>
+      Because multiple items are added the <code class="option">--noupdate</code>
+      option has been used.
+    </p><p>
+      In addition a .directory file needs to be created to provide a title and icon
+      for the sub-menu itself:
+</p><pre class="programlisting">
+webmirror.directory:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+</pre><p>
+    </p><p>
+      This webmirror.directorty file can be installed with:
+</p><pre class="programlisting">
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.directory
+</pre><p>
+    </p><p>
+      The last step is to provide a .menu file that links it all
+      togther:
+</p><pre class="programlisting">
+webmirror.menu:
+
+  &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+     "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+  &lt;Menu&gt;
+    &lt;Menu&gt;
+      &lt;Name&gt;WebMirror&lt;/Name&gt;
+      &lt;Directory&gt;shinythings-webmirror.directory&lt;/Directory&gt;
+      &lt;Include&gt;
+        &lt;Filename&gt;shinythings-webmirror.desktop&lt;/Filename&gt;
+        &lt;Filename&gt;shinythings-webmirror-admin.desktop&lt;/Filename&gt;
+      &lt;/Include&gt;
+    &lt;/Menu&gt;
+  &lt;/Menu&gt;
+</pre><p>
+    </p><p>
+      The webmirror.menu file can be installed with:
+</p><pre class="programlisting">
+xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.menu
+</pre><p>
+    </p><p>
+      After installing multiple files with <code class="option">--noupdate</code> make sure
+      to force an update:
+</p><pre class="programlisting">
+xdg-menu --system --forceupdate
+</pre><p>
+    </p></div></div></body></html>

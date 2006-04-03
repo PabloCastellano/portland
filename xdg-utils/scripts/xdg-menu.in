@@ -24,7 +24,7 @@ _USAGE
 
 update_desktop_database()
 {
-    echo Update desktop database: $mode
+#    echo Update desktop database: $mode
     if [ "$mode" = "system" ] ; then
         for x in `echo $PATH | sed 's/:/ /g'` /opt/gnome/bin; do
            if [ -x $x/update-desktop-database ] ; then
@@ -201,7 +201,8 @@ else
     gnome_dir=$gnome_global_dir
     my_umask=022
     if [ -n "$xdg_dir $kde_dir $gnome_dir" ] ; then
-        echo Error:  No writable system menu directory found.
+        [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
+        echo Error:  No writable system menu directory found. $rootmsg
         exit 3 
     fi
 fi
