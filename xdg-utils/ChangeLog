@@ -1,0 +1,17 @@
+2006-04-05 Kevin Krammer <kevin.krammer@gmx.at>
+    * Applied patch by Benedikt Meurer <benedikt.meurer@unix-ag.uni-siegen.de> which
+      adds detection for XFCE, XFCE paths for xdg-open and xdg-email and
+      which fixes the script for non-bash shells.
+
+2006-03-31 Waldo Bastian <waldo.bastian@intel.com>
+    * Generate usage instructions from the same XML that is used for manpages
+    * Included licence text in scripts
+    * Added xdg-desktop script
+    * Added documentation (DocBook, HTML, manpages)
+    * Have Makefile generate manpages
+    * Included fix for xdg-su provided by Jeremy White <jwhite@codeweavers.com>
+    * Added "release" target to Makefile for generating releases
+    * Added support for .directory and .menu files to xdg-menu
+
+2006-03-21 Kevin Krammer <kevin.krammer@gmx.at>
+    * Imported the current state into freedesktop.org CVS for easier shared development

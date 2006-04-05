@@ -54,8 +54,8 @@ su_generic()
     fi
 }
 
-[ "$1" != "" ] || usage
-[ "$1" != "--help" ] || usage
+[ x"$1" != x"" ] || usage
+[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 

@@ -35,12 +35,12 @@
 usage()
 {
 cat << _USAGE
-xdg-email -- command line tool for sending mail using the user's preferred
-   e-mail composer
+xdg-email ? command line tool for sending mail using the user's preferred
+e-mail composer
 
 Synopsis
 
-   xdg-email [--help] [mailto-uri]
+xdg-email [--help] [mailto-uri]
 
 _USAGE
     exit 1
@@ -61,8 +61,16 @@ open_gnome()
 }
 
 
-[ "$1" != "" ] || usage
-[ "$1" != "--help" ] || usage
+open_xfce()
+{
+    exo-open "$1"
+
+    exit $?
+}
+
+
+[ x"$1" != x"" ] || usage
+[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 
@@ -71,8 +79,9 @@ open_gnome()
 #----------------------------------------------------------------------------
 detectDE()
 {
-    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
-    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
+    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
 
@@ -89,6 +98,10 @@ case "$DE" in
 
     gnome)
     open_gnome "$1"
+    ;;
+
+    xfce)
+    open_xfce "$1"
     ;;
 
     *)

@@ -34,11 +34,11 @@
 usage()
 {
 cat << _USAGE
-xdg-open -- opens a file or URL in the user's preferred application
+xdg-open ? opens a file or URL in the user's preferred application
 
 Synopsis
 
-   xdg-open [--help] [[file] | [URL]]
+xdg-open [--help] [[file] | [URL]]
 
 _USAGE
     exit 1
@@ -58,25 +58,32 @@ open_gnome()
     exit $?
 }
 
+open_xfce()
+{
+    exo-open "$1"
+
+    exit $?
+}
+
 open_generic()
 {
     # should rather iterate over all entries in BROWSER
     browser=`echo "$BROWSER" | cut -d ':' -f 1`
 
-    if [ "$browser" == "" ]; then exit 2;
+    if [ x"$browser" = x"" ]; then exit 2;
     fi
 
     browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
 
-    if [ "$browser_with_arg" == "$browser" ]; then "$browser" "$1";
+    if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
     else $browser_with_arg;
     fi
 
     exit 0
 }
 
-[ "$1" != "" ] || usage
-[ "$1" != "--help" ] || usage
+[ x"$1" != x"" ] || usage
+[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 
@@ -85,8 +92,9 @@ open_generic()
 #----------------------------------------------------------------------------
 detectDE()
 {
-    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
-    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
+    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
 

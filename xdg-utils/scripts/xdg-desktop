@@ -34,18 +34,18 @@
 usage()
 {
 cat << _USAGE
-xdg-desktop -- command line tool for (un)installing icons to the desktop
+xdg-desktop ? command line tool for (un)installing icons to the desktop
 
 Synopsis
 
-   xdg-desktop [--help] [--vendor vendor-id] [[--install file] | [--uninstall
-   file]]
+xdg-desktop [--help] [--vendor vendor-id] [[--install file] | [--uninstall file
+]]
 
 _USAGE
     exit 1
 }
 
-[ "$1" != "" ] || usage
+[ x"$1" != x"" ] || usage
 
 action=
 desktop_file=
@@ -122,7 +122,7 @@ desktop_dir=$HOME/Desktop
 # echo "[using|$desktop_dir]"
 
 basefile=`basename $desktop_file`
-[ -z $vendor ] || [ "$filetype" != "desktop" ] || basefile=$vendor-$basefile
+[ -z $vendor ] || [ x"$filetype" != x"desktop" ] || basefile=$vendor-$basefile
 
 case $action in
     install)

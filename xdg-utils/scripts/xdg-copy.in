@@ -35,9 +35,9 @@ copy_gnome()
     exit $?
 }
 
-[ "$1" != "" ] || usage
-[ "$2" != "" ] || usage
-[ "$1" != "--help" ] || usage
+[ x"$1" != x"" ] || usage
+[ x"$2" != x"" ] || usage
+[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 

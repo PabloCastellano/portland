@@ -35,12 +35,11 @@
 usage()
 {
 cat << _USAGE
-xdg-mime -- command line tool for providing information about file type
-   handling
+xdg-mime ? command line tool for providing information about file type handling
 
 Synopsis
 
-   xdg-mime [--help] [--info FILE] [--defapp FILE]
+xdg-mime [--help] [--info FILE] [--defapp FILE]
 
 _USAGE
     exit 1
@@ -71,7 +70,7 @@ defapp_kde()
 {
     MIME=`kfile "$1" 2> /dev/null | cut -d "(" -f 2 | cut -d ")" -f 1`
 
-    if [ "$MIME" != "" ]; then
+    if [ x"$MIME" != x"" ]; then
         ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
             | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2 | xargs basename
         exit 0
@@ -86,8 +85,8 @@ defapp_gnome()
         | cut -d " " -f 2
 }
 
-[ "$1" != "" ] || usage
-[ "$1" != "--help" ] || usage
+[ x"$1" != x"" ] || usage
+[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 
@@ -96,8 +95,9 @@ defapp_gnome()
 #----------------------------------------------------------------------------
 detectDE()
 {
-    if [ "$KDE_FULL_SESSION" == "true" ]; then DE=kde;
-    elif [ "$GNOME_DESKTOP_SESSION_ID" != "" ]; then DE=gnome;
+    if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
+    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
 
@@ -107,9 +107,9 @@ detectDE
 
 
 
-if [ "$1" = "--info" ]; then
+if [ x"$1" = x"--info" ]; then
     shift
-    [ "$1" != "" ] || usage
+    [ x"$1" != x"" ] || usage
 
     case "$DE" in
         kde)
@@ -129,9 +129,9 @@ if [ "$1" = "--info" ]; then
         exit 2
         ;;
     esac
-elif [ "$1" = "--defapp" ]; then
+elif [ x"$1" = x"--defapp" ]; then
     shift
-    [ "$1" != "" ] || usage
+    [ x"$1" != x"" ] || usage
 
     case "$DE" in
         kde)

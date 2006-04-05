@@ -34,25 +34,32 @@ open_gnome()
     exit $?
 }
 
+open_xfce()
+{
+    exo-open "$1"
+
+    exit $?
+}
+
 open_generic()
 {
     # should rather iterate over all entries in BROWSER
     browser=`echo "$BROWSER" | cut -d ':' -f 1`
 
-    if [ "$browser" == "" ]; then exit 2;
+    if [ x"$browser" = x"" ]; then exit 2;
     fi
 
     browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
 
-    if [ "$browser_with_arg" == "$browser" ]; then "$browser" "$1";
+    if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
     else $browser_with_arg;
     fi
 
     exit 0
 }
 
-[ "$1" != "" ] || usage
-[ "$1" != "--help" ] || usage
+[ x"$1" != x"" ] || usage
+[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 

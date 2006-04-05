@@ -20,7 +20,7 @@ _USAGE
     exit 1
 }
 
-[ "$1" != "" ] || usage
+[ x"$1" != x"" ] || usage
 
 action=
 desktop_file=
@@ -97,7 +97,7 @@ desktop_dir=$HOME/Desktop
 # echo "[using|$desktop_dir]"
 
 basefile=`basename $desktop_file`
-[ -z $vendor ] || [ "$filetype" != "desktop" ] || basefile=$vendor-$basefile
+[ -z $vendor ] || [ x"$filetype" != x"desktop" ] || basefile=$vendor-$basefile
 
 case $action in
     install)

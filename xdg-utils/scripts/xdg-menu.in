@@ -35,7 +35,7 @@ update_desktop_database()
     fi
 }
 
-[ "$1" != "" ] || usage
+[ x"$1" != x"" ] || usage
 
 mode=
 action=
@@ -123,7 +123,7 @@ if [ -z "$action" ] ; then
     exit 2
 fi
 
-if [ "$action" = "forceupdate" ] ; then
+if [ x"$action" = x"forceupdate" ] ; then
     update_desktop_database
     exit 0;
 fi
@@ -149,7 +149,7 @@ case $desktop_file in
      ;;
 esac
 
-if [ "$filetype" = "menu" ] ; then
+if [ x"$filetype" = x"menu" ] ; then
     xdg_user_dir=$XDG_CONFIG_HOME
     [ -n "$xdg_user_dir" ] || xdg_user_dir=$HOME/.config
     xdg_user_dir=$xdg_user_dir/$xdg_dir_name
@@ -178,7 +178,7 @@ else
     done
     [ -w $xdg_global_dir ] || xdg_global_dir=
 
-    if [ "$filetype" = "desktop" ] ; then
+    if [ x"$filetype" = x"desktop" ] ; then
         kde_user_dir=$HOME/.kde/share/applnk
         kde_global_dir=/usr/share/applnk
         [ -w $kde_global_dir ] || kde_global_dir=
@@ -190,7 +190,7 @@ else
 fi
 
 
-if [ "$mode" = "user" ] ; then
+if [ x"$mode" = x"user" ] ; then
     xdg_dir=$xdg_user_dir
     kde_dir=$kde_user_dir
     gnome_dir=$gnome_user_dir
@@ -246,7 +246,7 @@ case $action in
         ;;
 esac
 
-if [ "$update" = "yes" ] ; then
+if [ x"$update" = x"yes" ] ; then
     update_desktop_database
 fi
 

@@ -36,8 +36,16 @@ open_gnome()
 }
 
 
-[ "$1" != "" ] || usage
-[ "$1" != "--help" ] || usage
+open_xfce()
+{
+    exo-open "$1"
+
+    exit $?
+}
+
+
+[ x"$1" != x"" ] || usage
+[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 
@@ -48,6 +56,10 @@ case "$DE" in
 
     gnome)
     open_gnome "$1"
+    ;;
+
+    xfce)
+    open_xfce "$1"
     ;;
 
     *)
