@@ -1,3 +1,9 @@
+2006-04-06 Kevin Krammer <kevin.krammer@gmx.at>
+    * Fixed "detection" of generic case in xdg-mime, xdg-open and xdg-su as
+      discovered by Hagai Kariti <hobbithk@gmail.com>
+    * Fixed tailoring of file and gnomevf-info output by using "sed" to remove a leading
+      whitespace instead of "cut"
+
 2006-04-05 Kevin Krammer <kevin.krammer@gmx.at>
     * Applied patch by Benedikt Meurer <benedikt.meurer@unix-ag.uni-siegen.de> which
       adds detection for XFCE, XFCE paths for xdg-open and xdg-email and

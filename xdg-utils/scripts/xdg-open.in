@@ -63,6 +63,12 @@ open_generic()
 
 #@xdg-utils-common@
 
+if [ x"$DE" = x"" ]; then
+    if [ x"$BROWSER" != x"" ]; then
+        DE=generic
+    fi
+fi
+
 case "$DE" in
     kde)
     open_kde "$1"

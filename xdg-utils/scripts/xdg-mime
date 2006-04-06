@@ -54,14 +54,14 @@ info_kde()
 
 info_gnome()
 {
-    gnomevfs-info "$1" 2> /dev/null | grep MIME | cut -d ":" -f 2 | cut -d " " -f 2
+    gnomevfs-info "$1" 2> /dev/null | grep MIME | cut -d ":" -f 2 | sed s/"^ "//
 
     exit 0
 }
 
 info_generic()
 {
-    /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | cut -d " " -f 2
+    /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | sed s/"^ "//
 
     exit 0
 }
@@ -110,6 +110,12 @@ detectDE
 if [ x"$1" = x"--info" ]; then
     shift
     [ x"$1" != x"" ] || usage
+
+    if [ x"$DE" = x"" ]; then
+        if [ -x /usr/bin/file ]; then
+            DE=generic
+        fi
+    fi
 
     case "$DE" in
         kde)
