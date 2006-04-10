@@ -18,28 +18,29 @@ usage()
 {
 cat << _USAGE
 _USAGE
-    exit 1
 }
+
+#@xdg-utils-common@
 
 info_kde()
 {
     kfile "$1" 2> /dev/null | cut -d "(" -f 2 | cut -d ")" -f 1
 
-    exit 0
+    exit_success
 }
 
 info_gnome()
 {
     gnomevfs-info "$1" 2> /dev/null | grep MIME | cut -d ":" -f 2 | sed s/"^ "//
 
-    exit 0
+    exit_success
 }
 
 info_generic()
 {
     /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | sed s/"^ "//
 
-    exit 0
+    exit_success
 }
 
 defapp_kde()
@@ -49,9 +50,9 @@ defapp_kde()
     if [ x"$MIME" != x"" ]; then
         ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
             | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2 | xargs basename
-        exit 0
+        exit_success
     else
-        exit 3;
+        exit_failure_operation_failed
     fi
 }
 
@@ -59,16 +60,19 @@ defapp_gnome()
 {
     gnomevfs-info "$1" 2> /dev/null | grep "Default app" | cut -d ":" -f 2 \
         | cut -d " " -f 2
+
+    exit_success
 }
 
-[ x"$1" != x"" ] || usage
-[ x"$1" != x"--help" ] || usage
+[ x"$1" != x"" ] || exit_failure_arg_count
 
-#@xdg-utils-common@
 
-if [ x"$1" = x"--info" ]; then
+if [ x"$1" = x"--help" ]; then
+    usage
+    exit_success
+elif [ x"$1" = x"--info" ]; then
     shift
-    [ x"$1" != x"" ] || usage
+    [ x"$1" != x"" ] || exit_failure_arg_count
 
     if [ x"$DE" = x"" ]; then
         if [ -x /usr/bin/file ]; then
@@ -90,13 +94,12 @@ if [ x"$1" = x"--info" ]; then
         ;;
 
         *)
-        echo Sorry, no method available for quering MIME type of "$1"
-        exit 2
+        exit_failure_operation_impossible "Sorry, no method available for quering MIME type of" "$1"
         ;;
     esac
 elif [ x"$1" = x"--defapp" ]; then
     shift
-    [ x"$1" != x"" ] || usage
+    [ x"$1" != x"" ] || exit_failure_arg_count
 
     case "$DE" in
         kde)
@@ -108,10 +111,9 @@ elif [ x"$1" = x"--defapp" ]; then
         ;;
 
         *)
-        echo Sorry, no method available for quering default application for file "$1"
-        exit 2
+        exit_failure_operation_impossible "Sorry, no method available for quering default application for file" "$1"
         ;;
     esac
 else
-    usage
+    exit_failure_arg_malformed "Unkown command" "$1"
 fi

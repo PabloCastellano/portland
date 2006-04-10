@@ -1,3 +1,11 @@
+2006-04-10 Kevin Krammer <kevin.krammer@gmx.at>
+    * Added common exit functions to improve return value consistency.
+      Currently only used in xdg-mime to gather feedback
+
+2006-04-08 Kevin Krammer <kevin.krammer@gmx.at>
+    * In case of $BROWSER being not avialable or empty, try a fixed list of well
+      known browsers instead
+
 2006-04-06 Kevin Krammer <kevin.krammer@gmx.at>
     * Fixed "detection" of generic case in xdg-mime, xdg-open and xdg-su as
       discovered by Hagai Kariti <hobbithk@gmail.com>
