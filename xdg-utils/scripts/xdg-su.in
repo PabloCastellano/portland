@@ -19,14 +19,19 @@ usage()
 {
 cat << _USAGE
 _USAGE
-    exit 1
 }
+
+#@xdg-utils-common@
 
 su_kde()
 {
     kdesu "$@"
 
-    exit $?
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 su_gnome()
@@ -35,7 +40,11 @@ su_gnome()
     if [ $? -eq 0 ] ; then
         $GSU "$@"
 
-        exit $?
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
     else
         su_generic "$@"
     fi
@@ -47,17 +56,17 @@ su_generic()
     if [ $? -eq 0 ] ; then
         $XSU "$@"
 
-        exit $?
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
     else
-        echo Sorry, no graphical method available for invoking su "$*"
-        exit 2
+        exit_failure_operation_impossible "Sorry, no graphical method available for invoking su" "$@"
     fi
 }
 
-[ x"$1" != x"" ] || usage
-[ x"$1" != x"--help" ] || usage
-
-#@xdg-utils-common@
+[ x"$1" != x"" ] || exit_failure_arg_count
 
 if [ x"$DE" = x"" ]; then
     XSU=`which xsu 2>/dev/null`
@@ -75,7 +84,11 @@ case "$DE" in
     su_gnome "$@"
     ;;
 
-    *)
+    generic)
     su_generic "$@"
+    ;;
+
+    *)
+    exit_failure_operation_impossible "Sorry, no graphical method available for invoking su" "$@"
     ;;
 esac

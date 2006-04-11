@@ -66,11 +66,7 @@ defapp_gnome()
 
 [ x"$1" != x"" ] || exit_failure_arg_count
 
-
-if [ x"$1" = x"--help" ]; then
-    usage
-    exit_success
-elif [ x"$1" = x"--info" ]; then
+if [ x"$1" = x"--info" ]; then
     shift
     [ x"$1" != x"" ] || exit_failure_arg_count
 

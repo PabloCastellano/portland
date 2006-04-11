@@ -17,28 +17,41 @@ usage()
 {
 cat << _USAGE
 _USAGE
-    exit 1
 }
+
+#@xdg-utils-common@
 
 open_kde()
 {
     kfmclient exec "$1"
 
-    exit $?
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 open_gnome()
 {
     gnome-open "$1"
 
-    exit $?
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 open_xfce()
 {
     exo-open "$1"
 
-    exit $?
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 open_generic()
@@ -53,19 +66,15 @@ open_generic()
             else $browser_with_arg;
             fi
 
-            if [ $? -eq 0 ]; then exit 0;
+            if [ $? -eq 0 ]; then exit_success;
             fi
         fi
     done
 
-    echo Sorry, no method available for opening "$1"
-    exit 2
+    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
 }
 
-[ x"$1" != x"" ] || usage
-[ x"$1" != x"--help" ] || usage
-
-#@xdg-utils-common@
+[ x"$1" != x"" ] || exit_failure_arg_count
 
 if [ x"$DE" = x"" ]; then
     # if BROWSER variable is not set, check some well known browsers instead
@@ -89,7 +98,6 @@ case "$DE" in
     ;;
 
     *)
-    echo Sorry, no method available for opening "$1"
-    exit 2
+    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
     ;;
 esac

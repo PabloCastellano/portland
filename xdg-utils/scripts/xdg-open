@@ -41,53 +41,7 @@ Synopsis
 xdg-open [--help] [[file] | [URL]]
 
 _USAGE
-    exit 1
 }
-
-open_kde()
-{
-    kfmclient exec "$1"
-
-    exit $?
-}
-
-open_gnome()
-{
-    gnome-open "$1"
-
-    exit $?
-}
-
-open_xfce()
-{
-    exo-open "$1"
-
-    exit $?
-}
-
-open_generic()
-{
-    IFS=":"
-    for browser in $BROWSER; do
-        if [ x"$browser" != x"" ]; then
-
-            browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
-
-            if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
-            else $browser_with_arg;
-            fi
-
-            if [ $? -eq 0 ]; then exit 0;
-            fi
-        fi
-    done
-
-    echo Sorry, no method available for opening "$1"
-    exit 2
-}
-
-[ x"$1" != x"" ] || usage
-[ x"$1" != x"--help" ] || usage
 
 #@xdg-utils-common@
 
@@ -152,8 +106,6 @@ exit_failure_operation_impossible()
         echo
     fi
 
-    usage
-
     exit 3
 }
 
@@ -167,10 +119,33 @@ exit_failure_operation_failed()
         echo
     fi
 
-    usage
-
     exit 4
 }
+
+#----------------------------------------
+# Checks for shared commands, e.g. --help
+
+check_common_commands()
+{
+    while [ $# -gt 0 ] ; do
+        parm=$1
+        shift
+
+        case $parm in
+            --help)
+            usage
+            exit_success
+            ;;
+
+            --version)
+            echo "xdg-utils technical-preview"
+            exit_success
+            ;;
+        esac
+    done
+}
+
+check_common_commands "$@"
 
 #--------------------------------------
 # Checks for known desktop environments
@@ -189,6 +164,61 @@ detectDE
 #----------------------------------------------------------------------------
 
 
+
+open_kde()
+{
+    kfmclient exec "$1"
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+}
+
+open_gnome()
+{
+    gnome-open "$1"
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+}
+
+open_xfce()
+{
+    exo-open "$1"
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+}
+
+open_generic()
+{
+    IFS=":"
+    for browser in $BROWSER; do
+        if [ x"$browser" != x"" ]; then
+
+            browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
+
+            if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
+            else $browser_with_arg;
+            fi
+
+            if [ $? -eq 0 ]; then exit_success;
+            fi
+        fi
+    done
+
+    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
+}
+
+[ x"$1" != x"" ] || exit_failure_arg_count
 
 if [ x"$DE" = x"" ]; then
     # if BROWSER variable is not set, check some well known browsers instead
@@ -212,7 +242,6 @@ case "$DE" in
     ;;
 
     *)
-    echo Sorry, no method available for opening "$1"
-    exit 2
+    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
     ;;
 esac

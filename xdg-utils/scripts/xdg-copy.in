@@ -18,28 +18,34 @@ usage()
 {
 cat << _USAGE
 _USAGE
-    exit 1
 }
+
+#@xdg-utils-common@
 
 copy_kde()
 {
     kfmclient copy "$1" "$2"
 
-    exit $?
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 copy_gnome()
 {
     gnomevfs-copy "$1" "$2"
 
-    exit $?
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
-[ x"$1" != x"" ] || usage
-[ x"$2" != x"" ] || usage
-[ x"$1" != x"--help" ] || usage
-
-#@xdg-utils-common@
+[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$2" != x"" ] || exit_failure_arg_count
 
 case "$DE" in
     kde)
@@ -51,7 +57,6 @@ case "$DE" in
     ;;
 
     *)
-    echo Sorry, no method available for copying "$1" to "$2"
-    exit 2
+    exit_failure_operation_impossible "Sorry, no method available for copying" "$1" "to" "$2"
     ;;
 esac

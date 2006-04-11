@@ -107,8 +107,6 @@ exit_failure_operation_impossible()
         echo
     fi
 
-    usage
-
     exit 3
 }
 
@@ -122,10 +120,33 @@ exit_failure_operation_failed()
         echo
     fi
 
-    usage
-
     exit 4
 }
+
+#----------------------------------------
+# Checks for shared commands, e.g. --help
+
+check_common_commands()
+{
+    while [ $# -gt 0 ] ; do
+        parm=$1
+        shift
+
+        case $parm in
+            --help)
+            usage
+            exit_success
+            ;;
+
+            --version)
+            echo "xdg-utils technical-preview"
+            exit_success
+            ;;
+        esac
+    done
+}
+
+check_common_commands "$@"
 
 #--------------------------------------
 # Checks for known desktop environments
@@ -189,11 +210,7 @@ defapp_gnome()
 
 [ x"$1" != x"" ] || exit_failure_arg_count
 
-
-if [ x"$1" = x"--help" ]; then
-    usage
-    exit_success
-elif [ x"$1" = x"--info" ]; then
+if [ x"$1" = x"--info" ]; then
     shift
     [ x"$1" != x"" ] || exit_failure_arg_count
 

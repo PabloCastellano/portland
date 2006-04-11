@@ -1,3 +1,8 @@
+2006-04-11 Kevin Krammer <kevin.krammer@gmx.at>
+    * Applied exit functions to the other scripts
+    * Added a function to check for common commands like --help or --version
+      and always perform the same reaction
+
 2006-04-10 Kevin Krammer <kevin.krammer@gmx.at>
     * Added common exit functions to improve return value consistency.
       Currently only used in xdg-mime to gather feedback
