@@ -37,6 +37,7 @@
     <cmdsynopsis>
       <command>xdg-desktop</command>
       <arg><option>--help</option></arg>
+      <arg><option>--version</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <group>
 	<arg>--install <replaceable>file</replaceable></arg>
@@ -62,6 +63,15 @@
 	    Show this help.
 	  </simpara>
 	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
       </varlistentry>
 
       <varlistentry>

@@ -24,7 +24,7 @@ xdg-email \- command line tool for sending mail using the user's preferred e-mai
 .ad l
 .hy 0
 .HP 10
-\fBxdg\-email\fR [\fB\-\-help\fR] [\fB\fImailto\-uri\fR\fR]
+\fBxdg\-email\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\fImailto\-uri\fR\fR]
 .ad
 .hy
 
@@ -39,6 +39,10 @@ xdg\-email opens the user's preferred e\-mail composer in order to send a mail t
 \fB\-\-help\fR
 Show this help\&.
 
+.TP
+\fB\-\-version\fR
+Show the xdg\-utils version information\&.
+
 .SH "EXAMPLES"
 
 .PP
@@ -47,7 +51,7 @@ Show this help\&.
 .nf
 
 xdg\-email 'mailto:jwhite@codeweavers\&.com?subject=Logo contest&' \\
-          'body=Attached you find the logo for the contest\&.&' \\ 
+          'body=Attached you find the logo for the contest\&.&' \\
           'attachment=/tmp/logo\&.png'
 
 .fi

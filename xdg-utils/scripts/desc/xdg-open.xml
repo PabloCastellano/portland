@@ -37,6 +37,7 @@
     <cmdsynopsis>
       <command>xdg-open</command>
       <arg><option>--help</option></arg>
+      <arg><option>--version</option></arg>
       <group>
       <arg><option><replaceable>file</replaceable></option></arg>
       <arg><option><replaceable>URL</replaceable></option></arg>
@@ -47,7 +48,7 @@
   <refsect1 id="description">
     <title>Description</title>
     <para>
-      xdg-open opens a file or URL in the user's preferred application. 
+      xdg-open opens a file or URL in the user's preferred application.
       If a URL is provided the URL will be opened in the user's preferred
       web browser. If a file is provided the file will be opened in the
       preferred application for files of that type. xdg-open supports
@@ -64,6 +65,15 @@
 	    Show this help.
 	  </simpara>
 	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
       </varlistentry>
     </variablelist>
   </refsect1>

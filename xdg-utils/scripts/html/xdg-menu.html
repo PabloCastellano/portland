@@ -1,13 +1,15 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>  [<code class="option">--help</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] [<code class="option">--noupdate</code>] [[--user] |  [--system]] [[--install <em class="replaceable"><code>desktop-file</code></em>] |  [--install <em class="replaceable"><code>directory-file</code></em>] |  [--install <em class="replaceable"><code>menu-file</code></em>] |  [--uninstall <em class="replaceable"><code>desktop-file</code></em>] |  [--uninstall <em class="replaceable"><code>directory-file</code></em>] |  [--uninstall <em class="replaceable"><code>menu-file</code></em>] |  [--forceupdate]]</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>  [<code class="option">--help</code>] [<code class="option">--version</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] [<code class="option">--noupdate</code>] [[--user] |  [--system]] [[--install <em class="replaceable"><code>desktop-file</code></em>] |  [--install <em class="replaceable"><code>directory-file</code></em>] |  [--install <em class="replaceable"><code>menu-file</code></em>] |  [--uninstall <em class="replaceable"><code>desktop-file</code></em>] |  [--uninstall <em class="replaceable"><code>directory-file</code></em>] |  [--uninstall <em class="replaceable"><code>menu-file</code></em>] |  [--forceupdate]]</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-menu program can be used to install new items to the
       desktop's application menu.
     </p><p>
-      The application menu works according to the 
+      The application menu works according to the
       XDG Desktop Menu Specification at
-      http://www.freedesktop.org/Standards/menu-spec 
+      http://www.freedesktop.org/Standards/menu-spec
     </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--help</code></span></dt><dd>
 	    Show this help.
-	  </dd><dt><span class="term"> <code class="option">--vendor</code> <em class="replaceable"><code>vendor-id</code></em></span></dt><dd>
+	  </dd><dt><span class="term"><code class="option">--version</code></span></dt><dd>
+            Show the xdg-utils version information.
+          </dd><dt><span class="term"> <code class="option">--vendor</code> <em class="replaceable"><code>vendor-id</code></em></span></dt><dd>
 	    Adds <em class="replaceable"><code>vendor-id</code></em> as a prefix when installing desktop
             and directory files.
 	  </dd><dt><span class="term"><code class="option">--noupdate</code></span></dt><dd>
@@ -31,10 +33,10 @@
             to the menu system. A menu file describes a submenu.
 	  </dd><dt><span class="term"> <code class="option">--uninstall</code> <em class="replaceable"><code>desktop-file</code></em></span></dt><dd>
 	    Removes the *.desktop file indicated by <em class="replaceable"><code>desktop-file</code></em>
-            from the menu system. 
+            from the menu system.
 	  </dd><dt><span class="term"> <code class="option">--uninstall</code> <em class="replaceable"><code>directory-file</code></em></span></dt><dd>
 	    Removes the *.directory file indicated by <em class="replaceable"><code>directory-file</code></em>
-            from the menu system. 
+            from the menu system.
 	  </dd><dt><span class="term"> <code class="option">--uninstall</code> <em class="replaceable"><code>menu-file</code></em></span></dt><dd>
 	    Removes the *.menu file indicated by <em class="replaceable"><code>menu-file</code></em>
             from the menu system.
@@ -43,7 +45,7 @@
 	    the last call to xdg-menu included the <code class="option">--noupdate</code> option.
 	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
       The company ShinyThings Inc. has developed an application named
-      "WebMirror" and would like to add it to the application menu. 
+      "WebMirror" and would like to add it to the application menu.
       The company will use "shinythings" as its vendor id.
       In order to add the application to the menu there needs to be a
       .desktop file with a suitable <span class="emphasis"><em>Categories</em></span> entry:

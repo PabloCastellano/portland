@@ -40,14 +40,135 @@ xdg-menu ? command line tool for (un)installing desktop menu items
 
 Synopsis
 
-xdg-menu [--help] [--vendor vendor-id] [--noupdate] [[--user] | [--system]]
-[[--install desktop-file] | [--install directory-file] | [--install menu-file]
-| [--uninstall desktop-file] | [--uninstall directory-file] | [--uninstall
-menu-file] | [--forceupdate]]
+xdg-menu [--help] [--version] [--vendor vendor-id] [--noupdate] [[--user] |
+[--system]] [[--install desktop-file] | [--install directory-file] | [--install
+menu-file] | [--uninstall desktop-file] | [--uninstall directory-file] |
+[--uninstall menu-file] | [--forceupdate]]
 
 _USAGE
+}
+
+#@xdg-utils-common@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+
+#-------------------------------------------------------------
+# Exit script on successfully completing the desired operation
+
+exit_success()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    exit 0
+}
+
+
+#-----------------------------------------
+# Exit script on wrong number of arguments
+# prints usage information
+
+exit_failure_arg_count()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    usage
+
     exit 1
 }
+
+
+#-----------------------------------
+# Exit script on malformed arguments
+# prints usage information
+
+exit_failure_arg_malformed()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    usage
+
+    exit 2
+}
+
+#-------------------------------------------------------------
+# Exit script on failure to locate necessary tool applications
+
+exit_failure_operation_impossible()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    exit 3
+}
+
+#-------------------------------------------------------------
+# Exit script on failure returned by a tool application
+
+exit_failure_operation_failed()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    exit 4
+}
+
+#----------------------------------------
+# Checks for shared commands, e.g. --help
+
+check_common_commands()
+{
+    while [ $# -gt 0 ] ; do
+        parm=$1
+        shift
+
+        case $parm in
+            --help)
+            usage
+            exit_success
+            ;;
+
+            --version)
+            echo "xdg-utils technical-preview"
+            exit_success
+            ;;
+        esac
+    done
+}
+
+check_common_commands "$@"
+
+#--------------------------------------
+# Checks for known desktop environments
+# set variable DE to the desktop environments name, lowercase
+
+detectDE()
+{
+    if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
+    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+
 
 update_desktop_database()
 {
@@ -62,7 +183,7 @@ update_desktop_database()
     fi
 }
 
-[ x"$1" != x"" ] || usage
+[ x"$1" != x"" ] || exit_failure_arg_count
 
 mode=
 action=
@@ -75,12 +196,10 @@ while [ $# -gt 0 ] ; do
     case $parm in
       --install)
         if [ -n "$action" ] ; then
-            echo Error:  Too many options: $parm $1
-            exit 1
+            exit_failure_arg_count "Error:  Too many options:" $parm $1
         fi
         if [ ! -f "$1" ] ; then
-            echo Error:  You must specify an existing file to install.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify an existing file to install."
         fi
 
         action=install
@@ -90,12 +209,10 @@ while [ $# -gt 0 ] ; do
 
       --uninstall)
         if [ -n "$action" ] ; then
-            echo Error:  Too many options: $parm $1
-            exit 1
+            exit_failure_arg_count "Error:  Too many options:" $parm $1
         fi
         if [ -z "$1" ] ; then
-            echo Error:  You must specify a file to uninstall.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify a file to uninstall."
         fi
         action=uninstall
         desktop_file=$1
@@ -104,8 +221,7 @@ while [ $# -gt 0 ] ; do
 
       --forceupdate)
         if [ -n "$action" ] ; then
-            echo Error:  Too many options: $parm
-            exit 1
+            exit_failure_arg_count "Error:  Too many options:" $parm $1
         fi
 
         action=forceupdate
@@ -125,34 +241,29 @@ while [ $# -gt 0 ] ; do
 
       --vendor)
         if [ -z "$1" ] ; then
-            echo Error:  You must specify a vendor-id.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify a vendor-id."
         fi
         vendor=$1
         shift
         ;;
 
       *)
-        echo "$parm:  Invalid parameter/option"
-        usage
-        exit 2
+        exit_failure_arg_malformed "$parm:  Invalid parameter/option"
         ;;
     esac
 done
 
 if [ -z "$mode" ] ; then
-    echo Error:  You must specify either --user or --system
-    exit 2
+    exit_failure_arg_malformed "Error:  You must specify either --user or --system"
 fi
 
 if [ -z "$action" ] ; then
-    usage
-    exit 2
+    exit_failure_arg_count
 fi
 
 if [ x"$action" = x"forceupdate" ] ; then
     update_desktop_database
-    exit 0;
+    exit_success
 fi
 
 filetype=
@@ -171,8 +282,7 @@ case $desktop_file in
      xdg_dir_name=menus/applications-merged
      ;;
   *)
-     echo Error: File to $action must be a *.desktop, *.directory or *.menu file
-     exit 1
+     exit_failure_arg_malformed "Error: File to $action must be a *.desktop, *.directory or *.menu file"
      ;;
 esac
 
@@ -229,8 +339,7 @@ else
     my_umask=022
     if [ -n "$xdg_dir $kde_dir $gnome_dir" ] ; then
         [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
-        echo Error:  No writable system menu directory found. $rootmsg
-        exit 3 
+        exit_failure_operation_impossible "No writable system menu directory found. $rootmsg"
     fi
 fi
 
@@ -277,6 +386,6 @@ if [ x"$update" = x"yes" ] ; then
     update_desktop_database
 fi
 
-exit 0
+exit_success
 
 

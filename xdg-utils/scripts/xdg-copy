@@ -39,7 +39,7 @@ xdg-copy ? command line tool for copying files between desktop URIs
 
 Synopsis
 
-xdg-copy [--help] [source] [destination]
+xdg-copy [--help] [--version] [source] [destination]
 
 _USAGE
 }

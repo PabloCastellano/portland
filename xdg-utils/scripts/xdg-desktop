@@ -38,14 +38,135 @@ xdg-desktop ? command line tool for (un)installing icons to the desktop
 
 Synopsis
 
-xdg-desktop [--help] [--vendor vendor-id] [[--install file] | [--uninstall file
-]]
+xdg-desktop [--help] [--version] [--vendor vendor-id] [[--install file] |
+[--uninstall file]]
 
 _USAGE
+}
+
+#@xdg-utils-common@
+
+#----------------------------------------------------------------------------
+#   Common utility functions included in all XDG wrapper scripts
+#----------------------------------------------------------------------------
+
+#-------------------------------------------------------------
+# Exit script on successfully completing the desired operation
+
+exit_success()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    exit 0
+}
+
+
+#-----------------------------------------
+# Exit script on wrong number of arguments
+# prints usage information
+
+exit_failure_arg_count()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    usage
+
     exit 1
 }
 
-[ x"$1" != x"" ] || usage
+
+#-----------------------------------
+# Exit script on malformed arguments
+# prints usage information
+
+exit_failure_arg_malformed()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    usage
+
+    exit 2
+}
+
+#-------------------------------------------------------------
+# Exit script on failure to locate necessary tool applications
+
+exit_failure_operation_impossible()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    exit 3
+}
+
+#-------------------------------------------------------------
+# Exit script on failure returned by a tool application
+
+exit_failure_operation_failed()
+{
+    if [ $# -gt 0 ]; then
+        echo "$@"
+        echo
+    fi
+
+    exit 4
+}
+
+#----------------------------------------
+# Checks for shared commands, e.g. --help
+
+check_common_commands()
+{
+    while [ $# -gt 0 ] ; do
+        parm=$1
+        shift
+
+        case $parm in
+            --help)
+            usage
+            exit_success
+            ;;
+
+            --version)
+            echo "xdg-utils technical-preview"
+            exit_success
+            ;;
+        esac
+    done
+}
+
+check_common_commands "$@"
+
+#--------------------------------------
+# Checks for known desktop environments
+# set variable DE to the desktop environments name, lowercase
+
+detectDE()
+{
+    if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
+    elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+    fi
+}
+
+detectDE
+
+#----------------------------------------------------------------------------
+
+
+
+[ x"$1" != x"" ] || exit_failure_arg_count
 
 action=
 desktop_file=
@@ -56,12 +177,10 @@ while [ $# -gt 0 ] ; do
     case $parm in
       --install)
         if [ -n "$action" ] ; then
-            echo Error:  Too many options: $parm $1
-            exit 1
+            exit_failure_arg_count "Error:  Too many options:" $parm $1
         fi
         if [ ! -f "$1" ] ; then
-            echo Error:  You must specify an existing file to install.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify an existing file to install."
         fi
 
         action=install
@@ -71,12 +190,10 @@ while [ $# -gt 0 ] ; do
 
       --uninstall)
         if [ -n "$action" ] ; then
-            echo Error:  Too many options: $parm $1
-            exit 1
+            exit_failure_arg_count "Error:  Too many options:" $parm $1
         fi
         if [ -z "$1" ] ; then
-            echo Error:  You must specify a file to uninstall.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify a file to uninstall."
         fi
         action=uninstall
         desktop_file=$1
@@ -85,24 +202,20 @@ while [ $# -gt 0 ] ; do
 
       --vendor)
         if [ -z "$1" ] ; then
-            echo Error:  You must specify a vendor-id.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify a vendor-id."
         fi
         vendor=$1
         shift
         ;;
 
       *)
-        echo "$parm:  Invalid parameter/option"
-        usage
-        exit 2
+        exit_failure_arg_malformed "$parm:  Invalid parameter/option"
         ;;
     esac
 done
 
 if [ -z "$action" ] ; then
-    usage
-    exit 2
+    exit_failure_arg_count
 fi
 
 filetype=
@@ -145,6 +258,6 @@ case $action in
         ;;
 esac
 
-exit 0
+exit_success
 
 

@@ -1,0 +1,277 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-file-dialog
+#
+#   Utility script to file selection dialogs
+#   on XDG compliant systems.
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
+#
+#   LICENSE:
+#
+#---------------------------------------------
+
+usage()
+{
+cat << _USAGE
+_USAGE
+}
+
+#@xdg-utils-common@
+
+open_kde()
+{
+    DIALOG=`which kdialog`
+    if [ $? -eq 0 ]; then
+        $DIALOG --getopenfilename "$1" ""
+
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+open_gnome()
+{
+    DIALOG=`which zenity`
+    if [ $? -eq 0 ]; then
+        if [ x"$1" != x"" ]; then
+            cd `dirname "$1"` 2>/dev/null
+            FILENAME=`basename "$1"`
+            if [ x"$FILENAME" != x"" ]; then
+                FILENAME="--filename=""$FILENAME"
+            fi
+        fi
+
+        if [ x"$FILENAME" != x"" ]; then
+            $DIALOG --file-selection "$FILENAME"
+        else
+            $DIALOG --file-selection
+        fi
+
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+open_multi_kde()
+{
+    DIALOG=`which kdialog`
+    if [ $? -eq 0 ]; then
+        $DIALOG --multiple --separate-output --getopenfilename "$1" ""
+
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+open_multi_gnome()
+{
+    DIALOG=`which zenity`
+    if [ $? -eq 0 ]; then
+        if [ x"$1" != x"" ]; then
+            cd `dirname "$1"` 2>/dev/null
+            FILENAME=`basename "$1"`
+            if [ x"$FILENAME" != x"" ]; then
+                FILENAME="--filename=""$FILENAME"
+            fi
+        fi
+
+        if [ x"$FILENAME" != x"" ]; then
+            LIST=`$DIALOG --multiple --file-selection "$FILENAME"`
+        else
+            LIST=`$DIALOG --multiple --file-selection`
+        fi
+
+        if [ $? -eq 0 ]; then
+            echo "$LIST" | sed s#'|'#\\n#
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+save_kde()
+{
+    DIALOG=`which kdialog`
+    if [ $? -eq 0 ]; then
+        $DIALOG --getsavefilename "$1" ""
+
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+save_gnome()
+{
+    DIALOG=`which zenity`
+    if [ $? -eq 0 ]; then
+        if [ x"$1" != x"" ]; then
+            cd `dirname "$1"` 2>/dev/null
+            FILENAME=`basename "$1"`
+            if [ x"$FILENAME" != x"" ]; then
+                FILENAME="--filename=""$FILENAME"
+            fi
+        fi
+
+        if [ x"$FILENAME" != x"" ]; then
+            $DIALOG --save --file-selection "$FILENAME"
+        else
+            $DIALOG --save --file-selection
+        fi
+
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+directory_kde()
+{
+    DIALOG=`which kdialog`
+    if [ $? -eq 0 ]; then
+        $DIALOG --getexistingdirectory "$1" ""
+
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+directory_gnome()
+{
+    DIALOG=`which zenity`
+    if [ $? -eq 0 ]; then
+        if [ x"$1" != x"" ]; then
+            cd "$1" 2>/dev/null
+        fi
+
+        $DIALOG --directory --file-selection
+
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        exit_failure_operation_impossible
+    fi
+}
+
+[ x"$1" != x"" ] || exit_failure_arg_count
+
+if [ x"$1" = x"--openfilename" ]; then
+    shift
+
+    if [ $# -gt 1 ]; then
+        exit_failure_arg_count
+    fi;
+
+    case "$DE" in
+        kde)
+        open_kde "$1"
+        ;;
+
+        gnome)
+        open_gnome "$1"
+        ;;
+
+        *)
+        exit_failure_operation_impossible "Sorry, no method available for getting a filename for opening"
+        ;;
+    esac
+elif [ x"$1" = x"--openfilenamelist" ]; then
+    shift
+
+    if [ $# -gt 1 ]; then
+        exit_failure_arg_count
+    fi;
+
+    case "$DE" in
+        kde)
+        open_multi_kde "$1"
+        ;;
+
+        gnome)
+        open_multi_gnome "$1"
+        ;;
+
+        *)
+        exit_failure_operation_impossible "Sorry, no method available for getting a list of filenames for opening"
+        ;;
+    esac
+elif [ x"$1" = x"--savefilename" ]; then
+    shift
+
+    if [ $# -gt 1 ]; then
+        exit_failure_arg_count
+    fi;
+
+    case "$DE" in
+        kde)
+        save_kde "$1"
+        ;;
+
+        gnome)
+        save_gnome "$1"
+        ;;
+
+        *)
+        exit_failure_operation_impossible "Sorry, no method available for getting a filename for saving"
+        ;;
+    esac
+elif [ x"$1" = x"--directory" ]; then
+    shift
+
+    if [ $# -gt 1 ]; then
+        exit_failure_arg_count
+    fi;
+
+    case "$DE" in
+        kde)
+        directory_kde "$1"
+        ;;
+
+        gnome)
+        directory_gnome "$1"
+        ;;
+
+        *)
+        exit_failure_operation_impossible "Sorry, no method available for getting a directory"
+        ;;
+    esac
+else
+    exit_failure_arg_malformed "Unkown command" "$1"
+fi

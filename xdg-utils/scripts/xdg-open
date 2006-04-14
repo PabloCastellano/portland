@@ -38,7 +38,7 @@ xdg-open ? opens a file or URL in the user's preferred application
 
 Synopsis
 
-xdg-open [--help] [[file] | [URL]]
+xdg-open [--help] [--version] [[file] | [URL]]
 
 _USAGE
 }

@@ -40,7 +40,7 @@ e-mail composer
 
 Synopsis
 
-xdg-email [--help] [mailto-uri]
+xdg-email [--help] [--version] [mailto-uri]
 
 _USAGE
 }

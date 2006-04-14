@@ -37,6 +37,7 @@
     <cmdsynopsis>
       <command>xdg-su</command>
       <arg><option>--help</option></arg>
+      <arg><option>--version</option></arg>
       <arg><option>-u <replaceable>user</replaceable></option></arg>
       <arg><option>-c <replaceable>command</replaceable></option></arg>
     </cmdsynopsis>
@@ -61,6 +62,16 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
       <varlistentry>
 	<term><option>-u <replaceable>user</replaceable></option></term>
 	<listitem>

@@ -37,6 +37,7 @@
     <cmdsynopsis>
       <command>xdg-menu</command>
       <arg><option>--help</option></arg>
+      <arg><option>--version</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <arg><option>--noupdate</option></arg>
       <group>
@@ -62,9 +63,9 @@
       desktop's application menu.
     </para>
     <para>
-      The application menu works according to the 
+      The application menu works according to the
       XDG Desktop Menu Specification at
-      http://www.freedesktop.org/Standards/menu-spec 
+      http://www.freedesktop.org/Standards/menu-spec
     </para>
   </refsect1>
   <refsect1 id="options">
@@ -77,6 +78,15 @@
 	    Show this help.
 	  </simpara>
 	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
       </varlistentry>
 
       <varlistentry>
@@ -155,7 +165,7 @@
 	<listitem>
 	  <simpara>
 	    Removes the *.desktop file indicated by <replaceable>desktop-file</replaceable>
-            from the menu system. 
+            from the menu system.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -165,7 +175,7 @@
 	<listitem>
 	  <simpara>
 	    Removes the *.directory file indicated by <replaceable>directory-file</replaceable>
-            from the menu system. 
+            from the menu system.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -196,7 +206,7 @@
     <title>Examples</title>
     <para>
       The company ShinyThings Inc. has developed an application named
-      "WebMirror" and would like to add it to the application menu. 
+      "WebMirror" and would like to add it to the application menu.
       The company will use "shinythings" as its vendor id.
       In order to add the application to the menu there needs to be a
       .desktop file with a suitable <emphasis>Categories</emphasis> entry:

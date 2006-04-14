@@ -37,6 +37,7 @@
     <cmdsynopsis>
       <command>xdg-email</command>
       <arg><option>--help</option></arg>
+      <arg><option>--version</option></arg>
       <arg><option><replaceable>mailto-uri</replaceable></option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -47,7 +48,7 @@
       xdg-email opens the user's preferred e-mail composer in order to send
       a mail to <replaceable>mailto-uri</replaceable>. RFC2368 defines mailto:
       URIs. <replaceable>mailto-uri</replaceable> may contain fields for to, cc,
-      bcc, subject, body and attachment. 
+      bcc, subject, body and attachment.
     </para>
   </refsect1>
   <refsect1 id="options">
@@ -61,6 +62,15 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
+      </varlistentry>
     </variablelist>
   </refsect1>
   <refsect1 id="examples">
@@ -68,7 +78,7 @@
     <para>
 <programlisting>
 xdg-email 'mailto:jwhite@codeweavers.com?subject=Logo contest&amp;' \
-          'body=Attached you find the logo for the contest.&amp;' \ 
+          'body=Attached you find the logo for the contest.&amp;' \
           'attachment=/tmp/logo.png'
 </programlisting>
     </para>

@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry id="xdg-file-dialog">
+  <refentryinfo>
+    <title>xdg-file-dialog Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Kevin</firstname>
+      <surname>Krammer</surname>
+    </author>
+    <address><email>kevin.krammer@gmx.at</email></address>
+    <releaseinfo>This is release 0.5 of the xdg-mime Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-file-dialog</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-file-dialog</refname>
+    <refpurpose>command line tool for providing file and directory selection dialogs</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-file-dialog</command>
+      <arg><option>--help</option></arg>
+      <arg><option>--version</option></arg>
+      <arg><option>--openfilename <replaceable>FILENAME</replaceable></option></arg>
+      <arg><option>--openfilenamelist <replaceable>FILENAME</replaceable></option></arg>
+      <arg><option>--savefilename <replaceable>FILENAME</replaceable></option></arg>
+      <arg><option>--directory <replaceable>DIRNAME</replaceable></option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id="description">
+    <title>Description</title>
+    <para>
+      The xdg-file-dialog program can be used to let the native file selection dialog
+      handle file and directory input.
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+        <term><option>--help</option></term>
+        <listitem>
+            <simpara>
+                Show this help.
+            </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term> <option>--openfilename</option> <replaceable>FILENAME</replaceable></term>
+        <listitem>
+          <simpara>
+              Returns the filename with path for a file to read from. <replaceable>FILENAME</replaceable> can optionally be used to specify path and filename of a preselection
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term> <option>--openfilenamelist</option> <replaceable>FILENAME</replaceable></term>
+        <listitem>
+          <simpara>
+            Returns one or more filenames with path for files to read from, each on a new line. <replaceable>FILENAME</replaceable> can optionally be used to specify path and filename of a preselection
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term> <option>--savefilename</option> <replaceable>FILENAME</replaceable></term>
+        <listitem>
+          <simpara>
+            Returns the filename with path for file to write to. <replaceable>FILENAME</replaceable> can optionally be used to specify path and filename of a preselection
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term> <option>--directory</option> <replaceable>DIRNAME</replaceable></term>
+        <listitem>
+          <simpara>
+            Returns the path for an exsiting directory. <replaceable>DIRNAME</replaceable> can optionally be used to specify a path of a preselection
+            </simpara>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+<programlisting>
+xdg-file-dialog --savefilename /tmp/foobar.png
+</programlisting>
+      Asks for a save file name starting in directory /tmp and suggesting foobar.png as the filename
+    </para>
+  </refsect1>
+</refentry>

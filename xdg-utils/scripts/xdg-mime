@@ -39,7 +39,7 @@ xdg-mime ? command line tool for providing information about file type handling
 
 Synopsis
 
-xdg-mime [--help] [--info FILE] [--defapp FILE]
+xdg-mime [--help] [--version] [--info FILE] [--defapp FILE]
 
 _USAGE
 }

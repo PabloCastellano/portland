@@ -17,10 +17,11 @@ usage()
 {
 cat << _USAGE
 _USAGE
-    exit 1
 }
 
-[ x"$1" != x"" ] || usage
+#@xdg-utils-common@
+
+[ x"$1" != x"" ] || exit_failure_arg_count
 
 action=
 desktop_file=
@@ -31,12 +32,10 @@ while [ $# -gt 0 ] ; do
     case $parm in
       --install)
         if [ -n "$action" ] ; then
-            echo Error:  Too many options: $parm $1
-            exit 1
+            exit_failure_arg_count "Error:  Too many options:" $parm $1
         fi
         if [ ! -f "$1" ] ; then
-            echo Error:  You must specify an existing file to install.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify an existing file to install."
         fi
 
         action=install
@@ -46,12 +45,10 @@ while [ $# -gt 0 ] ; do
 
       --uninstall)
         if [ -n "$action" ] ; then
-            echo Error:  Too many options: $parm $1
-            exit 1
+            exit_failure_arg_count "Error:  Too many options:" $parm $1
         fi
         if [ -z "$1" ] ; then
-            echo Error:  You must specify a file to uninstall.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify a file to uninstall."
         fi
         action=uninstall
         desktop_file=$1
@@ -60,24 +57,20 @@ while [ $# -gt 0 ] ; do
 
       --vendor)
         if [ -z "$1" ] ; then
-            echo Error:  You must specify a vendor-id.
-            exit 1
+            exit_failure_arg_count "Error:  You must specify a vendor-id."
         fi
         vendor=$1
         shift
         ;;
 
       *)
-        echo "$parm:  Invalid parameter/option"
-        usage
-        exit 2
+        exit_failure_arg_malformed "$parm:  Invalid parameter/option"
         ;;
     esac
 done
 
 if [ -z "$action" ] ; then
-    usage
-    exit 2
+    exit_failure_arg_count
 fi
 
 filetype=
@@ -120,6 +113,6 @@ case $action in
         ;;
 esac
 
-exit 0
+exit_success
 
 

@@ -19,7 +19,8 @@ SCRIPTS		= \
     xdg-mime \
     xdg-su \
     xdg-open \
-    xdg-copy
+    xdg-copy \
+    xdg-file-dialog
 
 do_subst = sed -e '/[@]xdg-utils-common[@]/ r xdg-utils-common.in' | sed -e '/LICENSE:/ r ../LICENSE'
 
@@ -78,6 +79,7 @@ xdg-mime: xdg-mime.in xdg-utils-common.in
 xdg-su: xdg-su.in xdg-utils-common.in
 xdg-open: xdg-open.in xdg-utils-common.in
 xdg-copy: xdg-copy.in xdg-utils-common.in
+xdg-file-dialog: xdg-file-dialog.in xdg-utils-common.in
 
 %.1: desc/%.xml
 	(cd man;$(XMLTO) man ../$<)
