@@ -315,29 +315,17 @@ static void processCommand( DapiConnection* conn )
         }
     }
 
-static char bind_name[ 256 ] = "";
-
-static void processArgs( int argc, char* argv[] )
-    {
-    if( argc == 3 && strcmp( argv[ 1 ], "--dapiname" ) == 0 )
-        {
-        strncpy( bind_name, argv[ 2 ], 255 );
-        bind_name[ 255 ] = '\0';
-        }
-    }
-
 int main( int argc, char* argv[] )
     {
     int i;
     int mainsock;
-    processArgs( argc, argv );
     dpy = XOpenDisplay( NULL );
     if( dpy == NULL )
         {
         fprintf( stderr, "Cannot open X connection!\n" );
         return 1;
         }
-    mainsock = dapi_namedBindSocket( bind_name );
+    mainsock = dapi_bindSocket();
     if( mainsock < 0 )
         return 2;
     for(;;)

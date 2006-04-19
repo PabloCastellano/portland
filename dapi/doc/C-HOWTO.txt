@@ -137,29 +137,7 @@ the required functionality.
 No backend daemon running
 -------------------------
 
-A backend daemon should be provided by the desktop environment in which the application is running.
-If dapi_connectAndInit() call fails, it is most probably because the daemon is not available.
-In such case the application may consider shipping its own fallback daemon.
-
-
-int initializeDapi()
-    {
-    my_dapi_connection = dapi_connectAndInit();
-    if( my_dapi_connection == NULL )
-        { /* failure, try a fallback */
-        run_fallback_daemon();
-        my_dapi_connection = dapi_namedConnectAndInit( "MyAppFooInc" );
-        if( my_dapi_connection == NULL )
-            return 0; /* still no luck */
-        }
-    return 1;
-    }
-
-This approach allows silently expecting all following calls to succeed and not caring about fallback
-code at all. (NOTE: still experimental, not sure if it's worth it)
-
-The provided generic daemon accepts --dapiname argument that specifies the fallback name it should
-use. In this specific case run_fallback_daemon() could run "dapi_generic --dapiname MyAppFooInc".
+TODO: fallback daemons don't make sense, the library should try to implement fallbacks
 
 
 Some functionality not available

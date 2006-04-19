@@ -33,27 +33,22 @@ static void getDisplay( char* ret, int max )
         *pos = '\0';
     }
 
-static void socketName( char* sock_file, const char* name, int max )
+static void socketName( char* sock_file, int max )
     {
     const char* home;
     char display[ 256 ];
     home = getenv( "HOME" );
     getDisplay( display, 255 );
-    snprintf( sock_file, max - 1, "%s/.dapi-%s%s%s", home, display, name != NULL ? "-" : "", name );
+    snprintf( sock_file, max - 1, "%s/.dapi-%s", home, display );
     }
 
 DapiConnection* dapi_connect()
-    {
-    return dapi_namedConnect( "" );
-    }
-    
-DapiConnection* dapi_namedConnect( const char* name )
     {
     char sock_file[ 256 ];
     int sock;
     struct sockaddr_un addr;
     DapiConnection* ret;
-    socketName( sock_file, name, 255 );
+    socketName( sock_file, 255 );
     sock = socket( PF_UNIX, SOCK_STREAM, 0 );
     if( sock < 0 )
         {
@@ -82,15 +77,10 @@ DapiConnection* dapi_namedConnect( const char* name )
 
 int dapi_bindSocket()
     {
-    return dapi_namedBindSocket( "" );
-    }
-
-int dapi_namedBindSocket( const char* name )
-    {
     char sock_file[ 256 ];
     int sock;
     struct sockaddr_un addr;
-    socketName( sock_file, name, 255 );
+    socketName( sock_file, 255 );
     sock = socket( PF_UNIX, SOCK_STREAM, 0 );
     if( sock < 0 )
         {
@@ -364,12 +354,7 @@ void dapi_windowInfoInitWindow( DapiWindowInfo* winfo, long window )
 
 DapiConnection* dapi_connectAndInit()
     {
-    return dapi_namedConnectAndInit( "" );
-    }
-
-DapiConnection* dapi_namedConnectAndInit( const char* name )
-    {
-    DapiConnection* conn = dapi_namedConnect( name );
+    DapiConnection* conn = dapi_connect();
     if( conn == NULL )
         return NULL;
     if( !dapi_Init( conn ))

@@ -121,22 +121,6 @@ Convenience function that calls dapi_connect() and if successful
 also performs initialization by calling dapi_Init() (see later).
 
 
-DapiConnection* dapi_namedConnect( const char* name )
------------------------------------------------------
-
-Tries to connect to a named fallback daemon.
-
-name: name of the fallback daemon
-Returns: NULL if failed, opaque connection handle if success.
-
-
-DapiConnection* dapi_namedConnectAndInit( const char* name )
-------------------------------------------------------------
-
-Convenience function that calls dapi_namedConnect() and if successful
-also performs initialization by calling dapi_Init() (see later).
-
-
 void dapi_close( DapiConnection* conn )
 ---------------------------------------
 
