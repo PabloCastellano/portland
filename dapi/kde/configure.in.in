@@ -10,4 +10,4 @@ dapi_includes='-I$(top_builddir)/../include'
 all_includes="$dapi_includes $all_includes"
 
 CFLAGS="$CFLAGS -Werror"
-CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS -Werror"
+CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS -DQT_CLEAN_NAMESPACE -Werror"
