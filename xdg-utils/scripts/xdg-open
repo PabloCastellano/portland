@@ -31,6 +31,23 @@
 #
 #---------------------------------------------
 
+examples()
+{
+cat << _EXAMPLES
+Examples
+
+xdg-open 'http://www.freedesktop.org/'
+
+Opens the Freedesktop.org website in the user's default browser
+
+xdg-open /tmp/foobar.png
+
+Opens the PNG image file /tmp/foobar.png in the user's default image viewing
+application.
+
+_EXAMPLES
+}
+
 usage()
 {
 cat << _USAGE
@@ -134,6 +151,7 @@ check_common_commands()
         case $parm in
             --help)
             usage
+            examples
             exit_success
             ;;
 

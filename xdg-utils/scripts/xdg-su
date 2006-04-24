@@ -33,6 +33,18 @@
 #
 #---------------------------------------------
 
+examples()
+{
+cat << _EXAMPLES
+Examples
+
+xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
+
+Runs the /opt/shinythings/bin/install-GUI command with root permissions.
+
+_EXAMPLES
+}
+
 usage()
 {
 cat << _USAGE
@@ -136,6 +148,7 @@ check_common_commands()
         case $parm in
             --help)
             usage
+            examples
             exit_success
             ;;
 

@@ -32,6 +32,23 @@
 #
 #---------------------------------------------
 
+examples()
+{
+cat << _EXAMPLES
+Examples
+
+xdg-mime --info /tmp/foobar.png
+
+Prints the MIME type of the file /tmp/foobar.png
+
+xdg-mime --defapp /tmp/foobar.png
+
+Prints the name of the .desktop file of the application which is registered to
+open files of the MIME type the file /tmp/foobar.png has
+
+_EXAMPLES
+}
+
 usage()
 {
 cat << _USAGE
@@ -135,6 +152,7 @@ check_common_commands()
         case $parm in
             --help)
             usage
+            examples
             exit_success
             ;;
 

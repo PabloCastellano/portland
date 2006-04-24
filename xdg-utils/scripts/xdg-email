@@ -32,6 +32,18 @@
 #
 #---------------------------------------------
 
+examples()
+{
+cat << _EXAMPLES
+Examples
+
+xdg-email 'mailto:jwhite@codeweavers.com?subject=Logo contest&' \
+          'body=Attached you find the logo for the contest.&' \
+          'attachment=/tmp/logo.png'
+
+_EXAMPLES
+}
+
 usage()
 {
 cat << _USAGE
@@ -136,6 +148,7 @@ check_common_commands()
         case $parm in
             --help)
             usage
+            examples
             exit_success
             ;;
 

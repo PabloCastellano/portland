@@ -135,6 +135,7 @@ check_common_commands()
         case $parm in
             --help)
             usage
+            examples
             exit_success
             ;;
 

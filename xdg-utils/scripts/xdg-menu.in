@@ -15,6 +15,12 @@
 #
 #---------------------------------------------
 
+examples()
+{
+cat << _EXAMPLES
+_EXAMPLES
+}
+
 usage()
 {
 cat << _USAGE

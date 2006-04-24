@@ -4,6 +4,9 @@
     * Added --title option to xdg-file-dialog
     * Applied another path by Benedikt to let xdg-file-dialog use
       zenity on GNOME and XFCE
+    * Added a documentation extraction AWK script created by Benedikt which replaces
+      the sed code and adds extraction of examples additionally to the usage info.
+    * Added printing of examples to the --help command.
 
 2006-04-14 Kevin Krammer <kevin.krammer@gmx.at>
     * Added documentation for --version to all xml files

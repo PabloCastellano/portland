@@ -31,6 +31,25 @@
 #
 #---------------------------------------------
 
+examples()
+{
+cat << _EXAMPLES
+Examples
+
+xdg-file-dialog --savefilename /tmp/foobar.png
+
+Asks for a save file name starting in directory /tmp and suggesting foobar.png
+as the filename
+
+            xdg-file-dialog --title "Select a target folder" --directory /tmp
+
+
+Asks for a directory name starting in directory /tmp using the text "Select a
+target folder" as the dialog's title/caption.
+
+_EXAMPLES
+}
+
 usage()
 {
 cat << _USAGE
@@ -136,6 +155,7 @@ check_common_commands()
         case $parm in
             --help)
             usage
+            examples
             exit_success
             ;;
 

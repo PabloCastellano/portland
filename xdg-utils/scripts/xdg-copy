@@ -32,6 +32,18 @@
 #
 #---------------------------------------------
 
+examples()
+{
+cat << _EXAMPLES
+Examples
+
+xdg-copy "http://portland.freedesktop.org/png/freedesktop-logo.png" .
+
+xdg-copy "/tmp/foobar.png" "/home/user/foobar-copy.png"
+
+_EXAMPLES
+}
+
 usage()
 {
 cat << _USAGE
@@ -135,6 +147,7 @@ check_common_commands()
         case $parm in
             --help)
             usage
+            examples
             exit_success
             ;;
 

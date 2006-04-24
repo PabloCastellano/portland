@@ -22,8 +22,6 @@ SCRIPTS		= \
     xdg-copy \
     xdg-file-dialog
 
-do_subst = sed -e '/[@]xdg-utils-common[@]/ r xdg-utils-common.in' | sed -e '/LICENSE:/ r ../LICENSE'
-
 all:
 
 scripts:	README $(SCRIPTS)
@@ -68,8 +66,8 @@ uninstall:
 	done
 	-$(RMDIR) $(bindir)
 
-%: %.in %.usage %.1 %.html
-	cat $@.in | $(do_subst) | sed -e '/<< _USAGE/ r '$@.usage >$@
+%: %.in %.txt %.1 %.html
+	awk -f generate-help-script.awk $@.in > $@
 	chmod a+x $@
 
 xdg-menu: xdg-menu.in xdg-utils-common.in
@@ -89,7 +87,4 @@ xdg-file-dialog: xdg-file-dialog.in xdg-utils-common.in
 
 %.txt: desc/%.xml
 	$(XMLTO) txt $<
-
-%.usage: %.txt
-	grep -B 100 Description $< | sed -e '1,2d' -e '$$d' > $@
 
