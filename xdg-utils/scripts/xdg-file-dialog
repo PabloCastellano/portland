@@ -34,12 +34,12 @@
 usage()
 {
 cat << _USAGE
-xdg-file-dialog ? command line tool for providing file and director selection
+xdg-file-dialog ? command line tool for providing file and directory selection
 dialogs
 
 Synopsis
 
-xdg-file-dialog [--help] [--version] [--openfilename FILENAME]
+xdg-file-dialog [--help] [--version] [--title TITLE] [--openfilename FILENAME]
 [--openfilenamelist FILENAME] [--savefilename FILENAME] [--directory DIRNAME]
 
 _USAGE
@@ -171,7 +171,11 @@ open_kde()
 {
     DIALOG=`which kdialog`
     if [ $? -eq 0 ]; then
-        $DIALOG --getopenfilename "$1" ""
+        if [ x"$TITLE" != x"" ]; then
+            $DIALOG --title "$TITLE" --getopenfilename "$1" ""
+        else
+            $DIALOG --getopenfilename "$1" ""
+        fi
 
         if [ $? -eq 0 ]; then
             exit_success
@@ -196,9 +200,17 @@ open_gnome()
         fi
 
         if [ x"$FILENAME" != x"" ]; then
-            $DIALOG --file-selection "$FILENAME"
+            if [ x"$TITLE" != x"" ]; then
+                $DIALOG --title "$TITLE" --file-selection "$FILENAME"
+            else
+                $DIALOG --file-selection "$FILENAME"
+            fi
         else
-            $DIALOG --file-selection
+            if [ x"$TITLE" != x"" ]; then
+                $DIALOG --title "$TITLE" --file-selection
+            else
+                $DIALOG --file-selection
+            fi
         fi
 
         if [ $? -eq 0 ]; then
@@ -215,7 +227,12 @@ open_multi_kde()
 {
     DIALOG=`which kdialog`
     if [ $? -eq 0 ]; then
-        $DIALOG --multiple --separate-output --getopenfilename "$1" ""
+        if [ x"$TITLE" != x"" ]; then
+            $DIALOG --title "$TITLE" --multiple --separate-output \
+                    --getopenfilename "$1" ""
+        else
+            $DIALOG --multiple --separate-output --getopenfilename "$1" ""
+        fi
 
         if [ $? -eq 0 ]; then
             exit_success
@@ -240,13 +257,21 @@ open_multi_gnome()
         fi
 
         if [ x"$FILENAME" != x"" ]; then
-            LIST=`$DIALOG --multiple --file-selection "$FILENAME"`
+            if [ x"$TITLE" != x"" ]; then
+                LIST=`$DIALOG --title "$TITLE" --multiple --file-selection "$FILENAME"`
+            else
+                LIST=`$DIALOG --multiple --file-selection "$FILENAME"`
+            fi
         else
-            LIST=`$DIALOG --multiple --file-selection`
+            if [ x"$TITLE" != x"" ]; then
+                LIST=`$DIALOG --title "$TITLE" --multiple --file-selection`
+            else
+                LIST=`$DIALOG --multiple --file-selection`
+            fi
         fi
 
         if [ $? -eq 0 ]; then
-            echo "$LIST" | sed s#'|'#\\n#
+            echo "$LIST" | sed s#'|'#\\n#g
             exit_success
         else
             exit_failure_operation_failed
@@ -260,7 +285,11 @@ save_kde()
 {
     DIALOG=`which kdialog`
     if [ $? -eq 0 ]; then
-        $DIALOG --getsavefilename "$1" ""
+        if [ x"$TITLE" != x"" ]; then
+            $DIALOG --title "$TITLE" --getsavefilename "$1" ""
+        else
+            $DIALOG --getsavefilename "$1" ""
+        fi
 
         if [ $? -eq 0 ]; then
             exit_success
@@ -285,9 +314,17 @@ save_gnome()
         fi
 
         if [ x"$FILENAME" != x"" ]; then
-            $DIALOG --save --file-selection "$FILENAME"
+            if [ x"$TITLE" != x"" ]; then
+                $DIALOG --title "$TITLE" --save --file-selection "$FILENAME"
+            else
+                $DIALOG --save --file-selection "$FILENAME"
+            fi
         else
-            $DIALOG --save --file-selection
+            if [ x"$TITLE" != x"" ]; then
+                $DIALOG --title "$TITLE" --save --file-selection
+            else
+                $DIALOG --save --file-selection
+            fi
         fi
 
         if [ $? -eq 0 ]; then
@@ -304,7 +341,11 @@ directory_kde()
 {
     DIALOG=`which kdialog`
     if [ $? -eq 0 ]; then
-        $DIALOG --getexistingdirectory "$1" ""
+        if [ x"$TITLE" != x"" ]; then
+            $DIALOG --title "$TITLE" --getexistingdirectory "$1" ""
+        else
+            $DIALOG --getexistingdirectory "$1" ""
+        fi
 
         if [ $? -eq 0 ]; then
             exit_success
@@ -324,7 +365,11 @@ directory_gnome()
             cd "$1" 2>/dev/null
         fi
 
-        $DIALOG --directory --file-selection
+        if [ x"$TITLE" != x"" ]; then
+            $DIALOG --title "$TITLE" --directory --file-selection
+        else
+            $DIALOG --directory --file-selection
+        fi
 
         if [ $? -eq 0 ]; then
             exit_success
@@ -336,7 +381,31 @@ directory_gnome()
     fi
 }
 
+check_title()
+{
+    TITLE=
+    while [ x"$TITLE" = x"" -a $# -gt 0 ] ; do
+        parm=$1
+        shift
+
+        if [ x"$parm" = x"--title" ]; then
+            if [ x"$1" = x"" ]; then
+                exit_failure_arg_count
+            else
+                TITLE="$1"
+            fi
+        fi
+    done
+}
+
 [ x"$1" != x"" ] || exit_failure_arg_count
+
+# check if optional title is specified and remove it if it is the first command
+check_title "$@"
+if [ x"$TITLE" != x"" ]; then
+    shift
+    shift
+fi
 
 if [ x"$1" = x"--openfilename" ]; then
     shift

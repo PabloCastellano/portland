@@ -33,6 +33,7 @@
       <command>xdg-file-dialog</command>
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
+      <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
       <arg><option>--openfilename <replaceable>FILENAME</replaceable></option></arg>
       <arg><option>--openfilenamelist <replaceable>FILENAME</replaceable></option></arg>
       <arg><option>--savefilename <replaceable>FILENAME</replaceable></option></arg>
@@ -64,6 +65,15 @@
         <listitem>
           <simpara>
             Show the xdg-utils version information.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term> <option>--title</option> <replaceable>TITLE</replaceable></term>
+        <listitem>
+          <simpara>
+              Sets the dialog's title (caption) to the specified text.
           </simpara>
         </listitem>
       </varlistentry>
@@ -112,6 +122,12 @@
 xdg-file-dialog --savefilename /tmp/foobar.png
 </programlisting>
       Asks for a save file name starting in directory /tmp and suggesting foobar.png as the filename
+    </para>
+    <para>
+        <programlisting>
+            xdg-file-dialog --title "Select a target folder" --directory /tmp
+        </programlisting>
+        Asks for a directory name starting in directory /tmp using the text "Select a target folder" as the dialog's title/caption.
     </para>
   </refsect1>
 </refentry>

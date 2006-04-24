@@ -1,3 +1,8 @@
+2006-04-24 Kevin Krammer <kevin.krammer@gmx.at>
+    * Applied patch provided by Benedikt Meurer <benedikt.meurer@unix-ag.uni-siegen.de>
+      to improve the compatability of the Makefile
+    * Added --title option to xdg-file-dialog
+
 2006-04-14 Kevin Krammer <kevin.krammer@gmx.at>
     * Added documentation for --version to all xml files
     * Added script for file selection task, e.g. using the native file dialog

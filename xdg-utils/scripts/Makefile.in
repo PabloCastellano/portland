@@ -43,7 +43,7 @@ scripts-clean:
 README: $(SCRIPTS)
 	echo > $@
 	@for x in $(SCRIPTS) ; do \
-	    sh ./$$x | grep -B 100 Synopsis | head -n-1 >> $@ ; \
+	    sh ./$$x | grep -B 100 Synopsis | sed -e '$$d' >> $@ ; \
 	done
 
 install:
@@ -91,5 +91,5 @@ xdg-file-dialog: xdg-file-dialog.in xdg-utils-common.in
 	$(XMLTO) txt $<
 
 %.usage: %.txt
-	grep -B 100 Description $< | (read;read;read a;echo $$a;head -n-1) > $@
+	grep -B 100 Description $< | sed -e '1,2d' -e '$$d' > $@
 

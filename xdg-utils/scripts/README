@@ -14,6 +14,6 @@ xdg-open ? opens a file or URL in the user's preferred application
 
 xdg-copy ? command line tool for copying files between desktop URIs
 
-xdg-file-dialog ? command line tool for providing file and director selection
+xdg-file-dialog ? command line tool for providing file and directory selection
 dialogs
 

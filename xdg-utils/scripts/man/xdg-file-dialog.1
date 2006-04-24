@@ -19,12 +19,12 @@
 ..
 .TH "XDG-FILE-DIALOG" 1 "" "" "xdg-file-dialog Manual"
 .SH NAME
-xdg-file-dialog \- command line tool for providing file and director selection dialogs
+xdg-file-dialog \- command line tool for providing file and directory selection dialogs
 .SH "SYNOPSIS"
 .ad l
 .hy 0
 .HP 16
-\fBxdg\-file\-dialog\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\-\-openfilename\ \fIFILENAME\fR\fR] [\fB\-\-openfilenamelist\ \fIFILENAME\fR\fR] [\fB\-\-savefilename\ \fIFILENAME\fR\fR] [\fB\-\-directory\ \fIDIRNAME\fR\fR]
+\fBxdg\-file\-dialog\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\-\-title\ \fITITLE\fR\fR] [\fB\-\-openfilename\ \fIFILENAME\fR\fR] [\fB\-\-openfilenamelist\ \fIFILENAME\fR\fR] [\fB\-\-savefilename\ \fIFILENAME\fR\fR] [\fB\-\-directory\ \fIDIRNAME\fR\fR]
 .ad
 .hy
 
@@ -42,6 +42,10 @@ Show this help\&.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
+
+.TP
+\fB\-\-title\fR \fITITLE\fR
+Sets the dialog's title (caption) to the specified text\&.
 
 .TP
 \fB\-\-openfilename\fR \fIFILENAME\fR
@@ -70,6 +74,16 @@ xdg\-file\-dialog \-\-savefilename /tmp/foobar\&.png
 
 .fi
  Asks for a save file name starting in directory /tmp and suggesting foobar\&.png as the filename
+
+.PP
+ 
+
+.nf
+
+            xdg\-file\-dialog \-\-title "Select a target folder" \-\-directory /tmp
+        
+.fi
+ Asks for a directory name starting in directory /tmp using the text "Select a target folder" as the dialog's title/caption\&.
 
 .SH AUTHOR
 Kevin Krammer.
