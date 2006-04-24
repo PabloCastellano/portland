@@ -2,6 +2,8 @@
     * Applied patch provided by Benedikt Meurer <benedikt.meurer@unix-ag.uni-siegen.de>
       to improve the compatability of the Makefile
     * Added --title option to xdg-file-dialog
+    * Applied another path by Benedikt to let xdg-file-dialog use
+      zenity on GNOME and XFCE
 
 2006-04-14 Kevin Krammer <kevin.krammer@gmx.at>
     * Added documentation for --version to all xml files

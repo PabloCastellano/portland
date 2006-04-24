@@ -187,7 +187,7 @@ open_kde()
     fi
 }
 
-open_gnome()
+open_zenity()
 {
     DIALOG=`which zenity`
     if [ $? -eq 0 ]; then
@@ -244,7 +244,7 @@ open_multi_kde()
     fi
 }
 
-open_multi_gnome()
+open_multi_zenity()
 {
     DIALOG=`which zenity`
     if [ $? -eq 0 ]; then
@@ -301,7 +301,7 @@ save_kde()
     fi
 }
 
-save_gnome()
+save_zenity()
 {
     DIALOG=`which zenity`
     if [ $? -eq 0 ]; then
@@ -357,7 +357,7 @@ directory_kde()
     fi
 }
 
-directory_gnome()
+directory_zenity()
 {
     DIALOG=`which zenity`
     if [ $? -eq 0 ]; then
@@ -419,8 +419,8 @@ if [ x"$1" = x"--openfilename" ]; then
         open_kde "$1"
         ;;
 
-        gnome)
-        open_gnome "$1"
+        gnome|xfce)
+        open_zenity "$1"
         ;;
 
         *)
@@ -439,8 +439,8 @@ elif [ x"$1" = x"--openfilenamelist" ]; then
         open_multi_kde "$1"
         ;;
 
-        gnome)
-        open_multi_gnome "$1"
+        gnome|xfce)
+        open_multi_zenity "$1"
         ;;
 
         *)
@@ -459,8 +459,8 @@ elif [ x"$1" = x"--savefilename" ]; then
         save_kde "$1"
         ;;
 
-        gnome)
-        save_gnome "$1"
+        gnome|xfce)
+        save_zenity "$1"
         ;;
 
         *)
@@ -479,8 +479,8 @@ elif [ x"$1" = x"--directory" ]; then
         directory_kde "$1"
         ;;
 
-        gnome)
-        directory_gnome "$1"
+        gnome|xfce)
+        directory_zenity "$1"
         ;;
 
         *)
