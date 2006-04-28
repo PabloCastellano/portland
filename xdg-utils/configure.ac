@@ -8,5 +8,6 @@ AC_PATH_PROG(XMLTO, xmlto, /usr/bin/xmlto)
 AC_CONFIG_FILES([
     Makefile
     scripts/Makefile
+    tests/Makefile
 ])
 AC_OUTPUT

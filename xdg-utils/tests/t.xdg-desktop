@@ -1,0 +1,28 @@
+#!/bin/sh
+
+file="/tmp/Test_File.txt"
+vendor_id="Portland Project"
+
+echo $vendor_id > $file
+
+PATH="$PATH:../scripts"
+
+xdg-desktop --install $file
+err=$?
+if [ $err != 0 ]; then
+    echo "FAIL  xdg-desktop install    # Gave exit code $err; expected 0"
+else
+    echo "PASS  xdg-desktop install"
+fi
+
+xdg-desktop --uninstall $file
+err=$?
+if [ $err != 0 ]; then
+    echo "FAIL  xdg-desktop uninstall  # Gave exit code $err; expected 0"
+else
+    echo "PASS  xdg-desktop uninstall"
+fi
+
+exit 0
+
+

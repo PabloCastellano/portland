@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# Test that running with no args returns usage
+# Test that running with 1 arg returns usage
+# Test that running with "--help" returns usage
+
+source="/tmp/xdg-copy.test"
+dest="$source-dest"
+
+echo "TESTING 123" > $source
+
+PATH="../scripts:$PATH"
+
+if [ -e $dest ]; then
+    rm $dest || ( echo "Existing file $dest could not be removed" && exit 1 )
+fi
+
+### COPY existing file properly ###
+xdg-copy "$source" "$dest"
+err=$?
+if [ $err != 0 ]; then
+    echo "FAIL  xdg-copy     # xdg-copy returned $err instead of 0 expected"
+elif [ ! -e "$dest" ]; then
+    echo "FAIL  xdg-copy     # xdg-copy failed to create dest file $dest"
+else
+    echo "PASS  xdg-copy"
+    rm "$dest"
+fi
+

@@ -1,8 +1,10 @@
-SUBDIRS = scripts
+SUBDIRS = scripts tests
 
 all:		$(SUBDIRS)
 install:	$(SUBDIRS:%=%/__install__)
 uninstall:	$(SUBDIRS:%=%/__uninstall__)
+test:		dummy
+	cd tests && $(MAKE) test
 clean:		$(SUBDIRS:%=%/__clean__)
 distclean:	clean $(SUBDIRS:%=%/__distclean__)
 	rm -f config.* Makefile
