@@ -22,7 +22,12 @@ SCRIPTS		= \
     xdg-copy \
     xdg-file-dialog
 
-all:
+MANPAGES=	$(SCRIPTS:%=man/%.1)
+WEBPAGES=	$(SCRIPTS:%=%.html)
+
+all:		
+
+html:		$(WEBPAGES)
 
 scripts:	README $(SCRIPTS)
 
@@ -44,20 +49,20 @@ README: $(SCRIPTS)
 	    sh ./$$x | grep -B 100 Synopsis | sed -e '$$d' >> $@ ; \
 	done
 
-install:
+install: $(SCRIPTS) $(MANPAGES)
 	$(MKDIR) $(bindir)
 	for x in $(SCRIPTS) ; do \
 	    $(INSTALL_SCRIPT) $$x $(bindir) ; \
 	done
 	$(MKDIR) $(mandir)
 	$(MKDIR) $(mandir)/man1
-	for x in $(SCRIPTS) ; do \
-	    $(INSTALL_DATA) man/$$x.1 $(mandir)/man1 ; \
+	for x in $(MANPAGES) ; do \
+	    $(INSTALL_DATA) $$x $(mandir)/man1 ; \
 	done
 
 uninstall:
-	for x in $(SCRIPTS) ; do \
-	    rm -f $(mandir)/man1/$$x.1 ; \
+	for x in $(MANPAGES) ; do \
+	    rm -f $(mandir)/man1/`basename $$x` ; \
 	done
 	-$(RMDIR) $(mandir)/man1
 	-$(RMDIR) $(mandir)
@@ -66,7 +71,7 @@ uninstall:
 	done
 	-$(RMDIR) $(bindir)
 
-%: %.in %.txt %.1 %.html
+%: %.in %.txt
 	awk -f generate-help-script.awk $@.in > $@
 	chmod a+x $@
 
@@ -79,7 +84,7 @@ xdg-open: xdg-open.in xdg-utils-common.in
 xdg-copy: xdg-copy.in xdg-utils-common.in
 xdg-file-dialog: xdg-file-dialog.in xdg-utils-common.in
 
-%.1: desc/%.xml
+man/%.1: desc/%.xml
 	(cd man;$(XMLTO) man ../$<)
 
 %.html: desc/%.xml
