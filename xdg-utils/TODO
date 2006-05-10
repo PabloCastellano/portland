@@ -2,6 +2,6 @@
     Currently, a make README in scripts will
     spit all the usage statements into a README,
     so improving usage() is a Good Thing (TM)
-2.  xdg-screensaver
+2.  xdg-screensaver (done)
 3.  xdg-desktop
 4.  flesh out xdg-mime

@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry id="xdg-screensaver">
+  <refentryinfo>
+    <title>xdg-screensaver Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Bryce</firstname>
+      <surname>Harrington</surname>
+    </author>
+    <address><email>bryce@osdl.org</email></address>
+    <releaseinfo>This is release 0.1 of the xdg-screensaver Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-screensaver</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-screensaver</refname>
+    <refpurpose>Enable, disable, and suspend the screensaver</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-screensaver</command>
+      <arg><option>suspend <replaceable>delay</replaceable></option></arg>
+      <arg><option>restore</option></arg>
+      <arg><option>enable<replaceable>user</replaceable></option></arg>
+      <arg><option>disable<replaceable>command</replaceable></option></arg>
+      <arg><option>activate<replaceable>command</replaceable></option></arg>
+      <arg><option>reset<replaceable>command</replaceable></option></arg>
+      <arg><option>status<replaceable>command</replaceable></option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id="description">
+    <title>Description</title>
+    <para>
+      xdg-screensaver provides commands
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+        <term><option>suspend <replaceable>delay</replaceable></option></term>
+        <listitem>
+          <simpara>
+            Suspends the screensaver and monitor power management for
+            the amount of time given by
+            <replaceable>delay</replaceable>, or 60 minutes if
+            unspecified.  This is of the form NUMBERSUFFIX, such as
+            45m, 4h, or 30s.  SUFFIX may be `s' for seconds (the
+            default), `m' for minutes, `h' for hours or `d' for days
+            This is intended to allow preventing the screensaver coming
+            on during a presentation, and return it to normal behavior
+            after the specified delay.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>restore</option></term>
+        <listitem>
+          <simpara>
+            Restores the screensaver state, timeout, etc. to the 
+            user's standard settings.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>enable<replaceable>user</replaceable></option></term>
+        <listitem>
+          <simpara>
+            This enables the screensaver to turn on after a certain
+            amount of inactivity.  Generally, applications will want to
+            use <replaceable>restore</replaceable> rather than <replaceable>enable</replaceable>.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>disable<replaceable>command</replaceable></option></term>
+        <listitem>
+          <simpara>
+            Disables the screensaver and power management from turning
+            on due to inactivity.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>activate<replaceable>command</replaceable></option></term>
+        <listitem>
+          <simpara>
+            Turns the screensaver on immediately.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>reset<replaceable>command</replaceable></option></term>
+        <listitem>
+          <simpara>
+            Turns the screensaver off immediately.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>status<replaceable>command</replaceable></option></term>
+        <listitem>
+          <simpara>
+            Returns true if the screensaver is enabled to turn on after
+            a period of inactivty, or false otherwise.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+<programlisting>
+xdg-screensaver suspend 3h
+</programlisting>
+        Causes the screensaver to not turn on due to inactivity, for 3
+        hours, after which time it will return to automatic activation.
+    </para>
+  </refsect1>
+  <refsect1 id="bugs">
+    <title>Bugss</title>
+    <para>
+        There is no provision for cancelling a suspend operation.  If a 
+        second suspend is started before the first one is completed,
+	then the screensaver will be restored to its original state
+	before the second suspend is able to complete.
+    </para>
+    <para>
+        For example, if a presenter completes her presentation, and a
+	second presenter starts before the delay is over, then the
+        screensaver could come on during the second presentation.
+    </para>
+    <para>
+        True suspend functionality will require cooperation from the X
+	server.  The Xorg group has implemented an extension that allows
+	an application to disable the screensaver while it is connected,
+        which will re-enable the screensaver.  xdg-screensaver should be
+	updated to take advantage of this functionality when it is
+	available.
+    </para>
+  </refsect1>
+</refentry>

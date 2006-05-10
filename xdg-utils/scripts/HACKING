@@ -1,7 +1,8 @@
 Note that the actual scripts are generated from xdg-*.in,
 xdg-utils-common.in and desc/xdg-*.xml which contains the
 command line descriptions. These are the files that you
-want to edit.
+want to edit.  To add a new script, you must also provide 
+a desc/xdg-*.xml file.
 
 DO NOT MAKE CHANGES TO THE GENERATED SCRIPTS THEMSELVES!
 

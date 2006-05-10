@@ -1,3 +1,6 @@
+2006-05-10 Bryce Harrington <bryce@osdl.org>
+	* Created xdg-screensaver
+
 2006-04-24 Kevin Krammer <kevin.krammer@gmx.at>
     * Applied patch provided by Benedikt Meurer <benedikt.meurer@unix-ag.uni-siegen.de>
       to improve the compatability of the Makefile

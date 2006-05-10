@@ -1,0 +1,174 @@
+#!/bin/sh
+#---------------------------------------------
+#   xdg-screensaver
+#
+#   Utility script to enable/disable screensaver.
+#
+#   Refer to the usage() function below for usage.
+#
+#   Copyright 2006, Bryce Harrington <bryce@osdl.org>
+#
+#   LICENSE:
+#
+#---------------------------------------------
+
+# Default value for delay when suspending screensaver
+DELAY=60m
+
+examples()
+{
+cat << _EXAMPLES
+_EXAMPLES
+}
+
+usage()
+{
+cat << _USAGE
+_USAGE
+}
+
+#@xdg-utils-common@
+
+screensaver_xset()
+{
+    TIMEOUT=`xset q | /bin/grep -A 2 ^Screen | /bin/grep timeout | awk '{print $2}'` 
+    DPMS=`xset q | /bin/grep 'DPMS is' | awk '{print $3}'` 
+
+    if [ "$DPMS" = "Enabled" ]; then
+        DPMS="+dpms"
+    else
+        DPMS="-dpms"
+    fi
+
+    case "$1" in
+        suspend)
+        delay=${2:-$DELAY}
+        xset s off -dpms && sleep $delay && xset s default &
+        ;;
+
+        restore)
+        # Restores screensaver to its default settings
+        xset s default "$DPMS"
+        ;;
+
+        enable)
+        # Allows the screensaver to start automatically
+        xset s on "$DPMS"
+        ;;
+
+        disable)
+        # Prevents screensaver from starting automatically
+        xset s off -dpms
+        ;;
+
+        activate)
+        # Turns the screensaver on right now
+        xset s activate
+        ;;
+
+        reset)
+        # Turns the screensaver off right now
+        xset s reset
+        ;;
+
+        status)
+        if [ $timeout -eq 0 ]; then
+            echo "Enabled:  false"
+        else
+            echo "Enabled:  true"
+        fi
+        ;;
+    esac
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+}
+
+screensaver_kde()
+{
+    case "$1" in
+        suspend) 
+        delay=${2:-$DELAY}
+        dcop kdesktop KScreensaverIface enable false > /dev/null && \
+            sleep $delay && \
+            dcop kdesktop KScreensaverIface configure > /dev/null &
+        ;;
+
+        restore)
+        dcop kdesktop KScreensaverIface configure
+        ;;
+        
+        enable)
+        dcop kdesktop KScreensaverIface enable false > /dev/null
+        ;;
+        
+        disable)
+        dcop kdesktop KScreensaverIface enable true > /dev/null
+        ;;
+
+        activate)
+        # Turns the screensaver on right now
+        dcop kdesktop KScreensaverIface save
+        ;;
+
+        reset)
+        # Turns the screensaver off right now
+        dcop kdesktop KScreensaverIface quit
+        ;;
+
+        status)
+        status=`dcop kdesktop KScreensaverIface isEnabled`
+        if [ status = 'true' ]; then
+            echo "enabled"
+        elif [ status = 'false' ]; then
+            echo "disabled"
+        else
+            echo "ERROR:  kdesktop KScreensaverIface isEnabled returned '$status'"
+            exit_failure_operation_failed
+        fi
+        ;;
+
+        *)
+        echo "ERROR:  Unknown command '$1"
+        exit_failure_operation_failed
+        ;;
+    esac
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+}
+
+screensaver_gnome()
+{
+# TODO
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+}
+
+[ x"$1" != x"" ] || exit_failure_arg_count
+
+
+# Always set the Xorg screensaver first
+screensaver_xset "$1" "$2"
+
+# Just in case, also do the desktop environment's screensaver
+case "$DE" in
+    kde)
+    screensaver_kde  "$1" "$2"
+    ;;
+
+    gnome)
+    screensaver_gnome "$1" "$2"
+    ;;
+
+esac

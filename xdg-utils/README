@@ -42,7 +42,7 @@ add more utilities.
                     potentially with subject and other info filled in
     xdg-copy        Copy one URI to another
     xdg-su          Run a command as a different (usually root) user
-
+    xdg-screensaver Enable, disable, or suspend the screensaver
 
 
 BUILD:

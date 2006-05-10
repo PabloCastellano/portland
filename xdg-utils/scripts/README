@@ -17,3 +17,6 @@ xdg-copy ? command line tool for copying files between desktop URIs
 xdg-file-dialog ? command line tool for providing file and directory selection
 dialogs
 
+   xdg-screensaver -- Enable, disable, and suspend the
+   screensaver
+

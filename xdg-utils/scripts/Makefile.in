@@ -20,7 +20,8 @@ SCRIPTS		= \
     xdg-su \
     xdg-open \
     xdg-copy \
-    xdg-file-dialog
+    xdg-file-dialog \
+    xdg-screensaver
 
 MANPAGES=	$(SCRIPTS:%=man/%.1)
 WEBPAGES=	$(SCRIPTS:%=%.html)
@@ -83,6 +84,7 @@ xdg-su: xdg-su.in xdg-utils-common.in
 xdg-open: xdg-open.in xdg-utils-common.in
 xdg-copy: xdg-copy.in xdg-utils-common.in
 xdg-file-dialog: xdg-file-dialog.in xdg-utils-common.in
+xdg-screensaver: xdg-screensaver.in xdg-utils-common.in
 
 man/%.1: desc/%.xml
 	(cd man;$(XMLTO) man ../$<)
