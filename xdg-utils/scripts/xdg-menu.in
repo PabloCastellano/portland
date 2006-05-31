@@ -37,6 +37,7 @@ update_desktop_database()
            if [ -x $x/update-desktop-database ] ; then
               echo Running $x/update-desktop-database
               $x/update-desktop-database
+              return
            fi
         done
     fi
