@@ -72,7 +72,7 @@ screensaver_xset()
         ;;
 
         status)
-        if [ $timeout -eq 0 ]; then
+        if [ ${TIMEOUT:0} -eq 0 ]; then
             echo "Enabled:  false"
         else
             echo "Enabled:  true"
