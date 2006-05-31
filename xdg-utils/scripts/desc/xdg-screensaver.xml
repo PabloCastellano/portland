@@ -31,13 +31,15 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-screensaver</command>
-      <arg><option>suspend <replaceable>delay</replaceable></option></arg>
-      <arg><option>restore</option></arg>
-      <arg><option>enable<replaceable>user</replaceable></option></arg>
-      <arg><option>disable<replaceable>command</replaceable></option></arg>
-      <arg><option>activate<replaceable>command</replaceable></option></arg>
-      <arg><option>reset<replaceable>command</replaceable></option></arg>
-      <arg><option>status<replaceable>command</replaceable></option></arg>
+      <group choice="req">
+        <arg choice="plain"><option>suspend <replaceable>delay</replaceable></option></arg>
+        <arg choice="plain"><option>restore</option></arg>
+        <arg choice="plain"><option>enable</option></arg>
+        <arg choice="plain"><option>disable</option></arg>
+        <arg choice="plain"><option>activate</option></arg>
+        <arg choice="plain"><option>reset</option></arg>
+        <arg choice="plain"><option>status</option></arg>
+      </group>
     </cmdsynopsis>
   </refsynopsisdiv>
 
@@ -78,18 +80,18 @@
       </varlistentry>
 
       <varlistentry>
-        <term><option>enable<replaceable>user</replaceable></option></term>
+        <term><option>enable</option></term>
         <listitem>
           <simpara>
             This enables the screensaver to turn on after a certain
             amount of inactivity.  Generally, applications will want to
-            use <replaceable>restore</replaceable> rather than <replaceable>enable</replaceable>.
+            use <option>restore</option> rather than <option>enable</option>.
           </simpara>
         </listitem>
       </varlistentry>
 
       <varlistentry>
-        <term><option>disable<replaceable>command</replaceable></option></term>
+        <term><option>disable</option></term>
         <listitem>
           <simpara>
             Disables the screensaver and power management from turning
@@ -99,7 +101,7 @@
       </varlistentry>
 
       <varlistentry>
-        <term><option>activate<replaceable>command</replaceable></option></term>
+        <term><option>activate</option></term>
         <listitem>
           <simpara>
             Turns the screensaver on immediately.
@@ -108,7 +110,7 @@
       </varlistentry>
 
       <varlistentry>
-        <term><option>reset<replaceable>command</replaceable></option></term>
+        <term><option>reset</option></term>
         <listitem>
           <simpara>
             Turns the screensaver off immediately.
@@ -117,7 +119,7 @@
       </varlistentry>
 
       <varlistentry>
-        <term><option>status<replaceable>command</replaceable></option></term>
+        <term><option>status</option></term>
         <listitem>
           <simpara>
             Returns true if the screensaver is enabled to turn on after

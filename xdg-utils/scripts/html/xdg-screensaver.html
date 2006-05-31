@@ -1,0 +1,52 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-screensaver</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-screensaver"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-screensaver &#8212; Enable, disable, and suspend the screensaver</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>  { <code class="option">suspend <em class="replaceable"><code>delay</code></em></code>  |   <code class="option">restore</code>  |   <code class="option">enable</code>  |   <code class="option">disable</code>  |   <code class="option">activate</code>  |   <code class="option">reset</code>  |   <code class="option">status</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+      xdg-screensaver provides commands
+    </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">suspend <em class="replaceable"><code>delay</code></em></code></span></dt><dd>
+            Suspends the screensaver and monitor power management for
+            the amount of time given by
+            <em class="replaceable"><code>delay</code></em>, or 60 minutes if
+            unspecified.  This is of the form NUMBERSUFFIX, such as
+            45m, 4h, or 30s.  SUFFIX may be `s' for seconds (the
+            default), `m' for minutes, `h' for hours or `d' for days
+            This is intended to allow preventing the screensaver coming
+            on during a presentation, and return it to normal behavior
+            after the specified delay.
+          </dd><dt><span class="term"><code class="option">restore</code></span></dt><dd>
+            Restores the screensaver state, timeout, etc. to the 
+            user's standard settings.
+          </dd><dt><span class="term"><code class="option">enable</code></span></dt><dd>
+            This enables the screensaver to turn on after a certain
+            amount of inactivity.  Generally, applications will want to
+            use <code class="option">restore</code> rather than <code class="option">enable</code>.
+          </dd><dt><span class="term"><code class="option">disable</code></span></dt><dd>
+            Disables the screensaver and power management from turning
+            on due to inactivity.
+          </dd><dt><span class="term"><code class="option">activate</code></span></dt><dd>
+            Turns the screensaver on immediately.
+          </dd><dt><span class="term"><code class="option">reset</code></span></dt><dd>
+            Turns the screensaver off immediately.
+          </dd><dt><span class="term"><code class="option">status</code></span></dt><dd>
+            Returns true if the screensaver is enabled to turn on after
+            a period of inactivty, or false otherwise.
+          </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
+</p><pre class="programlisting">
+xdg-screensaver suspend 3h
+</pre><p>
+        Causes the screensaver to not turn on due to inactivity, for 3
+        hours, after which time it will return to automatic activation.
+    </p></div><div class="refsect1" lang="en"><a name="bugs"></a><h2>Bugss</h2><p>
+        There is no provision for cancelling a suspend operation.  If a 
+        second suspend is started before the first one is completed,
+	then the screensaver will be restored to its original state
+	before the second suspend is able to complete.
+    </p><p>
+        For example, if a presenter completes her presentation, and a
+	second presenter starts before the delay is over, then the
+        screensaver could come on during the second presentation.
+    </p><p>
+        True suspend functionality will require cooperation from the X
+	server.  The Xorg group has implemented an extension that allows
+	an application to disable the screensaver while it is connected,
+        which will re-enable the screensaver.  xdg-screensaver should be
+	updated to take advantage of this functionality when it is
+	available.
+    </p></div></div></body></html>
