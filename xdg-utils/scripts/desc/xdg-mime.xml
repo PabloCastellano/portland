@@ -30,7 +30,8 @@
 
   <refnamediv>
     <refname>xdg-mime</refname>
-    <refpurpose>command line tool for providing information about file type handling</refpurpose>
+    <refpurpose>command line tool for querying information about file type handling
+and adding descriptions for new file types</refpurpose>
   </refnamediv>
 
   <refsynopsisdiv>
@@ -38,9 +39,17 @@
       <command>xdg-mime</command>
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
-      <group choice="req">
+      <group>
         <arg choice="plain"><option>--info <replaceable>FILE</replaceable></option></arg>
         <arg choice="plain"><option>--defapp <replaceable>FILE</replaceable></option></arg>
+      </group>
+      <group choice="req">
+	<arg choice="plain">--user</arg>
+	<arg choice="plain">--system</arg>
+      </group>
+      <group choice="req">
+	<arg choice="plain">--install <replaceable>mimetypes-file</replaceable></arg>
+	<arg choice="plain">--uninstall <replaceable>mimeypes-file</replaceable></arg>
       </group>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -49,6 +58,7 @@
     <title>Description</title>
     <para>
       The xdg-mime program can be used to query information about file types
+      and to add descriptions for new file types.
     </para>
   </refsect1>
   <refsect1 id="options">
@@ -92,6 +102,52 @@
 	</listitem>
       </varlistentry>
 
+      <varlistentry>
+	<term><option>--user</option></term>
+	<listitem>
+	  <simpara>
+	    Adds or removes file type descriptions for the current user only.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--system</option></term>
+	<listitem>
+	  <simpara>
+	    Adds or removes file type descriptions for all users on the system.
+            Usually only root is allowed to do this.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--install</option> <replaceable>mimetypes-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Adds the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
+            to the desktop environment. <replaceable>mimetypes-file</replaceable>
+            must be a XML file that follows the freedesktop.org 
+            Shared MIME-info Database specification
+            and that has a mime-info element as its document root.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--uninstall</option> <replaceable>mimetypes-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Removes the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
+            and previously added with <command>xdg-mime --install</command> from the
+            desktop environment. <replaceable>mimetypes-file</replaceable>
+            must be a XML file that follows the freedesktop.org
+            Shared MIME-info Database specification
+            and that has a mime-info element as its document root.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
     </variablelist>
   </refsect1>
   <refsect1 id="examples">
@@ -108,6 +164,25 @@ xdg-mime --defapp /tmp/foobar.png
 </programlisting>
       Prints the name of the .desktop file of the application which is
       registered to open files of the MIME type the file /tmp/foobar.png has
+    </para>
+    <para>
+<programlisting>
+xdg-mime --system --install diff.xml
+</programlisting>
+      Adds a file type description for "diff"-files for all users on the
+      system. The file type description could look as folows.  
+<programlisting>
+diff.xml:
+
+&lt;?xml version="1.0"?&gt;
+&lt;mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'&gt;
+  &lt;mime-type type="text/x-diff"&gt;
+    &lt;comment&gt;Differences between files&lt;/comment&gt;
+    &lt;glob pattern="*.diff"/&gt;
+    &lt;glob pattern="*.patch"/&gt;
+  &lt;/mime-type&gt;
+&lt;/mime-info&gt;
+</programlisting>
     </para>
   </refsect1>
 </refentry>

@@ -19,19 +19,19 @@
 ..
 .TH "XDG-MIME" 1 "" "" "xdg-mime Manual"
 .SH NAME
-xdg-mime \- command line tool for providing information about file type handling
+xdg-mime \- command line tool for querying information about file type handling and adding descriptions for new file types
 .SH "SYNOPSIS"
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-mime\fR [\fB\-\-help\fR] [\fB\-\-version\fR] {\fB\fB\-\-info\ \fIFILE\fR\fR\fR | \fB\fB\-\-defapp\ \fIFILE\fR\fR\fR}
+\fBxdg\-mime\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\fB\-\-info\ \fIFILE\fR\fR\fR | \fB\fB\-\-defapp\ \fIFILE\fR\fR\fR] {\fB\-\-user\fR | \fB\-\-system\fR} {\fB\-\-install\ \fImimetypes\-file\fR\fR | \fB\-\-uninstall\ \fImimeypes\-file\fR\fR}
 .ad
 .hy
 
 .SH "DESCRIPTION"
 
 .PP
-The xdg\-mime program can be used to query information about file types
+The xdg\-mime program can be used to query information about file types and to add descriptions for new file types\&.
 
 .SH "OPTIONS"
 
@@ -50,6 +50,22 @@ Returns the file type of \fIFILE\fR in the form of a MIME type\&.
 .TP
 \fB\-\-defapp\fR \fIFILE\fR
 Returns the default application that the desktop environment uses for opening \fIFILE\fR\&. The default applications is identified by its *\&.desktop file\&.
+
+.TP
+\fB\-\-user\fR
+Adds or removes file type descriptions for the current user only\&.
+
+.TP
+\fB\-\-system\fR
+Adds or removes file type descriptions for all users on the system\&. Usually only root is allowed to do this\&.
+
+.TP
+\fB\-\-install\fR \fImimetypes\-file\fR
+Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
+
+.TP
+\fB\-\-uninstall\fR \fImimetypes\-file\fR
+Removes the file type descriptions provided in \fImimetypes\-file\fR and previously added with \fBxdg\-mime \-\-install\fR from the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
 
 .SH "EXAMPLES"
 
@@ -72,6 +88,32 @@ xdg\-mime \-\-defapp /tmp/foobar\&.png
 
 .fi
  Prints the name of the \&.desktop file of the application which is registered to open files of the MIME type the file /tmp/foobar\&.png has
+
+.PP
+ 
+
+.nf
+
+xdg\-mime \-\-system \-\-install diff\&.xml
+
+.fi
+ Adds a file type description for "diff"\-files for all users on the system\&. The file type description could look as folows\&. 
+
+.nf
+
+diff\&.xml:
+
+<?xml version="1\&.0"?>
+<mime\-info xmlns='http://www\&.freedesktop\&.org/standards/shared\-mime\-info'>
+  <mime\-type type="text/x\-diff">
+    <comment>Differences between files</comment>
+    <glob pattern="*\&.diff"/>
+    <glob pattern="*\&.patch"/>
+  </mime\-type>
+</mime\-info>
+
+.fi
+ 
 
 .SH AUTHORS
 Kevin Krammer, Jeremy White.
