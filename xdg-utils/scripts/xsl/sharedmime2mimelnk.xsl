@@ -10,6 +10,7 @@ xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
         <xsl:text>[Desktop Entry]&#10;</xsl:text>
         <xsl:text>Type=MimeType&#10;</xsl:text>
         <xsl:text>MimeType=</xsl:text><xsl:value-of select="@type"/><xsl:text>&#10;</xsl:text>
+        <xsl:text>Icon=</xsl:text><xsl:value-of select="translate(@type,'/','-')"/><xsl:text>&#10;</xsl:text>
         <xsl:if test="mime:sub-class-of">
            <xsl:text>X-KDE-IsAlso=</xsl:text><xsl:value-of select="mime:sub-class-of/@type"/><xsl:text>&#10;</xsl:text>
         </xsl:if>
