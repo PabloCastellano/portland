@@ -37,22 +37,21 @@ examples()
 cat << _EXAMPLES
 Examples
 
-xdg-email 'mailto:jwhite@codeweavers.com?subject=Logo contest&' \
-          'body=Attached you find the logo for the contest.&' \
-          'attachment=/tmp/logo.png'
-
+ xdg-email 'mailto:jwhite@codeweavers.com?subject=Logo contest&' \
+           'body=Attached you find the logo for the contest.&' \
+           'attachment=/tmp/logo.png'
 _EXAMPLES
 }
 
 usage()
 {
 cat << _USAGE
-xdg-email ? command line tool for sending mail using the user's preferred
-e-mail composer
+   xdg-email -- command line tool for sending mail using the user's preferred
+   e-mail composer
 
 Synopsis
 
-xdg-email [--help] [--version] [mailto-uri]
+   xdg-email [--help] [--version] mailto-uri
 
 _USAGE
 }

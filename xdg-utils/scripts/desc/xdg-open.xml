@@ -38,9 +38,9 @@
       <command>xdg-open</command>
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
-      <group>
-      <arg><option><replaceable>file</replaceable></option></arg>
-      <arg><option><replaceable>URL</replaceable></option></arg>
+      <group choice="req">
+        <arg choice="plain"><option><replaceable>file</replaceable></option></arg>
+        <arg choice="plain"><option><replaceable>URL</replaceable></option></arg>
       </group>
     </cmdsynopsis>
   </refsynopsisdiv>

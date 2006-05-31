@@ -40,18 +40,18 @@
       <arg><option>--version</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <arg><option>--noupdate</option></arg>
-      <group>
-	<arg>--user</arg>
-	<arg>--system</arg>
+      <group choice="req">
+	<arg choice="plain">--user</arg>
+	<arg choice="plain">--system</arg>
       </group>
-      <group>
-	<arg>--install <replaceable>desktop-file</replaceable></arg>
-	<arg>--install <replaceable>directory-file</replaceable></arg>
-	<arg>--install <replaceable>menu-file</replaceable></arg>
-	<arg>--uninstall <replaceable>desktop-file</replaceable></arg>
-	<arg>--uninstall <replaceable>directory-file</replaceable></arg>
-	<arg>--uninstall <replaceable>menu-file</replaceable></arg>
-	<arg>--forceupdate</arg>
+      <group choice="req">
+	<arg choice="plain">--install <replaceable>desktop-file</replaceable></arg>
+	<arg choice="plain">--install <replaceable>directory-file</replaceable></arg>
+	<arg choice="plain">--install <replaceable>menu-file</replaceable></arg>
+	<arg choice="plain">--uninstall <replaceable>desktop-file</replaceable></arg>
+	<arg choice="plain">--uninstall <replaceable>directory-file</replaceable></arg>
+	<arg choice="plain">--uninstall <replaceable>menu-file</replaceable></arg>
+	<arg choice="plain">--forceupdate</arg>
       </group>
   </cmdsynopsis>
   </refsynopsisdiv>

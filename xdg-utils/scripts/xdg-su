@@ -38,21 +38,20 @@ examples()
 cat << _EXAMPLES
 Examples
 
-xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
+ xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
 
-Runs the /opt/shinythings/bin/install-GUI command with root permissions.
-
+   Runs the /opt/shinythings/bin/install-GUI command with root permissions.
 _EXAMPLES
 }
 
 usage()
 {
 cat << _USAGE
-xdg-su ? run a program as root after prompting for the root password
+   xdg-su -- run a program as root after prompting for the root password
 
 Synopsis
 
-xdg-su [--help] [--version] [-u user] [-c command]
+   xdg-su [--help] [--version] [-u user] -c command
 
 _USAGE
 }

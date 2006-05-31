@@ -37,26 +37,26 @@ examples()
 cat << _EXAMPLES
 Examples
 
-xdg-mime --info /tmp/foobar.png
+ xdg-mime --info /tmp/foobar.png
 
-Prints the MIME type of the file /tmp/foobar.png
+   Prints the MIME type of the file /tmp/foobar.png
 
-xdg-mime --defapp /tmp/foobar.png
+ xdg-mime --defapp /tmp/foobar.png
 
-Prints the name of the .desktop file of the application which is registered to
-open files of the MIME type the file /tmp/foobar.png has
-
+   Prints the name of the .desktop file of the application which is
+   registered to open files of the MIME type the file /tmp/foobar.png has
 _EXAMPLES
 }
 
 usage()
 {
 cat << _USAGE
-xdg-mime ? command line tool for providing information about file type handling
+   xdg-mime -- command line tool for providing information about file type
+   handling
 
 Synopsis
 
-xdg-mime [--help] [--version] [--info FILE] [--defapp FILE]
+   xdg-mime [--help] [--version] { --info FILE | --defapp FILE }
 
 _USAGE
 }

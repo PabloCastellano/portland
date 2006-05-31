@@ -34,10 +34,12 @@
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
       <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
-      <arg><option>--openfilename <replaceable>FILENAME</replaceable></option></arg>
-      <arg><option>--openfilenamelist <replaceable>FILENAME</replaceable></option></arg>
-      <arg><option>--savefilename <replaceable>FILENAME</replaceable></option></arg>
-      <arg><option>--directory <replaceable>DIRNAME</replaceable></option></arg>
+      <group choice="req">
+        <arg choice="plain"><option>--openfilename <replaceable>FILENAME</replaceable></option></arg>
+        <arg choice="plain"><option>--openfilenamelist <replaceable>FILENAME</replaceable></option></arg>
+        <arg choice="plain"><option>--savefilename <replaceable>FILENAME</replaceable></option></arg>
+        <arg choice="plain"><option>--directory <replaceable>DIRNAME</replaceable></option></arg>
+      </group>
     </cmdsynopsis>
   </refsynopsisdiv>
 

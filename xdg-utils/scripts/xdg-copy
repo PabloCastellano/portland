@@ -37,21 +37,20 @@ examples()
 cat << _EXAMPLES
 Examples
 
-xdg-copy "http://portland.freedesktop.org/png/freedesktop-logo.png" .
+ xdg-copy "http://portland.freedesktop.org/png/freedesktop-logo.png" .
 
-xdg-copy "/tmp/foobar.png" "/home/user/foobar-copy.png"
-
+ xdg-copy "/tmp/foobar.png" "/home/user/foobar-copy.png"
 _EXAMPLES
 }
 
 usage()
 {
 cat << _USAGE
-xdg-copy ? command line tool for copying files between desktop URIs
+   xdg-copy -- command line tool for copying files between desktop URIs
 
 Synopsis
 
-xdg-copy [--help] [--version] [source] [destination]
+   xdg-copy [--help] [--version] source destination
 
 _USAGE
 }

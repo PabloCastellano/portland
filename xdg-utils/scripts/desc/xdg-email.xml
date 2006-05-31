@@ -38,7 +38,7 @@
       <command>xdg-email</command>
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
-      <arg><option><replaceable>mailto-uri</replaceable></option></arg>
+      <arg choice="plain"><option><replaceable>mailto-uri</replaceable></option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 

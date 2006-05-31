@@ -38,128 +38,129 @@ examples()
 cat << _EXAMPLES
 Examples
 
-The company ShinyThings Inc. has developed an application named "WebMirror" and
-would like to add it to the application menu. The company will use
-"shinythings" as its vendor id. In order to add the application to the menu
-there needs to be a .desktop file with a suitable Categories entry:
+   The company ShinyThings Inc. has developed an application named
+   "WebMirror" and would like to add it to the application menu. The company
+   will use "shinythings" as its vendor id. In order to add the application
+   to the menu there needs to be a .desktop file with a suitable Categories
+   entry:
 
-webmirror.desktop:
+ webmirror.desktop:
 
-  [Desktop Entry]
-  Encoding=UTF-8
-  Type=Application
+   [Desktop Entry]
+   Encoding=UTF-8
+   Type=Application
 
-  Exec=webmirror
-  Icon=webmirror
+   Exec=webmirror
+   Icon=webmirror
 
-  Name=WebMirror
-  Name[nl]=WebSpiegel
+   Name=WebMirror
+   Name[nl]=WebSpiegel
 
-  Categories=Network;WebDevelopment;
+   Categories=Network;WebDevelopment;
 
-Now the xdg-menu tool can be used to add the webmirror.desktop file to the
-desktop application menu:
+   Now the xdg-menu tool can be used to add the webmirror.desktop file to the
+   desktop application menu:
 
-xdg-menu --system --vendor shinythings --install ./webmirror.desktop
+ xdg-menu --system --vendor shinythings --install ./webmirror.desktop
 
-Note that for the purpose of this example the menu items are available in two
-languages, English and Dutch. The language code for Dutch is nl.
+   Note that for the purpose of this example the menu items are available in
+   two languages, English and Dutch. The language code for Dutch is nl.
 
-In the next example the company ShinyThings Inc. wants to add its own submenu
-to the desktop application menu consisting of a "WebMirror" menu item and a
-"WebMirror Admin Tool" menu item.
+   In the next example the company ShinyThings Inc. wants to add its own
+   submenu to the desktop application menu consisting of a "WebMirror" menu
+   item and a "WebMirror Admin Tool" menu item.
 
-First the company needs to create two .desktop files that describe the two menu
-items, this time no Categories item is needed:
+   First the company needs to create two .desktop files that describe the two
+   menu items, this time no Categories item is needed:
 
-webmirror.desktop:
+ webmirror.desktop:
 
-  [Desktop Entry]
-  Encoding=UTF-8
-  Type=Application
+   [Desktop Entry]
+   Encoding=UTF-8
+   Type=Application
 
-  Exec=webmirror
-  Icon=webmirror
+   Exec=webmirror
+   Icon=webmirror
 
-  Name=WebMirror
-  Name[nl]=WebSpiegel
+   Name=WebMirror
+   Name[nl]=WebSpiegel
 
 
-webmirror-admin.desktop:
+ webmirror-admin.desktop:
 
-  [Desktop Entry]
-  Encoding=UTF-8
-  Type=Application
+   [Desktop Entry]
+   Encoding=UTF-8
+   Type=Application
 
-  Exec=webmirror-admintool
-  Icon=webmirror-admintool
+   Exec=webmirror-admintool
+   Icon=webmirror-admintool
 
-  Name=WebMirror Admin Tool
-  Name[nl]=WebSpiegel Administratie Tool
+   Name=WebMirror Admin Tool
+   Name[nl]=WebSpiegel Administratie Tool
 
-The files can be installed with:
+   The files can be installed with:
 
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.desktop
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror-admin.desktop
+ xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.desktop
+ xdg-menu --system --noupdate --vendor shinythings --install ./webmirror-admin.desktop
 
-Because multiple items are added the --noupdate option has been used.
+   Because multiple items are added the --noupdate option has been used.
 
-In addition a .directory file needs to be created to provide a title and icon
-for the sub-menu itself:
+   In addition a .directory file needs to be created to provide a title and
+   icon for the sub-menu itself:
 
-webmirror.directory:
+ webmirror.directory:
 
-  [Desktop Entry]
-  Encoding=UTF-8
+   [Desktop Entry]
+   Encoding=UTF-8
 
-  Icon=webmirror
+   Icon=webmirror
 
-  Name=WebMirror
-  Name[nl]=WebSpiegel
+   Name=WebMirror
+   Name[nl]=WebSpiegel
 
-This webmirror.directorty file can be installed with:
+   This webmirror.directorty file can be installed with:
 
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.directory
+ xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.directory
 
-The last step is to provide a .menu file that links it all togther:
+   The last step is to provide a .menu file that links it all togther:
 
-webmirror.menu:
+ webmirror.menu:
 
-  <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
-     "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd">
-  <Menu>
-    <Menu>
-      <Name>WebMirror</Name>
-      <Directory>shinythings-webmirror.directory</Directory>
-      <Include>
-        <Filename>shinythings-webmirror.desktop</Filename>
-        <Filename>shinythings-webmirror-admin.desktop</Filename>
-      </Include>
-    </Menu>
-  </Menu>
+   <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+      "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd">
+   <Menu>
+     <Menu>
+       <Name>WebMirror</Name>
+       <Directory>shinythings-webmirror.directory</Directory>
+       <Include>
+         <Filename>shinythings-webmirror.desktop</Filename>
+         <Filename>shinythings-webmirror-admin.desktop</Filename>
+       </Include>
+     </Menu>
+   </Menu>
 
-The webmirror.menu file can be installed with:
+   The webmirror.menu file can be installed with:
 
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.menu
+ xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.menu
 
-After installing multiple files with --noupdate make sure to force an update:
+   After installing multiple files with --noupdate make sure to force an
+   update:
 
-xdg-menu --system --forceupdate
-
+ xdg-menu --system --forceupdate
 _EXAMPLES
 }
 
 usage()
 {
 cat << _USAGE
-xdg-menu ? command line tool for (un)installing desktop menu items
+   xdg-menu -- command line tool for (un)installing desktop menu items
 
 Synopsis
 
-xdg-menu [--help] [--version] [--vendor vendor-id] [--noupdate] [[--user] |
-[--system]] [[--install desktop-file] | [--install directory-file] | [--install
-menu-file] | [--uninstall desktop-file] | [--uninstall directory-file] |
-[--uninstall menu-file] | [--forceupdate]]
+   xdg-menu [--help] [--version] [--vendor vendor-id] [--noupdate] { --user |
+   --system } { --install desktop-file | --install directory-file | --install
+   menu-file | --uninstall desktop-file | --uninstall directory-file |
+   --uninstall menu-file | --forceupdate }
 
 _USAGE
 }

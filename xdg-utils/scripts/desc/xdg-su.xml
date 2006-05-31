@@ -39,7 +39,7 @@
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
       <arg><option>-u <replaceable>user</replaceable></option></arg>
-      <arg><option>-c <replaceable>command</replaceable></option></arg>
+      <arg choice="plain"><option>-c <replaceable>command</replaceable></option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 

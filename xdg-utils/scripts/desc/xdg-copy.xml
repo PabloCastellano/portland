@@ -38,8 +38,8 @@
       <command>xdg-copy</command>
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
-      <arg><option><replaceable>source</replaceable></option></arg>
-      <arg><option><replaceable>destination</replaceable></option></arg>
+      <arg choice="plain"><option><replaceable>source</replaceable></option></arg>
+      <arg choice="plain"><option><replaceable>destination</replaceable></option></arg>
   </cmdsynopsis>
   </refsynopsisdiv>
 

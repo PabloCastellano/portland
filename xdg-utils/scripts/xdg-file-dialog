@@ -36,30 +36,30 @@ examples()
 cat << _EXAMPLES
 Examples
 
-xdg-file-dialog --savefilename /tmp/foobar.png
+ xdg-file-dialog --savefilename /tmp/foobar.png
 
-Asks for a save file name starting in directory /tmp and suggesting foobar.png
-as the filename
+   Asks for a save file name starting in directory /tmp and suggesting
+   foobar.png as the filename
 
-            xdg-file-dialog --title "Select a target folder" --directory /tmp
+             xdg-file-dialog --title "Select a target folder" --directory /tmp
 
 
-Asks for a directory name starting in directory /tmp using the text "Select a
-target folder" as the dialog's title/caption.
-
+   Asks for a directory name starting in directory /tmp using the text
+   "Select a target folder" as the dialog's title/caption.
 _EXAMPLES
 }
 
 usage()
 {
 cat << _USAGE
-xdg-file-dialog ? command line tool for providing file and directory selection
-dialogs
+   xdg-file-dialog -- command line tool for providing file and directory
+   selection dialogs
 
 Synopsis
 
-xdg-file-dialog [--help] [--version] [--title TITLE] [--openfilename FILENAME]
-[--openfilenamelist FILENAME] [--savefilename FILENAME] [--directory DIRNAME]
+   xdg-file-dialog [--help] [--version] [--title TITLE] { --openfilename
+   FILENAME | --openfilenamelist FILENAME | --savefilename FILENAME |
+   --directory DIRNAME }
 
 _USAGE
 }

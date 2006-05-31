@@ -36,26 +36,25 @@ examples()
 cat << _EXAMPLES
 Examples
 
-xdg-open 'http://www.freedesktop.org/'
+ xdg-open 'http://www.freedesktop.org/'
 
-Opens the Freedesktop.org website in the user's default browser
+   Opens the Freedesktop.org website in the user's default browser
 
-xdg-open /tmp/foobar.png
+ xdg-open /tmp/foobar.png
 
-Opens the PNG image file /tmp/foobar.png in the user's default image viewing
-application.
-
+   Opens the PNG image file /tmp/foobar.png in the user's default image
+   viewing application.
 _EXAMPLES
 }
 
 usage()
 {
 cat << _USAGE
-xdg-open ? opens a file or URL in the user's preferred application
+   xdg-open -- opens a file or URL in the user's preferred application
 
 Synopsis
 
-xdg-open [--help] [--version] [[file] | [URL]]
+   xdg-open [--help] [--version] { file | URL }
 
 _USAGE
 }

@@ -39,9 +39,9 @@
       <arg><option>--help</option></arg>
       <arg><option>--version</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
-      <group>
-	<arg>--install <replaceable>file</replaceable></arg>
-	<arg>--uninstall <replaceable>file</replaceable></arg>
+      <group choice="req">
+	<arg choice="plain">--install <replaceable>file</replaceable></arg>
+	<arg choice="plain">--uninstall <replaceable>file</replaceable></arg>
       </group>
   </cmdsynopsis>
   </refsynopsisdiv>

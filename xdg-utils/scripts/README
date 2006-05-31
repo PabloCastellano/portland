@@ -1,22 +1,22 @@
 
-xdg-menu ? command line tool for (un)installing desktop menu items
+   xdg-menu -- command line tool for (un)installing desktop menu items
 
-xdg-desktop ? command line tool for (un)installing icons to the desktop
+   xdg-desktop -- command line tool for (un)installing icons to the desktop
 
-xdg-email ? command line tool for sending mail using the user's preferred
-e-mail composer
+   xdg-email -- command line tool for sending mail using the user's preferred
+   e-mail composer
 
-xdg-mime ? command line tool for providing information about file type handling
+   xdg-mime -- command line tool for providing information about file type
+   handling
 
-xdg-su ? run a program as root after prompting for the root password
+   xdg-su -- run a program as root after prompting for the root password
 
-xdg-open ? opens a file or URL in the user's preferred application
+   xdg-open -- opens a file or URL in the user's preferred application
 
-xdg-copy ? command line tool for copying files between desktop URIs
+   xdg-copy -- command line tool for copying files between desktop URIs
 
-xdg-file-dialog ? command line tool for providing file and directory selection
-dialogs
+   xdg-file-dialog -- command line tool for providing file and directory
+   selection dialogs
 
-   xdg-screensaver -- Enable, disable, and suspend the
-   screensaver
+   xdg-screensaver -- Enable, disable, and suspend the screensaver
 
