@@ -1,0 +1,53 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-icon</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-icon"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-icon &#8212; command line tool for (un)installing icons</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>  [<code class="option">--help</code>] [<code class="option">--version</code>] [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] { --user  |   --system }  <code class="option">--context <em class="replaceable"><code>context</code></em></code>   <code class="option">--size <em class="replaceable"><code>size</code></em></code>  { --install <em class="replaceable"><code>icon-file</code></em>  |   --uninstall <em class="replaceable"><code>icon-file</code></em>  |   --forceupdate }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+      The xdg-icon program can be used to install icons into the desktop
+      icon system for use in menu entries, as desktop icons or as file icon.
+    </p><p>
+      The desktop icon system works according to the
+      XDG Icon Theme Specification at
+      http://www.freedesktop.org/Standards/icon-theme--spec
+    </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--help</code></span></dt><dd>
+	    Show this help.
+	  </dd><dt><span class="term"><code class="option">--version</code></span></dt><dd>
+            Show the xdg-utils version information.
+          </dd><dt><span class="term"><code class="option">--noupdate</code></span></dt><dd>
+	    Postpone updating the desktop icon system. If multiple icons are
+	    added in sequence this flag can be used to indicate that
+	    additional changes will follow and that it is not
+            necassery to update the desktop icon system right away.
+	  </dd><dt><span class="term"> <code class="option">--theme</code> <em class="replaceable"><code>theme</code></em></span></dt><dd>
+	    Installs or removes the icon file as part of 
+	    <em class="replaceable"><code>theme</code></em>. The default theme is
+	    hicolor.
+	  </dd><dt><span class="term"><code class="option">--user</code></span></dt><dd>
+	    Installs or uninstalls the icon for the current user only.
+	  </dd><dt><span class="term"><code class="option">--system</code></span></dt><dd>
+	    Installs or uninstalls the icon for all users on the system.
+            Usually only root is allowed to do this.
+	  </dd><dt><span class="term"> <code class="option">--context</code> <em class="replaceable"><code>context</code></em></span></dt><dd>
+	    Specifies the context for the icon. Icons to be used in the
+            application menu and as desktop icon should use apps as context.
+            Icons to be used as file icons should use mimetypes as context.
+            Other common contexts are actions, devices, emblems, filesystems
+            and stock.
+	  </dd><dt><span class="term"> <code class="option">--size</code> <em class="replaceable"><code>size</code></em></span></dt><dd>
+	    Specifies the size of the icon (for png and xpm icons only).
+	    All icons must be square.
+	    Common sizes for icons in the apps context are:
+	    16, 22, 32, 48, 64 and 128.  
+	    Common sizes for icons in the mimetypes context are:
+	    16, 22, 32, 48, 64 and 128
+	  </dd><dt><span class="term"> <code class="option">--install</code> <em class="replaceable"><code>icon-file</code></em></span></dt><dd>
+	    Installs the icon file indicated by <em class="replaceable"><code>icon-file</code></em>
+            to the desktop icon system. The icon file must have the
+            .png, .xpm or .svg as extension. If a corresponding .icon file
+            exists in the same location as <em class="replaceable"><code>icon-file</code></em>
+            it will be installed as well.
+	  </dd><dt><span class="term"> <code class="option">--uninstall</code> <em class="replaceable"><code>icon-file</code></em></span></dt><dd>
+	    Removes the icon file indicated by <em class="replaceable"><code>icon-file</code></em>
+            from the desktop icon system.
+	  </dd><dt><span class="term"><code class="option">--forceupdate</code></span></dt><dd>
+	    Force an update of the desktop icon system. This is only useful if
+	    the last call to xdg-icon included the <code class="option">--noupdate</code> option.
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
+      TBD
+    </p></div></div></body></html>

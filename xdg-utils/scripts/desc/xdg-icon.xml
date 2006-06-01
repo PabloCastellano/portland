@@ -1,0 +1,200 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry id="xdg-icon">
+  <refentryinfo>
+    <title>xdg-icon Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Kevin</firstname>
+      <surname>Krammer</surname>
+    </author>
+    <address><email>kevin.krammer@gmx.at</email></address>
+    <author>
+      <firstname>Jeremy</firstname>
+      <surname>White</surname>
+    </author>
+    <address><email>jwhite@codeweavers.com</email></address>
+    <releaseinfo>This is release 0.5 of the xdg-icon Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-icon</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-icon</refname>
+    <refpurpose>command line tool for (un)installing icons</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-icon</command>
+      <arg><option>--help</option></arg>
+      <arg><option>--version</option></arg>
+      <arg><option>--noupdate</option></arg>
+      <arg><option>--theme <replaceable>theme</replaceable></option></arg>
+      <group choice="req">
+	<arg choice="plain">--user</arg>
+	<arg choice="plain">--system</arg>
+      </group>
+      <arg choice="plain"><option>--context <replaceable>context</replaceable></option></arg>
+      <arg choice="plain"><option>--size <replaceable>size</replaceable></option></arg>
+      <group choice="req">
+	<arg choice="plain">--install <replaceable>icon-file</replaceable></arg>
+	<arg choice="plain">--uninstall <replaceable>icon-file</replaceable></arg>
+	<arg choice="plain">--forceupdate</arg>
+      </group>
+  </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1 id="description">
+    <title>Description</title>
+    <para>
+      The xdg-icon program can be used to install icons into the desktop
+      icon system for use in menu entries, as desktop icons or as file icon.
+    </para>
+    <para>
+      The desktop icon system works according to the
+      XDG Icon Theme Specification at
+      http://www.freedesktop.org/Standards/icon-theme--spec
+    </para>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>--help</option></term>
+	<listitem>
+	  <simpara>
+	    Show this help.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--noupdate</option></term>
+	<listitem>
+	  <simpara>
+	    Postpone updating the desktop icon system. If multiple icons are
+	    added in sequence this flag can be used to indicate that
+	    additional changes will follow and that it is not
+            necassery to update the desktop icon system right away.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--theme</option> <replaceable>theme</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Installs or removes the icon file as part of 
+	    <replaceable>theme</replaceable>. The default theme is
+	    hicolor.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--user</option></term>
+	<listitem>
+	  <simpara>
+	    Installs or uninstalls the icon for the current user only.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--system</option></term>
+	<listitem>
+	  <simpara>
+	    Installs or uninstalls the icon for all users on the system.
+            Usually only root is allowed to do this.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--context</option> <replaceable>context</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Specifies the context for the icon. Icons to be used in the
+            application menu and as desktop icon should use apps as context.
+            Icons to be used as file icons should use mimetypes as context.
+            Other common contexts are actions, devices, emblems, filesystems
+            and stock.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--size</option> <replaceable>size</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Specifies the size of the icon (for png and xpm icons only).
+	    All icons must be square.
+	    Common sizes for icons in the apps context are:
+	    16, 22, 32, 48, 64 and 128.  
+	    Common sizes for icons in the mimetypes context are:
+	    16, 22, 32, 48, 64 and 128
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--install</option> <replaceable>icon-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Installs the icon file indicated by <replaceable>icon-file</replaceable>
+            to the desktop icon system. The icon file must have the
+            .png, .xpm or .svg as extension. If a corresponding .icon file
+            exists in the same location as <replaceable>icon-file</replaceable>
+            it will be installed as well.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--uninstall</option> <replaceable>icon-file</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Removes the icon file indicated by <replaceable>icon-file</replaceable>
+            from the desktop icon system.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--forceupdate</option></term>
+	<listitem>
+	  <simpara>
+	    Force an update of the desktop icon system. This is only useful if
+	    the last call to xdg-icon included the <option>--noupdate</option> option.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+      TBD
+    </para>
+  </refsect1>
+</refentry>
