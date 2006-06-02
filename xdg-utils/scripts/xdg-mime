@@ -210,7 +210,6 @@ update_mime_database()
          return
       fi
    done
-   echo DONE
 }
 
 info_kde()
@@ -402,11 +401,12 @@ for x in `echo $xdg_system_dirs | sed 's/:/ /g'` ; do
 done
 [ -w $xdg_global_dir ] || xdg_global_dir=
 
+# TODO: KDE legacy support
 kde_user_dir=$HOME/.kde/share/mimelnk
 kde_global_dir=/usr/share/mimelnk
 [ -w $kde_global_dir ] || kde_global_dir=
 
-# FIX
+# TODO: Gnome legacy support
 gnome_user_dir=$HOME/.gnome/apps
 gnome_global_dir=/usr/share/gnome/apps
 [ -w $gnome_global_dir ] || gnome_global_dir=
@@ -421,7 +421,7 @@ else
     kde_dir=$kde_global_dir
     gnome_dir=$gnome_global_dir
     my_umask=022
-    if [ -n "$xdg_dir $kde_dir $gnome_dir" ] ; then
+    if [ -z "${xdg_dir}${kde_dir}${gnome_dir}" ] ; then
         [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
         exit_failure_operation_impossible "No writable system mimetype directory found. $rootmsg"
     fi

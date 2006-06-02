@@ -456,7 +456,7 @@ else
     kde_dir=$kde_global_dir
     gnome_dir=$gnome_global_dir
     my_umask=022
-    if [ -n "$xdg_dir $kde_dir $gnome_dir" ] ; then
+    if [ -z "${xdg_dir}${kde_dir}${gnome_dir}" ] ; then
         [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
         exit_failure_operation_impossible "No writable system menu directory found. $rootmsg"
     fi
