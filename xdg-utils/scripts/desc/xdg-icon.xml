@@ -40,6 +40,7 @@
       <arg><option>--version</option></arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
+      <arg><option>--context <replaceable>context</replaceable></option></arg>
       <group choice="req">
 	<arg choice="plain">--user</arg>
 	<arg choice="plain">--system</arg>
@@ -104,8 +105,26 @@
 	<listitem>
 	  <simpara>
 	    Installs or removes the icon file as part of 
-	    <replaceable>theme</replaceable>. The default theme is
-	    hicolor.
+	    <replaceable>theme</replaceable>. If no theme is specified the
+	    icons will be installed as part of the default <emphasis>hicolor</emphasis> theme.
+	    Applications may install icons under multiple themes but should
+	    at least install icons for the default <emphasis>hicolor</emphasis> theme.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--context</option> <replaceable>context</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Specifies the context for the icon. Icons to be used in the
+            application menu and as desktop icon should use
+            <emphasis>apps</emphasis> as context which is the default
+            context. Icons to be used as file icons should use
+            <emphasis>mimetypes</emphasis> as context.
+            Other common contexts are <emphasis>actions</emphasis>,
+            <emphasis>devices</emphasis>, <emphasis>emblems</emphasis>,
+            <emphasis>filesystems</emphasis> and <emphasis>stock</emphasis>.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -130,19 +149,6 @@
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--context</option> <replaceable>context</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Specifies the context for the icon. Icons to be used in the
-            application menu and as desktop icon should use apps as context.
-            Icons to be used as file icons should use mimetypes as context.
-            Other common contexts are actions, devices, emblems, filesystems
-            and stock.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
 	<term> <option>--size</option> <replaceable>size</replaceable></term>
 	<listitem>
 	  <simpara>
@@ -162,8 +168,9 @@
 	  <simpara>
 	    Installs the icon file indicated by <replaceable>icon-file</replaceable>
             to the desktop icon system. The icon file must have the
-            .png, .xpm or .svg as extension. If a corresponding .icon file
-            exists in the same location as <replaceable>icon-file</replaceable>
+            <emphasis>.png</emphasis>, <emphasis>.xpm</emphasis> or
+            <emphasis>.svg</emphasis> as extension. If a corresponding
+            <emphasis>.icon</emphasis> file exists in the same location as <replaceable>icon-file</replaceable>
             it will be installed as well.
 	  </simpara>
 	</listitem>
