@@ -6,8 +6,8 @@
    xdg-email -- command line tool for sending mail using the user's preferred
    e-mail composer
 
-   xdg-mime -- command line tool for providing information about file type
-   handling
+   xdg-mime -- command line tool for querying information about file type
+   handling and adding descriptions for new file types
 
    xdg-su -- run a program as root after prompting for the root password
 
@@ -19,4 +19,6 @@
    selection dialogs
 
    xdg-screensaver -- Enable, disable, and suspend the screensaver
+
+   xdg-icon -- command line tool for (un)installing icons
 
