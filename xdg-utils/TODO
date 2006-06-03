@@ -1,7 +1,8 @@
-1.  Make proper documentation (man pages? html?)
-    Currently, a make README in scripts will
-    spit all the usage statements into a README,
-    so improving usage() is a Good Thing (TM)
-2.  xdg-screensaver (done)
-3.  xdg-desktop
-4.  flesh out xdg-mime
+* Add KDE mimelnk support to xdg-mime
+* Add pre-XDG Base Dir support to xdg-icon
+* Rework xdg-email command line options
+* Document exit codes in all manpages
+* Add SEE ALSO references in all manpages
+* Clean up xdg-screensaver options
+* Fix interaction between xset and gnome/kde specific hacks in
+xdg-screensaver
