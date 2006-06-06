@@ -36,11 +36,16 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-open</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
       <group choice="req">
         <arg choice="plain"><option><replaceable>file</replaceable></option></arg>
         <arg choice="plain"><option><replaceable>URL</replaceable></option></arg>
+      </group>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-open</command>
+      <group choice="req">
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
       </group>
     </cmdsynopsis>
   </refsynopsisdiv>

@@ -72,6 +72,8 @@ Synopsis
    xdg-screensaver { suspend delay | restore | enable | disable | activate |
    reset | status }
 
+   xdg-screensaver { --help | --version }
+
 _USAGE
 }
 

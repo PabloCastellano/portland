@@ -50,7 +50,9 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-copy [--help] [--version] source destination
+   xdg-copy source destination
+
+   xdg-copy { --help | --version }
 
 _USAGE
 }

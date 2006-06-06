@@ -51,7 +51,9 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-email [--help] [--version] mailto-uri
+   xdg-email mailto-uri
+
+   xdg-email { --help | --version }
 
 _USAGE
 }

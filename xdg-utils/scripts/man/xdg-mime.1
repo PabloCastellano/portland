@@ -24,7 +24,25 @@ xdg-mime \- command line tool for querying information about file type handling 
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-mime\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\fB\-\-info\ \fIFILE\fR\fR\fR | \fB\fB\-\-defapp\ \fIFILE\fR\fR\fR] {\fB\-\-user\fR | \fB\-\-system\fR} {\fB\-\-install\ \fImimetypes\-file\fR\fR | \fB\-\-uninstall\ \fImimeypes\-file\fR\fR}
+\fBxdg\-mime\fR \fB\-\-query\ \fIwhat\fR\fR \fIFILE\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-mime\fR \fB\-\-install\fR {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fImimetypes\-file\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-mime\fR \fB\-\-uninstall\fR {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fImimetypes\-file\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-mime\fR {\fB\fB\-\-help\fR\fR | \fB\fB\-\-version\fR\fR}
 .ad
 .hy
 
@@ -36,20 +54,20 @@ The xdg\-mime program can be used to query information about file types and to a
 .SH "OPTIONS"
 
 .TP
-\fB\-\-help\fR
-Show this help\&.
+\fB\-\-query\fR \fIwhat\fR
+Returns information related to the file type of \fIFILE\fR as specified by \fIwhat\fR:
+
+\fItype\fR: Returns the file type of \fIFILE\fR in the form of a MIME type\&.
+
+\fIdefault\fR: Returns the default application that the desktop environment uses for opening \fIFILE\fR\&. The default applications is identified by its *\&.desktop file\&.
 
 .TP
-\fB\-\-version\fR
-Show the xdg\-utils version information\&.
+\fB\-\-install\fR
+Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
 
 .TP
-\fB\-\-info\fR \fIFILE\fR
-Returns the file type of \fIFILE\fR in the form of a MIME type\&.
-
-.TP
-\fB\-\-defapp\fR \fIFILE\fR
-Returns the default application that the desktop environment uses for opening \fIFILE\fR\&. The default applications is identified by its *\&.desktop file\&.
+\fB\-\-uninstall\fR
+Removes the file type descriptions provided in \fImimetypes\-file\fR and previously added with \fBxdg\-mime \-\-install\fR from the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
 
 .TP
 \fB\-\-user\fR
@@ -60,12 +78,12 @@ Adds or removes file type descriptions for the current user only\&.
 Adds or removes file type descriptions for all users on the system\&. Usually only root is allowed to do this\&.
 
 .TP
-\fB\-\-install\fR \fImimetypes\-file\fR
-Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
+\fB\-\-help\fR
+Show this help\&.
 
 .TP
-\fB\-\-uninstall\fR \fImimetypes\-file\fR
-Removes the file type descriptions provided in \fImimetypes\-file\fR and previously added with \fBxdg\-mime \-\-install\fR from the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
+\fB\-\-version\fR
+Show the xdg\-utils version information\&.
 
 .SH "EXAMPLES"
 
@@ -74,7 +92,7 @@ Removes the file type descriptions provided in \fImimetypes\-file\fR and previou
 
 .nf
 
-xdg\-mime \-\-info /tmp/foobar\&.png
+xdg\-mime \-\-query type /tmp/foobar\&.png
 
 .fi
  Prints the MIME type of the file /tmp/foobar\&.png
@@ -84,7 +102,7 @@ xdg\-mime \-\-info /tmp/foobar\&.png
 
 .nf
 
-xdg\-mime \-\-defapp /tmp/foobar\&.png
+xdg\-mime \-\-query default /tmp/foobar\&.png
 
 .fi
  Prints the name of the \&.desktop file of the application which is registered to open files of the MIME type the file /tmp/foobar\&.png has
@@ -94,7 +112,7 @@ xdg\-mime \-\-defapp /tmp/foobar\&.png
 
 .nf
 
-xdg\-mime \-\-system \-\-install diff\&.xml
+xdg\-mime \-\-install \-\-system diff\&.xml
 
 .fi
  Adds a file type description for "diff"\-files for all users on the system\&. The file type description could look as folows\&. 

@@ -36,14 +36,23 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-desktop</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
+      <arg choice="plain"><option>--install</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <arg choice="plain"><replaceable>FILE</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-desktop</command>
+      <arg choice="plain"><option>--uninstall</option></arg>
+      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <arg choice="plain"><replaceable>FILE</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-desktop</command>
       <group choice="req">
-	<arg choice="plain">--install <replaceable>file</replaceable></arg>
-	<arg choice="plain">--uninstall <replaceable>file</replaceable></arg>
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
       </group>
-  </cmdsynopsis>
+    </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1 id="description">
@@ -56,6 +65,36 @@
   <refsect1 id="options">
     <title>Options</title>
     <variablelist>
+      <varlistentry>
+	<term> <option>--install</option></term>
+	<listitem>
+	  <simpara>
+	    Installs <replaceable>FILE</replaceable> to the desktop of the current user.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--uninstall</option></term>
+	<listitem>
+	  <simpara>
+	    Removes <replaceable>FILE</replaceable> from the desktop
+            of the current user.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--vendor</option> <replaceable>vendor-id</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
+            files.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+
       <varlistentry>
 	<term><option>--help</option></term>
 	<listitem>
@@ -72,35 +111,6 @@
             Show the xdg-utils version information.
           </simpara>
         </listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--vendor</option> <replaceable>vendor-id</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
-            files.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--install</option> <replaceable>file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Installs <replaceable>file</replaceable> to the desktop of the current user.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--uninstall</option> <replaceable>file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Removes <replaceable>file</replaceable> from the desktop
-            of the current user.
-	  </simpara>
-	</listitem>
       </varlistentry>
 
     </variablelist>

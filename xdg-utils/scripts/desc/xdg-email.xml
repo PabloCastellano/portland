@@ -36,9 +36,14 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-email</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
-      <arg choice="plain"><option><replaceable>mailto-uri</replaceable></option></arg>
+      <arg choice="plain"><replaceable>mailto-uri</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-email</command>
+      <group choice="req">
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
+      </group>
     </cmdsynopsis>
   </refsynopsisdiv>
 

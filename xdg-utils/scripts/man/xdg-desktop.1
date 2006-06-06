@@ -24,7 +24,19 @@ xdg-desktop \- command line tool for (un)installing icons to the desktop
 .ad l
 .hy 0
 .HP 12
-\fBxdg\-desktop\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\-\-vendor\ \fIvendor\-id\fR\fR] {\fB\-\-install\ \fIfile\fR\fR | \fB\-\-uninstall\ \fIfile\fR\fR}
+\fBxdg\-desktop\fR \fB\-\-install\fR [\fB\-\-vendor\ \fIvendor\-id\fR\fR] \fIFILE\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 12
+\fBxdg\-desktop\fR \fB\-\-uninstall\fR [\fB\-\-vendor\ \fIvendor\-id\fR\fR] \fIFILE\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 12
+\fBxdg\-desktop\fR {\fB\fB\-\-help\fR\fR | \fB\fB\-\-version\fR\fR}
 .ad
 .hy
 
@@ -36,24 +48,24 @@ The xdg\-desktop program can be used to install an icon on the desktop of the cu
 .SH "OPTIONS"
 
 .TP
-\fB\-\-help\fR
-Show this help\&.
+\fB\-\-install\fR
+Installs \fIFILE\fR to the desktop of the current user\&.
 
 .TP
-\fB\-\-version\fR
-Show the xdg\-utils version information\&.
+\fB\-\-uninstall\fR
+Removes \fIFILE\fR from the desktop of the current user\&.
 
 .TP
 \fB\-\-vendor\fR \fIvendor\-id\fR
 Adds \fIvendor\-id\fR as a prefix when installing desktop files\&.
 
 .TP
-\fB\-\-install\fR \fIfile\fR
-Installs \fIfile\fR to the desktop of the current user\&.
+\fB\-\-help\fR
+Show this help\&.
 
 .TP
-\fB\-\-uninstall\fR \fIfile\fR
-Removes \fIfile\fR from the desktop of the current user\&.
+\fB\-\-version\fR
+Show the xdg\-utils version information\&.
 
 .SH AUTHORS
 Kevin Krammer, Jeremy White.

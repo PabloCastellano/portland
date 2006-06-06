@@ -6,3 +6,5 @@
 * Clean up xdg-screensaver options
 * Fix interaction between xset and gnome/kde specific hacks in
 xdg-screensaver
+* Update scripts to new option order (--install --noupdate FILE )
+* Change xdg-screensaver script to --options, add --help and --version 

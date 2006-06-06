@@ -31,14 +31,33 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-file-dialog</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
+      <arg choice="plain"><option>--openfilename</option></arg>
       <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
+      <arg><replaceable>FILENAME</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-file-dialog</command>
+      <arg choice="plain"><option>--openfilenamelist</option></arg>
+      <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
+      <arg><replaceable>FILENAME</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-file-dialog</command>
+      <arg choice="plain"><option>--savefilename</option></arg>
+      <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
+      <arg><replaceable>FILENAME</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-file-dialog</command>
+      <arg choice="plain"><option>--directory</option></arg>
+      <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
+      <arg><replaceable>DIRNAME</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-file-dialog</command>
       <group choice="req">
-        <arg choice="plain"><option>--openfilename <replaceable>FILENAME</replaceable></option></arg>
-        <arg choice="plain"><option>--openfilenamelist <replaceable>FILENAME</replaceable></option></arg>
-        <arg choice="plain"><option>--savefilename <replaceable>FILENAME</replaceable></option></arg>
-        <arg choice="plain"><option>--directory <replaceable>DIRNAME</replaceable></option></arg>
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
       </group>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -53,6 +72,59 @@
   <refsect1 id="options">
     <title>Options</title>
     <variablelist>
+      <varlistentry>
+        <term><option>--openfilename</option></term>
+        <listitem>
+          <simpara>
+              Returns the filename with path for a file to read from.
+              <replaceable>FILENAME</replaceable> can optionally be used to
+              specify path and filename of a preselection.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--openfilenamelist</option></term>
+        <listitem>
+          <simpara>
+            Returns one or more filenames with path for files to read from,
+            each on a new line. <replaceable>FILENAME</replaceable> can optionally
+            be used to specify path and filename of a preselection.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--savefilename</option></term>
+        <listitem>
+          <simpara>
+            Returns the filename with path for file to write to.
+            <replaceable>FILENAME</replaceable> can optionally be used to
+            specify path and filename of a preselection.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--directory</option></term>
+        <listitem>
+          <simpara>
+            Returns the path for an exsiting directory.
+            <replaceable>DIRNAME</replaceable> can optionally be used to
+            specify a path of a preselection.
+            </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--title</option> <replaceable>TITLE</replaceable></term>
+        <listitem>
+          <simpara>
+              Sets the dialog's title (caption) to the specified text.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
       <varlistentry>
         <term><option>--help</option></term>
         <listitem>
@@ -71,50 +143,6 @@
         </listitem>
       </varlistentry>
 
-      <varlistentry>
-        <term> <option>--title</option> <replaceable>TITLE</replaceable></term>
-        <listitem>
-          <simpara>
-              Sets the dialog's title (caption) to the specified text.
-          </simpara>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term> <option>--openfilename</option> <replaceable>FILENAME</replaceable></term>
-        <listitem>
-          <simpara>
-              Returns the filename with path for a file to read from. <replaceable>FILENAME</replaceable> can optionally be used to specify path and filename of a preselection
-          </simpara>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term> <option>--openfilenamelist</option> <replaceable>FILENAME</replaceable></term>
-        <listitem>
-          <simpara>
-            Returns one or more filenames with path for files to read from, each on a new line. <replaceable>FILENAME</replaceable> can optionally be used to specify path and filename of a preselection
-          </simpara>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term> <option>--savefilename</option> <replaceable>FILENAME</replaceable></term>
-        <listitem>
-          <simpara>
-            Returns the filename with path for file to write to. <replaceable>FILENAME</replaceable> can optionally be used to specify path and filename of a preselection
-          </simpara>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term> <option>--directory</option> <replaceable>DIRNAME</replaceable></term>
-        <listitem>
-          <simpara>
-            Returns the path for an exsiting directory. <replaceable>DIRNAME</replaceable> can optionally be used to specify a path of a preselection
-            </simpara>
-        </listitem>
-      </varlistentry>
     </variablelist>
   </refsect1>
   <refsect1 id="examples">
@@ -126,10 +154,10 @@ xdg-file-dialog --savefilename /tmp/foobar.png
       Asks for a save file name starting in directory /tmp and suggesting foobar.png as the filename
     </para>
     <para>
-        <programlisting>
-            xdg-file-dialog --title "Select a target folder" --directory /tmp
-        </programlisting>
-        Asks for a directory name starting in directory /tmp using the text "Select a target folder" as the dialog's title/caption.
+<programlisting>
+xdg-file-dialog --directory --title "Select a target folder" /tmp
+</programlisting>
+      Asks for a directory name starting in directory /tmp using the text "Select a target folder" as the dialog's title/caption.
     </para>
   </refsect1>
 </refentry>

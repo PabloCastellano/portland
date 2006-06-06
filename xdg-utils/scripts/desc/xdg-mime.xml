@@ -37,19 +37,32 @@ and adding descriptions for new file types</refpurpose>
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-mime</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
-      <group>
-        <arg choice="plain"><option>--info <replaceable>FILE</replaceable></option></arg>
-        <arg choice="plain"><option>--defapp <replaceable>FILE</replaceable></option></arg>
-      </group>
+      <arg choice="plain"><option>--query <replaceable>what</replaceable></option></arg>
+      <arg choice="plain"><replaceable>FILE</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-mime</command>
+      <arg choice="plain"><option>--install</option></arg>	
       <group choice="req">
-	<arg choice="plain">--user</arg>
-	<arg choice="plain">--system</arg>
+	<arg choice="plain"><option>--user</option></arg>
+	<arg choice="plain"><option>--system</option></arg>
       </group>
+      <arg choice="plain"><replaceable>mimetypes-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-mime</command>
+      <arg choice="plain"><option>--uninstall</option></arg>	
       <group choice="req">
-	<arg choice="plain">--install <replaceable>mimetypes-file</replaceable></arg>
-	<arg choice="plain">--uninstall <replaceable>mimeypes-file</replaceable></arg>
+	<arg choice="plain"><option>--user</option></arg>
+	<arg choice="plain"><option>--system</option></arg>
+      </group>
+      <arg choice="plain"><replaceable>mimetypes-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-mime</command>
+      <group choice="req">
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
       </group>
     </cmdsynopsis>
   </refsynopsisdiv>
@@ -65,39 +78,47 @@ and adding descriptions for new file types</refpurpose>
     <title>Options</title>
     <variablelist>
       <varlistentry>
-	<term><option>--help</option></term>
+	<term><option>--query</option> <replaceable>what</replaceable></term>
 	<listitem>
 	  <simpara>
-	    Show this help.
+	    Returns information related to the file type of <replaceable>FILE</replaceable>
+            as specified by <replaceable>what</replaceable>:
 	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term><option>--version</option></term>
-        <listitem>
-          <simpara>
-            Show the xdg-utils version information.
-          </simpara>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--info</option> <replaceable>FILE</replaceable></term>
-	<listitem>
-	  <simpara>
+	  <simpara><emphasis>type</emphasis>:
 	    Returns the file type of <replaceable>FILE</replaceable> in the form of a MIME type.
 	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--defapp</option> <replaceable>FILE</replaceable></term>
-	<listitem>
-	  <simpara>
+	  <simpara><emphasis>default</emphasis>:
 	    Returns the default application that the desktop environment uses for opening
 	    <replaceable>FILE</replaceable>. The default applications is
             identified by its *.desktop file.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+
+      <varlistentry>
+	<term><option>--install</option></term>
+	<listitem>
+	  <simpara>
+	    Adds the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
+            to the desktop environment. <replaceable>mimetypes-file</replaceable>
+            must be a XML file that follows the freedesktop.org 
+            Shared MIME-info Database specification
+            and that has a mime-info element as its document root.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--uninstall</option></term>
+	<listitem>
+	  <simpara>
+	    Removes the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
+            and previously added with <command>xdg-mime --install</command> from the
+            desktop environment. <replaceable>mimetypes-file</replaceable>
+            must be a XML file that follows the freedesktop.org
+            Shared MIME-info Database specification
+            and that has a mime-info element as its document root.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -122,30 +143,21 @@ and adding descriptions for new file types</refpurpose>
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--install</option> <replaceable>mimetypes-file</replaceable></term>
+	<term><option>--help</option></term>
 	<listitem>
 	  <simpara>
-	    Adds the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
-            to the desktop environment. <replaceable>mimetypes-file</replaceable>
-            must be a XML file that follows the freedesktop.org 
-            Shared MIME-info Database specification
-            and that has a mime-info element as its document root.
+	    Show this help.
 	  </simpara>
 	</listitem>
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--uninstall</option> <replaceable>mimetypes-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Removes the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
-            and previously added with <command>xdg-mime --install</command> from the
-            desktop environment. <replaceable>mimetypes-file</replaceable>
-            must be a XML file that follows the freedesktop.org
-            Shared MIME-info Database specification
-            and that has a mime-info element as its document root.
-	  </simpara>
-	</listitem>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
       </varlistentry>
 
     </variablelist>
@@ -154,20 +166,20 @@ and adding descriptions for new file types</refpurpose>
     <title>Examples</title>
     <para>
 <programlisting>
-xdg-mime --info /tmp/foobar.png
+xdg-mime --query type /tmp/foobar.png
 </programlisting>
       Prints the MIME type of the file /tmp/foobar.png
     </para>
     <para>
 <programlisting>
-xdg-mime --defapp /tmp/foobar.png
+xdg-mime --query default /tmp/foobar.png
 </programlisting>
       Prints the name of the .desktop file of the application which is
       registered to open files of the MIME type the file /tmp/foobar.png has
     </para>
     <para>
 <programlisting>
-xdg-mime --system --install diff.xml
+xdg-mime --install --system diff.xml
 </programlisting>
       Adds a file type description for "diff"-files for all users on the
       system. The file type description could look as folows.  

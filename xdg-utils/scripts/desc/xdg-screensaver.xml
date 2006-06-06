@@ -41,6 +41,13 @@
         <arg choice="plain"><option>status</option></arg>
       </group>
     </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-screensaver</command>
+      <group choice="req">
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
+      </group>
+    </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1 id="description">
@@ -128,6 +135,23 @@
         </listitem>
       </varlistentry>
 
+      <varlistentry>
+	<term><option>--help</option></term>
+	<listitem>
+	  <simpara>
+	    Show this help.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
+      </varlistentry>
     </variablelist>
   </refsect1>
 

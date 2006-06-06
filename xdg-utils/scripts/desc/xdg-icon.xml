@@ -36,23 +36,46 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-icon</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
+      <arg choice="plain"><option>--install</option></arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
+      <arg><option>--size <replaceable>size</replaceable></option></arg>
+      <group choice="req">
+	<arg choice="plain"><option>--user</option></arg>
+	<arg choice="plain"><option>--system</option></arg>
+      </group>
+      <arg choice="plain"><replaceable>icon-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-icon</command>
+      <arg choice="plain"><option>--uninstall</option></arg>
+      <arg><option>--noupdate</option></arg>
+      <arg><option>--theme <replaceable>theme</replaceable></option></arg>
+      <arg><option>--context <replaceable>context</replaceable></option></arg>
+      <arg><option>--size <replaceable>size</replaceable></option></arg>
+      <group choice="req">
+	<arg choice="plain"><option>--user</option></arg>
+	<arg choice="plain"><option>--system</option></arg>
+      </group>
+      <arg choice="plain"><replaceable>icon-file</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-icon</command>
+      <arg choice="plain"><option>--forceupdate</option></arg>
+      <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <group choice="req">
 	<arg choice="plain">--user</arg>
 	<arg choice="plain">--system</arg>
       </group>
-      <arg choice="plain"><option>--context <replaceable>context</replaceable></option></arg>
-      <arg choice="plain"><option>--size <replaceable>size</replaceable></option></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-icon</command>
       <group choice="req">
-	<arg choice="plain">--install <replaceable>icon-file</replaceable></arg>
-	<arg choice="plain">--uninstall <replaceable>icon-file</replaceable></arg>
-	<arg choice="plain">--forceupdate</arg>
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
       </group>
-  </cmdsynopsis>
+    </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1 id="description">
@@ -71,21 +94,37 @@
     <title>Options</title>
     <variablelist>
       <varlistentry>
-	<term><option>--help</option></term>
+	<term><option>--install</option></term>
 	<listitem>
 	  <simpara>
-	    Show this help.
+	    Installs the icon file indicated by <replaceable>icon-file</replaceable>
+            to the desktop icon system. The icon file must have
+            <emphasis>.png</emphasis>, <emphasis>.xpm</emphasis> or
+            <emphasis>.svg</emphasis> as extension. If a corresponding
+            <emphasis>.icon</emphasis> file exists in the same location as <replaceable>icon-file</replaceable>
+            it will be installed as well.
 	  </simpara>
 	</listitem>
       </varlistentry>
 
       <varlistentry>
-        <term><option>--version</option></term>
-        <listitem>
-          <simpara>
-            Show the xdg-utils version information.
-          </simpara>
-        </listitem>
+	<term><option>--uninstall</option></term>
+	<listitem>
+	  <simpara>
+	    Removes the icon file indicated by <replaceable>icon-file</replaceable>
+            from the desktop icon system.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--forceupdate</option></term>
+	<listitem>
+	  <simpara>
+	    Force an update of the desktop icon system. This is only useful if
+	    the last call to xdg-icon included the <option>--noupdate</option> option.
+	  </simpara>
+	</listitem>
       </varlistentry>
 
       <varlistentry>
@@ -101,7 +140,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--theme</option> <replaceable>theme</replaceable></term>
+	<term><option>--theme</option> <replaceable>theme</replaceable></term>
 	<listitem>
 	  <simpara>
 	    Installs or removes the icon file as part of 
@@ -114,7 +153,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--context</option> <replaceable>context</replaceable></term>
+	<term><option>--context</option> <replaceable>context</replaceable></term>
 	<listitem>
 	  <simpara>
 	    Specifies the context for the icon. Icons to be used in the
@@ -125,6 +164,20 @@
             Other common contexts are <emphasis>actions</emphasis>,
             <emphasis>devices</emphasis>, <emphasis>emblems</emphasis>,
             <emphasis>filesystems</emphasis> and <emphasis>stock</emphasis>.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--size</option> <replaceable>size</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Specifies the size of the icon (required for png and xpm icons).
+	    All icons must be square.
+	    Common sizes for icons in the apps context are:
+	    16, 22, 32, 48, 64 and 128.  
+	    Common sizes for icons in the mimetypes context are:
+	    16, 22, 32, 48, 64 and 128
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -149,51 +202,21 @@
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--size</option> <replaceable>size</replaceable></term>
+	<term><option>--help</option></term>
 	<listitem>
 	  <simpara>
-	    Specifies the size of the icon (for png and xpm icons only).
-	    All icons must be square.
-	    Common sizes for icons in the apps context are:
-	    16, 22, 32, 48, 64 and 128.  
-	    Common sizes for icons in the mimetypes context are:
-	    16, 22, 32, 48, 64 and 128
+	    Show this help.
 	  </simpara>
 	</listitem>
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--install</option> <replaceable>icon-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Installs the icon file indicated by <replaceable>icon-file</replaceable>
-            to the desktop icon system. The icon file must have the
-            <emphasis>.png</emphasis>, <emphasis>.xpm</emphasis> or
-            <emphasis>.svg</emphasis> as extension. If a corresponding
-            <emphasis>.icon</emphasis> file exists in the same location as <replaceable>icon-file</replaceable>
-            it will be installed as well.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--uninstall</option> <replaceable>icon-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Removes the icon file indicated by <replaceable>icon-file</replaceable>
-            from the desktop icon system.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term><option>--forceupdate</option></term>
-	<listitem>
-	  <simpara>
-	    Force an update of the desktop icon system. This is only useful if
-	    the last call to xdg-icon included the <option>--noupdate</option> option.
-	  </simpara>
-	</listitem>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
       </varlistentry>
 
     </variablelist>

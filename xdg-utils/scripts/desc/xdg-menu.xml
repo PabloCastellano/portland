@@ -36,24 +36,49 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-menu</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
-      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <arg choice="plain">--install</arg>
       <arg><option>--noupdate</option></arg>
+      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <group choice="req">
-	<arg choice="plain">--user</arg>
-	<arg choice="plain">--system</arg>
+	<arg choice="plain"><option>--user</option></arg>
+	<arg choice="plain"><option>--system</option></arg>
       </group>
       <group choice="req">
-	<arg choice="plain">--install <replaceable>desktop-file</replaceable></arg>
-	<arg choice="plain">--install <replaceable>directory-file</replaceable></arg>
-	<arg choice="plain">--install <replaceable>menu-file</replaceable></arg>
-	<arg choice="plain">--uninstall <replaceable>desktop-file</replaceable></arg>
-	<arg choice="plain">--uninstall <replaceable>directory-file</replaceable></arg>
-	<arg choice="plain">--uninstall <replaceable>menu-file</replaceable></arg>
-	<arg choice="plain">--forceupdate</arg>
+	<arg choice="plain"><replaceable>desktop-file</replaceable></arg>
+	<arg choice="plain"><replaceable>menu-file</replaceable></arg>
+	<arg choice="plain"><replaceable>directory-file</replaceable></arg>
       </group>
-  </cmdsynopsis>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-menu</command>
+      <arg choice="plain">--uninstall</arg>
+      <arg><option>--noupdate</option></arg>
+      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <group choice="req">
+	<arg choice="plain"><option>--user</option></arg>
+	<arg choice="plain"><option>--system</option></arg>
+      </group>
+      <group choice="req">
+	<arg choice="plain"><replaceable>desktop-file</replaceable></arg>
+	<arg choice="plain"><replaceable>menu-file</replaceable></arg>
+	<arg choice="plain"><replaceable>directory-file</replaceable></arg>
+      </group>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-menu</command>
+      <arg choice="plain">--forceupdate</arg>
+      <group choice="req">
+	<arg choice="plain"><option>--user</option></arg>
+	<arg choice="plain"><option>--system</option></arg>
+      </group>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-menu</command>
+      <group choice="req">
+	<arg choice="plain">--help</arg>
+	<arg choice="plain">--version</arg>
+      </group>
+    </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1 id="description">
@@ -72,29 +97,43 @@
     <title>Options</title>
     <variablelist>
       <varlistentry>
-	<term><option>--help</option></term>
+	<term><option>--install</option></term>
 	<listitem>
 	  <simpara>
-	    Show this help.
+	    Install applications or submenus into the desktop menu system.
+	  </simpara>
+	  <simpara><replaceable>desktop-file</replaceable>:
+	    Installs the *.desktop file indicated by <replaceable>desktop-file</replaceable>
+            to the menu system. A desktop file represents a single application in the menu.
+	  </simpara>
+	  <simpara><replaceable>menu-file</replaceable>:
+	    Installs the *.menu file indicated by <replaceable>menu-file</replaceable>
+            to the menu system. A menu file describes the location and contents for
+            one or more new submenus. Each submenu must reference a *.directory file.
+	  </simpara>
+	  <simpara><replaceable>directory-file</replaceable>:
+	    Installs the *.directory file indicated by <replaceable>directory-file</replaceable>
+            to the menu system. A directory file provides the name and icon for a submenu.
 	  </simpara>
 	</listitem>
       </varlistentry>
 
       <varlistentry>
-        <term><option>--version</option></term>
-        <listitem>
-          <simpara>
-            Show the xdg-utils version information.
-          </simpara>
-        </listitem>
+	<term><option>--uninstall</option></term>
+	<listitem>
+	  <simpara>
+	    Remove applications or submenus from the desktop menu system
+            previously installed with <command>xdg-menu --install</command>.
+	  </simpara>
+	</listitem>
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--vendor</option> <replaceable>vendor-id</replaceable></term>
+	<term><option>--forceupdate</option></term>
 	<listitem>
 	  <simpara>
-	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
-            and directory files.
+	    Force an update of the menu system. This is only useful if
+	    the last call to xdg-menu included the <option>--noupdate</option> option.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -107,6 +146,16 @@
             menu system are made in sequence this flag can be used to
             indicate that additional changes will follow and that it is not
             necassery to update the menu system right away.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term> <option>--vendor</option> <replaceable>vendor-id</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
+            and directory files.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -131,73 +180,21 @@
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--install</option> <replaceable>desktop-file</replaceable></term>
+	<term><option>--help</option></term>
 	<listitem>
 	  <simpara>
-	    Installs the *.desktop file indicated by <replaceable>desktop-file</replaceable>
-            to the menu system. A desktop file represents a single menu item.
+	    Show this help.
 	  </simpara>
 	</listitem>
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--install</option> <replaceable>directory-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Installs the *.directory file indicated by <replaceable>directory-file</replaceable>
-            to the menu system. A directory file provides the name and icon for a submenu.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--install</option> <replaceable>menu-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Installs the *.menu file indicated by <replaceable>menu-file</replaceable>
-            to the menu system. A menu file describes a submenu.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--uninstall</option> <replaceable>desktop-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Removes the *.desktop file indicated by <replaceable>desktop-file</replaceable>
-            from the menu system.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--uninstall</option> <replaceable>directory-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Removes the *.directory file indicated by <replaceable>directory-file</replaceable>
-            from the menu system.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term> <option>--uninstall</option> <replaceable>menu-file</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Removes the *.menu file indicated by <replaceable>menu-file</replaceable>
-            from the menu system.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term><option>--forceupdate</option></term>
-	<listitem>
-	  <simpara>
-	    Force an update of the menu system. This is only useful if
-	    the last call to xdg-menu included the <option>--noupdate</option> option.
-	  </simpara>
-	</listitem>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-utils version information.
+          </simpara>
+        </listitem>
       </varlistentry>
 
     </variablelist>
@@ -229,7 +226,7 @@ webmirror.desktop:
     <para>Now the xdg-menu tool can be used to add the webmirror.desktop file
     to the desktop application menu:
 <programlisting>
-xdg-menu --system --vendor shinythings --install ./webmirror.desktop
+xdg-menu --install --system --vendor shinythings ./webmirror.desktop
 </programlisting>
     </para>
     <para>
@@ -276,8 +273,8 @@ webmirror-admin.desktop:
     <para>
       The files can be installed with:
 <programlisting>
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.desktop
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror-admin.desktop
+xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.desktop
+xdg-menu --install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
 </programlisting>
     </para>
     <para>
@@ -302,7 +299,7 @@ webmirror.directory:
     <para>
       This webmirror.directorty file can be installed with:
 <programlisting>
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.directory
+xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.directory
 </programlisting>
     </para>
     <para>
@@ -328,14 +325,14 @@ webmirror.menu:
     <para>
       The webmirror.menu file can be installed with:
 <programlisting>
-xdg-menu --system --noupdate --vendor shinythings --install ./webmirror.menu
+xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.menu
 </programlisting>
     </para>
     <para>
       After installing multiple files with <option>--noupdate</option> make sure
       to force an update:
 <programlisting>
-xdg-menu --system --forceupdate
+xdg-menu --forceupdate --system
 </programlisting>
     </para>
   </refsect1>

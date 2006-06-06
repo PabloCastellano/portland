@@ -54,7 +54,9 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-open [--help] [--version] { file | URL }
+   xdg-open { file | URL }
+
+   xdg-open { --help | --version }
 
 _USAGE
 }

@@ -51,7 +51,9 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-su [--help] [--version] [-u user] -c command
+   xdg-su [-u user] -c command
+
+   xdg-su { --help | --version }
 
 _USAGE
 }

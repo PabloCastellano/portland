@@ -24,7 +24,13 @@ xdg-su \- run a program as root after prompting for the root password
 .ad l
 .hy 0
 .HP 7
-\fBxdg\-su\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\-u\ \fIuser\fR\fR] \fB\-c\ \fIcommand\fR\fR
+\fBxdg\-su\fR [\fB\-u\ \fIuser\fR\fR] \fB\-c\ \fIcommand\fR\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 7
+\fBxdg\-su\fR {\fB\fB\-\-help\fR\fR | \fB\fB\-\-version\fR\fR}
 .ad
 .hy
 
@@ -36,16 +42,16 @@ xdg\-su provides a graphical dialog that prompts the user for a password to run 
 .SH "OPTIONS"
 
 .TP
+\fB\-u \fIuser\fR\fR
+run \fIcommand\fR as \fIuser\fR\&. The default is to run as root\&.
+
+.TP
 \fB\-\-help\fR
 Show this help\&.
 
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
-
-.TP
-\fB\-u \fIuser\fR\fR
-run \fIcommand\fR as \fIuser\fR\&. The default is to run as root\&.
 
 .SH "EXAMPLES"
 

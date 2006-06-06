@@ -38,8 +38,11 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-desktop [--help] [--version] [--vendor vendor-id] { --install file |
-   --uninstall file }
+   xdg-desktop --install [--vendor vendor-id] FILE
+
+   xdg-desktop --uninstall [--vendor vendor-id] FILE
+
+   xdg-desktop { --help | --version }
 
 _USAGE
 }

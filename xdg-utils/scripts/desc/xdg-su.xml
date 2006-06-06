@@ -36,10 +36,15 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-su</command>
-      <arg><option>--help</option></arg>
-      <arg><option>--version</option></arg>
       <arg><option>-u <replaceable>user</replaceable></option></arg>
       <arg choice="plain"><option>-c <replaceable>command</replaceable></option></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-su</command>
+      <group choice="req">
+        <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--version</option></arg>
+      </group>
     </cmdsynopsis>
   </refsynopsisdiv>
 
@@ -54,6 +59,16 @@
   <refsect1 id="options">
     <title>Options</title>
     <variablelist>
+      <varlistentry>
+	<term><option>-u <replaceable>user</replaceable></option></term>
+	<listitem>
+	  <simpara>
+	    run <replaceable>command</replaceable> as
+            <replaceable>user</replaceable>. The default is to run as root.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
       <varlistentry>
 	<term><option>--help</option></term>
 	<listitem>
@@ -72,15 +87,6 @@
         </listitem>
       </varlistentry>
 
-      <varlistentry>
-	<term><option>-u <replaceable>user</replaceable></option></term>
-	<listitem>
-	  <simpara>
-	    run <replaceable>command</replaceable> as
-            <replaceable>user</replaceable>. The default is to run as root.
-	  </simpara>
-	</listitem>
-      </varlistentry>
     </variablelist>
   </refsect1>
   <refsect1 id="examples">

@@ -24,7 +24,25 @@ xdg-icon \- command line tool for (un)installing icons
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-icon\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] {\fB\-\-user\fR | \fB\-\-system\fR} \fB\-\-context\ \fIcontext\fR\fR \fB\-\-size\ \fIsize\fR\fR {\fB\-\-install\ \fIicon\-file\fR\fR | \fB\-\-uninstall\ \fIicon\-file\fR\fR | \fB\-\-forceupdate\fR}
+\fBxdg\-icon\fR \fB\-\-install\fR [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-icon\fR \fB\-\-uninstall\fR [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-icon\fR \fB\-\-forceupdate\fR [\fB\-\-theme\ \fItheme\fR\fR] {\fB\-\-user\fR | \fB\-\-system\fR}
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-icon\fR {\fB\fB\-\-help\fR\fR | \fB\fB\-\-version\fR\fR}
 .ad
 .hy
 
@@ -39,12 +57,16 @@ The desktop icon system works according to the XDG Icon Theme Specification at h
 .SH "OPTIONS"
 
 .TP
-\fB\-\-help\fR
-Show this help\&.
+\fB\-\-install\fR
+Installs the icon file indicated by \fIicon\-file\fR to the desktop icon system\&. The icon file must have \fI\&.png\fR, \fI\&.xpm\fR or \fI\&.svg\fR as extension\&. If a corresponding \fI\&.icon\fR file exists in the same location as \fIicon\-file\fR it will be installed as well\&.
 
 .TP
-\fB\-\-version\fR
-Show the xdg\-utils version information\&.
+\fB\-\-uninstall\fR
+Removes the icon file indicated by \fIicon\-file\fR from the desktop icon system\&.
+
+.TP
+\fB\-\-forceupdate\fR
+Force an update of the desktop icon system\&. This is only useful if the last call to xdg\-icon included the \fB\-\-noupdate\fR option\&.
 
 .TP
 \fB\-\-noupdate\fR
@@ -59,6 +81,10 @@ Installs or removes the icon file as part of \fItheme\fR\&. If no theme is speci
 Specifies the context for the icon\&. Icons to be used in the application menu and as desktop icon should use \fIapps\fR as context which is the default context\&. Icons to be used as file icons should use \fImimetypes\fR as context\&. Other common contexts are \fIactions\fR, \fIdevices\fR, \fIemblems\fR, \fIfilesystems\fR and \fIstock\fR\&.
 
 .TP
+\fB\-\-size\fR \fIsize\fR
+Specifies the size of the icon (required for png and xpm icons)\&. All icons must be square\&. Common sizes for icons in the apps context are: 16, 22, 32, 48, 64 and 128\&. Common sizes for icons in the mimetypes context are: 16, 22, 32, 48, 64 and 128
+
+.TP
 \fB\-\-user\fR
 Installs or uninstalls the icon for the current user only\&.
 
@@ -67,20 +93,12 @@ Installs or uninstalls the icon for the current user only\&.
 Installs or uninstalls the icon for all users on the system\&. Usually only root is allowed to do this\&.
 
 .TP
-\fB\-\-size\fR \fIsize\fR
-Specifies the size of the icon (for png and xpm icons only)\&. All icons must be square\&. Common sizes for icons in the apps context are: 16, 22, 32, 48, 64 and 128\&. Common sizes for icons in the mimetypes context are: 16, 22, 32, 48, 64 and 128
+\fB\-\-help\fR
+Show this help\&.
 
 .TP
-\fB\-\-install\fR \fIicon\-file\fR
-Installs the icon file indicated by \fIicon\-file\fR to the desktop icon system\&. The icon file must have the \fI\&.png\fR, \fI\&.xpm\fR or \fI\&.svg\fR as extension\&. If a corresponding \fI\&.icon\fR file exists in the same location as \fIicon\-file\fR it will be installed as well\&.
-
-.TP
-\fB\-\-uninstall\fR \fIicon\-file\fR
-Removes the icon file indicated by \fIicon\-file\fR from the desktop icon system\&.
-
-.TP
-\fB\-\-forceupdate\fR
-Force an update of the desktop icon system\&. This is only useful if the last call to xdg\-icon included the \fB\-\-noupdate\fR option\&.
+\fB\-\-version\fR
+Show the xdg\-utils version information\&.
 
 .SH "EXAMPLES"
 

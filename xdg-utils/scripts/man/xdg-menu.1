@@ -24,7 +24,25 @@ xdg-menu \- command line tool for (un)installing desktop menu items
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-menu\fR [\fB\-\-help\fR] [\fB\-\-version\fR] [\fB\-\-vendor\ \fIvendor\-id\fR\fR] [\fB\-\-noupdate\fR] {\fB\-\-user\fR | \fB\-\-system\fR} {\fB\-\-install\ \fIdesktop\-file\fR\fR | \fB\-\-install\ \fIdirectory\-file\fR\fR | \fB\-\-install\ \fImenu\-file\fR\fR | \fB\-\-uninstall\ \fIdesktop\-file\fR\fR | \fB\-\-uninstall\ \fIdirectory\-file\fR\fR | \fB\-\-uninstall\ \fImenu\-file\fR\fR | \fB\-\-forceupdate\fR}
+\fBxdg\-menu\fR \-\-install [\fB\-\-noupdate\fR] [\fB\-\-vendor\ \fIvendor\-id\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} {\fB\fIdesktop\-file\fR\fR | \fB\fImenu\-file\fR\fR | \fB\fIdirectory\-file\fR\fR}
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-menu\fR \-\-uninstall [\fB\-\-noupdate\fR] [\fB\-\-vendor\ \fIvendor\-id\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} {\fB\fIdesktop\-file\fR\fR | \fB\fImenu\-file\fR\fR | \fB\fIdirectory\-file\fR\fR}
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-menu\fR \-\-forceupdate {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR}
+.ad
+.hy
+.ad l
+.hy 0
+.HP 9
+\fBxdg\-menu\fR {\fB\-\-help\fR | \fB\-\-version\fR}
 .ad
 .hy
 
@@ -39,20 +57,30 @@ The application menu works according to the XDG Desktop Menu Specification at ht
 .SH "OPTIONS"
 
 .TP
-\fB\-\-help\fR
-Show this help\&.
+\fB\-\-install\fR
+Install applications or submenus into the desktop menu system\&.
+
+\fIdesktop\-file\fR: Installs the *\&.desktop file indicated by \fIdesktop\-file\fR to the menu system\&. A desktop file represents a single application in the menu\&.
+
+\fImenu\-file\fR: Installs the *\&.menu file indicated by \fImenu\-file\fR to the menu system\&. A menu file describes the location and contents for one or more new submenus\&. Each submenu must reference a *\&.directory file\&.
+
+\fIdirectory\-file\fR: Installs the *\&.directory file indicated by \fIdirectory\-file\fR to the menu system\&. A directory file provides the name and icon for a submenu\&.
 
 .TP
-\fB\-\-version\fR
-Show the xdg\-utils version information\&.
+\fB\-\-uninstall\fR
+Remove applications or submenus from the desktop menu system previously installed with \fBxdg\-menu \-\-install\fR\&.
 
 .TP
-\fB\-\-vendor\fR \fIvendor\-id\fR
-Adds \fIvendor\-id\fR as a prefix when installing desktop and directory files\&.
+\fB\-\-forceupdate\fR
+Force an update of the menu system\&. This is only useful if the last call to xdg\-menu included the \fB\-\-noupdate\fR option\&.
 
 .TP
 \fB\-\-noupdate\fR
 Postpone updating the menu system\&. If multiple updates to the menu system are made in sequence this flag can be used to indicate that additional changes will follow and that it is not necassery to update the menu system right away\&.
+
+.TP
+\fB\-\-vendor\fR \fIvendor\-id\fR
+Adds \fIvendor\-id\fR as a prefix when installing desktop and directory files\&.
 
 .TP
 \fB\-\-user\fR
@@ -63,32 +91,12 @@ Installs or uninstalls the file for the current user only\&.
 Installs or uninstalls the file for all users on the system\&. Usually only root is allowed to do this\&.
 
 .TP
-\fB\-\-install\fR \fIdesktop\-file\fR
-Installs the *\&.desktop file indicated by \fIdesktop\-file\fR to the menu system\&. A desktop file represents a single menu item\&.
+\fB\-\-help\fR
+Show this help\&.
 
 .TP
-\fB\-\-install\fR \fIdirectory\-file\fR
-Installs the *\&.directory file indicated by \fIdirectory\-file\fR to the menu system\&. A directory file provides the name and icon for a submenu\&.
-
-.TP
-\fB\-\-install\fR \fImenu\-file\fR
-Installs the *\&.menu file indicated by \fImenu\-file\fR to the menu system\&. A menu file describes a submenu\&.
-
-.TP
-\fB\-\-uninstall\fR \fIdesktop\-file\fR
-Removes the *\&.desktop file indicated by \fIdesktop\-file\fR from the menu system\&.
-
-.TP
-\fB\-\-uninstall\fR \fIdirectory\-file\fR
-Removes the *\&.directory file indicated by \fIdirectory\-file\fR from the menu system\&.
-
-.TP
-\fB\-\-uninstall\fR \fImenu\-file\fR
-Removes the *\&.menu file indicated by \fImenu\-file\fR from the menu system\&.
-
-.TP
-\fB\-\-forceupdate\fR
-Force an update of the menu system\&. This is only useful if the last call to xdg\-menu included the \fB\-\-noupdate\fR option\&.
+\fB\-\-version\fR
+Show the xdg\-utils version information\&.
 
 .SH "EXAMPLES"
 
@@ -119,7 +127,7 @@ Now the xdg\-menu tool can be used to add the webmirror\&.desktop file to the de
 
 .nf
 
-xdg\-menu \-\-system \-\-vendor shinythings \-\-install \&./webmirror\&.desktop
+xdg\-menu \-\-install \-\-system \-\-vendor shinythings \&./webmirror\&.desktop
 
 .fi
  
@@ -168,8 +176,8 @@ The files can be installed with:
 
 .nf
 
-xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\&.desktop
-xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\-admin\&.desktop
+xdg\-menu \-\-install \-\-system \-\-noupdate \-\-vendor shinythings \&./webmirror\&.desktop
+xdg\-menu \-\-install \-\-system \-\-noupdate \-\-vendor shinythings \&./webmirror\-admin\&.desktop
 
 .fi
  
@@ -200,7 +208,7 @@ This webmirror\&.directorty file can be installed with:
 
 .nf
 
-xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\&.directory
+xdg\-menu \-\-install \-\-system \-\-noupdate \-\-vendor shinythings \&./webmirror\&.directory
 
 .fi
  
@@ -233,7 +241,7 @@ The webmirror\&.menu file can be installed with:
 
 .nf
 
-xdg\-menu \-\-system \-\-noupdate \-\-vendor shinythings \-\-install \&./webmirror\&.menu
+xdg\-menu \-\-install \-\-system \-\-noupdate \-\-vendor shinythings \&./webmirror\&.menu
 
 .fi
  
@@ -243,7 +251,7 @@ After installing multiple files with \fB\-\-noupdate\fR make sure to force an up
 
 .nf
 
-xdg\-menu \-\-system \-\-forceupdate
+xdg\-menu \-\-forceupdate \-\-system
 
 .fi
  
