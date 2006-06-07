@@ -51,7 +51,8 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-email mailto-uri
+   xdg-email [--utf8] [--to address] [--cc address] [--bcc address]
+   [--subject subject] [--body body] [--attach file] { mailto-uri | address }
 
    xdg-email { --help | --version }
 
@@ -215,20 +216,150 @@ open_xfce()
     fi
 }
 
+url_encode()
+{
+result=$(echo "$1" | $utf8 | awk '
+    BEGIN {
+	for ( i=1; i<=255; ++i ) ord [ sprintf ("%c", i) "" ] = i + 0
+	e = ""
+	linenr = 1
+    }
+    {
+        if ( linenr++ != 1 ) {
+            e = e "%0D%0A"
+        }
+	for ( i=1; i<=length ($0); ++i ) {
+	    c = substr ($0, i, 1)
+	    if ( c ~ /[@a-zA-Z0-9.-]/ ) {
+		e = e c
+	    } else {
+		e = e "%" sprintf("%02X", ord [c])
+	    }
+	}
+	
+    }
+    END {
+        print e
+    }
+')
+}
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+options=
+mailto=
+utf8="iconv -t utf8"
+while [ $# -gt 0 ] ; do
+    parm=$1
+    shift
+
+    case $parm in
+      --utf8)
+        utf8="cat"
+        ;;
+
+      --to)
+        if [ -z "$1" ] ; then
+            exit_failure_arg_count "Error:  You must specify an email address for --to."
+        fi
+        url_encode "$1"
+        options=${options}"to="${result}"&" 
+        shift
+        ;;
+
+      --cc)
+        if [ -z "$1" ] ; then
+            exit_failure_arg_count "Error:  You must specify an email address for --to."
+        fi
+        url_encode "$1"
+        options=${options}"cc="${result}"&" 
+        shift
+        ;;
+
+      --bcc)
+        if [ -z "$1" ] ; then
+            exit_failure_arg_count "Error:  You must specify an email address for --to."
+        fi
+        url_encode "$1"
+        options=${options}"bcc="${result}"&" 
+        shift
+        ;;
+
+      --subject)
+        if [ -z "$1" ] ; then
+            exit_failure_arg_count "Error:  You must specify an email address for --to."
+        fi
+        url_encode "$1"
+        options=${options}"subject="${result}"&" 
+        shift
+        ;;
+
+      --body)
+        if [ -z "$1" ] ; then
+            exit_failure_arg_count "Error:  You must specify an email address for --to."
+        fi
+        url_encode "$1"
+        options=${options}"body="${result}"&" 
+        shift
+        ;;
+
+      --attach)
+        if [ -z "$1" ] ; then
+            exit_failure_arg_count "Error:  You must specify an email address for --to."
+        fi
+        url_encode "$1"
+        options=${options}"attach="${result}"&" 
+        shift
+        ;;
+
+      *@*)
+        url_encode "$parm"
+        mailto="mailto:"${result}
+        shift
+        ;;
+
+      mailto:*)
+        mailto="$parm"
+        shift
+        ;;
+
+      *)
+        exit_failure_arg_malformed "$parm:  Invalid parameter/option"
+        ;;
+    esac
+done
+
+if [ -z "${mailto}" ] ; then
+    exit_failure_arg_count "Error:  You must specify an address or mailto URI."
+fi
+
+case $mailto in
+      *\?)
+        mailto=${mailto}${options}
+        ;;
+
+      *\?*)
+        mailto=${mailto}"&"${options}
+        ;;
+
+      *)
+        mailto=${mailto}"?"${options}
+        ;;
+esac
+
+echo Mailto="${mailto}"
+
+[ x"${mailto}" != x"" ] || exit_failure_arg_count
 
 case "$DE" in
     kde)
-    open_kde "$1"
+    open_kde "${mailto}"
     ;;
 
     gnome)
-    open_gnome "$1"
+    open_gnome "${mailto}"
     ;;
 
     xfce)
-    open_xfce "$1"
+    open_xfce "${mailto}"
     ;;
 
     *)
