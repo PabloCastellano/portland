@@ -1,10 +1,7 @@
 * Add KDE mimelnk support to xdg-mime
 * Add pre-XDG Base Dir support to xdg-icon
-* Rework xdg-email command line options
 * Document exit codes in all manpages
 * Add SEE ALSO references in all manpages
-* Clean up xdg-screensaver options
+* Clean up xdg-screensaver options, add --help and --version
 * Fix interaction between xset and gnome/kde specific hacks in
 xdg-screensaver
-* Update scripts to new option order (--install --noupdate FILE )
-* Change xdg-screensaver script to --options, add --help and --version 
