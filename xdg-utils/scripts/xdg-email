@@ -37,9 +37,15 @@ examples()
 cat << _EXAMPLES
 Examples
 
- xdg-email 'mailto:jwhite@codeweavers.com?subject=Logo contest&' \
-           'body=Attached you find the logo for the contest.&' \
-           'attachment=/tmp/logo.png'
+ xdg-email 'Jeremy White <jwhite@example.com>'
+
+ xdg-email --attach /tmp/logo.png \
+           --subject 'Logo contest' \
+           --body 'Attached you find the logo for the contest.' \
+           'jwhite@example.com'
+
+ xdg-email --subject 'Your password is about to expire' \
+           'jwhite@example.com' 'bastian@example.com' 'whipple@example.com'
 _EXAMPLES
 }
 
@@ -51,8 +57,8 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-email [--utf8] [--to address] [--cc address] [--bcc address]
-   [--subject subject] [--body body] [--attach file] { mailto-uri | address }
+   xdg-email [--utf8] [--cc address] [--bcc address] [--subject subject]
+   [--body body] [--attach file] { mailto-uri | address(es) }
 
    xdg-email { --help | --version }
 
@@ -312,13 +318,15 @@ while [ $# -gt 0 ] ; do
 
       *@*)
         url_encode "$parm"
-        mailto="mailto:"${result}
-        shift
+        if [ -z "${mailto}" ] ; then
+            mailto="mailto:"${result}"?"
+        else
+            options=${options}"to="${result}"&"
+        fi
         ;;
 
       mailto:*)
         mailto="$parm"
-        shift
         ;;
 
       *)

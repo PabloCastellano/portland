@@ -158,13 +158,15 @@ while [ $# -gt 0 ] ; do
 
       *@*)
         url_encode "$parm"
-        mailto="mailto:"${result}
-        shift
+        if [ -z "${mailto}" ] ; then
+            mailto="mailto:"${result}"?"
+        else
+            options=${options}"to="${result}"&"
+        fi
         ;;
 
       mailto:*)
         mailto="$parm"
-        shift
         ;;
 
       *)

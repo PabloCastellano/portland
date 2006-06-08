@@ -48,7 +48,7 @@ scripts-clean:
 README: $(SCRIPTS)
 	echo > $@
 	@for x in $(SCRIPTS) ; do \
-	    sh ./$$x | grep -B 100 Synopsis | sed -e '$$d' >> $@ ; \
+	    sh ./$$x --help | grep -B 100 Synopsis | sed -e '$$d' >> $@ ; \
 	done
 
 install: $(SCRIPTS) $(MANPAGES)

@@ -24,7 +24,7 @@ xdg-email \- command line tool for sending mail using the user's preferred e-mai
 .ad l
 .hy 0
 .HP 10
-\fBxdg\-email\fR \fImailto\-uri\fR
+\fBxdg\-email\fR [\fB\-\-utf8\fR] [\fB\-\-cc\fR\ \fIaddress\fR] [\fB\-\-bcc\fR\ \fIaddress\fR] [\fB\-\-subject\fR\ \fIsubject\fR] [\fB\-\-body\fR\ \fIbody\fR] [\fB\-\-attach\fR\ \fIfile\fR] {\fB\fImailto\-uri\fR\fR | \fB\fIaddress(es)\fR\fR}
 .ad
 .hy
 .ad l
@@ -37,9 +37,36 @@ xdg-email \- command line tool for sending mail using the user's preferred e-mai
 .SH "DESCRIPTION"
 
 .PP
-xdg\-email opens the user's preferred e\-mail composer in order to send a mail to \fImailto\-uri\fR\&. RFC2368 defines mailto: URIs\&. \fImailto\-uri\fR may contain fields for to, cc, bcc, subject, body and attachment\&.
+xdg\-email opens the user's preferred e\-mail composer in order to send a mail to \fIaddress(es)\fR or \fImailto\-uri\fR\&. RFC2368 defines mailto: URIs\&. xdg\-email limits support to, cc, subject and body fields in \fImailto\-uri\fR, all other fields are silently ignored\&. \fIaddress(es)\fR must follow the syntax of RFC822\&. Multiple addresses may be provided as separate arguments\&.
+
+.PP
+All information provided on the command line is used to prefill corresponding fields in the user's e\-mail composer\&. The user will have the opportunity to change any of this information before actually sending the e\-mail\&.
 
 .SH "OPTIONS"
+
+.TP
+\fB\-\-utf8\fR
+Indicates that all command line options that follow are in utf8\&. Without this option, command line options are expected to be encoded according to locale\&. If the locale already specifies utf8 this option has no effect\&. This option does not affect mailto URIs that are passed on the command line\&.
+
+.TP
+\fB\-\-cc\fR \fIaddress\fR
+Specify a recipient to be copied on the e\-mail\&.
+
+.TP
+\fB\-\-bcc\fR \fIaddress\fR
+Specify a recipient to be blindly copied on the e\-mail\&.
+
+.TP
+\fB\-\-subject\fR \fIsubject\fR
+Specify a subject for the e\-mail\&.
+
+.TP
+\fB\-\-body\fR \fIbody\fR
+Specify a body for the e\-mail\&. Since the user will be able to make changes before actually sending the e\-mail, this can be used to provide the user with a template for the e\-mail\&.
+
+.TP
+\fB\-\-attach\fR \fIfile\fR
+Specify an attachment for the e\-mail\&. \fIfile\fR must point to an existing file\&.
 
 .TP
 \fB\-\-help\fR
@@ -56,9 +83,31 @@ Show the xdg\-utils version information\&.
 
 .nf
 
-xdg\-email 'mailto:jwhite@codeweavers\&.com?subject=Logo contest&' \\
-          'body=Attached you find the logo for the contest\&.&' \\
-          'attachment=/tmp/logo\&.png'
+xdg\-email 'Jeremy White <jwhite@example\&.com>'
+
+.fi
+ 
+
+.PP
+ 
+
+.nf
+
+xdg\-email \-\-attach /tmp/logo\&.png \\
+          \-\-subject 'Logo contest' \\
+          \-\-body 'Attached you find the logo for the contest\&.' \\
+          'jwhite@example\&.com'
+
+.fi
+ 
+
+.PP
+ 
+
+.nf
+
+xdg\-email \-\-subject 'Your password is about to expire' \\
+          'jwhite@example\&.com' 'bastian@example\&.com' 'whipple@example\&.com'
 
 .fi
  
