@@ -25,7 +25,7 @@
 
   <refnamediv>
     <refname>xdg-screensaver</refname>
-    <refpurpose>Enable, disable, and suspend the screensaver</refpurpose>
+    <refpurpose>Control the screensaver</refpurpose>
   </refnamediv>
 
   <refsynopsisdiv>
@@ -34,8 +34,6 @@
       <group choice="req">
         <arg choice="plain"><option>suspend <replaceable>delay</replaceable></option></arg>
         <arg choice="plain"><option>restore</option></arg>
-        <arg choice="plain"><option>enable</option></arg>
-        <arg choice="plain"><option>disable</option></arg>
         <arg choice="plain"><option>activate</option></arg>
         <arg choice="plain"><option>reset</option></arg>
         <arg choice="plain"><option>status</option></arg>
@@ -82,27 +80,6 @@
           <simpara>
             Restores the screensaver state, timeout, etc. to the 
             user's standard settings.
-          </simpara>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term><option>enable</option></term>
-        <listitem>
-          <simpara>
-            This enables the screensaver to turn on after a certain
-            amount of inactivity.  Generally, applications will want to
-            use <option>restore</option> rather than <option>enable</option>.
-          </simpara>
-        </listitem>
-      </varlistentry>
-
-      <varlistentry>
-        <term><option>disable</option></term>
-        <listitem>
-          <simpara>
-            Disables the screensaver and power management from turning
-            on due to inactivity.
           </simpara>
         </listitem>
       </varlistentry>
