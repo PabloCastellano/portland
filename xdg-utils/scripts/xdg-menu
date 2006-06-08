@@ -313,44 +313,34 @@ mode=
 action=
 update=yes
 desktop_file=
+
+case $1 in
+  install)
+    action=install
+    ;;
+
+  uninstall)
+    action=uninstall
+    ;;
+
+  forceupdate)
+    action=forceupdate
+    ;;
+
+  *)
+  exit_failure_arg_malformed "$1:  Invalid parameter/option"
+  ;;
+esac
+
+shift
+
+
+
 while [ $# -gt 0 ] ; do
     parm=$1
     shift
 
     case $parm in
-      --install)
-        if [ -n "$action" ] ; then
-            exit_failure_arg_count "Error:  Too many options:" $parm $1
-        fi
-        if [ ! -f "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an existing file to install."
-        fi
-
-        action=install
-        desktop_file=$1
-        shift
-        ;;
-
-      --uninstall)
-        if [ -n "$action" ] ; then
-            exit_failure_arg_count "Error:  Too many options:" $parm $1
-        fi
-        if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a file to uninstall."
-        fi
-        action=uninstall
-        desktop_file=$1
-        shift
-        ;;
-
-      --forceupdate)
-        if [ -n "$action" ] ; then
-            exit_failure_arg_count "Error:  Too many options:" $parm $1
-        fi
-
-        action=forceupdate
-        ;;
-
       --noupdate)
         update=no
         ;;
@@ -372,23 +362,36 @@ while [ $# -gt 0 ] ; do
         ;;
 
       *)
-        exit_failure_arg_malformed "$parm:  Invalid parameter/option"
+        if [ -n "$desktop_file" ] ; then
+            exit_failure_arg_count "Error:  Too many arguments: $parm"
+        fi
+        if [ "$action" = "install" ] ; then
+            if [ ! -f "$parm" ] ; then
+                exit_failure_arg_count "Error:  You must specify an existing file to install."
+            fi
+        fi
+        desktop_file=$parm
         ;;
     esac
 done
 
-if [ -z "$mode" ] ; then
-    exit_failure_arg_malformed "Error:  You must specify either --user or --system"
-fi
-
 if [ -z "$action" ] ; then
     exit_failure_arg_count
+fi
+
+if [ -z "$mode" ] ; then
+    exit_failure_arg_malformed "Error:  You must specify either --user or --system"
 fi
 
 if [ x"$action" = x"forceupdate" ] ; then
     update_desktop_database
     exit_success
 fi
+
+if [ -z "$desktop_file" ] ; then
+    exit_failure_arg_count
+fi
+
 
 filetype=
 xdg_dir_name=

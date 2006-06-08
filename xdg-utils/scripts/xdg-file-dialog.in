@@ -241,112 +241,116 @@ directory_zenity()
     fi
 }
 
-check_title()
-{
-    TITLE=
-    while [ x"$TITLE" = x"" -a $# -gt 0 ] ; do
-        parm=$1
-        shift
-
-        if [ x"$parm" = x"--title" ]; then
-            if [ x"$1" = x"" ]; then
-                exit_failure_arg_count
-            else
-                TITLE="$1"
-            fi
-        fi
-    done
-}
-
 [ x"$1" != x"" ] || exit_failure_arg_count
 
-# check if optional title is specified and remove it if it is the first command
-check_title "$@"
-if [ x"$TITLE" != x"" ]; then
+TITLE=
+action=
+filename=
+
+case $1 in
+  openfilename)
+    action=openfilename
+    ;;
+
+  openfilenamelist)
+    action=openfilenamelist
+    ;;
+
+  savefilename)
+    action=savefilename
+    ;;
+    
+  directory)
+    action=directory
+    ;;
+
+  *)
+  exit_failure_arg_malformed "$parm:  Invalid parameter/option"
+  ;;
+esac
+
+shift
+
+while [ $# -gt 0 ] ; do
+    parm=$1
     shift
-    shift
+
+    case $parm in
+      --title)
+        if [ -z "$1" ] ; then
+            exit_failure_arg_count "Error:  You must specify a vendor-id."
+        fi
+        TITLE="$1"
+        shift
+        ;;
+
+      *)
+        if [ -n "$filename" ] ; then
+            exit_failure_arg_count "Error:  Too many arguments: $parm"
+        fi
+        filename="$parm"
+        ;;
+    esac
+done
+
+if [ -z "$action" ] ; then
+    exit_failure_arg_count
 fi
 
-if [ x"$1" = x"--openfilename" ]; then
-    shift
-
-    if [ $# -gt 1 ]; then
-        exit_failure_arg_count
-    fi;
-
+if [ "$action" = "openfilename" ]; then
     case "$DE" in
         kde)
-        open_kde "$1"
+        open_kde "$filename"
         ;;
 
         gnome|xfce)
-        open_zenity "$1"
+        open_zenity "$filename"
         ;;
 
         *)
         exit_failure_operation_impossible "Sorry, no method available for getting a filename for opening"
         ;;
     esac
-elif [ x"$1" = x"--openfilenamelist" ]; then
-    shift
-
-    if [ $# -gt 1 ]; then
-        exit_failure_arg_count
-    fi;
-
+elif [ "$action" = "openfilenamelist" ]; then
     case "$DE" in
         kde)
-        open_multi_kde "$1"
+        open_multi_kde "$filename"
         ;;
 
         gnome|xfce)
-        open_multi_zenity "$1"
+        open_multi_zenity "$filename"
         ;;
 
         *)
         exit_failure_operation_impossible "Sorry, no method available for getting a list of filenames for opening"
         ;;
     esac
-elif [ x"$1" = x"--savefilename" ]; then
-    shift
-
-    if [ $# -gt 1 ]; then
-        exit_failure_arg_count
-    fi;
-
+elif [ "$action" = "savefilename" ]; then
     case "$DE" in
         kde)
-        save_kde "$1"
+        save_kde "$filename"
         ;;
 
         gnome|xfce)
-        save_zenity "$1"
+        save_zenity "$filename"
         ;;
 
         *)
         exit_failure_operation_impossible "Sorry, no method available for getting a filename for saving"
         ;;
     esac
-elif [ x"$1" = x"--directory" ]; then
-    shift
-
-    if [ $# -gt 1 ]; then
-        exit_failure_arg_count
-    fi;
-
+elif [ "$action" = "directory" ]; then
     case "$DE" in
         kde)
-        directory_kde "$1"
+        directory_kde "$filename"
         ;;
 
         gnome|xfce)
-        directory_zenity "$1"
+        directory_zenity "$filename"
         ;;
 
         *)
         exit_failure_operation_impossible "Sorry, no method available for getting a directory"
         ;;
     esac
-else
-    exit_failure_arg_malformed "Unkown command" "$1"
 fi

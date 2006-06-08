@@ -263,62 +263,53 @@ defapp_gnome()
 
 mode=
 action=
-mimetypes_file=
-info_file=
+filename=
+
+case $1 in
+  install)
+    action=install
+    ;;
+
+  uninstall)
+    action=uninstall
+    ;;
+
+  query)
+    shift
+
+    if [ -z "$1" ] ; then 
+        exit_failure_arg_count "query type missing"
+    fi
+    
+    case $1 in
+      filetype)
+        action=info
+        ;;
+
+      default)
+        action=defapp
+        ;;
+
+      *)
+      exit_failure_arg_malformed "$1:  Invalid parameter/option"
+      ;;
+    esac
+    ;;
+
+  *)
+  exit_failure_arg_malformed "$1:  Invalid parameter/option"
+  ;;
+esac
+
+shift
+
+
+
 while [ $# -gt 0 ] ; do
     parm=$1
     shift
 
     case $parm in
-      --install)
-        if [ -n "$action" ] ; then
-            exit_failure_arg_count "Error:  Too many options:" $parm $1
-        fi
-        if [ ! -f "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an existing file to install."
-        fi
-
-        action=install
-        mimetypes_file=$1
-        shift
-        ;;
-
-      --uninstall)
-        if [ -n "$action" ] ; then
-            exit_failure_arg_count "Error:  Too many options:" $parm $1
-        fi
-        if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a file to uninstall."
-        fi
-        action=uninstall
-        mimetypes_file=$1
-        shift
-        ;;
-
-      --info)
-        if [ -n "$action" ] ; then
-            exit_failure_arg_count "Error:  Too many options:" $parm $1
-        fi
-        if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a file with --info."
-        fi
-        action=info
-        info_file=$1
-        shift
-        ;;
-
-      --defapp)
-        if [ -n "$action" ] ; then
-            exit_failure_arg_count "Error:  Too many options:" $parm $1
-        fi
-        if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a file with --defapp."
-        fi
-        action=defapp
-        info_file=$1
-        shift
-        ;;
-
       --user)
         mode=user
         ;;
@@ -328,11 +319,22 @@ while [ $# -gt 0 ] ; do
         ;;
 
       *)
-        exit_failure_arg_malformed "$parm:  Invalid parameter/option"
+        if [ -n "$filename" ] ; then
+            exit_failure_arg_count "Error:  Too many arguments: $parm"
+        fi
+        if [ "$action" = "install" ] ; then
+            if [ ! -f "$parm" ] ; then
+                exit_failure_arg_count "Error:  You must specify an existing file to install."
+            fi
+        elif [ "$action" != "uninstall" ] ; then
+            if [ ! -f "$parm" ] ; then
+                exit_failure_arg_count "Error:  You must specify an existing file."
+            fi
+        fi
+        filename=$parm
         ;;
     esac
 done
-
 
 if [ -z "$action" ] ; then
     exit_failure_arg_count
@@ -352,18 +354,18 @@ if [ "$action" = "info" ]; then
 
     case "$DE" in
         kde)
-        info_kde "$info_file"
+        info_kde "$filename"
         ;;
 
         gnome)
-        info_gnome "$info_file"
+        info_gnome "$filename"
         ;;
 
         generic)
-        info_generic "$info_file"
+        info_generic "$filename"
         ;;
     esac
-    exit_failure_operation_impossible "Sorry, no method available for quering MIME type of" "$info_file"
+    exit_failure_operation_impossible "Sorry, no method available for quering MIME type of" "$filename"
 fi
 
 if [ "$action" = "defapp" ]; then
@@ -373,14 +375,14 @@ if [ "$action" = "defapp" ]; then
 
     case "$DE" in
         kde)
-        defapp_kde "$info_file"
+        defapp_kde "$filename"
         ;;
 
         gnome)
-        defapp_gnome "$info_file"
+        defapp_gnome "$filename"
         ;;
     esac
-    exit_failure_operation_impossible "Sorry, no method available for quering default application for file" "$info_file"
+    exit_failure_operation_impossible "Sorry, no method available for quering default application for file" "$filename"
 fi
 
 if [ -z "$mode" ] ; then
@@ -437,7 +439,7 @@ fi
 # echo "[gnome|$gnome_user_dir|$gnome_global_dir]"
 # echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
 
-basefile=`basename $mimetypes_file`
+basefile=`basename $filename`
 #[ -z $vendor ] || basefile=$vendor-$basefile
 
 case $action in
@@ -447,7 +449,7 @@ case $action in
 
         for x in $xdg_dir ; do
             mkdir -p $x
-            cp $mimetypes_file $x/$basefile
+            cp $filename $x/$basefile
         done
 
         umask $save_umask
