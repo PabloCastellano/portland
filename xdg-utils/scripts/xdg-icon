@@ -49,13 +49,13 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-icon --install [--noupdate] [--theme theme] [--context context]
+   xdg-icon install [--noupdate] [--theme theme] [--context context] [--size
+   size] { --user | --system } icon-file
+
+   xdg-icon uninstall [--noupdate] [--theme theme] [--context context]
    [--size size] { --user | --system } icon-file
 
-   xdg-icon --uninstall [--noupdate] [--theme theme] [--context context]
-   [--size size] { --user | --system } icon-file
-
-   xdg-icon --forceupdate [--theme theme] { --user | --system }
+   xdg-icon forceupdate [--theme theme] { --user | --system }
 
    xdg-icon { --help | --version }
 

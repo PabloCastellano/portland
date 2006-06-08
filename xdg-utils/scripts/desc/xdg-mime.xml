@@ -37,12 +37,16 @@ and adding descriptions for new file types</refpurpose>
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-mime</command>
-      <arg choice="plain"><option>--query <replaceable>what</replaceable></option></arg>
+      <arg choice="plain">query</arg>
+      <group choice="req">
+	<arg choice="plain">filetype</arg>
+	<arg choice="plain">default</arg>
+      </group>
       <arg choice="plain"><replaceable>FILE</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-mime</command>
-      <arg choice="plain"><option>--install</option></arg>	
+      <arg choice="plain">install</arg>	
       <group choice="req">
 	<arg choice="plain"><option>--user</option></arg>
 	<arg choice="plain"><option>--system</option></arg>
@@ -51,7 +55,7 @@ and adding descriptions for new file types</refpurpose>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-mime</command>
-      <arg choice="plain"><option>--uninstall</option></arg>	
+      <arg choice="plain">uninstall</arg>	
       <group choice="req">
 	<arg choice="plain"><option>--user</option></arg>
 	<arg choice="plain"><option>--system</option></arg>
@@ -74,17 +78,18 @@ and adding descriptions for new file types</refpurpose>
       and to add descriptions for new file types.
     </para>
   </refsect1>
-  <refsect1 id="options">
-    <title>Options</title>
+  <refsect1 id="commands">
+    <title>Commands</title>
     <variablelist>
       <varlistentry>
-	<term><option>--query</option> <replaceable>what</replaceable></term>
+	<term>query</term>
 	<listitem>
 	  <simpara>
-	    Returns information related to the file type of <replaceable>FILE</replaceable>
-            as specified by <replaceable>what</replaceable>:
+	    Returns information related to the file type of
+            <replaceable>FILE</replaceable>.
+            The following queries are supported:
 	  </simpara>
-	  <simpara><emphasis>type</emphasis>:
+	  <simpara><emphasis>filetype</emphasis>:
 	    Returns the file type of <replaceable>FILE</replaceable> in the form of a MIME type.
 	  </simpara>
 	  <simpara><emphasis>default</emphasis>:
@@ -95,9 +100,8 @@ and adding descriptions for new file types</refpurpose>
 	</listitem>
       </varlistentry>
 
-
       <varlistentry>
-	<term><option>--install</option></term>
+	<term>install</term>
 	<listitem>
 	  <simpara>
 	    Adds the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
@@ -110,11 +114,11 @@ and adding descriptions for new file types</refpurpose>
       </varlistentry>
 
       <varlistentry>
-	<term><option>--uninstall</option></term>
+	<term>uninstall</term>
 	<listitem>
 	  <simpara>
 	    Removes the file type descriptions provided in <replaceable>mimetypes-file</replaceable>
-            and previously added with <command>xdg-mime --install</command> from the
+            and previously added with <command>xdg-mime install</command> from the
             desktop environment. <replaceable>mimetypes-file</replaceable>
             must be a XML file that follows the freedesktop.org
             Shared MIME-info Database specification
@@ -122,7 +126,12 @@ and adding descriptions for new file types</refpurpose>
 	  </simpara>
 	</listitem>
       </varlistentry>
+    </variablelist>
+  </refsect1>
 
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
       <varlistentry>
 	<term><option>--user</option></term>
 	<listitem>
@@ -166,20 +175,20 @@ and adding descriptions for new file types</refpurpose>
     <title>Examples</title>
     <para>
 <programlisting>
-xdg-mime --query type /tmp/foobar.png
+xdg-mime query filetype /tmp/foobar.png
 </programlisting>
       Prints the MIME type of the file /tmp/foobar.png
     </para>
     <para>
 <programlisting>
-xdg-mime --query default /tmp/foobar.png
+xdg-mime query default /tmp/foobar.png
 </programlisting>
       Prints the name of the .desktop file of the application which is
       registered to open files of the MIME type the file /tmp/foobar.png has
     </para>
     <para>
 <programlisting>
-xdg-mime --install --system diff.xml
+xdg-mime install --system diff.xml
 </programlisting>
       Adds a file type description for "diff"-files for all users on the
       system. The file type description could look as folows.  

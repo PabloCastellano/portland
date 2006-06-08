@@ -1,30 +1,31 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-mime</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-mime"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-mime &#8212; command line tool for querying information about file type handling
-and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   <code class="option">--query <em class="replaceable"><code>what</code></em></code>   <em class="replaceable"><code>FILE</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   <code class="option">--install</code>  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   <code class="option">--uninstall</code>  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   query  { filetype  |   default }  <em class="replaceable"><code>FILE</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   install  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   uninstall  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-mime program can be used to query information about file types
       and to add descriptions for new file types.
-    </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--query</code> <em class="replaceable"><code>what</code></em></span></dt><dd><p>
-	    Returns information related to the file type of <em class="replaceable"><code>FILE</code></em>
-            as specified by <em class="replaceable"><code>what</code></em>:
-	  </p><p><span class="emphasis"><em>type</em></span>:
+    </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">query</span></dt><dd><p>
+	    Returns information related to the file type of
+            <em class="replaceable"><code>FILE</code></em>.
+            The following queries are supported:
+	  </p><p><span class="emphasis"><em>filetype</em></span>:
 	    Returns the file type of <em class="replaceable"><code>FILE</code></em> in the form of a MIME type.
 	  </p><p><span class="emphasis"><em>default</em></span>:
 	    Returns the default application that the desktop environment uses for opening
 	    <em class="replaceable"><code>FILE</code></em>. The default applications is
             identified by its *.desktop file.
-	  </p></dd><dt><span class="term"><code class="option">--install</code></span></dt><dd>
+	  </p></dd><dt><span class="term">install</span></dt><dd>
 	    Adds the file type descriptions provided in <em class="replaceable"><code>mimetypes-file</code></em>
             to the desktop environment. <em class="replaceable"><code>mimetypes-file</code></em>
             must be a XML file that follows the freedesktop.org 
             Shared MIME-info Database specification
             and that has a mime-info element as its document root.
-	  </dd><dt><span class="term"><code class="option">--uninstall</code></span></dt><dd>
+	  </dd><dt><span class="term">uninstall</span></dt><dd>
 	    Removes the file type descriptions provided in <em class="replaceable"><code>mimetypes-file</code></em>
-            and previously added with <span><strong class="command">xdg-mime --install</strong></span> from the
+            and previously added with <span><strong class="command">xdg-mime install</strong></span> from the
             desktop environment. <em class="replaceable"><code>mimetypes-file</code></em>
             must be a XML file that follows the freedesktop.org
             Shared MIME-info Database specification
             and that has a mime-info element as its document root.
-	  </dd><dt><span class="term"><code class="option">--user</code></span></dt><dd>
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--user</code></span></dt><dd>
 	    Adds or removes file type descriptions for the current user only.
 	  </dd><dt><span class="term"><code class="option">--system</code></span></dt><dd>
 	    Adds or removes file type descriptions for all users on the system.
@@ -35,18 +36,18 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
             Show the xdg-utils version information.
           </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
 </p><pre class="programlisting">
-xdg-mime --query type /tmp/foobar.png
+xdg-mime query filetype /tmp/foobar.png
 </pre><p>
       Prints the MIME type of the file /tmp/foobar.png
     </p><p>
 </p><pre class="programlisting">
-xdg-mime --query default /tmp/foobar.png
+xdg-mime query default /tmp/foobar.png
 </pre><p>
       Prints the name of the .desktop file of the application which is
       registered to open files of the MIME type the file /tmp/foobar.png has
     </p><p>
 </p><pre class="programlisting">
-xdg-mime --install --system diff.xml
+xdg-mime install --system diff.xml
 </pre><p>
       Adds a file type description for "diff"-files for all users on the
       system. The file type description could look as folows.  

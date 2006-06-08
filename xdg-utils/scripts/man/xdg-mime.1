@@ -24,19 +24,19 @@ xdg-mime \- command line tool for querying information about file type handling 
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-mime\fR \fB\-\-query\ \fIwhat\fR\fR \fIFILE\fR
+\fBxdg\-mime\fR query {\fBfiletype\fR | \fBdefault\fR} \fIFILE\fR
 .ad
 .hy
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-mime\fR \fB\-\-install\fR {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fImimetypes\-file\fR
+\fBxdg\-mime\fR install {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fImimetypes\-file\fR
 .ad
 .hy
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-mime\fR \fB\-\-uninstall\fR {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fImimetypes\-file\fR
+\fBxdg\-mime\fR uninstall {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fImimetypes\-file\fR
 .ad
 .hy
 .ad l
@@ -51,23 +51,25 @@ xdg-mime \- command line tool for querying information about file type handling 
 .PP
 The xdg\-mime program can be used to query information about file types and to add descriptions for new file types\&.
 
-.SH "OPTIONS"
+.SH "COMMANDS"
 
 .TP
-\fB\-\-query\fR \fIwhat\fR
-Returns information related to the file type of \fIFILE\fR as specified by \fIwhat\fR:
+query
+Returns information related to the file type of \fIFILE\fR\&. The following queries are supported:
 
-\fItype\fR: Returns the file type of \fIFILE\fR in the form of a MIME type\&.
+\fIfiletype\fR: Returns the file type of \fIFILE\fR in the form of a MIME type\&.
 
 \fIdefault\fR: Returns the default application that the desktop environment uses for opening \fIFILE\fR\&. The default applications is identified by its *\&.desktop file\&.
 
 .TP
-\fB\-\-install\fR
+install
 Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
 
 .TP
-\fB\-\-uninstall\fR
-Removes the file type descriptions provided in \fImimetypes\-file\fR and previously added with \fBxdg\-mime \-\-install\fR from the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
+uninstall
+Removes the file type descriptions provided in \fImimetypes\-file\fR and previously added with \fBxdg\-mime install\fR from the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
+
+.SH "OPTIONS"
 
 .TP
 \fB\-\-user\fR
@@ -92,7 +94,7 @@ Show the xdg\-utils version information\&.
 
 .nf
 
-xdg\-mime \-\-query type /tmp/foobar\&.png
+xdg\-mime query filetype /tmp/foobar\&.png
 
 .fi
  Prints the MIME type of the file /tmp/foobar\&.png
@@ -102,7 +104,7 @@ xdg\-mime \-\-query type /tmp/foobar\&.png
 
 .nf
 
-xdg\-mime \-\-query default /tmp/foobar\&.png
+xdg\-mime query default /tmp/foobar\&.png
 
 .fi
  Prints the name of the \&.desktop file of the application which is registered to open files of the MIME type the file /tmp/foobar\&.png has
@@ -112,7 +114,7 @@ xdg\-mime \-\-query default /tmp/foobar\&.png
 
 .nf
 
-xdg\-mime \-\-install \-\-system diff\&.xml
+xdg\-mime install \-\-system diff\&.xml
 
 .fi
  Adds a file type description for "diff"\-files for all users on the system\&. The file type description could look as folows\&. 

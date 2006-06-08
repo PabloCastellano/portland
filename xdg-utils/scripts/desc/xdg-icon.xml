@@ -36,7 +36,7 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-icon</command>
-      <arg choice="plain"><option>--install</option></arg>
+      <arg choice="plain">install</arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
@@ -49,7 +49,7 @@
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-icon</command>
-      <arg choice="plain"><option>--uninstall</option></arg>
+      <arg choice="plain">uninstall</arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
@@ -62,7 +62,7 @@
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-icon</command>
-      <arg choice="plain"><option>--forceupdate</option></arg>
+      <arg choice="plain">forceupdate</arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <group choice="req">
 	<arg choice="plain">--user</arg>
@@ -90,11 +90,11 @@
       http://www.freedesktop.org/Standards/icon-theme--spec
     </para>
   </refsect1>
-  <refsect1 id="options">
-    <title>Options</title>
+  <refsect1 id="commands">
+    <title>Commands</title>
     <variablelist>
       <varlistentry>
-	<term><option>--install</option></term>
+	<term>install</term>
 	<listitem>
 	  <simpara>
 	    Installs the icon file indicated by <replaceable>icon-file</replaceable>
@@ -108,7 +108,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term><option>--uninstall</option></term>
+	<term>uninstall</term>
 	<listitem>
 	  <simpara>
 	    Removes the icon file indicated by <replaceable>icon-file</replaceable>
@@ -118,7 +118,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term><option>--forceupdate</option></term>
+	<term>forceupdate</term>
 	<listitem>
 	  <simpara>
 	    Force an update of the desktop icon system. This is only useful if
@@ -126,7 +126,11 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
-
+    </variablelist>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
       <varlistentry>
 	<term><option>--noupdate</option></term>
 	<listitem>

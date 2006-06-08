@@ -24,19 +24,19 @@ xdg-icon \- command line tool for (un)installing icons
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-icon\fR \fB\-\-install\fR [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
+\fBxdg\-icon\fR install [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
 .ad
 .hy
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-icon\fR \fB\-\-uninstall\fR [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
+\fBxdg\-icon\fR uninstall [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
 .ad
 .hy
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-icon\fR \fB\-\-forceupdate\fR [\fB\-\-theme\ \fItheme\fR\fR] {\fB\-\-user\fR | \fB\-\-system\fR}
+\fBxdg\-icon\fR forceupdate [\fB\-\-theme\ \fItheme\fR\fR] {\fB\-\-user\fR | \fB\-\-system\fR}
 .ad
 .hy
 .ad l
@@ -54,19 +54,21 @@ The xdg\-icon program can be used to install icons into the desktop icon system 
 .PP
 The desktop icon system works according to the XDG Icon Theme Specification at http://www\&.freedesktop\&.org/Standards/icon\-theme\-\-spec
 
-.SH "OPTIONS"
+.SH "COMMANDS"
 
 .TP
-\fB\-\-install\fR
+install
 Installs the icon file indicated by \fIicon\-file\fR to the desktop icon system\&. The icon file must have \fI\&.png\fR, \fI\&.xpm\fR or \fI\&.svg\fR as extension\&. If a corresponding \fI\&.icon\fR file exists in the same location as \fIicon\-file\fR it will be installed as well\&.
 
 .TP
-\fB\-\-uninstall\fR
+uninstall
 Removes the icon file indicated by \fIicon\-file\fR from the desktop icon system\&.
 
 .TP
-\fB\-\-forceupdate\fR
+forceupdate
 Force an update of the desktop icon system\&. This is only useful if the last call to xdg\-icon included the \fB\-\-noupdate\fR option\&.
+
+.SH "OPTIONS"
 
 .TP
 \fB\-\-noupdate\fR

@@ -31,25 +31,25 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-file-dialog</command>
-      <arg choice="plain"><option>--openfilename</option></arg>
+      <arg choice="plain">openfilename</arg>
       <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
       <arg><replaceable>FILENAME</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-file-dialog</command>
-      <arg choice="plain"><option>--openfilenamelist</option></arg>
+      <arg choice="plain">openfilenamelist</arg>
       <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
       <arg><replaceable>FILENAME</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-file-dialog</command>
-      <arg choice="plain"><option>--savefilename</option></arg>
+      <arg choice="plain">savefilename</arg>
       <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
       <arg><replaceable>FILENAME</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-file-dialog</command>
-      <arg choice="plain"><option>--directory</option></arg>
+      <arg choice="plain">directory</arg>
       <arg><option>--title <replaceable>TITLE</replaceable></option></arg>
       <arg><replaceable>DIRNAME</replaceable></arg>
     </cmdsynopsis>
@@ -69,11 +69,11 @@
       handle file and directory input.
     </para>
   </refsect1>
-  <refsect1 id="options">
-    <title>Options</title>
+  <refsect1 id="commands">
+    <title>Commands</title>
     <variablelist>
       <varlistentry>
-        <term><option>--openfilename</option></term>
+        <term>openfilename</term>
         <listitem>
           <simpara>
               Returns the filename with path for a file to read from.
@@ -84,7 +84,7 @@
       </varlistentry>
 
       <varlistentry>
-        <term><option>--openfilenamelist</option></term>
+        <term>openfilenamelist</term>
         <listitem>
           <simpara>
             Returns one or more filenames with path for files to read from,
@@ -95,7 +95,7 @@
       </varlistentry>
 
       <varlistentry>
-        <term><option>--savefilename</option></term>
+        <term>savefilename</term>
         <listitem>
           <simpara>
             Returns the filename with path for file to write to.
@@ -106,7 +106,7 @@
       </varlistentry>
 
       <varlistentry>
-        <term><option>--directory</option></term>
+        <term>directory</term>
         <listitem>
           <simpara>
             Returns the path for an exsiting directory.
@@ -115,7 +115,11 @@
             </simpara>
         </listitem>
       </varlistentry>
-
+    </variablelist>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
       <varlistentry>
         <term><option>--title</option> <replaceable>TITLE</replaceable></term>
         <listitem>
@@ -149,13 +153,13 @@
     <title>Examples</title>
     <para>
 <programlisting>
-xdg-file-dialog --savefilename /tmp/foobar.png
+xdg-file-dialog savefilename /tmp/foobar.png
 </programlisting>
       Asks for a save file name starting in directory /tmp and suggesting foobar.png as the filename
     </para>
     <para>
 <programlisting>
-xdg-file-dialog --directory --title "Select a target folder" /tmp
+xdg-file-dialog directory --title "Select a target folder" /tmp
 </programlisting>
       Asks for a directory name starting in directory /tmp using the text "Select a target folder" as the dialog's title/caption.
     </para>

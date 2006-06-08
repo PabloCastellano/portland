@@ -24,25 +24,25 @@ xdg-file-dialog \- command line tool for providing file and directory selection 
 .ad l
 .hy 0
 .HP 16
-\fBxdg\-file\-dialog\fR \fB\-\-openfilename\fR [\fB\-\-title\ \fITITLE\fR\fR] [\fIFILENAME\fR]
+\fBxdg\-file\-dialog\fR openfilename [\fB\-\-title\ \fITITLE\fR\fR] [\fIFILENAME\fR]
 .ad
 .hy
 .ad l
 .hy 0
 .HP 16
-\fBxdg\-file\-dialog\fR \fB\-\-openfilenamelist\fR [\fB\-\-title\ \fITITLE\fR\fR] [\fIFILENAME\fR]
+\fBxdg\-file\-dialog\fR openfilenamelist [\fB\-\-title\ \fITITLE\fR\fR] [\fIFILENAME\fR]
 .ad
 .hy
 .ad l
 .hy 0
 .HP 16
-\fBxdg\-file\-dialog\fR \fB\-\-savefilename\fR [\fB\-\-title\ \fITITLE\fR\fR] [\fIFILENAME\fR]
+\fBxdg\-file\-dialog\fR savefilename [\fB\-\-title\ \fITITLE\fR\fR] [\fIFILENAME\fR]
 .ad
 .hy
 .ad l
 .hy 0
 .HP 16
-\fBxdg\-file\-dialog\fR \fB\-\-directory\fR [\fB\-\-title\ \fITITLE\fR\fR] [\fIDIRNAME\fR]
+\fBxdg\-file\-dialog\fR directory [\fB\-\-title\ \fITITLE\fR\fR] [\fIDIRNAME\fR]
 .ad
 .hy
 .ad l
@@ -57,23 +57,25 @@ xdg-file-dialog \- command line tool for providing file and directory selection 
 .PP
 The xdg\-file\-dialog program can be used to let the native file selection dialog handle file and directory input\&.
 
-.SH "OPTIONS"
+.SH "COMMANDS"
 
 .TP
-\fB\-\-openfilename\fR
+openfilename
 Returns the filename with path for a file to read from\&. \fIFILENAME\fR can optionally be used to specify path and filename of a preselection\&.
 
 .TP
-\fB\-\-openfilenamelist\fR
+openfilenamelist
 Returns one or more filenames with path for files to read from, each on a new line\&. \fIFILENAME\fR can optionally be used to specify path and filename of a preselection\&.
 
 .TP
-\fB\-\-savefilename\fR
+savefilename
 Returns the filename with path for file to write to\&. \fIFILENAME\fR can optionally be used to specify path and filename of a preselection\&.
 
 .TP
-\fB\-\-directory\fR
+directory
 Returns the path for an exsiting directory\&. \fIDIRNAME\fR can optionally be used to specify a path of a preselection\&.
+
+.SH "OPTIONS"
 
 .TP
 \fB\-\-title\fR \fITITLE\fR
@@ -94,7 +96,7 @@ Show the xdg\-utils version information\&.
 
 .nf
 
-xdg\-file\-dialog \-\-savefilename /tmp/foobar\&.png
+xdg\-file\-dialog savefilename /tmp/foobar\&.png
 
 .fi
  Asks for a save file name starting in directory /tmp and suggesting foobar\&.png as the filename
@@ -104,7 +106,7 @@ xdg\-file\-dialog \-\-savefilename /tmp/foobar\&.png
 
 .nf
 
-xdg\-file\-dialog \-\-directory \-\-title "Select a target folder" /tmp
+xdg\-file\-dialog directory \-\-title "Select a target folder" /tmp
 
 .fi
  Asks for a directory name starting in directory /tmp using the text "Select a target folder" as the dialog's title/caption\&.

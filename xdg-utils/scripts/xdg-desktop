@@ -38,9 +38,9 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-desktop --install [--vendor vendor-id] FILE
+   xdg-desktop install [--vendor vendor-id] FILE
 
-   xdg-desktop --uninstall [--vendor vendor-id] FILE
+   xdg-desktop uninstall [--vendor vendor-id] FILE
 
    xdg-desktop { --help | --version }
 
@@ -50,6 +50,9 @@ _USAGE
 examples()
 {
 cat << _EXAMPLES
+Examples
+
+   TBD
 _EXAMPLES
 }
 

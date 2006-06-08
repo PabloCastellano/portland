@@ -61,7 +61,7 @@ Examples
    Now the xdg-menu tool can be used to add the webmirror.desktop file to the
    desktop application menu:
 
- xdg-menu --install --system --vendor shinythings ./webmirror.desktop
+ xdg-menu install --system --vendor shinythings ./webmirror.desktop
 
    Note that for the purpose of this example the menu items are available in
    two languages, English and Dutch. The language code for Dutch is nl.
@@ -100,8 +100,8 @@ Examples
 
    The files can be installed with:
 
- xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.desktop
- xdg-menu --install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
+ xdg-menu install --system --noupdate --vendor shinythings ./webmirror.desktop
+ xdg-menu install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
 
    Because multiple items are added the --noupdate option has been used.
 
@@ -120,7 +120,7 @@ Examples
 
    This webmirror.directorty file can be installed with:
 
- xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.directory
+ xdg-menu install --system --noupdate --vendor shinythings ./webmirror.directory
 
    The last step is to provide a .menu file that links it all togther:
 
@@ -141,12 +141,12 @@ Examples
 
    The webmirror.menu file can be installed with:
 
- xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.menu
+ xdg-menu install --system --noupdate --vendor shinythings ./webmirror.menu
 
    After installing multiple files with --noupdate make sure to force an
    update:
 
- xdg-menu --forceupdate --system
+ xdg-menu forceupdate --system
 _EXAMPLES
 }
 
@@ -157,13 +157,13 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-menu --install [--noupdate] [--vendor vendor-id] { --user | --system }
+   xdg-menu install [--noupdate] [--vendor vendor-id] { --user | --system } {
+   desktop-file | menu-file | directory-file }
+
+   xdg-menu uninstall [--noupdate] [--vendor vendor-id] { --user | --system }
    { desktop-file | menu-file | directory-file }
 
-   xdg-menu --uninstall [--noupdate] [--vendor vendor-id] { --user | --system
-   } { desktop-file | menu-file | directory-file }
-
-   xdg-menu --forceupdate { --user | --system }
+   xdg-menu forceupdate { --user | --system }
 
    xdg-menu { --help | --version }
 

@@ -1,11 +1,11 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>   --install  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> } { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>   --uninstall  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> } { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>   --forceupdate  { <code class="option">--user</code>  |   <code class="option">--system</code> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>  { --help  |   --version }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> } { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> } { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>   forceupdate  { <code class="option">--user</code>  |   <code class="option">--system</code> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-menu</code>  { --help  |   --version }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-menu program can be used to install new items to the
       desktop's application menu.
     </p><p>
       The application menu works according to the
       XDG Desktop Menu Specification at
       http://www.freedesktop.org/Standards/menu-spec
-    </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--install</code></span></dt><dd><p>
+    </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">install</span></dt><dd><p>
 	    Install applications or submenus into the desktop menu system.
 	  </p><p><em class="replaceable"><code>desktop-file</code></em>:
 	    Installs the *.desktop file indicated by <em class="replaceable"><code>desktop-file</code></em>
@@ -17,13 +17,13 @@
 	  </p><p><em class="replaceable"><code>directory-file</code></em>:
 	    Installs the *.directory file indicated by <em class="replaceable"><code>directory-file</code></em>
             to the menu system. A directory file provides the name and icon for a submenu.
-	  </p></dd><dt><span class="term"><code class="option">--uninstall</code></span></dt><dd>
+	  </p></dd><dt><span class="term">uninstall</span></dt><dd>
 	    Remove applications or submenus from the desktop menu system
-            previously installed with <span><strong class="command">xdg-menu --install</strong></span>.
-	  </dd><dt><span class="term"><code class="option">--forceupdate</code></span></dt><dd>
+            previously installed with <span><strong class="command">xdg-menu install</strong></span>.
+	  </dd><dt><span class="term">forceupdate</span></dt><dd>
 	    Force an update of the menu system. This is only useful if
 	    the last call to xdg-menu included the <code class="option">--noupdate</code> option.
-	  </dd><dt><span class="term"><code class="option">--noupdate</code></span></dt><dd>
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--noupdate</code></span></dt><dd>
 	    Postpone updating the menu system. If multiple updates to the
             menu system are made in sequence this flag can be used to
             indicate that additional changes will follow and that it is not
@@ -64,7 +64,7 @@ webmirror.desktop:
     </p><p>Now the xdg-menu tool can be used to add the webmirror.desktop file
     to the desktop application menu:
 </p><pre class="programlisting">
-xdg-menu --install --system --vendor shinythings ./webmirror.desktop
+xdg-menu install --system --vendor shinythings ./webmirror.desktop
 </pre><p>
     </p><p>
       Note that for the purpose of this example the menu items are available
@@ -107,8 +107,8 @@ webmirror-admin.desktop:
     </p><p>
       The files can be installed with:
 </p><pre class="programlisting">
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.desktop
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror.desktop
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
 </pre><p>
     </p><p>
       Because multiple items are added the <code class="option">--noupdate</code>
@@ -130,7 +130,7 @@ webmirror.directory:
     </p><p>
       This webmirror.directorty file can be installed with:
 </p><pre class="programlisting">
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.directory
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror.directory
 </pre><p>
     </p><p>
       The last step is to provide a .menu file that links it all
@@ -154,12 +154,12 @@ webmirror.menu:
     </p><p>
       The webmirror.menu file can be installed with:
 </p><pre class="programlisting">
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.menu
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror.menu
 </pre><p>
     </p><p>
       After installing multiple files with <code class="option">--noupdate</code> make sure
       to force an update:
 </p><pre class="programlisting">
-xdg-menu --forceupdate --system
+xdg-menu forceupdate --system
 </pre><p>
     </p></div></div></body></html>

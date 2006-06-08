@@ -37,16 +37,16 @@ examples()
 cat << _EXAMPLES
 Examples
 
- xdg-mime --query type /tmp/foobar.png
+ xdg-mime query filetype /tmp/foobar.png
 
    Prints the MIME type of the file /tmp/foobar.png
 
- xdg-mime --query default /tmp/foobar.png
+ xdg-mime query default /tmp/foobar.png
 
    Prints the name of the .desktop file of the application which is
    registered to open files of the MIME type the file /tmp/foobar.png has
 
- xdg-mime --install --system diff.xml
+ xdg-mime install --system diff.xml
 
    Adds a file type description for "diff"-files for all users on the system.
    The file type description could look as folows.
@@ -72,11 +72,11 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-mime --query what FILE
+   xdg-mime query { filetype | default } FILE
 
-   xdg-mime --install { --user | --system } mimetypes-file
+   xdg-mime install { --user | --system } mimetypes-file
 
-   xdg-mime --uninstall { --user | --system } mimetypes-file
+   xdg-mime uninstall { --user | --system } mimetypes-file
 
    xdg-mime { --help | --version }
 

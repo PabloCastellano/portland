@@ -36,7 +36,7 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-menu</command>
-      <arg choice="plain">--install</arg>
+      <arg choice="plain">install</arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <group choice="req">
@@ -51,7 +51,7 @@
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-menu</command>
-      <arg choice="plain">--uninstall</arg>
+      <arg choice="plain">uninstall</arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <group choice="req">
@@ -66,7 +66,7 @@
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-menu</command>
-      <arg choice="plain">--forceupdate</arg>
+      <arg choice="plain">forceupdate</arg>
       <group choice="req">
 	<arg choice="plain"><option>--user</option></arg>
 	<arg choice="plain"><option>--system</option></arg>
@@ -93,11 +93,11 @@
       http://www.freedesktop.org/Standards/menu-spec
     </para>
   </refsect1>
-  <refsect1 id="options">
-    <title>Options</title>
+  <refsect1 id="commands">
+    <title>Commands</title>
     <variablelist>
       <varlistentry>
-	<term><option>--install</option></term>
+	<term>install</term>
 	<listitem>
 	  <simpara>
 	    Install applications or submenus into the desktop menu system.
@@ -119,17 +119,17 @@
       </varlistentry>
 
       <varlistentry>
-	<term><option>--uninstall</option></term>
+	<term>uninstall</term>
 	<listitem>
 	  <simpara>
 	    Remove applications or submenus from the desktop menu system
-            previously installed with <command>xdg-menu --install</command>.
+            previously installed with <command>xdg-menu install</command>.
 	  </simpara>
 	</listitem>
       </varlistentry>
 
       <varlistentry>
-	<term><option>--forceupdate</option></term>
+	<term>forceupdate</term>
 	<listitem>
 	  <simpara>
 	    Force an update of the menu system. This is only useful if
@@ -137,7 +137,11 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
-
+    </variablelist>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
       <varlistentry>
 	<term><option>--noupdate</option></term>
 	<listitem>
@@ -226,7 +230,7 @@ webmirror.desktop:
     <para>Now the xdg-menu tool can be used to add the webmirror.desktop file
     to the desktop application menu:
 <programlisting>
-xdg-menu --install --system --vendor shinythings ./webmirror.desktop
+xdg-menu install --system --vendor shinythings ./webmirror.desktop
 </programlisting>
     </para>
     <para>
@@ -273,8 +277,8 @@ webmirror-admin.desktop:
     <para>
       The files can be installed with:
 <programlisting>
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.desktop
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror.desktop
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
 </programlisting>
     </para>
     <para>
@@ -299,7 +303,7 @@ webmirror.directory:
     <para>
       This webmirror.directorty file can be installed with:
 <programlisting>
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.directory
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror.directory
 </programlisting>
     </para>
     <para>
@@ -325,14 +329,14 @@ webmirror.menu:
     <para>
       The webmirror.menu file can be installed with:
 <programlisting>
-xdg-menu --install --system --noupdate --vendor shinythings ./webmirror.menu
+xdg-menu install --system --noupdate --vendor shinythings ./webmirror.menu
 </programlisting>
     </para>
     <para>
       After installing multiple files with <option>--noupdate</option> make sure
       to force an update:
 <programlisting>
-xdg-menu --forceupdate --system
+xdg-menu forceupdate --system
 </programlisting>
     </para>
   </refsect1>

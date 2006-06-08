@@ -24,13 +24,13 @@ xdg-desktop \- command line tool for (un)installing icons to the desktop
 .ad l
 .hy 0
 .HP 12
-\fBxdg\-desktop\fR \fB\-\-install\fR [\fB\-\-vendor\ \fIvendor\-id\fR\fR] \fIFILE\fR
+\fBxdg\-desktop\fR install [\fB\-\-vendor\ \fIvendor\-id\fR\fR] \fIFILE\fR
 .ad
 .hy
 .ad l
 .hy 0
 .HP 12
-\fBxdg\-desktop\fR \fB\-\-uninstall\fR [\fB\-\-vendor\ \fIvendor\-id\fR\fR] \fIFILE\fR
+\fBxdg\-desktop\fR uninstall [\fB\-\-vendor\ \fIvendor\-id\fR\fR] \fIFILE\fR
 .ad
 .hy
 .ad l
@@ -45,15 +45,17 @@ xdg-desktop \- command line tool for (un)installing icons to the desktop
 .PP
 The xdg\-desktop program can be used to install an icon on the desktop of the current user\&.
 
-.SH "OPTIONS"
+.SH "COMMANDS"
 
 .TP
-\fB\-\-install\fR
+install
 Installs \fIFILE\fR to the desktop of the current user\&.
 
 .TP
-\fB\-\-uninstall\fR
+uninstall
 Removes \fIFILE\fR from the desktop of the current user\&.
+
+.SH "OPTIONS"
 
 .TP
 \fB\-\-vendor\fR \fIvendor\-id\fR
@@ -66,6 +68,11 @@ Show this help\&.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
+
+.SH "EXAMPLES"
+
+.PP
+TBD
 
 .SH AUTHORS
 Kevin Krammer, Jeremy White.

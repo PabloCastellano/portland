@@ -36,13 +36,13 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>xdg-desktop</command>
-      <arg choice="plain"><option>--install</option></arg>
+      <arg choice="plain">install</arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <arg choice="plain"><replaceable>FILE</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-desktop</command>
-      <arg choice="plain"><option>--uninstall</option></arg>
+      <arg choice="plain">uninstall</arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <arg choice="plain"><replaceable>FILE</replaceable></arg>
     </cmdsynopsis>
@@ -62,11 +62,11 @@
       of the current user.
     </para>
   </refsect1>
-  <refsect1 id="options">
-    <title>Options</title>
+  <refsect1 id="commands">
+    <title>Commands</title>
     <variablelist>
       <varlistentry>
-	<term> <option>--install</option></term>
+	<term>install</term>
 	<listitem>
 	  <simpara>
 	    Installs <replaceable>FILE</replaceable> to the desktop of the current user.
@@ -75,7 +75,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--uninstall</option></term>
+	<term>uninstall</term>
 	<listitem>
 	  <simpara>
 	    Removes <replaceable>FILE</replaceable> from the desktop
@@ -83,7 +83,11 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
-
+    </variablelist>
+  </refsect1>
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
       <varlistentry>
 	<term><option>--vendor</option> <replaceable>vendor-id</replaceable></term>
 	<listitem>
@@ -93,7 +97,6 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
-
 
       <varlistentry>
 	<term><option>--help</option></term>
@@ -114,5 +117,11 @@
       </varlistentry>
 
     </variablelist>
+  </refsect1>
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+      TBD
+    </para>
   </refsect1>
 </refentry>
