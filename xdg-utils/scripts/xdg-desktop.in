@@ -19,6 +19,12 @@ cat << _USAGE
 _USAGE
 }
 
+examples()
+{
+cat << _EXAMPLES
+_EXAMPLES
+}
+
 #@xdg-utils-common@
 
 [ x"$1" != x"" ] || exit_failure_arg_count

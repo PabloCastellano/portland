@@ -47,6 +47,12 @@ Synopsis
 _USAGE
 }
 
+examples()
+{
+cat << _EXAMPLES
+_EXAMPLES
+}
+
 #@xdg-utils-common@
 
 #----------------------------------------------------------------------------
