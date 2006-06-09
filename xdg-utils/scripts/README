@@ -18,7 +18,7 @@
    xdg-file-dialog -- command line tool for providing file and directory
    selection dialogs
 
-   xdg-screensaver -- Enable, disable, and suspend the screensaver
+   xdg-screensaver -- Control the screensaver
 
    xdg-icon -- command line tool for (un)installing icons
 

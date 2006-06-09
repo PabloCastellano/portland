@@ -19,12 +19,12 @@
 ..
 .TH "XDG-SCREENSAVER" 1 "" "" "xdg-screensaver Manual"
 .SH NAME
-xdg-screensaver \- Enable, disable, and suspend the screensaver
+xdg-screensaver \- Control the screensaver
 .SH "SYNOPSIS"
 .ad l
 .hy 0
 .HP 16
-\fBxdg\-screensaver\fR {\fB\fBsuspend\ \fIdelay\fR\fR\fR | \fB\fBrestore\fR\fR | \fB\fBenable\fR\fR | \fB\fBdisable\fR\fR | \fB\fBactivate\fR\fR | \fB\fBreset\fR\fR | \fB\fBstatus\fR\fR}
+\fBxdg\-screensaver\fR {\fB\fBsuspend\ \fIdelay\fR\fR\fR | \fB\fBrestore\fR\fR | \fB\fBactivate\fR\fR | \fB\fBreset\fR\fR | \fB\fBstatus\fR\fR}
 .ad
 .hy
 .ad l
@@ -48,14 +48,6 @@ Suspends the screensaver and monitor power management for the amount of time giv
 .TP
 \fBrestore\fR
 Restores the screensaver state, timeout, etc\&. to the user's standard settings\&.
-
-.TP
-\fBenable\fR
-This enables the screensaver to turn on after a certain amount of inactivity\&. Generally, applications will want to use \fBrestore\fR rather than \fBenable\fR\&.
-
-.TP
-\fBdisable\fR
-Disables the screensaver and power management from turning on due to inactivity\&.
 
 .TP
 \fBactivate\fR

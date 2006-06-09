@@ -2,7 +2,7 @@
 #---------------------------------------------
 #   xdg-screensaver
 #
-#   Utility script to enable/disable screensaver.
+#   Utility script to control screensaver.
 #
 #   Refer to the usage() function below for usage.
 #
@@ -65,12 +65,11 @@ _EXAMPLES
 usage()
 {
 cat << _USAGE
-   xdg-screensaver -- Enable, disable, and suspend the screensaver
+   xdg-screensaver -- Control the screensaver
 
 Synopsis
 
-   xdg-screensaver { suspend delay | restore | enable | disable | activate |
-   reset | status }
+   xdg-screensaver { suspend delay | restore | activate | reset | status }
 
    xdg-screensaver { --help | --version }
 
@@ -222,16 +221,6 @@ screensaver_xset()
         xset s default "$DPMS"
         ;;
 
-        enable)
-        # Allows the screensaver to start automatically
-        xset s on "$DPMS"
-        ;;
-
-        disable)
-        # Prevents screensaver from starting automatically
-        xset s off -dpms
-        ;;
-
         activate)
         # Turns the screensaver on right now
         xset s activate
@@ -276,15 +265,6 @@ screensaver_kde()
         dcop kdesktop KScreensaverIface enable false > /dev/null
         ;;
         
-        disable)
-        dcop kdesktop KScreensaverIface enable true > /dev/null
-        ;;
-
-        activate)
-        # Turns the screensaver on right now
-        dcop kdesktop KScreensaverIface save
-        ;;
-
         reset)
         # Turns the screensaver off right now
         dcop kdesktop KScreensaverIface quit
