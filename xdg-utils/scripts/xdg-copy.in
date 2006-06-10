@@ -50,8 +50,10 @@ copy_gnome()
     fi
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
-[ x"$2" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
+[ x"$2" != x"" ] || exit_failure_syntax
+
+detectDE
 
 case "$DE" in
     kde)

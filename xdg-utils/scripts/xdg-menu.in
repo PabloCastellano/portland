@@ -43,7 +43,7 @@ update_desktop_database()
     fi
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
 
 mode=
 action=
@@ -64,7 +64,7 @@ case $1 in
     ;;
 
   *)
-  exit_failure_arg_malformed "$1:  Invalid parameter/option"
+  exit_failure_syntax "$1:  Invalid parameter/option"
   ;;
 esac
 
@@ -91,7 +91,7 @@ while [ $# -gt 0 ] ; do
 
       --vendor)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a vendor-id."
+            exit_failure_syntax "Error:  You must specify a vendor-id."
         fi
         vendor=$1
         shift
@@ -99,11 +99,11 @@ while [ $# -gt 0 ] ; do
 
       *)
         if [ -n "$desktop_file" ] ; then
-            exit_failure_arg_count "Error:  Too many arguments: $parm"
+            exit_failure_syntax "Error:  Too many arguments: $parm"
         fi
         if [ "$action" = "install" ] ; then
             if [ ! -f "$parm" ] ; then
-                exit_failure_arg_count "Error:  You must specify an existing file to install."
+                exit_failure_file_missing "Error:  You must specify an existing file to install."
             fi
         fi
         desktop_file=$parm
@@ -112,11 +112,11 @@ while [ $# -gt 0 ] ; do
 done
 
 if [ -z "$action" ] ; then
-    exit_failure_arg_count
+    exit_failure_syntax
 fi
 
 if [ -z "$mode" ] ; then
-    exit_failure_arg_malformed "Error:  You must specify either --user or --system"
+    exit_failure_syntax "Error:  You must specify either --user or --system"
 fi
 
 if [ x"$action" = x"forceupdate" ] ; then
@@ -125,7 +125,7 @@ if [ x"$action" = x"forceupdate" ] ; then
 fi
 
 if [ -z "$desktop_file" ] ; then
-    exit_failure_arg_count
+    exit_failure_syntax
 fi
 
 
@@ -145,7 +145,7 @@ case $desktop_file in
      xdg_dir_name=menus/applications-merged
      ;;
   *)
-     exit_failure_arg_malformed "Error: File to $action must be a *.desktop, *.directory or *.menu file"
+     exit_failure_syntax "Error: File to $action must be a *.desktop, *.directory or *.menu file"
      ;;
 esac
 

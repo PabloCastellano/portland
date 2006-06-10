@@ -136,11 +136,13 @@ screensaver_gnome()
     fi
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
 
 
 # Always set the Xorg screensaver first
 screensaver_xset "$1" "$2"
+
+detectDE
 
 # Just in case, also do the desktop environment's screensaver
 case "$DE" in

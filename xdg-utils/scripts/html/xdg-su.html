@@ -2,6 +2,8 @@
       xdg-su provides a graphical dialog that prompts the user for a password
       to run <em class="replaceable"><code>command</code></em> as <em class="replaceable"><code>user</code></em>
       or as root if no user was specified.
+    </p><p>
+      xdg-su is for use inside a desktop session only.
     </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">-u <em class="replaceable"><code>user</code></em></code></span></dt><dd>
 	    run <em class="replaceable"><code>command</code></em> as
             <em class="replaceable"><code>user</code></em>. The default is to run as root.
@@ -9,7 +11,18 @@
 	    Show this help.
 	  </dd><dt><span class="term"><code class="option">--version</code></span></dt><dd>
             Show the xdg-utils version information.
-          </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
+          </dd></dl></div></div><div class="refsect1" lang="en"><a name="exitcodes"></a><h2>Exit Codes</h2><p>
+      An exit code of 0 indicates success while a non-zero exit code
+      indicates failure. The following failure codes can be returned:
+    </p><div class="variablelist"><dl><dt><span class="term"><code class="option">1</code></span></dt><dd>
+	    Error in command line syntax.
+	  </dd><dt><span class="term"><code class="option">2</code></span></dt><dd>
+	    One of the files passed on the command line did not exist.
+	  </dd><dt><span class="term"><code class="option">3</code></span></dt><dd>
+	    A required tool could not be found. 
+	  </dd><dt><span class="term"><code class="option">4</code></span></dt><dd>
+	    The action failed. 
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
 </p><pre class="programlisting">
 xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
 </pre><p>

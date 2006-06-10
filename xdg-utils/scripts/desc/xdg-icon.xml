@@ -225,6 +225,47 @@
 
     </variablelist>
   </refsect1>
+  <refsect1 id="exitcodes">
+    <title>Exit Codes</title>
+    <para>
+      An exit code of 0 indicates success while a non-zero exit code
+      indicates failure. The following failure codes can be returned:
+    </para>
+    <variablelist>
+      <varlistentry>
+	<term><option>1</option></term>
+	<listitem>
+	  <simpara>
+	    Error in command line syntax.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>2</option></term>
+	<listitem>
+	  <simpara>
+	    One of the files passed on the command line did not exist.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>3</option></term>
+	<listitem>
+	  <simpara>
+	    A required tool could not be found. 
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>4</option></term>
+	<listitem>
+	  <simpara>
+	    The action failed. 
+	  </simpara>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
   <refsect1 id="examples">
     <title>Examples</title>
     <para>

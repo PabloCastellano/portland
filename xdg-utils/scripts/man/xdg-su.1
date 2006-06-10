@@ -39,6 +39,9 @@ xdg-su \- run a program as root after prompting for the root password
 .PP
 xdg\-su provides a graphical dialog that prompts the user for a password to run \fIcommand\fR as \fIuser\fR or as root if no user was specified\&.
 
+.PP
+xdg\-su is for use inside a desktop session only\&.
+
 .SH "OPTIONS"
 
 .TP
@@ -52,6 +55,27 @@ Show this help\&.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
+
+.SH "EXIT CODES"
+
+.PP
+An exit code of 0 indicates success while a non\-zero exit code indicates failure\&. The following failure codes can be returned:
+
+.TP
+\fB1\fR
+Error in command line syntax\&.
+
+.TP
+\fB2\fR
+One of the files passed on the command line did not exist\&.
+
+.TP
+\fB3\fR
+A required tool could not be found\&.
+
+.TP
+\fB4\fR
+The action failed\&.
 
 .SH "EXAMPLES"
 

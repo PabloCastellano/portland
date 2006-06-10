@@ -39,6 +39,9 @@ xdg-open \- opens a file or URL in the user's preferred application
 .PP
 xdg\-open opens a file or URL in the user's preferred application\&. If a URL is provided the URL will be opened in the user's preferred web browser\&. If a file is provided the file will be opened in the preferred application for files of that type\&. xdg\-open supports file, ftp, http and https URLs\&.
 
+.PP
+xdg\-open is for use inside a desktop session only\&. It is not recommended to use xdg\-open as root\&.
+
 .SH "OPTIONS"
 
 .TP
@@ -48,6 +51,27 @@ Show this help\&.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
+
+.SH "EXIT CODES"
+
+.PP
+An exit code of 0 indicates success while a non\-zero exit code indicates failure\&. The following failure codes can be returned:
+
+.TP
+\fB1\fR
+Error in command line syntax\&.
+
+.TP
+\fB2\fR
+One of the files passed on the command line did not exist\&.
+
+.TP
+\fB3\fR
+A required tool could not be found\&.
+
+.TP
+\fB4\fR
+The action failed\&.
 
 .SH "EXAMPLES"
 

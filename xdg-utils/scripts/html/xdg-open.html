@@ -4,11 +4,25 @@
       web browser. If a file is provided the file will be opened in the
       preferred application for files of that type. xdg-open supports
       file, ftp, http and https URLs.
+    </p><p>
+      xdg-open is for use inside a desktop session only.
+      It is not recommended to use xdg-open as root.
     </p></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--help</code></span></dt><dd>
 	    Show this help.
 	  </dd><dt><span class="term"><code class="option">--version</code></span></dt><dd>
             Show the xdg-utils version information.
-          </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
+          </dd></dl></div></div><div class="refsect1" lang="en"><a name="exitcodes"></a><h2>Exit Codes</h2><p>
+      An exit code of 0 indicates success while a non-zero exit code
+      indicates failure. The following failure codes can be returned:
+    </p><div class="variablelist"><dl><dt><span class="term"><code class="option">1</code></span></dt><dd>
+	    Error in command line syntax.
+	  </dd><dt><span class="term"><code class="option">2</code></span></dt><dd>
+	    One of the files passed on the command line did not exist.
+	  </dd><dt><span class="term"><code class="option">3</code></span></dt><dd>
+	    A required tool could not be found. 
+	  </dd><dt><span class="term"><code class="option">4</code></span></dt><dd>
+	    The action failed. 
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
 </p><pre class="programlisting">
 xdg-open 'http://www.freedesktop.org/'
 </pre><p>

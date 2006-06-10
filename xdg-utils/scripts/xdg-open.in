@@ -80,7 +80,9 @@ open_generic()
     exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
+
+detectDE
 
 if [ x"$DE" = x"" ]; then
     # if BROWSER variable is not set, check some well known browsers instead

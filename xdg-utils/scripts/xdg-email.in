@@ -104,7 +104,7 @@ while [ $# -gt 0 ] ; do
 
       --to)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an email address for --to."
+            exit_failure_syntax "Error:  You must specify an email address for --to."
         fi
         url_encode "$1"
         options=${options}"to="${result}"&" 
@@ -113,7 +113,7 @@ while [ $# -gt 0 ] ; do
 
       --cc)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an email address for --to."
+            exit_failure_syntax "Error:  You must specify an email address for --to."
         fi
         url_encode "$1"
         options=${options}"cc="${result}"&" 
@@ -122,7 +122,7 @@ while [ $# -gt 0 ] ; do
 
       --bcc)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an email address for --to."
+            exit_failure_syntax "Error:  You must specify an email address for --to."
         fi
         url_encode "$1"
         options=${options}"bcc="${result}"&" 
@@ -131,7 +131,7 @@ while [ $# -gt 0 ] ; do
 
       --subject)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an email address for --to."
+            exit_failure_syntax "Error:  You must specify an email address for --to."
         fi
         url_encode "$1"
         options=${options}"subject="${result}"&" 
@@ -140,7 +140,7 @@ while [ $# -gt 0 ] ; do
 
       --body)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an email address for --to."
+            exit_failure_syntax "Error:  You must specify an email address for --to."
         fi
         url_encode "$1"
         options=${options}"body="${result}"&" 
@@ -149,7 +149,7 @@ while [ $# -gt 0 ] ; do
 
       --attach)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify an email address for --to."
+            exit_failure_syntax "Error:  You must specify an email address for --to."
         fi
         url_encode "$1"
         options=${options}"attach="${result}"&" 
@@ -170,13 +170,13 @@ while [ $# -gt 0 ] ; do
         ;;
 
       *)
-        exit_failure_arg_malformed "$parm:  Invalid parameter/option"
+        exit_failure_syntax "$parm:  Invalid parameter/option"
         ;;
     esac
 done
 
 if [ -z "${mailto}" ] ; then
-    exit_failure_arg_count "Error:  You must specify an address or mailto URI."
+    exit_failure_syntax "Error:  You must specify an address or mailto URI."
 fi
 
 case $mailto in
@@ -195,7 +195,9 @@ esac
 
 echo Mailto="${mailto}"
 
-[ x"${mailto}" != x"" ] || exit_failure_arg_count
+[ x"${mailto}" != x"" ] || exit_failure_syntax
+
+detectDE
 
 case "$DE" in
     kde)

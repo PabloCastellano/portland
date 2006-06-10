@@ -241,7 +241,7 @@ directory_zenity()
     fi
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
 
 TITLE=
 action=
@@ -265,7 +265,7 @@ case $1 in
     ;;
 
   *)
-  exit_failure_arg_malformed "$parm:  Invalid parameter/option"
+  exit_failure_syntax "$parm:  Invalid parameter/option"
   ;;
 esac
 
@@ -278,7 +278,7 @@ while [ $# -gt 0 ] ; do
     case $parm in
       --title)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a vendor-id."
+            exit_failure_syntax "Error:  You must specify a vendor-id."
         fi
         TITLE="$1"
         shift
@@ -286,7 +286,7 @@ while [ $# -gt 0 ] ; do
 
       *)
         if [ -n "$filename" ] ; then
-            exit_failure_arg_count "Error:  Too many arguments: $parm"
+            exit_failure_syntax "Error:  Too many arguments: $parm"
         fi
         filename="$parm"
         ;;
@@ -294,8 +294,10 @@ while [ $# -gt 0 ] ; do
 done
 
 if [ -z "$action" ] ; then
-    exit_failure_arg_count
+    exit_failure_syntax
 fi
+
+detectDE
 
 if [ "$action" = "openfilename" ]; then
     case "$DE" in

@@ -33,7 +33,9 @@ html:		$(WEBPAGES)
 
 scripts:	README $(SCRIPTS)
 
-release:	scripts
+man:		$(MANPAGES)
+
+release:	scripts html man
 	rm -f xdg-*.in *~ HACKING
 	rm -rf desc/
 

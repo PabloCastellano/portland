@@ -79,14 +79,15 @@ exit_success()
 
 
 #-----------------------------------------
-# Exit script on wrong number of arguments
+# Exit script on malformed arguments, not enough arguments
+# or missing required option.
 # prints usage information
 
-exit_failure_arg_count()
+exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
 
     usage
@@ -94,19 +95,15 @@ exit_failure_arg_count()
     exit 1
 }
 
+#-------------------------------------------------------------
+# Exit script on missing file specified on command line
 
-#-----------------------------------
-# Exit script on malformed arguments
-# prints usage information
-
-exit_failure_arg_malformed()
+exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
-
-    usage
 
     exit 2
 }
@@ -117,8 +114,8 @@ exit_failure_arg_malformed()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
 
     exit 3
@@ -130,12 +127,13 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
 
     exit 4
 }
+
 
 #----------------------------------------
 # Checks for shared commands, e.g. --help
@@ -174,8 +172,6 @@ detectDE()
     elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
-
-detectDE
 
 #----------------------------------------------------------------------------
 
@@ -224,7 +220,9 @@ su_generic()
     fi
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
+
+detectDE
 
 if [ x"$DE" = x"" ]; then
     XSU=`which xsu 2>/dev/null`

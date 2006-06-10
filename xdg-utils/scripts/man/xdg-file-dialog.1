@@ -57,6 +57,9 @@ xdg-file-dialog \- command line tool for providing file and directory selection 
 .PP
 The xdg\-file\-dialog program can be used to let the native file selection dialog handle file and directory input\&.
 
+.PP
+xdg\-file\-dialog is for use inside a desktop session only\&. It is not recommended to use xdg\-file\-dialog as root\&.
+
 .SH "COMMANDS"
 
 .TP
@@ -88,6 +91,27 @@ Show this help\&.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
+
+.SH "EXIT CODES"
+
+.PP
+An exit code of 0 indicates success while a non\-zero exit code indicates failure\&. The following failure codes can be returned:
+
+.TP
+\fB1\fR
+Error in command line syntax\&.
+
+.TP
+\fB2\fR
+One of the files passed on the command line did not exist\&.
+
+.TP
+\fB3\fR
+A required tool could not be found\&.
+
+.TP
+\fB4\fR
+The action failed\&.
 
 .SH "EXAMPLES"
 

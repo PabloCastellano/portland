@@ -83,14 +83,15 @@ exit_success()
 
 
 #-----------------------------------------
-# Exit script on wrong number of arguments
+# Exit script on malformed arguments, not enough arguments
+# or missing required option.
 # prints usage information
 
-exit_failure_arg_count()
+exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
 
     usage
@@ -98,19 +99,15 @@ exit_failure_arg_count()
     exit 1
 }
 
+#-------------------------------------------------------------
+# Exit script on missing file specified on command line
 
-#-----------------------------------
-# Exit script on malformed arguments
-# prints usage information
-
-exit_failure_arg_malformed()
+exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
-
-    usage
 
     exit 2
 }
@@ -121,8 +118,8 @@ exit_failure_arg_malformed()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
 
     exit 3
@@ -134,12 +131,13 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@"
-        echo
+        echo "$@" >&2
+        echo >&2
     fi
 
     exit 4
 }
+
 
 #----------------------------------------
 # Checks for shared commands, e.g. --help
@@ -179,8 +177,6 @@ detectDE()
     fi
 }
 
-detectDE
-
 #----------------------------------------------------------------------------
 
 
@@ -196,7 +192,7 @@ update_icon_database()
    done
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
 
 mode=
 action=
@@ -220,7 +216,7 @@ case $1 in
     ;;
 
   *)
-  exit_failure_arg_malformed "$1:  Invalid parameter/option"
+  exit_failure_syntax "$1:  Invalid parameter/option"
   ;;
 esac
 
@@ -246,7 +242,7 @@ while [ $# -gt 0 ] ; do
 
       --theme)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a theme."
+            exit_failure_syntax "Error:  You must specify a theme."
         fi
         theme=$1
         shift
@@ -254,7 +250,7 @@ while [ $# -gt 0 ] ; do
 
       --size)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a size."
+            exit_failure_syntax "Error:  You must specify a size."
         fi
         size=$1
         shift
@@ -262,7 +258,7 @@ while [ $# -gt 0 ] ; do
 
       --context)
         if [ -z "$1" ] ; then
-            exit_failure_arg_count "Error:  You must specify a context."
+            exit_failure_syntax "Error:  You must specify a context."
         fi
         context=$1
         shift
@@ -270,11 +266,11 @@ while [ $# -gt 0 ] ; do
 
       *)
         if [ -n "$icon_file" ] ; then
-            exit_failure_arg_count "Error:  Too many arguments: $parm"
+            exit_failure_syntax "Error:  Too many arguments: $parm"
         fi
         if [ "$action" = "install" ] ; then
             if [ ! -f "$parm" ] ; then
-                exit_failure_arg_count "Error:  You must specify an existing file to install."
+                exit_failure_file_missing "Error:  You must specify an existing file to install."
             fi
         fi
         icon_file=$parm
@@ -283,11 +279,11 @@ while [ $# -gt 0 ] ; do
 done
 
 if [ -z "$action" ] ; then
-    exit_failure_arg_count
+    exit_failure_syntax
 fi
 
 if [ -z "$mode" ] ; then
-    exit_failure_arg_malformed "Error:  You must specify either --user or --system"
+    exit_failure_syntax "Error:  You must specify either --user or --system"
 fi
 
 xdg_dir_name=icons/$theme
@@ -322,7 +318,7 @@ if [ x"$action" = x"forceupdate" ] ; then
 fi
 
 if [ -z "$icon_file" ] ; then
-    exit_failure_arg_count
+    exit_failure_syntax
 fi
 
 filetype=
@@ -331,26 +327,26 @@ case $icon_file in
   *.xpm)
      filetype=bitmap
      if [ -z "$size" ] ; then
-         exit_failure_arg_malformed "Error:  You must specify the icon size with --size"
+         exit_failure_syntax "Error:  You must specify the icon size with --size"
      fi
      xdg_size_name=${size}x${size}
      ;;
   *.png)
      filetype=bitmap
      if [ -z "$size" ] ; then
-         exit_failure_arg_malformed "Error:  You must specify the icon size with --size"
+         exit_failure_syntax "Error:  You must specify the icon size with --size"
      fi
      xdg_size_name=${size}x${size}
      ;;
   *.svg)
      fileype=svg
      if [ -n "$size" ] ; then
-         exit_failure_arg_malformed "Error:  You may not specify an icon size for .svg icons"
+         exit_failure_syntax "Error:  You may not specify an icon size for .svg icons"
      fi
      xdg_size_name=scalable
      ;;
   *)
-     exit_failure_arg_malformed "Error: File to $action must be a *.png, *.xpm or *.svg file"
+     exit_failure_syntax "Error: File to $action must be a *.png, *.xpm or *.svg file"
      ;;
 esac
 

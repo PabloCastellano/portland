@@ -12,4 +12,6 @@ Use 'make scripts-clean' to delete all generated files and use
 The manual files in man/ and html/ are also generated from the
 desc/xdg-*.xml files.
 
+Use 'make scripts html man' to update all generated files
+
 Use 'make release' to remove everything but the generated files.

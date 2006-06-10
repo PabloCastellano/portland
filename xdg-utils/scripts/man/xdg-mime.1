@@ -55,7 +55,11 @@ The xdg\-mime program can be used to query information about file types and to a
 
 .TP
 query
-Returns information related to the file type of \fIFILE\fR\&. The following queries are supported:
+Returns information related to the file type of \fIFILE\fR\&.
+
+The \fIquery\fR option is for use inside a desktop session only\&. It is not recommended to use xdg\-mime query as root\&.
+
+The following queries are supported:
 
 \fIfiletype\fR: Returns the file type of \fIFILE\fR in the form of a MIME type\&.
 
@@ -86,6 +90,27 @@ Show this help\&.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
+
+.SH "EXIT CODES"
+
+.PP
+An exit code of 0 indicates success while a non\-zero exit code indicates failure\&. The following failure codes can be returned:
+
+.TP
+\fB1\fR
+Error in command line syntax\&.
+
+.TP
+\fB2\fR
+One of the files passed on the command line did not exist\&.
+
+.TP
+\fB3\fR
+A required tool could not be found\&.
+
+.TP
+\fB4\fR
+The action failed\&.
 
 .SH "EXAMPLES"
 

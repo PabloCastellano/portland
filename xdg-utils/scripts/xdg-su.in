@@ -72,7 +72,9 @@ su_generic()
     fi
 }
 
-[ x"$1" != x"" ] || exit_failure_arg_count
+[ x"$1" != x"" ] || exit_failure_syntax
+
+detectDE
 
 if [ x"$DE" = x"" ]; then
     XSU=`which xsu 2>/dev/null`
