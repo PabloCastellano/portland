@@ -1,7 +1,8 @@
 * Add KDE mimelnk support to xdg-mime
 * Add pre-XDG Base Dir support to xdg-icon
-* Document exit codes in all manpages
-* Add SEE ALSO references in all manpages
 * Clean up xdg-screensaver options, add --help and --version
 * Fix interaction between xset and gnome/kde specific hacks in
 xdg-screensaver
+* Add description of .desktop file format to xdg-desktop and xdg-menu
+* Refer to xdg-icon in xdg-desktop, xdg-menu and xdg-mime documentation
+and explain when xdg-icon is required
