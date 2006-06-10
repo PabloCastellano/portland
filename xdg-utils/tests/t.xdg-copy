@@ -4,7 +4,7 @@
 # Test that running with 1 arg returns usage
 # Test that running with "--help" returns usage
 
-source="/tmp/xdg-copy.test"
+source=`tempfile -d /tmp`
 dest="$source-dest"
 
 echo "TESTING 123" > $source

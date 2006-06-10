@@ -1,6 +1,6 @@
 #!/bin/sh
 
-file="/tmp/Test_File.txt"
+file=`tempfile -d /tmp`
 vendor_id="Portland Project"
 
 echo $vendor_id > $file
