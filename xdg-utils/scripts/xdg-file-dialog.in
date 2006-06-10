@@ -265,7 +265,7 @@ case $1 in
     ;;
 
   *)
-  exit_failure_syntax "$parm:  Invalid parameter/option"
+  exit_failure_syntax "$1:  Invalid parameter/option"
   ;;
 esac
 
