@@ -8,6 +8,7 @@ xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
 <xsl:template match="/">
       <xsl:for-each select='mime:mime-info/mime:mime-type[@type=$type]'>
         <xsl:text>[Desktop Entry]&#10;</xsl:text>
+        <xsl:text># Installed by xdg-mime from </xsl:text><xsl:value-of select="$source"/><xsl:text>&#10;</xsl:text>
         <xsl:text>Type=MimeType&#10;</xsl:text>
         <xsl:text>MimeType=</xsl:text><xsl:value-of select="@type"/><xsl:text>&#10;</xsl:text>
         <xsl:text>Icon=</xsl:text><xsl:value-of select="translate(@type,'/','-')"/><xsl:text>&#10;</xsl:text>
