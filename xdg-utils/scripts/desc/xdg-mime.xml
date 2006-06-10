@@ -218,6 +218,16 @@ and adding descriptions for new file types</refpurpose>
       </varlistentry>
     </variablelist>
   </refsect1>
+  <refsect1 id="seealso">
+    <title>See Also</title>
+    <para><citerefentry><refentrytitle>xdg-icon</refentrytitle>
+        <manvolnum>1</manvolnum>
+      </citerefentry>,
+      <citerefentry><refentrytitle>xdg-menu</refentrytitle>
+        <manvolnum>1</manvolnum>
+      </citerefentry>
+    </para>
+  </refsect1>
   <refsect1 id="examples">
     <title>Examples</title>
     <para>
