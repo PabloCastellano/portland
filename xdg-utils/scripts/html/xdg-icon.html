@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-icon</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-icon"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-icon &#8212; command line tool for (un)installing icons</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>icon-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>icon-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>   forceupdate  [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] { --user  |   --system }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>  { <code class="option">--help</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-icon</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-icon"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-icon &#8212; command line tool for (un)installing icons</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>icon-file</code></em>  [<em class="replaceable"><code>icon-name</code></em>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>icon-name</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>   forceupdate  [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] { --user  |   --system }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon</code>  { <code class="option">--help</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-icon program can be used to install icons into the desktop
       icon system for use in menu entries, as desktop icons or as file icon.
     </p><p>
@@ -7,13 +7,17 @@
       http://www.freedesktop.org/Standards/icon-theme--spec
     </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">install</span></dt><dd>
 	    Installs the icon file indicated by <em class="replaceable"><code>icon-file</code></em>
-            to the desktop icon system. The icon file must have
+            to the desktop icon system under the name 
+            <em class="replaceable"><code>icon-name</code></em>. If  
+            <em class="replaceable"><code>icon-name</code></em> is not provided the name is
+            derived from <em class="replaceable"><code>icon-file</code></em>.
+            The icon file must have
             <span class="emphasis"><em>.png</em></span>, <span class="emphasis"><em>.xpm</em></span> or
             <span class="emphasis"><em>.svg</em></span> as extension. If a corresponding
             <span class="emphasis"><em>.icon</em></span> file exists in the same location as <em class="replaceable"><code>icon-file</code></em>
             it will be installed as well.
 	  </dd><dt><span class="term">uninstall</span></dt><dd>
-	    Removes the icon file indicated by <em class="replaceable"><code>icon-file</code></em>
+	    Removes the icon file indicated by <em class="replaceable"><code>icon-name</code></em>
             from the desktop icon system.
 	  </dd><dt><span class="term">forceupdate</span></dt><dd>
 	    Force an update of the desktop icon system. This is only useful if
@@ -66,7 +70,8 @@
 	  </dd><dt><span class="term"><code class="option">4</code></span></dt><dd>
 	    The action failed. 
 	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="seealso"></a><h2>See Also</h2><p><span class="citerefentry"><span class="refentrytitle">xdg-desktop</span>(1)</span>,
-      <span class="citerefentry"><span class="refentrytitle">xdg-menu</span>(1)</span>
+      <span class="citerefentry"><span class="refentrytitle">xdg-menu</span>(1)</span>,
+      <span class="citerefentry"><span class="refentrytitle">xdg-mime</span>(1)</span>
     </p></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
       TBD
     </p></div></div></body></html>

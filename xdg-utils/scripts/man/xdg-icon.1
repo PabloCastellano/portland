@@ -24,13 +24,13 @@ xdg-icon \- command line tool for (un)installing icons
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-icon\fR install [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
+\fBxdg\-icon\fR install [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR [\fIicon\-name\fR]
 .ad
 .hy
 .ad l
 .hy 0
 .HP 9
-\fBxdg\-icon\fR uninstall [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-file\fR
+\fBxdg\-icon\fR uninstall [\fB\-\-noupdate\fR] [\fB\-\-theme\ \fItheme\fR\fR] [\fB\-\-context\ \fIcontext\fR\fR] [\fB\-\-size\ \fIsize\fR\fR] {\fB\fB\-\-user\fR\fR | \fB\fB\-\-system\fR\fR} \fIicon\-name\fR
 .ad
 .hy
 .ad l
@@ -58,11 +58,11 @@ The desktop icon system works according to the XDG Icon Theme Specification at h
 
 .TP
 install
-Installs the icon file indicated by \fIicon\-file\fR to the desktop icon system\&. The icon file must have \fI\&.png\fR, \fI\&.xpm\fR or \fI\&.svg\fR as extension\&. If a corresponding \fI\&.icon\fR file exists in the same location as \fIicon\-file\fR it will be installed as well\&.
+Installs the icon file indicated by \fIicon\-file\fR to the desktop icon system under the name \fIicon\-name\fR\&. If \fIicon\-name\fR is not provided the name is derived from \fIicon\-file\fR\&. The icon file must have \fI\&.png\fR, \fI\&.xpm\fR or \fI\&.svg\fR as extension\&. If a corresponding \fI\&.icon\fR file exists in the same location as \fIicon\-file\fR it will be installed as well\&.
 
 .TP
 uninstall
-Removes the icon file indicated by \fIicon\-file\fR from the desktop icon system\&.
+Removes the icon file indicated by \fIicon\-name\fR from the desktop icon system\&.
 
 .TP
 forceupdate

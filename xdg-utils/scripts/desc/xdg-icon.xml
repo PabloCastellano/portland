@@ -46,6 +46,7 @@
 	<arg choice="plain"><option>--system</option></arg>
       </group>
       <arg choice="plain"><replaceable>icon-file</replaceable></arg>
+      <arg><replaceable>icon-name</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-icon</command>
@@ -58,7 +59,7 @@
 	<arg choice="plain"><option>--user</option></arg>
 	<arg choice="plain"><option>--system</option></arg>
       </group>
-      <arg choice="plain"><replaceable>icon-file</replaceable></arg>
+      <arg choice="plain"><replaceable>icon-name</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-icon</command>
@@ -98,7 +99,11 @@
 	<listitem>
 	  <simpara>
 	    Installs the icon file indicated by <replaceable>icon-file</replaceable>
-            to the desktop icon system. The icon file must have
+            to the desktop icon system under the name 
+            <replaceable>icon-name</replaceable>. If  
+            <replaceable>icon-name</replaceable> is not provided the name is
+            derived from <replaceable>icon-file</replaceable>.
+            The icon file must have
             <emphasis>.png</emphasis>, <emphasis>.xpm</emphasis> or
             <emphasis>.svg</emphasis> as extension. If a corresponding
             <emphasis>.icon</emphasis> file exists in the same location as <replaceable>icon-file</replaceable>
@@ -111,7 +116,7 @@
 	<term>uninstall</term>
 	<listitem>
 	  <simpara>
-	    Removes the icon file indicated by <replaceable>icon-file</replaceable>
+	    Removes the icon file indicated by <replaceable>icon-name</replaceable>
             from the desktop icon system.
 	  </simpara>
 	</listitem>
