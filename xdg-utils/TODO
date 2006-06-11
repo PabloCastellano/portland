@@ -1,8 +1,15 @@
-* Add KDE mimelnk support to xdg-mime
-* Add pre-XDG Base Dir support to xdg-icon
-* Clean up xdg-screensaver options, add --help and --version
-* Fix interaction between xset and gnome/kde specific hacks in
+xdg-icon
+* Add pre-XDG Base Dir gnome-support
+* Install .icon file, don't require file-extension for icon-name
+* Gnome 2.10 (RH FC4) requires mime icons in the form gnome-mime-<mime>-<type>
+
 xdg-screensaver
+* Clean up options, add --help and --version
+* Fix interaction between xset and gnome/kde specific hacks
+
+General
 * Add description of .desktop file format to xdg-desktop and xdg-menu
 * Refer to xdg-icon in xdg-desktop, xdg-menu and xdg-mime documentation
 and explain when xdg-icon is required
+* Fix error messages to be of the form "xdg-tool: Problem with '--foo'"
+* Don't interpret '--foo' as a filename, it results in confusing error messages
