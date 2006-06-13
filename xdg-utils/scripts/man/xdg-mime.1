@@ -67,7 +67,7 @@ The following queries are supported:
 
 .TP
 install
-Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&.
+Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&. For each new file type one or more icons with name \fImajor\fR\-\fIminor\fR must be installed with the \fBxdg\-icon\fR command in the \fImimetypes\fR context\&. For example the application/vnd\&.oasis\&.opendocument\&.text filetype requires an icon by the name of application\-vnd\&.oasis\&.opendocument\&.text to be installed\&.
 
 .TP
 uninstall
@@ -127,7 +127,7 @@ The action failed\&.
 xdg\-mime query filetype /tmp/foobar\&.png
 
 .fi
- Prints the MIME type of the file /tmp/foobar\&.png
+Prints the MIME type of the file /tmp/foobar\&.png
 
 .PP
  
@@ -137,7 +137,7 @@ xdg\-mime query filetype /tmp/foobar\&.png
 xdg\-mime query default /tmp/foobar\&.png
 
 .fi
- Prints the name of the \&.desktop file of the application which is registered to open files of the MIME type the file /tmp/foobar\&.png has
+Prints the name of the \&.desktop file of the application which is registered to open files of the MIME type the file /tmp/foobar\&.png has
 
 .PP
  
@@ -147,7 +147,7 @@ xdg\-mime query default /tmp/foobar\&.png
 xdg\-mime install \-\-system diff\&.xml
 
 .fi
- Adds a file type description for "diff"\-files for all users on the system\&. The file type description could look as folows\&. 
+Adds a file type description for "diff"\-files for all users on the system\&. The file type description could look as folows\&. 
 
 .nf
 
@@ -161,6 +161,13 @@ diff\&.xml:
     <glob pattern="*\&.patch"/>
   </mime\-type>
 </mime\-info>
+
+.fi
+An icon for this new file type must alsobe installed, for example with: 
+
+.nf
+
+xdg\-icon install \-\-system \-\-context mimetypes \-\-size 64 text\-x\-diff\&.png
 
 .fi
  

@@ -10,6 +10,9 @@
 	  </p><p><em class="replaceable"><code>desktop-file</code></em>:
 	    Installs the *.desktop file indicated by <em class="replaceable"><code>desktop-file</code></em>
             to the menu system. A desktop file represents a single application in the menu.
+            Desktop files are defined by the freedesktop.org Desktop Entry
+            Specification. The most important aspects of *.desktop
+            files are summarized below.
 	  </p><p><em class="replaceable"><code>menu-file</code></em>:
 	    Installs the *.menu file indicated by <em class="replaceable"><code>menu-file</code></em>
             to the menu system. A menu file describes the location and contents for
@@ -40,7 +43,68 @@
 	    Show this help.
 	  </dd><dt><span class="term"><code class="option">--version</code></span></dt><dd>
             Show the xdg-utils version information.
-          </dd></dl></div></div><div class="refsect1" lang="en"><a name="exitcodes"></a><h2>Exit Codes</h2><p>
+          </dd></dl></div></div><div class="refsect1" lang="en"><a name="desktopfiles"></a><h2>Desktop Files</h2><p>
+      An application item in the application menu is represented by a
+      *.desktop file. A *.desktop file consists of a
+      <span class="emphasis"><em>[Desktop Entry]</em></span> header followed by several
+      <em class="replaceable"><code>Key</code></em>=<em class="replaceable"><code>Value</code></em> lines.
+    </p><p>
+      A *.desktop file can provide a name and description for an application
+      in several different languages. This is done by adding a language
+      code as used by LC_MESSAGES in square brackets behind the 
+      <em class="replaceable"><code>Key</code></em>. This way one can specify different
+      values for the same <em class="replaceable"><code>Key</code></em> depending on the
+      currently selected language.
+    </p><p>
+      The following keys are often used:
+    </p><div class="variablelist"><dl><dt><span class="term">Value=1.0</span></dt><dd>
+	    This is a mandatory field to indicate that the *.desktop file
+	    follows the 1.0 version of the specification.
+	  </dd><dt><span class="term">Type=Application</span></dt><dd>
+	    This is a mandatory field that indicates that the *.desktop file
+	    describes an application launcher.
+	  </dd><dt><span class="term">Name=<em class="replaceable"><code>Application Name</code></em></span></dt><dd>
+	    The name of the application.
+	    For example <span class="emphasis"><em>Mozilla</em></span>
+	  </dd><dt><span class="term">GenericName=<em class="replaceable"><code>Generic Name</code></em></span></dt><dd>
+	    A generic description of the application.
+	    For example <span class="emphasis"><em>Web Browser</em></span>
+	  </dd><dt><span class="term">Comment=<em class="replaceable"><code>Comment</code></em></span></dt><dd>
+	    Optional field to specify a tooltip for the application. 
+	    For example <span class="emphasis"><em>Visit websites on the Internet</em></span>
+	  </dd><dt><span class="term">Icon=<em class="replaceable"><code>Icon File</code></em></span></dt><dd>
+	    The icon to use for the application. This can either be
+	    an absolute path to an image file or an icon-name.
+	    If an icon-name is provided an image lookup by name is done
+	    in the user's current icon theme. The <span><strong class="command">xdg-icon</strong></span>
+	    command can be used to install image files into icon themes.
+	    The advantage of using an icon-name instead of an absolute
+	    path is that with an icon-name the application icon can be
+	    provided in several different sizes as well as in several
+	    differently themed styles.
+	  </dd><dt><span class="term">Exec=<em class="replaceable"><code>Command Line</code></em></span></dt><dd>
+	    The command line to start the application. If the application
+	    can open files the %f placeholder should be specified. When
+	    a file is dropped on the application launcher the %f is replaced
+	    with the file path of the dropped file. If multiple files
+	    can be specified on the command line the %F placeholder should
+	    be used instead of %f. If the application is able to open URLs
+	    in addition to local files then  %u or %U can be used instead
+	    of %f or %F.
+	  </dd><dt><span class="term">Categories=<em class="replaceable"><code>Categories</code></em></span></dt><dd>
+	    A list of categories separated by semi-colons. A category is
+	    a keyword that describes and classifies the application.
+	    By default applications are organized in the application menu
+            based on category. The XDG Desktop Menu Specification defines
+            a large number of predefined categories.
+	  </dd><dt><span class="term">MimeType=<em class="replaceable"><code>Mimetypes</code></em></span></dt><dd>
+	    A list of mimetypes separated by semi-colons. This field is
+	    used to indicate which file types the application is able to
+	    open.
+	  </dd></dl></div><p>
+      For a complete oveview of the *.desktop file format please
+      visit http://www.freedesktop.org/wiki/Standards/desktop-entry-spec
+    </p></div><div class="refsect1" lang="en"><a name="exitcodes"></a><h2>Exit Codes</h2><p>
       An exit code of 0 indicates success while a non-zero exit code
       indicates failure. The following failure codes can be returned:
     </p><div class="variablelist"><dl><dt><span class="term"><code class="option">1</code></span></dt><dd>
@@ -136,15 +200,29 @@ webmirror.directory:
   [Desktop Entry]
   Encoding=UTF-8
 
-  Icon=webmirror
+  Icon=webmirror-menu
 
   Name=WebMirror
   Name[nl]=WebSpiegel
 </pre><p>
     </p><p>
-      This webmirror.directorty file can be installed with:
+      This webmirror.directory file can be installed with:
 </p><pre class="programlisting">
 xdg-menu install --system --noupdate --vendor shinythings ./webmirror.directory
+</pre><p>
+    </p><p>
+      The *.desktop and *.directory files reference icons with the names
+      webmirror, webmirror-admin and webmirror-menu which should also be
+      installed. In this example the icons are installed in two different
+      sizes, once with a size of 22x22 pixels and once with a size
+      of 64x64 pixels:
+</p><pre class="programlisting">
+xdg-icon install --system --size 22 ./wmicon-22.png webmirror.png
+xdg-icon install --system --size 22 ./wmicon-menu-22.png webmirror-menu.png
+xdg-icon install --system --size 22 ./wmicon-admin-22.png webmirror-admin.png
+xdg-icon install --system --size 64 ./wmicon-64.png webmirror.png
+xdg-icon install --system --size 64 ./wmicon-menu-64.png webmirror-menu.png
+xdg-icon install --system --size 64 ./wmicon-admin-64.png webmirror-admin.png
 </pre><p>
     </p><p>
       The last step is to provide a .menu file that links it all

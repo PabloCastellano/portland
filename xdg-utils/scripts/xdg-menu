@@ -113,14 +113,26 @@ Examples
    [Desktop Entry]
    Encoding=UTF-8
 
-   Icon=webmirror
+   Icon=webmirror-menu
 
    Name=WebMirror
    Name[nl]=WebSpiegel
 
-   This webmirror.directorty file can be installed with:
+   This webmirror.directory file can be installed with:
 
  xdg-menu install --system --noupdate --vendor shinythings ./webmirror.directory
+
+   The *.desktop and *.directory files reference icons with the names
+   webmirror, webmirror-admin and webmirror-menu which should also be
+   installed. In this example the icons are installed in two different sizes,
+   once with a size of 22x22 pixels and once with a size of 64x64 pixels:
+
+ xdg-icon install --system --size 22 ./wmicon-22.png webmirror.png
+ xdg-icon install --system --size 22 ./wmicon-menu-22.png webmirror-menu.png
+ xdg-icon install --system --size 22 ./wmicon-admin-22.png webmirror-admin.png
+ xdg-icon install --system --size 64 ./wmicon-64.png webmirror.png
+ xdg-icon install --system --size 64 ./wmicon-menu-64.png webmirror-menu.png
+ xdg-icon install --system --size 64 ./wmicon-admin-64.png webmirror-admin.png
 
    The last step is to provide a .menu file that links it all togther:
 

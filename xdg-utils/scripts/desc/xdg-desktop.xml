@@ -58,8 +58,14 @@
   <refsect1 id="description">
     <title>Description</title>
     <para>
-      The xdg-desktop program can be used to install an icon on the desktop
-      of the current user.
+      The xdg-desktop program can be used to install an application launcher
+      or other file on the desktop of the current user.
+    </para>
+    <para>
+      An application launcher is represented by a *.desktop file.
+      Desktop files are defined by the freedesktop.org Desktop Entry
+      Specification. The most important aspects of *.desktop files
+      are summarized below.
     </para>
   </refsect1>
   <refsect1 id="commands">
@@ -117,6 +123,114 @@
       </varlistentry>
 
     </variablelist>
+  </refsect1>
+  <refsect1 id="desktopfiles">
+    <title>Desktop Files</title>
+    <para>
+      An application launcher can be added to the desktop by installing a
+      *.desktop file. A *.desktop file consists of a
+      <emphasis>[Desktop Entry]</emphasis> header followed by several
+      <replaceable>Key</replaceable>=<replaceable>Value</replaceable> lines.
+    </para>
+    <para>
+      A *.desktop file can provide a name and description for an application
+      in several different languages. This is done by adding a language
+      code as used by LC_MESSAGES in square brackets behind the 
+      <replaceable>Key</replaceable>. This way one can specify different
+      values for the same <replaceable>Key</replaceable> depending on the
+      currently selected language.
+    </para>
+    <para>
+      The following keys are often used:
+    </para>
+    <variablelist>
+      <varlistentry>
+	<term>Value=1.0</term>
+	<listitem>
+	  <simpara>
+	    This is a mandatory field to indicate that the *.desktop file
+	    follows the 1.0 version of the specification.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Type=Application</term>
+	<listitem>
+	  <simpara>
+	    This is a mandatory field that indicates that the *.desktop file
+	    describes an application launcher.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Name=<replaceable>Application Name</replaceable></term>
+	<listitem>
+	  <simpara>
+	    The name of the application.
+	    For example <emphasis>Mozilla</emphasis>
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>GenericName=<replaceable>Generic Name</replaceable></term>
+	<listitem>
+	  <simpara>
+	    A generic description of the application.
+	    For example <emphasis>Web Browser</emphasis>
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Comment=<replaceable>Comment</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Optional field to specify a tooltip for the application. 
+	    For example <emphasis>Visit websites on the Internet</emphasis>
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Icon=<replaceable>Icon File</replaceable></term>
+	<listitem>
+	  <simpara>
+	    The icon to use for the application. This can either be
+	    an absolute path to an image file or an icon-name.
+	    If an icon-name is provided an image lookup by name is done
+	    in the user's current icon theme. The <command>xdg-icon</command>
+	    command can be used to install image files into icon themes.
+	    The advantage of using an icon-name instead of an absolute
+	    path is that with an icon-name the application icon can be
+	    provided in several different sizes as well as in several
+	    differently themed styles.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Exec=<replaceable>Command Line</replaceable></term>
+	<listitem>
+	  <simpara>
+	    The command line to start the application. If the application
+	    can open files the %f placeholder should be specified. When
+	    a file is dropped on the application launcher the %f is replaced
+	    with the file path of the dropped file. If multiple files
+	    can be specified on the command line the %F placeholder should
+	    be used instead of %f. If the application is able to open URLs
+	    in addition to local files then  %u or %U can be used instead
+	    of %f or %F.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+    <para>
+      For a complete oveview of the *.desktop file format please
+      visit http://www.freedesktop.org/wiki/Standards/desktop-entry-spec
+    </para>
   </refsect1>
   <refsect1 id="exitcodes">
     <title>Exit Codes</title>

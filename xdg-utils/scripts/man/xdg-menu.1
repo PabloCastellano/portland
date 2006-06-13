@@ -60,7 +60,7 @@ The application menu works according to the XDG Desktop Menu Specification at ht
 install
 Install applications or submenus into the desktop menu system\&.
 
-\fIdesktop\-file\fR: Installs the *\&.desktop file indicated by \fIdesktop\-file\fR to the menu system\&. A desktop file represents a single application in the menu\&.
+\fIdesktop\-file\fR: Installs the *\&.desktop file indicated by \fIdesktop\-file\fR to the menu system\&. A desktop file represents a single application in the menu\&. Desktop files are defined by the freedesktop\&.org Desktop Entry Specification\&. The most important aspects of *\&.desktop files are summarized below\&.
 
 \fImenu\-file\fR: Installs the *\&.menu file indicated by \fImenu\-file\fR to the menu system\&. A menu file describes the location and contents for one or more new submenus\&. Each submenu must reference a *\&.directory file\&.
 
@@ -99,6 +99,56 @@ Show this help\&.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information\&.
+
+.SH "DESKTOP FILES"
+
+.PP
+An application item in the application menu is represented by a *\&.desktop file\&. A *\&.desktop file consists of a \fI[Desktop Entry]\fR header followed by several \fIKey\fR=\fIValue\fR lines\&.
+
+.PP
+A *\&.desktop file can provide a name and description for an application in several different languages\&. This is done by adding a language code as used by LC_MESSAGES in square brackets behind the \fIKey\fR\&. This way one can specify different values for the same \fIKey\fR depending on the currently selected language\&.
+
+.PP
+The following keys are often used:
+
+.TP
+Value=1\&.0
+This is a mandatory field to indicate that the *\&.desktop file follows the 1\&.0 version of the specification\&.
+
+.TP
+Type=Application
+This is a mandatory field that indicates that the *\&.desktop file describes an application launcher\&.
+
+.TP
+Name=\fIApplication Name\fR
+The name of the application\&. For example \fIMozilla\fR 
+
+.TP
+GenericName=\fIGeneric Name\fR
+A generic description of the application\&. For example \fIWeb Browser\fR 
+
+.TP
+Comment=\fIComment\fR
+Optional field to specify a tooltip for the application\&. For example \fIVisit websites on the Internet\fR 
+
+.TP
+Icon=\fIIcon File\fR
+The icon to use for the application\&. This can either be an absolute path to an image file or an icon\-name\&. If an icon\-name is provided an image lookup by name is done in the user's current icon theme\&. The \fBxdg\-icon\fR command can be used to install image files into icon themes\&. The advantage of using an icon\-name instead of an absolute path is that with an icon\-name the application icon can be provided in several different sizes as well as in several differently themed styles\&.
+
+.TP
+Exec=\fICommand Line\fR
+The command line to start the application\&. If the application can open files the %f placeholder should be specified\&. When a file is dropped on the application launcher the %f is replaced with the file path of the dropped file\&. If multiple files can be specified on the command line the %F placeholder should be used instead of %f\&. If the application is able to open URLs in addition to local files then %u or %U can be used instead of %f or %F\&.
+
+.TP
+Categories=\fICategories\fR
+A list of categories separated by semi\-colons\&. A category is a keyword that describes and classifies the application\&. By default applications are organized in the application menu based on category\&. The XDG Desktop Menu Specification defines a large number of predefined categories\&.
+
+.TP
+MimeType=\fIMimetypes\fR
+A list of mimetypes separated by semi\-colons\&. This field is used to indicate which file types the application is able to open\&.
+
+.PP
+For a complete oveview of the *\&.desktop file format please visit http://www\&.freedesktop\&.org/wiki/Standards/desktop\-entry\-spec
 
 .SH "EXIT CODES"
 
@@ -223,7 +273,7 @@ webmirror\&.directory:
   [Desktop Entry]
   Encoding=UTF\-8
 
-  Icon=webmirror
+  Icon=webmirror\-menu
 
   Name=WebMirror
   Name[nl]=WebSpiegel
@@ -232,11 +282,26 @@ webmirror\&.directory:
  
 
 .PP
-This webmirror\&.directorty file can be installed with: 
+This webmirror\&.directory file can be installed with: 
 
 .nf
 
 xdg\-menu install \-\-system \-\-noupdate \-\-vendor shinythings \&./webmirror\&.directory
+
+.fi
+ 
+
+.PP
+The *\&.desktop and *\&.directory files reference icons with the names webmirror, webmirror\-admin and webmirror\-menu which should also be installed\&. In this example the icons are installed in two different sizes, once with a size of 22x22 pixels and once with a size of 64x64 pixels: 
+
+.nf
+
+xdg\-icon install \-\-system \-\-size 22 \&./wmicon\-22\&.png webmirror\&.png
+xdg\-icon install \-\-system \-\-size 22 \&./wmicon\-menu\-22\&.png webmirror\-menu\&.png
+xdg\-icon install \-\-system \-\-size 22 \&./wmicon\-admin\-22\&.png webmirror\-admin\&.png
+xdg\-icon install \-\-system \-\-size 64 \&./wmicon\-64\&.png webmirror\&.png
+xdg\-icon install \-\-system \-\-size 64 \&./wmicon\-menu\-64\&.png webmirror\-menu\&.png
+xdg\-icon install \-\-system \-\-size 64 \&./wmicon\-admin\-64\&.png webmirror\-admin\&.png
 
 .fi
  

@@ -61,6 +61,10 @@ Examples
      <glob pattern="*.patch"/>
    </mime-type>
  </mime-info>
+
+   An icon for this new file type must alsobe installed, for example with:
+
+ xdg-icon install --system --context mimetypes --size 64 text-x-diff.png
 _EXAMPLES
 }
 

@@ -21,7 +21,14 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
             to the desktop environment. <em class="replaceable"><code>mimetypes-file</code></em>
             must be a XML file that follows the freedesktop.org 
             Shared MIME-info Database specification
-            and that has a mime-info element as its document root.
+            and that has a mime-info element as its document root. For
+            each new file type one or more icons with name
+            <em class="replaceable"><code>major</code></em>-<em class="replaceable"><code>minor</code></em>
+            must be installed with the <span><strong class="command">xdg-icon</strong></span> command
+            in the <span class="emphasis"><em>mimetypes</em></span> context. For example the
+            application/vnd.oasis.opendocument.text filetype requires an
+            icon by the name of application-vnd.oasis.opendocument.text
+            to be installed.
 	  </dd><dt><span class="term">uninstall</span></dt><dd>
 	    Removes the file type descriptions provided in <em class="replaceable"><code>mimetypes-file</code></em>
             and previously added with <span><strong class="command">xdg-mime install</strong></span> from the
@@ -54,19 +61,16 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
     </p></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
 </p><pre class="programlisting">
 xdg-mime query filetype /tmp/foobar.png
-</pre><p>
-      Prints the MIME type of the file /tmp/foobar.png
+</pre><p>Prints the MIME type of the file /tmp/foobar.png
     </p><p>
 </p><pre class="programlisting">
 xdg-mime query default /tmp/foobar.png
-</pre><p>
-      Prints the name of the .desktop file of the application which is
+</pre><p>Prints the name of the .desktop file of the application which is
       registered to open files of the MIME type the file /tmp/foobar.png has
     </p><p>
 </p><pre class="programlisting">
 xdg-mime install --system diff.xml
-</pre><p>
-      Adds a file type description for "diff"-files for all users on the
+</pre><p>Adds a file type description for "diff"-files for all users on the
       system. The file type description could look as folows.  
 </p><pre class="programlisting">
 diff.xml:
@@ -79,5 +83,9 @@ diff.xml:
     &lt;glob pattern="*.patch"/&gt;
   &lt;/mime-type&gt;
 &lt;/mime-info&gt;
+</pre><p>An icon for this new file type must alsobe installed, for
+example with:
+</p><pre class="programlisting">
+xdg-icon install --system --context mimetypes --size 64 text-x-diff.png
 </pre><p>
     </p></div></div></body></html>

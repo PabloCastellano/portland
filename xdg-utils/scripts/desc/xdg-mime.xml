@@ -114,7 +114,14 @@ and adding descriptions for new file types</refpurpose>
             to the desktop environment. <replaceable>mimetypes-file</replaceable>
             must be a XML file that follows the freedesktop.org 
             Shared MIME-info Database specification
-            and that has a mime-info element as its document root.
+            and that has a mime-info element as its document root. For
+            each new file type one or more icons with name
+            <replaceable>major</replaceable>-<replaceable>minor</replaceable>
+            must be installed with the <command>xdg-icon</command> command
+            in the <emphasis>mimetypes</emphasis> context. For example the
+            application/vnd.oasis.opendocument.text filetype requires an
+            icon by the name of application-vnd.oasis.opendocument.text
+            to be installed.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -233,21 +240,18 @@ and adding descriptions for new file types</refpurpose>
     <para>
 <programlisting>
 xdg-mime query filetype /tmp/foobar.png
-</programlisting>
-      Prints the MIME type of the file /tmp/foobar.png
+</programlisting>Prints the MIME type of the file /tmp/foobar.png
     </para>
     <para>
 <programlisting>
 xdg-mime query default /tmp/foobar.png
-</programlisting>
-      Prints the name of the .desktop file of the application which is
+</programlisting>Prints the name of the .desktop file of the application which is
       registered to open files of the MIME type the file /tmp/foobar.png has
     </para>
     <para>
 <programlisting>
 xdg-mime install --system diff.xml
-</programlisting>
-      Adds a file type description for "diff"-files for all users on the
+</programlisting>Adds a file type description for "diff"-files for all users on the
       system. The file type description could look as folows.  
 <programlisting>
 diff.xml:
@@ -260,6 +264,10 @@ diff.xml:
     &lt;glob pattern="*.patch"/&gt;
   &lt;/mime-type&gt;
 &lt;/mime-info&gt;
+</programlisting>An icon for this new file type must alsobe installed, for
+example with:
+<programlisting>
+xdg-icon install --system --context mimetypes --size 64 text-x-diff.png
 </programlisting>
     </para>
   </refsect1>
