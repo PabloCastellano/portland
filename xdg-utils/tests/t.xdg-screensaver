@@ -68,27 +68,14 @@ DELAY=10
 #     > Verify it is set to the correct original state
 
 
-xdg-screensaver suspend [$DELAY]
+#xdg-screensaver suspend [$DELAY]
 
-xdg-screensaver restore
+#xdg-screensaver restore
 
-xdg-screensaver enable
-xdg-screensaver disable
-xdg-screensaver activate
-xdg-screensaver reset
-xdg-screensaver status
+#xdg-screensaver enable
+#xdg-screensaver disable
+#xdg-screensaver activate
+#xdg-screensaver reset
+#xdg-screensaver status
 
-
-
-### COPY existing file properly ###
-xdg-copy "$source" "$dest"
-err=$?
-if [ $err != 0 ]; then
-    echo "FAIL  xdg-copy     # xdg-copy returned $err instead of 0 expected"
-elif [ ! -e "$dest" ]; then
-    echo "FAIL  xdg-copy     # xdg-copy failed to create dest file $dest"
-else
-    echo "PASS  xdg-copy"
-    rm "$dest"
-fi
 
