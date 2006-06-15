@@ -33,9 +33,77 @@
 # Default value for delay when suspending screensaver
 DELAY=60m
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
+cat << _MANUALPAGE
+Name
+
+   xdg-screensaver -- Control the screensaver
+
+Synopsis
+
+   xdg-screensaver { suspend delay | restore | activate | reset | status }
+
+   xdg-screensaver { --help | --manual | --version }
+
+Description
+
+   xdg-screensaver provides commands to control the screensaver
+
+   xdg-screensaver is for use inside a desktop session only. It is not
+   recommended to use xdg-screensaver as root.
+
+Options
+
+   suspend delay
+           Suspends the screensaver and monitor power management for the
+           amount of time given by delay, or 60 minutes if unspecified. This
+           is of the form NUMBERSUFFIX, such as 45m, 4h, or 30s. SUFFIX may
+           be 's' for seconds (the default), 'm' for minutes, 'h' for hours
+           or 'd' for days This is intended to allow preventing the
+           screensaver coming on during a presentation, and return it to
+           normal behavior after the specified delay.
+
+   restore
+           Restores the screensaver state, timeout, etc. to the user's
+           standard settings.
+
+   activate
+           Turns the screensaver on immediately.
+
+   reset
+           Turns the screensaver off immediately.
+
+   status
+           Returns true if the screensaver is enabled to turn on after a
+           period of inactivty, or false otherwise.
+
+   --help
+           Show command synopsis.
+
+   --manual
+           Show this manualpage.
+
+   --version
+           Show the xdg-utils version information.
+
+Exit Codes
+
+   An exit code of 0 indicates success while a non-zero exit code indicates
+   failure. The following failure codes can be returned:
+
+   1
+           Error in command line syntax.
+
+   2
+           One of the files passed on the command line did not exist.
+
+   3
+           A required tool could not be found.
+
+   4
+           The action failed.
+
 Examples
 
  xdg-screensaver suspend 3h
@@ -59,7 +127,7 @@ Bugss
    disable the screensaver while it is connected, which will re-enable the
    screensaver. xdg-screensaver should be updated to take advantage of this
    functionality when it is available.
-_EXAMPLES
+_MANUALPAGE
 }
 
 usage()
@@ -71,7 +139,7 @@ Synopsis
 
    xdg-screensaver { suspend delay | restore | activate | reset | status }
 
-   xdg-screensaver { --help | --version }
+   xdg-screensaver { --help | --manual | --version }
 
 _USAGE
 }
@@ -108,6 +176,7 @@ exit_failure_syntax()
         echo "Try 'xdg-screensaver --help' for more information." >&2
     else
         usage
+        echo "Use 'man xdg-screensaver' or 'xdg-screensaver --manual' for additional info." 
     fi
 
     exit 1
@@ -162,7 +231,12 @@ check_common_commands()
         case $parm in
             --help)
             usage
-            examples
+            echo "Use 'man xdg-screensaver' or 'xdg-screensaver --manual' for additional info." 
+            exit_success
+            ;;
+
+            --manual)
+            manualpage
             exit_success
             ;;
 

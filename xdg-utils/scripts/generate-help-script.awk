@@ -47,21 +47,23 @@
 
 
 # Insert the examples text from the .txt file
-# after the "cat << _EXAMPLES" line
-/^cat << _EXAMPLES/ {
+# after the "cat << _MANUALPAGE" line
+/^cat << _MANUALPAGE/ {
 	# determine the name of the .txt file
 	txtfile = FILENAME
 	sub(/\.in$/, ".txt", txtfile)
 
 	# read the .txt file content
 	for (txtfile_print = 0; getline < txtfile; ) {
-		if (match ($0, /^Examples/) != 0) {
-			# print everything starting at the "Examples" line
-			txtfile_print = 1
-		}
-		if (txtfile_print != 0) {
-			print $0
-		}
+#		if (match ($0, /^Examples/) != 0) {
+#			# print everything starting at the "Examples" line
+#			txtfile_print = 1
+#		}
+#		if (txtfile_print != 0) {
+#			print $0
+#		}
+                gsub("`","'")
+                print $0
 	}
 	close (txtfile)
 }

@@ -33,13 +33,119 @@
 #
 #---------------------------------------------
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
+cat << _MANUALPAGE
+Name
+
+   xdg-icon -- command line tool for (un)installing icons
+
+Synopsis
+
+   xdg-icon install [--noupdate] [--theme theme] [--context context] [--size
+   size] { --user | --system } icon-file [icon-name]
+
+   xdg-icon uninstall [--noupdate] [--theme theme] [--context context]
+   [--size size] { --user | --system } icon-name
+
+   xdg-icon forceupdate [--theme theme] { --user | --system }
+
+   xdg-icon { --help | --manual | --version }
+
+Description
+
+   The xdg-icon program can be used to install icons into the desktop icon
+   system for use in menu entries, as desktop icons or as file icon.
+
+   The desktop icon system works according to the XDG Icon Theme
+   Specification at http://www.freedesktop.org/Standards/icon-theme--spec
+
+Commands
+
+   install
+           Installs the icon file indicated by icon-file to the desktop icon
+           system under the name icon-name. If icon-name is not provided the
+           name is derived from icon-file. The icon file must have .png, .xpm
+           or .svg as extension. If a corresponding .icon file exists in the
+           same location as icon-file it will be installed as well.
+
+   uninstall
+           Removes the icon file indicated by icon-name from the desktop icon
+           system.
+
+   forceupdate
+           Force an update of the desktop icon system. This is only useful if
+           the last call to xdg-icon included the --noupdate option.
+
+Options
+
+   --noupdate
+           Postpone updating the desktop icon system. If multiple icons are
+           added in sequence this flag can be used to indicate that
+           additional changes will follow and that it is not necassery to
+           update the desktop icon system right away.
+
+   --theme theme
+           Installs or removes the icon file as part of theme. If no theme is
+           specified the icons will be installed as part of the default
+           hicolor theme. Applications may install icons under multiple
+           themes but should at least install icons for the default hicolor
+           theme.
+
+   --context context
+           Specifies the context for the icon. Icons to be used in the
+           application menu and as desktop icon should use apps as context
+           which is the default context. Icons to be used as file icons
+           should use mimetypes as context. Other common contexts are
+           actions, devices, emblems, filesystems and stock.
+
+   --size size
+           Specifies the size of the icon (required for png and xpm icons).
+           All icons must be square. Common sizes for icons in the apps
+           context are: 16, 22, 32, 48, 64 and 128. Common sizes for icons in
+           the mimetypes context are: 16, 22, 32, 48, 64 and 128
+
+   --user
+           Installs or uninstalls the icon for the current user only.
+
+   --system
+           Installs or uninstalls the icon for all users on the system.
+           Usually only root is allowed to do this.
+
+   --help
+           Show command synopsis.
+
+   --manual
+           Show this manualpage.
+
+   --version
+           Show the xdg-utils version information.
+
+Exit Codes
+
+   An exit code of 0 indicates success while a non-zero exit code indicates
+   failure. The following failure codes can be returned:
+
+   1
+           Error in command line syntax.
+
+   2
+           One of the files passed on the command line did not exist.
+
+   3
+           A required tool could not be found.
+
+   4
+           The action failed.
+
+See Also
+
+   xdg-desktop(1), xdg-menu(1), xdg-mime(1)
+
 Examples
 
    TBD
-_EXAMPLES
+_MANUALPAGE
 }
 
 usage()
@@ -57,7 +163,7 @@ Synopsis
 
    xdg-icon forceupdate [--theme theme] { --user | --system }
 
-   xdg-icon { --help | --version }
+   xdg-icon { --help | --manual | --version }
 
 _USAGE
 }
@@ -94,6 +200,7 @@ exit_failure_syntax()
         echo "Try 'xdg-icon --help' for more information." >&2
     else
         usage
+        echo "Use 'man xdg-icon' or 'xdg-icon --manual' for additional info." 
     fi
 
     exit 1
@@ -148,7 +255,12 @@ check_common_commands()
         case $parm in
             --help)
             usage
-            examples
+            echo "Use 'man xdg-icon' or 'xdg-icon --manual' for additional info." 
+            exit_success
+            ;;
+
+            --manual)
+            manualpage
             exit_success
             ;;
 

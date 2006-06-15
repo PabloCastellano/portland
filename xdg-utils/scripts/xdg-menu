@@ -33,9 +33,176 @@
 #
 #---------------------------------------------
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
+cat << _MANUALPAGE
+Name
+
+   xdg-menu -- command line tool for (un)installing desktop menu items
+
+Synopsis
+
+   xdg-menu install [--noupdate] [--vendor vendor-id] { --user | --system } {
+   desktop-file | menu-file | directory-file }
+
+   xdg-menu uninstall [--noupdate] [--vendor vendor-id] { --user | --system }
+   { desktop-file | menu-file | directory-file }
+
+   xdg-menu forceupdate { --user | --system }
+
+   xdg-menu { --help | --manual | --version }
+
+Description
+
+   The xdg-menu program can be used to install new items to the desktop's
+   application menu.
+
+   The application menu works according to the XDG Desktop Menu Specification
+   at http://www.freedesktop.org/Standards/menu-spec
+
+Commands
+
+   install
+
+           Install applications or submenus into the desktop menu system.
+
+           desktop-file: Installs the *.desktop file indicated by
+           desktop-file to the menu system. A desktop file represents a
+           single application in the menu. Desktop files are defined by the
+           freedesktop.org Desktop Entry Specification. The most important
+           aspects of *.desktop files are summarized below.
+
+           menu-file: Installs the *.menu file indicated by menu-file to the
+           menu system. A menu file describes the location and contents for
+           one or more new submenus. Each submenu must reference a
+           *.directory file.
+
+           directory-file: Installs the *.directory file indicated by
+           directory-file to the menu system. A directory file provides the
+           name and icon for a submenu.
+
+   uninstall
+           Remove applications or submenus from the desktop menu system
+           previously installed with xdg-menu install.
+
+   forceupdate
+           Force an update of the menu system. This is only useful if the
+           last call to xdg-menu included the --noupdate option.
+
+Options
+
+   --noupdate
+           Postpone updating the menu system. If multiple updates to the menu
+           system are made in sequence this flag can be used to indicate that
+           additional changes will follow and that it is not necassery to
+           update the menu system right away.
+
+   --vendor vendor-id
+           Adds vendor-id as a prefix when installing desktop and directory
+           files.
+
+   --user
+           Installs or uninstalls the file for the current user only.
+
+   --system
+           Installs or uninstalls the file for all users on the system.
+           Usually only root is allowed to do this.
+
+   --help
+           Show command synopsis.
+
+   --manual
+           Show this manualpage.
+
+   --version
+           Show the xdg-utils version information.
+
+Desktop Files
+
+   An application item in the application menu is represented by a *.desktop
+   file. A *.desktop file consists of a [Desktop Entry] header followed by
+   several Key=Value lines.
+
+   A *.desktop file can provide a name and description for an application in
+   several different languages. This is done by adding a language code as
+   used by LC_MESSAGES in square brackets behind the Key. This way one can
+   specify different values for the same Key depending on the currently
+   selected language.
+
+   The following keys are often used:
+
+   Value=1.0
+           This is a mandatory field to indicate that the *.desktop file
+           follows the 1.0 version of the specification.
+
+   Type=Application
+           This is a mandatory field that indicates that the *.desktop file
+           describes an application launcher.
+
+   Name=Application Name
+           The name of the application. For example Mozilla
+
+   GenericName=Generic Name
+           A generic description of the application. For example Web Browser
+
+   Comment=Comment
+           Optional field to specify a tooltip for the application. For
+           example Visit websites on the Internet
+
+   Icon=Icon File
+           The icon to use for the application. This can either be an
+           absolute path to an image file or an icon-name. If an icon-name is
+           provided an image lookup by name is done in the user's current
+           icon theme. The xdg-icon command can be used to install image
+           files into icon themes. The advantage of using an icon-name
+           instead of an absolute path is that with an icon-name the
+           application icon can be provided in several different sizes as
+           well as in several differently themed styles.
+
+   Exec=Command Line
+           The command line to start the application. If the application can
+           open files the %f placeholder should be specified. When a file is
+           dropped on the application launcher the %f is replaced with the
+           file path of the dropped file. If multiple files can be specified
+           on the command line the %F placeholder should be used instead of
+           %f. If the application is able to open URLs in addition to local
+           files then %u or %U can be used instead of %f or %F.
+
+   Categories=Categories
+           A list of categories separated by semi-colons. A category is a
+           keyword that describes and classifies the application. By default
+           applications are organized in the application menu based on
+           category. The XDG Desktop Menu Specification defines a large
+           number of predefined categories.
+
+   MimeType=Mimetypes
+           A list of mimetypes separated by semi-colons. This field is used
+           to indicate which file types the application is able to open.
+
+   For a complete oveview of the *.desktop file format please visit
+   http://www.freedesktop.org/wiki/Standards/desktop-entry-spec
+
+Exit Codes
+
+   An exit code of 0 indicates success while a non-zero exit code indicates
+   failure. The following failure codes can be returned:
+
+   1
+           Error in command line syntax.
+
+   2
+           One of the files passed on the command line did not exist.
+
+   3
+           A required tool could not be found.
+
+   4
+           The action failed.
+
+See Also
+
+   xdg-desktop(1), xdg-icon(1), xdg-mime(1)
+
 Examples
 
    The company ShinyThings Inc. has developed an application named
@@ -159,7 +326,7 @@ Examples
    update:
 
  xdg-menu forceupdate --system
-_EXAMPLES
+_MANUALPAGE
 }
 
 usage()
@@ -177,7 +344,7 @@ Synopsis
 
    xdg-menu forceupdate { --user | --system }
 
-   xdg-menu { --help | --version }
+   xdg-menu { --help | --manual | --version }
 
 _USAGE
 }
@@ -214,6 +381,7 @@ exit_failure_syntax()
         echo "Try 'xdg-menu --help' for more information." >&2
     else
         usage
+        echo "Use 'man xdg-menu' or 'xdg-menu --manual' for additional info." 
     fi
 
     exit 1
@@ -268,7 +436,12 @@ check_common_commands()
         case $parm in
             --help)
             usage
-            examples
+            echo "Use 'man xdg-menu' or 'xdg-menu --manual' for additional info." 
+            exit_success
+            ;;
+
+            --manual)
+            manualpage
             exit_success
             ;;
 

@@ -66,6 +66,7 @@ and adding descriptions for new file types</refpurpose>
       <command>xdg-mime</command>
       <group choice="req">
         <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--manual</option></arg>
         <arg choice="plain"><option>--version</option></arg>
       </group>
     </cmdsynopsis>
@@ -168,7 +169,16 @@ and adding descriptions for new file types</refpurpose>
 	<term><option>--help</option></term>
 	<listitem>
 	  <simpara>
-	    Show this help.
+	    Show command synopsis.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--manual</option></term>
+	<listitem>
+	  <simpara>
+	    Show this manualpage.
 	  </simpara>
 	</listitem>
       </varlistentry>

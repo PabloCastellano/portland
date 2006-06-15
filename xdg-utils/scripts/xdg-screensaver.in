@@ -15,10 +15,10 @@
 # Default value for delay when suspending screensaver
 DELAY=60m
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
-_EXAMPLES
+cat << _MANUALPAGE
+_MANUALPAGE
 }
 
 usage()

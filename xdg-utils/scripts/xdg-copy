@@ -32,15 +32,63 @@
 #
 #---------------------------------------------
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
+cat << _MANUALPAGE
+Name
+
+   xdg-copy -- command line tool for copying files between desktop URIs
+
+Synopsis
+
+   xdg-copy source destination
+
+   xdg-copy { --help | --manual | --version }
+
+Description
+
+   xdg-copy copies source to destination and provides visual feedback to the
+   user during the operation. Both source and destination can either be a
+   file or URL. Supported URL types are file, ftp, http and https. Additional
+   URL types may be supported depending on the desktop environment.
+
+   xdg-copy is for use inside a desktop session only. It is not recommended
+   to use xdg-copy as root.
+
+Options
+
+   --help
+           Show command synopsis.
+
+   --manual
+           Show this manualpage.
+
+   --version
+           Show the xdg-utils version information.
+
+Exit Codes
+
+   An exit code of 0 indicates success while a non-zero exit code indicates
+   failure. The following failure codes can be returned:
+
+   1
+           Error in command line syntax.
+
+   2
+           One of the files passed on the command line did not exist.
+
+   3
+           A required tool could not be found.
+
+   4
+           The action failed.
+
 Examples
 
  xdg-copy "http://portland.freedesktop.org/png/freedesktop-logo.png" .
 
  xdg-copy "/tmp/foobar.png" "/home/user/foobar-copy.png"
-_EXAMPLES
+_MANUALPAGE
 }
 
 usage()
@@ -52,7 +100,7 @@ Synopsis
 
    xdg-copy source destination
 
-   xdg-copy { --help | --version }
+   xdg-copy { --help | --manual | --version }
 
 _USAGE
 }
@@ -89,6 +137,7 @@ exit_failure_syntax()
         echo "Try 'xdg-copy --help' for more information." >&2
     else
         usage
+        echo "Use 'man xdg-copy' or 'xdg-copy --manual' for additional info." 
     fi
 
     exit 1
@@ -143,7 +192,12 @@ check_common_commands()
         case $parm in
             --help)
             usage
-            examples
+            echo "Use 'man xdg-copy' or 'xdg-copy --manual' for additional info." 
+            exit_success
+            ;;
+
+            --manual)
+            manualpage
             exit_success
             ;;
 

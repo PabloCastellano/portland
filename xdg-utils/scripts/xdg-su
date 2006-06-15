@@ -33,15 +33,67 @@
 #
 #---------------------------------------------
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
+cat << _MANUALPAGE
+Name
+
+   xdg-su -- run a program as root after prompting for the root password
+
+Synopsis
+
+   xdg-su [-u user] -c command
+
+   xdg-su { --help | --manual | --version }
+
+Description
+
+   xdg-su provides a graphical dialog that prompts the user for a password to
+   run command as user or as root if no user was specified.
+
+   xdg-su is for use inside a desktop session only.
+
+Options
+
+   -u user
+           run command as user. The default is to run as root.
+
+   --help
+           Show command synopsis.
+
+   --manual
+           Show this manualpage.
+
+   --version
+           Show the xdg-utils version information.
+
+Exit Codes
+
+   An exit code of 0 indicates success while a non-zero exit code indicates
+   failure. The following failure codes can be returned:
+
+   1
+           Error in command line syntax.
+
+   2
+           One of the files passed on the command line did not exist.
+
+   3
+           A required tool could not be found.
+
+   4
+           The action failed.
+
+See Also
+
+   su(1)
+
 Examples
 
  xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
 
    Runs the /opt/shinythings/bin/install-GUI command with root permissions.
-_EXAMPLES
+_MANUALPAGE
 }
 
 usage()
@@ -53,7 +105,7 @@ Synopsis
 
    xdg-su [-u user] -c command
 
-   xdg-su { --help | --version }
+   xdg-su { --help | --manual | --version }
 
 _USAGE
 }
@@ -90,6 +142,7 @@ exit_failure_syntax()
         echo "Try 'xdg-su --help' for more information." >&2
     else
         usage
+        echo "Use 'man xdg-su' or 'xdg-su --manual' for additional info." 
     fi
 
     exit 1
@@ -144,7 +197,12 @@ check_common_commands()
         case $parm in
             --help)
             usage
-            examples
+            echo "Use 'man xdg-su' or 'xdg-su --manual' for additional info." 
+            exit_success
+            ;;
+
+            --manual)
+            manualpage
             exit_success
             ;;
 

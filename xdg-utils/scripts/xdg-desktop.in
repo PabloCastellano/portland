@@ -19,10 +19,10 @@ cat << _USAGE
 _USAGE
 }
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
-_EXAMPLES
+cat << _MANUALPAGE
+_MANUALPAGE
 }
 
 #@xdg-utils-common@

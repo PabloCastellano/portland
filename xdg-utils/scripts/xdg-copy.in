@@ -14,10 +14,10 @@
 #
 #---------------------------------------------
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
-_EXAMPLES
+cat << _MANUALPAGE
+_MANUALPAGE
 }
 
 usage()

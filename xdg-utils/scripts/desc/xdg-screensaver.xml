@@ -43,6 +43,7 @@
       <command>xdg-screensaver</command>
       <group choice="req">
         <arg choice="plain"><option>--help</option></arg>
+        <arg choice="plain"><option>--manual</option></arg>
         <arg choice="plain"><option>--version</option></arg>
       </group>
     </cmdsynopsis>
@@ -120,7 +121,16 @@
 	<term><option>--help</option></term>
 	<listitem>
 	  <simpara>
-	    Show this help.
+	    Show command synopsis.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--manual</option></term>
+	<listitem>
+	  <simpara>
+	    Show this manualpage.
 	  </simpara>
 	</listitem>
       </varlistentry>

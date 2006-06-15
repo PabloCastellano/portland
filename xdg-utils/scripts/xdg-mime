@@ -32,9 +32,105 @@
 #
 #---------------------------------------------
 
-examples()
+manualpage()
 {
-cat << _EXAMPLES
+cat << _MANUALPAGE
+Name
+
+   xdg-mime -- command line tool for querying information about file type
+   handling and adding descriptions for new file types
+
+Synopsis
+
+   xdg-mime query { filetype | default } FILE
+
+   xdg-mime install { --user | --system } mimetypes-file
+
+   xdg-mime uninstall { --user | --system } mimetypes-file
+
+   xdg-mime { --help | --manual | --version }
+
+Description
+
+   The xdg-mime program can be used to query information about file types and
+   to add descriptions for new file types.
+
+Commands
+
+   query
+
+           Returns information related to the file type of FILE.
+
+           The query option is for use inside a desktop session only. It is
+           not recommended to use xdg-mime query as root.
+
+           The following queries are supported:
+
+           filetype: Returns the file type of FILE in the form of a MIME
+           type.
+
+           default: Returns the default application that the desktop
+           environment uses for opening FILE. The default applications is
+           identified by its *.desktop file.
+
+   install
+           Adds the file type descriptions provided in mimetypes-file to the
+           desktop environment. mimetypes-file must be a XML file that
+           follows the freedesktop.org Shared MIME-info Database
+           specification and that has a mime-info element as its document
+           root. For each new file type one or more icons with name
+           major-minor must be installed with the xdg-icon command in the
+           mimetypes context. For example the
+           application/vnd.oasis.opendocument.text filetype requires an icon
+           by the name of application-vnd.oasis.opendocument.text to be
+           installed.
+
+   uninstall
+           Removes the file type descriptions provided in mimetypes-file and
+           previously added with xdg-mime install from the desktop
+           environment. mimetypes-file must be a XML file that follows the
+           freedesktop.org Shared MIME-info Database specification and that
+           has a mime-info element as its document root.
+
+Options
+
+   --user
+           Adds or removes file type descriptions for the current user only.
+
+   --system
+           Adds or removes file type descriptions for all users on the
+           system. Usually only root is allowed to do this.
+
+   --help
+           Show command synopsis.
+
+   --manual
+           Show this manualpage.
+
+   --version
+           Show the xdg-utils version information.
+
+Exit Codes
+
+   An exit code of 0 indicates success while a non-zero exit code indicates
+   failure. The following failure codes can be returned:
+
+   1
+           Error in command line syntax.
+
+   2
+           One of the files passed on the command line did not exist.
+
+   3
+           A required tool could not be found.
+
+   4
+           The action failed.
+
+See Also
+
+   xdg-icon(1), xdg-menu(1)
+
 Examples
 
  xdg-mime query filetype /tmp/foobar.png
@@ -65,7 +161,7 @@ Examples
    An icon for this new file type must alsobe installed, for example with:
 
  xdg-icon install --system --context mimetypes --size 64 text-x-diff.png
-_EXAMPLES
+_MANUALPAGE
 }
 
 usage()
@@ -82,7 +178,7 @@ Synopsis
 
    xdg-mime uninstall { --user | --system } mimetypes-file
 
-   xdg-mime { --help | --version }
+   xdg-mime { --help | --manual | --version }
 
 _USAGE
 }
@@ -119,6 +215,7 @@ exit_failure_syntax()
         echo "Try 'xdg-mime --help' for more information." >&2
     else
         usage
+        echo "Use 'man xdg-mime' or 'xdg-mime --manual' for additional info." 
     fi
 
     exit 1
@@ -173,7 +270,12 @@ check_common_commands()
         case $parm in
             --help)
             usage
-            examples
+            echo "Use 'man xdg-mime' or 'xdg-mime --manual' for additional info." 
+            exit_success
+            ;;
+
+            --manual)
+            manualpage
             exit_success
             ;;
 
