@@ -31,7 +31,11 @@ _USAGE
 
 su_kde()
 {
-    kdesu "$@"
+    if [ -z "$user" ] ; then
+        kdesu -c "$cmd"
+    else
+        kdesu -u "$user" -c "$cmd"
+    fi
 
     if [ $? -eq 0 ]; then
         exit_success
@@ -44,7 +48,11 @@ su_gnome()
 {
     GSU=`which gnomesu 2>/dev/null`
     if [ $? -eq 0 ] ; then
-        $GSU "$@"
+        if [ -z "$user" ] ; then
+            $GSU -c "$cmd"
+        else
+            $GSU -u "$user" -c "$cmd"
+        fi
 
         if [ $? -eq 0 ]; then
             exit_success
@@ -52,7 +60,7 @@ su_gnome()
             exit_failure_operation_failed
         fi
     else
-        su_generic "$@"
+        su_generic
     fi
 }
 
@@ -60,7 +68,11 @@ su_generic()
 {
     XSU=`which xsu 2>/dev/null`
     if [ $? -eq 0 ] ; then
-        $XSU "$@"
+        if [ -z "$user" ] ; then
+            $XSU -c "$cmd"
+        else
+            $XSU -u "$user" -c "$cmd"
+        fi
 
         if [ $? -eq 0 ]; then
             exit_success
@@ -68,11 +80,49 @@ su_generic()
             exit_failure_operation_failed
         fi
     else
-        exit_failure_operation_impossible "Sorry, no graphical method available for invoking su" "$@"
+        [ x"$user" = x"" ] && user=root 
+        exit_failure_operation_impossible "no graphical method available for invoking '$cmd' as '$user'"
     fi
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
+
+user=
+cmd=
+while [ $# -gt 0 ] ; do
+    parm=$1
+    shift
+
+    case $parm in
+      -u)
+        if [ -z "$1" ] ; then
+            exit_failure_syntax "user argument missing for -u"
+        fi
+        user=$1
+        shift
+        ;;
+
+      -c)
+        if [ -z "$1" ] ; then
+            exit_failure_syntax "command argument missing for -c"
+        fi
+        cmd=$1
+        shift
+        ;;
+
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
+      *)
+        exit_failure_syntax "unexpected argument '$parm'"
+        ;;
+    esac
+done
+
+if [ -z "${cmd}" ] ; then
+    exit_failure_syntax "command missing"
+fi
 
 detectDE
 
@@ -85,18 +135,19 @@ fi
 
 case "$DE" in
     kde)
-    su_kde "$@"
+    su_kde
     ;;
 
     gnome)
-    su_gnome "$@"
+    su_gnome
     ;;
 
     generic)
-    su_generic "$@"
+    su_generic
     ;;
 
     *)
-    exit_failure_operation_impossible "Sorry, no graphical method available for invoking su" "$@"
+    [ x"$user" = x"" ] && user=root 
+    exit_failure_operation_impossible "no graphical method available for invoking '$cmd' as '$user'"
     ;;
 esac

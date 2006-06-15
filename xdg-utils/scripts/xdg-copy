@@ -85,11 +85,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-copy: $@" >&2
+        echo "Try 'xdg-copy --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -100,8 +100,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-copy: $@" >&2
     fi
 
     exit 2
@@ -113,8 +112,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-copy: $@" >&2
     fi
 
     exit 3
@@ -126,8 +124,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-copy: $@" >&2
     fi
 
     exit 4
@@ -151,7 +148,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "xdg-copy 1.0beta1"
             exit_success
             ;;
         esac
@@ -199,20 +196,50 @@ copy_gnome()
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
-[ x"$2" != x"" ] || exit_failure_syntax
+
+source=
+dest=
+while [ $# -gt 0 ] ; do
+    parm=$1
+    shift
+
+    case $parm in
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
+      *)
+        if [ -n "$dest" ] ; then
+            exit_failure_syntax "unexpected argument '$parm'"
+        fi
+        if [ -n "$source" ] ; then
+            dest=$parm
+        else
+            source=$parm
+        fi
+        ;;
+    esac
+done
+
+if [ -z "${source}" ] ; then
+    exit_failure_syntax "source argument missing"
+fi
+if [ -z "${dest}" ] ; then
+    exit_failure_syntax "destination argument missing"
+fi
 
 detectDE
 
 case "$DE" in
     kde)
-    copy_kde "$1" "$2"
+    copy_kde "$source" "$dest"
     ;;
 
     gnome)
-    copy_gnome "$1" "$2"
+    copy_gnome "$source" "$dest"
     ;;
 
     *)
-    exit_failure_operation_impossible "Sorry, no method available for copying" "$1" "to" "$2"
+    exit_failure_operation_impossible "no method available for copying '$source' to '$dest'"
     ;;
 esac

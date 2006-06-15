@@ -89,11 +89,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-open: $@" >&2
+        echo "Try 'xdg-open --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -104,8 +104,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-open: $@" >&2
     fi
 
     exit 2
@@ -117,8 +116,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-open: $@" >&2
     fi
 
     exit 3
@@ -130,8 +128,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-open: $@" >&2
     fi
 
     exit 4
@@ -155,7 +152,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "xdg-open 1.0beta1"
             exit_success
             ;;
         esac
@@ -230,10 +227,33 @@ open_generic()
         fi
     done
 
-    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
+    exit_failure_operation_impossible "no method available for opening '$1'"
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
+
+url=
+while [ $# -gt 0 ] ; do
+    parm=$1
+    shift
+
+    case $parm in
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
+      *)
+        if [ -n "$url" ] ; then
+            exit_failure_syntax "unexpected argument '$parm'"
+        fi
+        url=$parm
+        ;;
+    esac
+done
+
+if [ -z "${url}" ] ; then
+    exit_failure_syntax "file or URL argument missing"
+fi
 
 detectDE
 
@@ -259,6 +279,6 @@ case "$DE" in
     ;;
 
     *)
-    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
+    exit_failure_operation_impossible "no method available for opening '$1'"
     ;;
 esac

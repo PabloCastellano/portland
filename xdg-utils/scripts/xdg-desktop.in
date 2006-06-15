@@ -27,7 +27,7 @@ _EXAMPLES
 
 #@xdg-utils-common@
 
-[ x"$1" != x"" ] || exit_failure_syntax
+[ x"$1" != x"" ] || exit_failure_syntax 
 
 action=
 desktop_file=
@@ -42,8 +42,8 @@ case $1 in
     ;;
 
   *)
-  exit_failure_syntax "$1:  Invalid parameter/option"
-  ;;
+    exit_failure_syntax "unknown command '$1'"
+    ;;
 esac
 
 shift
@@ -55,19 +55,23 @@ while [ $# -gt 0 ] ; do
     case $parm in
       --vendor)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify a vendor-id."
+            exit_failure_syntax "vendor-id argument missing for --vendor"
         fi
         vendor=$1
         shift
         ;;
 
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
       *)
         if [ -n "$desktop_file" ] ; then
-            exit_failure_syntax "Error:  Too many arguments: $parm"
+            exit_failure_syntax "unexpected argument '$parm'"
         fi
         if [ "$action" = "install" ] ; then
             if [ ! -f "$parm" ] ; then
-                exit_failure_file_missing "Error:  You must specify an existing file to install."
+                exit_failure_file_missing "file '$parm' does not exist"
             fi
         fi
         desktop_file=$parm
@@ -75,11 +79,13 @@ while [ $# -gt 0 ] ; do
     esac
 done
 
+# Shouldn't happen
 if [ -z "$action" ] ; then
-    exit_failure_syntax
+    exit_failure_syntax "command argument missing"
 fi
+
 if [ -z "$desktop_file" ] ; then
-    exit_failure_syntax
+    exit_failure_syntax "FILE argument missing"
 fi
 
 filetype=

@@ -39,8 +39,8 @@
       <arg><option>--utf8</option></arg>
       <arg><option>--cc</option> <replaceable>address</replaceable></arg>
       <arg><option>--bcc</option> <replaceable>address</replaceable></arg>
-      <arg><option>--subject</option> <replaceable>subject</replaceable></arg>
-      <arg><option>--body</option> <replaceable>body</replaceable></arg>
+      <arg><option>--subject</option> <replaceable>text</replaceable></arg>
+      <arg><option>--body</option> <replaceable>text</replaceable></arg>
       <arg><option>--attach</option> <replaceable>file</replaceable></arg>
       <group choice="req">
         <arg choice="plain"><replaceable>mailto-uri</replaceable></arg>
@@ -115,7 +115,7 @@
       </varlistentry>
 
       <varlistentry>
-	<term><option>--subject</option> <replaceable>subject</replaceable></term>
+	<term><option>--subject</option> <replaceable>text</replaceable></term>
 	<listitem>
 	  <simpara>
 	    Specify a subject for the e-mail.
@@ -124,12 +124,13 @@
       </varlistentry>
 
       <varlistentry>
-	<term><option>--body</option> <replaceable>body</replaceable></term>
+	<term><option>--body</option> <replaceable>text</replaceable></term>
 	<listitem>
 	  <simpara>
 	    Specify a body for the e-mail. Since the user will be able to 
 	    make changes before actually sending the e-mail, this can be 
 	    used to provide the user with a template for the e-mail.
+	    <replaceable>text</replaceable> may contain linebreaks. 
 	  </simpara>
 	</listitem>
       </varlistentry>

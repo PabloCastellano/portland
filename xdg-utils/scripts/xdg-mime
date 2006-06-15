@@ -115,11 +115,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-mime: $@" >&2
+        echo "Try 'xdg-mime --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -130,8 +130,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-mime: $@" >&2
     fi
 
     exit 2
@@ -143,8 +142,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-mime: $@" >&2
     fi
 
     exit 3
@@ -156,8 +154,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-mime: $@" >&2
     fi
 
     exit 4
@@ -181,7 +178,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "xdg-mime 1.0beta1"
             exit_success
             ;;
         esac
@@ -350,7 +347,7 @@ case $1 in
     shift
 
     if [ -z "$1" ] ; then 
-        exit_failure_syntax "query type missing"
+        exit_failure_syntax "query type argument missing"
     fi
     
     case $1 in
@@ -363,13 +360,13 @@ case $1 in
         ;;
 
       *)
-      exit_failure_syntax "$1:  Invalid parameter/option"
+      exit_failure_syntax "unknown query type '$1'"
       ;;
     esac
     ;;
 
   *)
-  exit_failure_syntax "$1:  Invalid parameter/option"
+  exit_failure_syntax "unknown command '$1'"
   ;;
 esac
 
@@ -390,28 +387,35 @@ while [ $# -gt 0 ] ; do
         mode=system
         ;;
 
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
       *)
         if [ -n "$filename" ] ; then
-            exit_failure_syntax "Error:  Too many arguments: $parm"
+            exit_failure_syntax "unexpected argument '$parm'"
         fi
         if [ ! -f "$parm" ] ; then
-            exit_failure_file_missing "Error:  You must specify an existing file."
+            exit_failure_file_missing "file '$parm' does not exist"
         fi
         filename=$parm
         ;;
     esac
 done
 
+# Shouldn't happen
 if [ -z "$action" ] ; then
-    exit_failure_syntax
+    exit_failure_syntax "command argument missing"
 fi
-
 
 if [ "$action" = "info" ]; then
     if [ -n "$mode" ] ; then
-        exit_failure_syntax "Error:  Too many options: --$mode"
+        exit_failure_syntax "unexpected option '--$mode'"
     fi
-    
+    if [ -z "$filename" ] ; then
+        exit_failure_syntax "FILE argument missing"
+    fi
+
     detectDE
 
     if [ x"$DE" = x"" ]; then
@@ -433,12 +437,15 @@ if [ "$action" = "info" ]; then
         info_generic "$filename"
         ;;
     esac
-    exit_failure_operation_impossible "Sorry, no method available for quering MIME type of" "$filename"
+    exit_failure_operation_impossible "no method available for quering MIME type of '$filename'"
 fi
 
 if [ "$action" = "defapp" ]; then
     if [ -n "$mode" ] ; then
-        exit_failure_syntax "Error:  Too many options: --$mode"
+        exit_failure_syntax "unexpected option '--$mode'"
+    fi
+    if [ -z "$filename" ] ; then
+        exit_failure_syntax "FILE argument missing"
     fi
 
     detectDE
@@ -452,11 +459,14 @@ if [ "$action" = "defapp" ]; then
         defapp_gnome "$filename"
         ;;
     esac
-    exit_failure_operation_impossible "Sorry, no method available for quering default application for file" "$filename"
+    exit_failure_operation_impossible "no method available for quering default application for file '$filename'"
 fi
 
 if [ -z "$mode" ] ; then
-    exit_failure_syntax "Error:  You must specify either --user or --system"
+    exit_failure_syntax "expected --user or --system option"
+fi
+if [ -z "$filename" ] ; then
+    exit_failure_syntax "mimetypes-file argument missing"
 fi
 
 xdg_base_dir=

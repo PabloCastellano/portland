@@ -90,6 +90,8 @@ result=$(echo "$1" | $utf8 | awk '
 ')
 }
 
+[ x"$1" != x"" ] || exit_failure_syntax
+
 options=
 mailto=
 utf8="iconv -t utf8"
@@ -104,7 +106,7 @@ while [ $# -gt 0 ] ; do
 
       --to)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "email address argument missing for --to"
         fi
         url_encode "$1"
         options=${options}"to="${result}"&" 
@@ -113,7 +115,7 @@ while [ $# -gt 0 ] ; do
 
       --cc)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+             exit_failure_syntax "email address argument missing for --cc"
         fi
         url_encode "$1"
         options=${options}"cc="${result}"&" 
@@ -122,7 +124,7 @@ while [ $# -gt 0 ] ; do
 
       --bcc)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "email address argument missing for --cc"
         fi
         url_encode "$1"
         options=${options}"bcc="${result}"&" 
@@ -131,7 +133,7 @@ while [ $# -gt 0 ] ; do
 
       --subject)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "text argument missing for --subject option"
         fi
         url_encode "$1"
         options=${options}"subject="${result}"&" 
@@ -140,7 +142,7 @@ while [ $# -gt 0 ] ; do
 
       --body)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "text argument missing for --body option"
         fi
         url_encode "$1"
         options=${options}"body="${result}"&" 
@@ -149,11 +151,15 @@ while [ $# -gt 0 ] ; do
 
       --attach)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "file argument missing for --attach option"
         fi
         url_encode "$1"
         options=${options}"attach="${result}"&" 
         shift
+        ;;
+
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
         ;;
 
       *@*)
@@ -170,13 +176,13 @@ while [ $# -gt 0 ] ; do
         ;;
 
       *)
-        exit_failure_syntax "$parm:  Invalid parameter/option"
+        exit_failure_syntax "unexpected argument '$parm'"
         ;;
     esac
 done
 
 if [ -z "${mailto}" ] ; then
-    exit_failure_syntax "Error:  You must specify an address or mailto URI."
+    exit_failure_syntax "email address or mailto URI argument missing"
 fi
 
 case $mailto in
@@ -193,8 +199,7 @@ case $mailto in
         ;;
 esac
 
-echo Mailto="${mailto}"
-
+# Shouldn't happen
 [ x"${mailto}" != x"" ] || exit_failure_syntax
 
 detectDE
@@ -213,6 +218,6 @@ case "$DE" in
     ;;
 
     *)
-    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
+    exit_failure_operation_impossible "no method available for opening '${mailto}'"
     ;;
 esac

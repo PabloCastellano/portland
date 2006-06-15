@@ -265,7 +265,7 @@ case $1 in
     ;;
 
   *)
-  exit_failure_syntax "$1:  Invalid parameter/option"
+  exit_failure_syntax "unknown command '$1'"
   ;;
 esac
 
@@ -278,23 +278,28 @@ while [ $# -gt 0 ] ; do
     case $parm in
       --title)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify a vendor-id."
+            exit_failure_syntax "TITLE argument missing for --title"
         fi
         TITLE="$1"
         shift
         ;;
 
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
       *)
         if [ -n "$filename" ] ; then
-            exit_failure_syntax "Error:  Too many arguments: $parm"
+            exit_failure_syntax "unexpected argument '$parm'"
         fi
         filename="$parm"
         ;;
     esac
 done
 
+# Shouldn't happen
 if [ -z "$action" ] ; then
-    exit_failure_syntax
+    exit_failure_syntax "command argument missing"
 fi
 
 detectDE
@@ -310,7 +315,7 @@ if [ "$action" = "openfilename" ]; then
         ;;
 
         *)
-        exit_failure_operation_impossible "Sorry, no method available for getting a filename for opening"
+        exit_failure_operation_impossible "no method available for opening a filename dialog"
         ;;
     esac
 elif [ "$action" = "openfilenamelist" ]; then
@@ -324,7 +329,7 @@ elif [ "$action" = "openfilenamelist" ]; then
         ;;
 
         *)
-        exit_failure_operation_impossible "Sorry, no method available for getting a list of filenames for opening"
+        exit_failure_operation_impossible "no method available for opening a filename dialog"
         ;;
     esac
 elif [ "$action" = "savefilename" ]; then
@@ -338,7 +343,7 @@ elif [ "$action" = "savefilename" ]; then
         ;;
 
         *)
-        exit_failure_operation_impossible "Sorry, no method available for getting a filename for saving"
+        exit_failure_operation_impossible "no method available for opening a filename dialog"
         ;;
     esac
 elif [ "$action" = "directory" ]; then
@@ -352,7 +357,7 @@ elif [ "$action" = "directory" ]; then
         ;;
 
         *)
-        exit_failure_operation_impossible "Sorry, no method available for getting a directory"
+        exit_failure_operation_impossible "no method available for opening a directory dialog"
         ;;
     esac
 fi

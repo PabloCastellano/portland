@@ -57,8 +57,8 @@ cat << _USAGE
 
 Synopsis
 
-   xdg-email [--utf8] [--cc address] [--bcc address] [--subject subject]
-   [--body body] [--attach file] { mailto-uri | address(es) }
+   xdg-email [--utf8] [--cc address] [--bcc address] [--subject text] [--body
+   text] [--attach file] { mailto-uri | address(es) }
 
    xdg-email { --help | --version }
 
@@ -93,11 +93,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-email: $@" >&2
+        echo "Try 'xdg-email --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -108,8 +108,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-email: $@" >&2
     fi
 
     exit 2
@@ -121,8 +120,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-email: $@" >&2
     fi
 
     exit 3
@@ -134,8 +132,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-email: $@" >&2
     fi
 
     exit 4
@@ -159,7 +156,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "xdg-email 1.0beta1"
             exit_success
             ;;
         esac
@@ -246,6 +243,8 @@ result=$(echo "$1" | $utf8 | awk '
 ')
 }
 
+[ x"$1" != x"" ] || exit_failure_syntax
+
 options=
 mailto=
 utf8="iconv -t utf8"
@@ -260,7 +259,7 @@ while [ $# -gt 0 ] ; do
 
       --to)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "email address argument missing for --to"
         fi
         url_encode "$1"
         options=${options}"to="${result}"&" 
@@ -269,7 +268,7 @@ while [ $# -gt 0 ] ; do
 
       --cc)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+             exit_failure_syntax "email address argument missing for --cc"
         fi
         url_encode "$1"
         options=${options}"cc="${result}"&" 
@@ -278,7 +277,7 @@ while [ $# -gt 0 ] ; do
 
       --bcc)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "email address argument missing for --cc"
         fi
         url_encode "$1"
         options=${options}"bcc="${result}"&" 
@@ -287,7 +286,7 @@ while [ $# -gt 0 ] ; do
 
       --subject)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "text argument missing for --subject option"
         fi
         url_encode "$1"
         options=${options}"subject="${result}"&" 
@@ -296,7 +295,7 @@ while [ $# -gt 0 ] ; do
 
       --body)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "text argument missing for --body option"
         fi
         url_encode "$1"
         options=${options}"body="${result}"&" 
@@ -305,11 +304,15 @@ while [ $# -gt 0 ] ; do
 
       --attach)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify an email address for --to."
+            exit_failure_syntax "file argument missing for --attach option"
         fi
         url_encode "$1"
         options=${options}"attach="${result}"&" 
         shift
+        ;;
+
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
         ;;
 
       *@*)
@@ -326,13 +329,13 @@ while [ $# -gt 0 ] ; do
         ;;
 
       *)
-        exit_failure_syntax "$parm:  Invalid parameter/option"
+        exit_failure_syntax "unexpected argument '$parm'"
         ;;
     esac
 done
 
 if [ -z "${mailto}" ] ; then
-    exit_failure_syntax "Error:  You must specify an address or mailto URI."
+    exit_failure_syntax "email address or mailto URI argument missing"
 fi
 
 case $mailto in
@@ -349,8 +352,7 @@ case $mailto in
         ;;
 esac
 
-echo Mailto="${mailto}"
-
+# Shouldn't happen
 [ x"${mailto}" != x"" ] || exit_failure_syntax
 
 detectDE
@@ -369,6 +371,6 @@ case "$DE" in
     ;;
 
     *)
-    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
+    exit_failure_operation_impossible "no method available for opening '${mailto}'"
     ;;
 esac

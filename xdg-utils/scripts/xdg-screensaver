@@ -104,11 +104,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-screensaver: $@" >&2
+        echo "Try 'xdg-screensaver --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -119,8 +119,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-screensaver: $@" >&2
     fi
 
     exit 2
@@ -132,8 +131,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-screensaver: $@" >&2
     fi
 
     exit 3
@@ -145,8 +143,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-screensaver: $@" >&2
     fi
 
     exit 4
@@ -170,7 +167,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "xdg-screensaver 1.0beta1"
             exit_success
             ;;
         esac
@@ -207,6 +204,7 @@ screensaver_xset()
     fi
 
     case "$1" in
+        # New arg Window ID, create lockfile with $WINDOWID
         suspend)
         delay=${2:-$DELAY}
         xset s off -dpms && sleep $delay && xset s default &
@@ -236,11 +234,7 @@ screensaver_xset()
         ;;
     esac
 
-    if [ $? -eq 0 ]; then
-        exit_success
-    else
-        exit_failure_operation_failed
-    fi
+    return $?
 }
 
 screensaver_kde()
@@ -274,32 +268,24 @@ screensaver_kde()
             echo "disabled"
         else
             echo "ERROR:  kdesktop KScreensaverIface isEnabled returned '$status'"
-            exit_failure_operation_failed
+            return 1
         fi
         ;;
 
         *)
         echo "ERROR:  Unknown command '$1"
-        exit_failure_operation_failed
+        return 1
         ;;
     esac
 
-    if [ $? -eq 0 ]; then
-        exit_success
-    else
-        exit_failure_operation_failed
-    fi
+    return $?
 }
 
 screensaver_gnome()
 {
 # TODO
 
-    if [ $? -eq 0 ]; then
-        exit_success
-    else
-        exit_failure_operation_failed
-    fi
+    return 1
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
@@ -307,6 +293,7 @@ screensaver_gnome()
 
 # Always set the Xorg screensaver first
 screensaver_xset "$1" "$2"
+xset_err=$?
 
 detectDE
 
@@ -321,3 +308,11 @@ case "$DE" in
     ;;
 
 esac
+
+if [ $? -eq 0 ]; then
+    exit_success
+elif [ $xset_err -eq 0 ]; then
+    exit_success
+else
+    exit_failure_operation_failed
+fi

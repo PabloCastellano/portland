@@ -25,11 +25,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "@NAME@: $@" >&2
+        echo "Try '@NAME@ --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -40,8 +40,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "@NAME@: $@" >&2
     fi
 
     exit 2
@@ -53,8 +52,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "@NAME@: $@" >&2
     fi
 
     exit 3
@@ -66,8 +64,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "@NAME@: $@" >&2
     fi
 
     exit 4
@@ -91,7 +88,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "@NAME@ 1.0beta1"
             exit_success
             ;;
         esac

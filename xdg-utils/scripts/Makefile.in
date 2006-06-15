@@ -76,7 +76,7 @@ uninstall:
 	-$(RMDIR) $(bindir)
 
 %: %.in %.txt
-	awk -f generate-help-script.awk $@.in > $@
+	awk -f generate-help-script.awk $@.in | sed -e 's/@NAME@/'$@'/g' > $@
 	chmod a+x $@
 
 xdg-menu: xdg-menu.in xdg-utils-common.in

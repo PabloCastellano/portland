@@ -84,11 +84,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-desktop: $@" >&2
+        echo "Try 'xdg-desktop --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -99,8 +99,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-desktop: $@" >&2
     fi
 
     exit 2
@@ -112,8 +111,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-desktop: $@" >&2
     fi
 
     exit 3
@@ -125,8 +123,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-desktop: $@" >&2
     fi
 
     exit 4
@@ -150,7 +147,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "xdg-desktop 1.0beta1"
             exit_success
             ;;
         esac
@@ -175,7 +172,7 @@ detectDE()
 
 
 
-[ x"$1" != x"" ] || exit_failure_syntax
+[ x"$1" != x"" ] || exit_failure_syntax 
 
 action=
 desktop_file=
@@ -190,8 +187,8 @@ case $1 in
     ;;
 
   *)
-  exit_failure_syntax "$1:  Invalid parameter/option"
-  ;;
+    exit_failure_syntax "unknown command '$1'"
+    ;;
 esac
 
 shift
@@ -203,19 +200,23 @@ while [ $# -gt 0 ] ; do
     case $parm in
       --vendor)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify a vendor-id."
+            exit_failure_syntax "vendor-id argument missing for --vendor"
         fi
         vendor=$1
         shift
         ;;
 
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
       *)
         if [ -n "$desktop_file" ] ; then
-            exit_failure_syntax "Error:  Too many arguments: $parm"
+            exit_failure_syntax "unexpected argument '$parm'"
         fi
         if [ "$action" = "install" ] ; then
             if [ ! -f "$parm" ] ; then
-                exit_failure_file_missing "Error:  You must specify an existing file to install."
+                exit_failure_file_missing "file '$parm' does not exist"
             fi
         fi
         desktop_file=$parm
@@ -223,11 +224,13 @@ while [ $# -gt 0 ] ; do
     esac
 done
 
+# Shouldn't happen
 if [ -z "$action" ] ; then
-    exit_failure_syntax
+    exit_failure_syntax "command argument missing"
 fi
+
 if [ -z "$desktop_file" ] ; then
-    exit_failure_syntax
+    exit_failure_syntax "FILE argument missing"
 fi
 
 filetype=

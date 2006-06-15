@@ -90,11 +90,11 @@ exit_success()
 exit_failure_syntax()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-icon: $@" >&2
+        echo "Try 'xdg-icon --help' for more information." >&2
+    else
+        usage
     fi
-
-    usage
 
     exit 1
 }
@@ -105,8 +105,7 @@ exit_failure_syntax()
 exit_failure_file_missing()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-icon: $@" >&2
     fi
 
     exit 2
@@ -118,8 +117,7 @@ exit_failure_file_missing()
 exit_failure_operation_impossible()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-icon: $@" >&2
     fi
 
     exit 3
@@ -131,8 +129,7 @@ exit_failure_operation_impossible()
 exit_failure_operation_failed()
 {
     if [ $# -gt 0 ]; then
-        echo "$@" >&2
-        echo >&2
+        echo "xdg-icon: $@" >&2
     fi
 
     exit 4
@@ -156,7 +153,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-utils technical-preview"
+            echo "xdg-icon 1.0beta1"
             exit_success
             ;;
         esac
@@ -217,7 +214,7 @@ case $1 in
     ;;
 
   *)
-    exit_failure_syntax "Invalid command: $1"
+    exit_failure_syntax "unknown command '$1'"
     ;;
 esac
 
@@ -243,7 +240,7 @@ while [ $# -gt 0 ] ; do
 
       --theme)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify a theme."
+            exit_failure_syntax "theme argument missing for --theme"
         fi
         theme=$1
         shift
@@ -251,7 +248,7 @@ while [ $# -gt 0 ] ; do
 
       --size)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify a size."
+            exit_failure_syntax "size argument missing for --size"
         fi
         size=$1
         shift
@@ -259,25 +256,25 @@ while [ $# -gt 0 ] ; do
 
       --context)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "Error:  You must specify a context."
+            exit_failure_syntax "context argument missing for --context"
         fi
         context=$1
         shift
         ;;
 
-      --*)
-        exit_failure_syntax "Invalid option '$parm'"
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
         ;;
 
       *)
         if [ -n "$icon_name" ] ; then
-            exit_failure_syntax "Error:  Too many arguments: $parm"
+            exit_failure_syntax "unexpected argument '$parm'"
         elif [ -n "$icon_file" ] ; then
             icon_name=$parm
         else
             if [ "$action" = "install" ] ; then
                 if [ ! -f "$parm" ] ; then
-                    exit_failure_file_missing "Error:  You must specify an existing file to install."
+                    exit_failure_file_missing "file '$parm' does not exist"
                 fi
             fi
             icon_file=$parm
@@ -286,12 +283,13 @@ while [ $# -gt 0 ] ; do
     esac
 done
 
+# Shouldn't happen
 if [ -z "$action" ] ; then
-    exit_failure_syntax
+    exit_failure_syntax "command argument missing"
 fi
 
 if [ -z "$mode" ] ; then
-    exit_failure_syntax "Error:  You must specify either --user or --system"
+    exit_failure_syntax "expected --user or --system option"
 fi
 
 xdg_dir_name=icons/$theme
@@ -321,12 +319,19 @@ else
 fi
 
 if [ x"$action" = x"forceupdate" ] ; then
+    if [ -n "$icon_file" ] ; then
+      exit_failure_syntax "unexpected argument '$icon_file'"
+    fi
     update_icon_database $xdg_base_dir
     exit_success
 fi
 
 if [ -z "$icon_file" ] ; then
-    exit_failure_syntax
+    if [ x"$action" = x"install" ] ; then
+      exit_failure_syntax "icon-file argument missing"
+    else
+      exit_failure_syntax "icon-name argument missing"
+    fi
 fi
 
 filetype=
@@ -335,26 +340,26 @@ case $icon_file in
   *.xpm)
      filetype=bitmap
      if [ -z "$size" ] ; then
-         exit_failure_syntax "Error:  You must specify the icon size with --size"
+         exit_failure_syntax "*.xpm icons must have the icon size specified with --size"
      fi
      xdg_size_name=${size}x${size}
      ;;
   *.png)
      filetype=bitmap
      if [ -z "$size" ] ; then
-         exit_failure_syntax "Error:  You must specify the icon size with --size"
+         exit_failure_syntax "*.png icons must have the icon size specified with --size"
      fi
      xdg_size_name=${size}x${size}
      ;;
   *.svg)
      fileype=svg
      if [ -n "$size" ] ; then
-         exit_failure_syntax "Error:  You may not specify an icon size for .svg icons"
+         echo "xdg-icon: Warning, no icon size should be specified for .svg icons"
      fi
      xdg_size_name=scalable
      ;;
   *)
-     exit_failure_syntax "Error: File to $action must be a *.png, *.xpm or *.svg file"
+     exit_failure_syntax "icon file to $action must be a *.png, *.xpm or *.svg file"
      ;;
 esac
 
@@ -367,7 +372,7 @@ if [ -n "$icon_name" ] ; then
       *.svg)
          ;;
       *)
-         exit_failure_syntax "Error: icon name must end with .png, .xpm or .svg"
+         exit_failure_syntax "icon name must have a .png, .xpm or .svg extension"
          ;;
     esac
 fi

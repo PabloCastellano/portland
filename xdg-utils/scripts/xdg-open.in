@@ -77,10 +77,33 @@ open_generic()
         fi
     done
 
-    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
+    exit_failure_operation_impossible "no method available for opening '$1'"
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
+
+url=
+while [ $# -gt 0 ] ; do
+    parm=$1
+    shift
+
+    case $parm in
+      -*)
+        exit_failure_syntax "unexpected option '$parm'"
+        ;;
+
+      *)
+        if [ -n "$url" ] ; then
+            exit_failure_syntax "unexpected argument '$parm'"
+        fi
+        url=$parm
+        ;;
+    esac
+done
+
+if [ -z "${url}" ] ; then
+    exit_failure_syntax "file or URL argument missing"
+fi
 
 detectDE
 
@@ -106,6 +129,6 @@ case "$DE" in
     ;;
 
     *)
-    exit_failure_operation_impossible "Sorry, no method available for opening" "$1"
+    exit_failure_operation_impossible "no method available for opening '$1'"
     ;;
 esac
