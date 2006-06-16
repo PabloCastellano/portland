@@ -3,6 +3,13 @@
 #   Common utility functions included in all XDG wrapper scripts
 #----------------------------------------------------------------------------
 
+DEBUG()
+{
+  [ ${xdg_utils_debug_level-0} -lt $1 ] && return 0;
+  shift
+  echo "$@"
+}
+
 #-------------------------------------------------------------
 # Exit script on successfully completing the desired operation
 
