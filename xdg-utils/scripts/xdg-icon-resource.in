@@ -316,9 +316,13 @@ need_gnome_mime=
 
 [ -n "$icon_name" ] || icon_name=`basename $icon_file`
 
+icon_icon_file=`echo "$icon_file" | sed 's/\.[^\.]*$/.icon/'`
+icon_icon_name=`echo "$icon_name" | sed 's/\.[^\.]*$/.icon/'`
+
 DEBUG 1 "$action icon in $xdg_dir"
-[ -z $kde_dir ] || DEBUG 1 "$action symlink in $kde_dir (KDE 3.x support)"
-[ -z $need_gnome_mime ] || DEBUG 1 "$action gnome-mime-$icon_name symlink  (GNOME 2.x support)"
+[ $action = "install" -a -f $icon_icon_file ] && DEBUG 1 "install $icon_icon_name meta file in $xdg_dir"
+[ -n "$kde_dir" ] && DEBUG 1 "$action symlink in $kde_dir (KDE 3.x support)"
+[ -n "$need_gnome_mime" ] && DEBUG 1 "$action gnome-mime-$icon_name symlink  (GNOME 2.x support)"
 
 case $action in
     install)
@@ -327,6 +331,9 @@ case $action in
 
         mkdir -p $xdg_dir
         cp $icon_file $xdg_dir/$icon_name
+        if [ -f "$icon_icon_file" ] ; then
+            cp $icon_icon_file $xdg_dir/$icon_icon_name
+        fi
         if [ -n "$kde_dir" ] ; then
             mkdir -p $kde_dir
             ln -s $xdg_dir/$icon_name $kde_dir/$icon_name
@@ -340,6 +347,7 @@ case $action in
 
     uninstall)
         rm -f $xdg_dir/$icon_name
+        rm -f $xdg_dir/$icon_icon_name
         if [ -n "$kde_dir" ] ; then
             rm -f $kde_dir/$icon_name
         fi
