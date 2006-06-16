@@ -180,6 +180,13 @@ _USAGE
 #   Common utility functions included in all XDG wrapper scripts
 #----------------------------------------------------------------------------
 
+DEBUG()
+{
+  [ ${xdg_utils_debug_level-0} -lt $1 ] && return 0;
+  shift
+  echo "$@"
+}
+
 #-------------------------------------------------------------
 # Exit script on successfully completing the desired operation
 
@@ -298,13 +305,16 @@ detectDE()
 
 update_icon_database()
 {
-   for x in `echo $PATH | sed 's/:/ /g'` /opt/gnome/bin; do
+   IFS_save=$IFS
+   IFS=":"
+   for x in $PATH:/opt/gnome/bin; do
       if [ -x $x/gtk-update-icon-cache ] ; then
-         echo Running $x/gtk-update-icon-cache -f -t $1
+         DEBUG 1 "Running $x/gtk-update-icon-cache -f -t $1"
          $x/gtk-update-icon-cache -f -t $1
          return
       fi
    done
+   IFS=$IFS_save
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
@@ -414,16 +424,23 @@ xdg_dir_name=icons/$theme
 
 xdg_user_dir=$XDG_DATA_HOME
 [ -n "$xdg_user_dir" ] || xdg_user_dir=$HOME/.local/share
+xdg_user_prefix=$xdg_user_dir/icons
 xdg_user_dir=$xdg_user_dir/$xdg_dir_name
 
+xdg_global_dir=
+xdg_global_prefix=
 xdg_system_dirs=$XDG_DATA_DIRS
 [ -n "$xdg_system_dirs" ] || xdg_system_dirs=/usr/local/share/:/usr/share/
-for x in `echo $xdg_system_dirs | sed 's/:/ /g'` ; do
+IFS_save=$IFS
+IFS=":"
+for x in $xdg_system_dirs ; do
    if [ -w $x/$xdg_dir_name ] ; then
+      xdg_global_prefix=$x/icons
       xdg_global_dir=$x/$xdg_dir_name
       break
    fi
 done
+IFS=$IFS_save
 [ -w $xdg_global_dir ] || xdg_global_dir=
 
 if [ x"$mode" = x"user" ] ; then
@@ -499,29 +516,81 @@ fi
 #KDE 3.4 (RH FC4) doesn't look for icons in xdg_user_dir
 #we must install to $kde_user_dir as well
 kde_dir=
-kde_user_dir=$HOME/.kde/share/icons/$theme
-kde_global_dir=/usr/share/applnk
-[ -w $kde_global_dir ] || kde_global_dir=
+
+
+kde_global_dir=
 
 #TODO: Legacy support
+gnome_dir=
 gnome_user_dir=$HOME/.gnome/apps
 gnome_global_dir=/usr/share/gnome/apps
 [ -w $gnome_global_dir ] || gnome_global_dir=
 
+function need_kde_icon_path()
+{
+  local path
+  path=`readlink -f "$1"` # Normalize path
+  DEBUG 2 "need_kde_icon_path $path"
+  if [ -z $path ] ; then
+     DEBUG 2 "need_kde_icon_path RETURN 1 (not needed, no xdg icon dir)"
+     return 1; # Not needed
+  fi
+
+  # if kde-config not found... return 0
+  kde_icon_dirs=`kde-config --path icon`
+  DEBUG 3 "kde_icon_dirs: $kde_icon_dirs"
+  if [ -z $kde_icon_dirs ] ; then
+     DEBUG 3 "no result from kde-config --path icon"
+     DEBUG 2 "need_kde_icon_path RETURN 1 (not needed, no kde icon path)"
+     return 1; # Not needed
+  fi
+  needed=0 # Needed
+  IFS_save=$IFS
+  IFS=":"
+  for y in $kde_icon_dirs ; do
+    x=`readlink -f "$y"` # Normalize path
+    DEBUG 3 "Normalize $y --> $x"
+    if [ -n "$x" ] ; then
+      if [ $x = $path ] ; then
+        needed=1 # Not needed
+      fi
+      if [ -w $x ] ; then
+        kde_global_prefix=$x
+        # Take last writable dir
+      fi
+    fi
+  done
+  IFS=$IFS_save
+  DEBUG 2 "kde_global_prefix: $kde_global_prefix"
+  [ $needed -eq "1" ] && DEBUG 2 "need_kde_icon_path RETURN $needed (not needed)"
+  [ $needed -eq "0" ] && DEBUG 2 "need_kde_icon_path RETURN $needed (needed)"
+  return $needed
+}
 
 if [ x"$mode" = x"user" ] ; then
     xdg_dir=$xdg_base_dir/$xdg_size_name/$context
-    kde_dir=$kde_user_dir/$xdg_size_name/$context
+    #KDE 3.x doesn't support XDG_DATA_HOME for icons
+    #Check if xdg_dir prefix is listed by kde-config --path icon
+    #If not, install additional symlink to kdedir 
+    if need_kde_icon_path "$xdg_user_prefix" ; then
+        kde_user_dir=$HOME/.kde/share/icons/$theme
+        kde_dir=$kde_user_dir/$xdg_size_name/$context
+    fi
     my_umask=077
 else
     xdg_dir=$xdg_base_dir/$xdg_size_name/$context
+    #KDE 3.x doesn't support XDG_DATA_DIRS for icons
+    #Check if xdg_dir prefix is listed by kde-config --path icon
+    #If not, install additional symlink to kdedir 
+    if need_kde_icon_path "$xdg_global_prefix" ; then
+        kde_global_dir=$kde_global_prefix/$theme
+        kde_dir=$kde_global_dir/$xdg_size_name/$context
+    fi
     my_umask=022
 fi
 
-echo "[xdg|$xdg_user_dir|$xdg_global_dir]"
-# echo "[kde|$kde_user_dir|$kde_global_dir]"
-# echo "[gnome|$gnome_user_dir|$gnome_global_dir]"
-echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
+DEBUG 1 "$action icon in $xdg_dir"
+[ -z $kde_dir ] || DEBUG 1 "$action symlink in $kde_dir (KDE 3.x support)"
 
 [ -n "$icon_name" ] || icon_name=`basename $icon_file`
 
