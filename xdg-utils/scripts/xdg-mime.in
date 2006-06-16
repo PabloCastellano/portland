@@ -335,6 +335,7 @@ done
 IFS=$IFS_save
 
 # TODO: Gnome legacy support
+# See http://forums.fedoraforum.org/showthread.php?t=26875
 gnome_user_dir=$HOME/.gnome/apps
 gnome_global_dir=/usr/share/gnome/apps
 [ -w $gnome_global_dir ] || gnome_global_dir=
