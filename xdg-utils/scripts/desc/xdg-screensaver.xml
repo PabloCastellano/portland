@@ -25,7 +25,7 @@
 
   <refnamediv>
     <refname>xdg-screensaver</refname>
-    <refpurpose>Control the screensaver</refpurpose>
+    <refpurpose>command line tool for controlling the screensaver</refpurpose>
   </refnamediv>
 
   <refsynopsisdiv>
@@ -52,7 +52,7 @@
   <refsect1 id="description">
     <title>Description</title>
     <para>
-      xdg-screensaver provides commands to control the screensaver
+      xdg-screensaver provides commands to control the screensaver.
     </para>
     <para>
       xdg-screensaver is for use inside a desktop session only.

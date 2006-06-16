@@ -38,7 +38,7 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-   xdg-screensaver -- Control the screensaver
+   xdg-screensaver -- command line tool for controlling the screensaver
 
 Synopsis
 
@@ -48,7 +48,7 @@ Synopsis
 
 Description
 
-   xdg-screensaver provides commands to control the screensaver
+   xdg-screensaver provides commands to control the screensaver.
 
    xdg-screensaver is for use inside a desktop session only. It is not
    recommended to use xdg-screensaver as root.
@@ -133,7 +133,7 @@ _MANUALPAGE
 usage()
 {
 cat << _USAGE
-   xdg-screensaver -- Control the screensaver
+   xdg-screensaver -- command line tool for controlling the screensaver
 
 Synopsis
 

@@ -67,7 +67,7 @@ The following queries are supported:
 
 .TP
 install
-Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&. For each new file type one or more icons with name \fImajor\fR\-\fIminor\fR must be installed with the \fBxdg\-icon\fR command in the \fImimetypes\fR context\&. For example the application/vnd\&.oasis\&.opendocument\&.text filetype requires an icon by the name of application\-vnd\&.oasis\&.opendocument\&.text to be installed\&.
+Adds the file type descriptions provided in \fImimetypes\-file\fR to the desktop environment\&. \fImimetypes\-file\fR must be a XML file that follows the freedesktop\&.org Shared MIME\-info Database specification and that has a mime\-info element as its document root\&. For each new file type one or more icons with name \fImajor\fR\-\fIminor\fR must be installed with the \fBxdg\-icon\-resource\fR command in the \fImimetypes\fR context\&. For example the application/vnd\&.oasis\&.opendocument\&.text filetype requires an icon by the name of application\-vnd\&.oasis\&.opendocument\&.text to be installed\&.
 
 .TP
 uninstall
@@ -119,7 +119,7 @@ The action failed\&.
 .SH "SEE ALSO"
 
 .PP
-\fBxdg\-icon\fR(1), \fBxdg\-menu\fR(1) 
+\fBxdg\-icon\-resource\fR(1), \fBxdg\-desktop\-menu\fR(1) 
 
 .SH "EXAMPLES"
 
@@ -171,7 +171,7 @@ An icon for this new file type must alsobe installed, for example with:
 
 .nf
 
-xdg\-icon install \-\-system \-\-context mimetypes \-\-size 64 text\-x\-diff\&.png
+xdg\-icon\-resource install \-\-system \-\-context mimetypes \-\-size 64 text\-x\-diff\&.png
 
 .fi
  

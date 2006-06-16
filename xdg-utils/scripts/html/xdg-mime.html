@@ -24,8 +24,8 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
             and that has a mime-info element as its document root. For
             each new file type one or more icons with name
             <em class="replaceable"><code>major</code></em>-<em class="replaceable"><code>minor</code></em>
-            must be installed with the <span><strong class="command">xdg-icon</strong></span> command
-            in the <span class="emphasis"><em>mimetypes</em></span> context. For example the
+            must be installed with the <span><strong class="command">xdg-icon-resource</strong></span>
+            command in the <span class="emphasis"><em>mimetypes</em></span> context. For example the
             application/vnd.oasis.opendocument.text filetype requires an
             icon by the name of application-vnd.oasis.opendocument.text
             to be installed.
@@ -58,8 +58,8 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
 	    A required tool could not be found. 
 	  </dd><dt><span class="term"><code class="option">4</code></span></dt><dd>
 	    The action failed. 
-	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="seealso"></a><h2>See Also</h2><p><span class="citerefentry"><span class="refentrytitle">xdg-icon</span>(1)</span>,
-      <span class="citerefentry"><span class="refentrytitle">xdg-menu</span>(1)</span>
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="seealso"></a><h2>See Also</h2><p><span class="citerefentry"><span class="refentrytitle">xdg-icon-resource</span>(1)</span>,
+      <span class="citerefentry"><span class="refentrytitle">xdg-desktop-menu</span>(1)</span>
     </p></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
 </p><pre class="programlisting">
 xdg-mime query filetype /tmp/foobar.png
@@ -88,6 +88,6 @@ diff.xml:
 </pre><p>An icon for this new file type must alsobe installed, for
 example with:
 </p><pre class="programlisting">
-xdg-icon install --system --context mimetypes --size 64 text-x-diff.png
+xdg-icon-resource install --system --context mimetypes --size 64 text-x-diff.png
 </pre><p>
     </p></div></div></body></html>

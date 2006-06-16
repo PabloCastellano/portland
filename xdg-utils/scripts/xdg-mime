@@ -79,8 +79,8 @@ Commands
            follows the freedesktop.org Shared MIME-info Database
            specification and that has a mime-info element as its document
            root. For each new file type one or more icons with name
-           major-minor must be installed with the xdg-icon command in the
-           mimetypes context. For example the
+           major-minor must be installed with the xdg-icon-resource command
+           in the mimetypes context. For example the
            application/vnd.oasis.opendocument.text filetype requires an icon
            by the name of application-vnd.oasis.opendocument.text to be
            installed.
@@ -129,7 +129,7 @@ Exit Codes
 
 See Also
 
-   xdg-icon(1), xdg-menu(1)
+   xdg-icon-resource(1), xdg-desktop-menu(1)
 
 Examples
 
@@ -160,7 +160,7 @@ Examples
 
    An icon for this new file type must alsobe installed, for example with:
 
- xdg-icon install --system --context mimetypes --size 64 text-x-diff.png
+ xdg-icon-resource install --system --context mimetypes --size 64 text-x-diff.png
 _MANUALPAGE
 }
 

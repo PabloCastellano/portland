@@ -118,8 +118,8 @@ and adding descriptions for new file types</refpurpose>
             and that has a mime-info element as its document root. For
             each new file type one or more icons with name
             <replaceable>major</replaceable>-<replaceable>minor</replaceable>
-            must be installed with the <command>xdg-icon</command> command
-            in the <emphasis>mimetypes</emphasis> context. For example the
+            must be installed with the <command>xdg-icon-resource</command>
+            command in the <emphasis>mimetypes</emphasis> context. For example the
             application/vnd.oasis.opendocument.text filetype requires an
             icon by the name of application-vnd.oasis.opendocument.text
             to be installed.
@@ -237,10 +237,10 @@ and adding descriptions for new file types</refpurpose>
   </refsect1>
   <refsect1 id="seealso">
     <title>See Also</title>
-    <para><citerefentry><refentrytitle>xdg-icon</refentrytitle>
+    <para><citerefentry><refentrytitle>xdg-icon-resource</refentrytitle>
         <manvolnum>1</manvolnum>
       </citerefentry>,
-      <citerefentry><refentrytitle>xdg-menu</refentrytitle>
+      <citerefentry><refentrytitle>xdg-desktop-menu</refentrytitle>
         <manvolnum>1</manvolnum>
       </citerefentry>
     </para>
@@ -277,7 +277,7 @@ diff.xml:
 </programlisting>An icon for this new file type must alsobe installed, for
 example with:
 <programlisting>
-xdg-icon install --system --context mimetypes --size 64 text-x-diff.png
+xdg-icon-resource install --system --context mimetypes --size 64 text-x-diff.png
 </programlisting>
     </para>
   </refsect1>

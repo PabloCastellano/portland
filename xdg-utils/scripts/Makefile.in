@@ -13,16 +13,16 @@ bindir          = @bindir@
 mandir          = @mandir@
 
 SCRIPTS		= \
-    xdg-menu \
-    xdg-desktop \
-    xdg-email \
+    xdg-desktop-menu \
+    xdg-desktop-icon \
     xdg-mime \
-    xdg-su \
+    xdg-icon-resource \
     xdg-open \
-    xdg-copy \
-    xdg-file-dialog \
+    xdg-email \
+    xdg-su \
     xdg-screensaver \
-    xdg-icon
+    xdg-copy \
+    xdg-file-dialog
 
 MANPAGES=	$(SCRIPTS:%=man/%.1)
 WEBPAGES=	$(SCRIPTS:%=%.html)
@@ -79,8 +79,8 @@ uninstall:
 	awk -f generate-help-script.awk $@.in | sed -e 's/@NAME@/'$@'/g' > $@
 	chmod a+x $@
 
-xdg-menu: xdg-menu.in xdg-utils-common.in
-xdg-desktop: xdg-desktop.in xdg-utils-common.in
+xdg-desktop-menu: xdg-desktop-menu.in xdg-utils-common.in
+xdg-desktop-icon: xdg-desktop-icon.in xdg-utils-common.in
 xdg-email: xdg-email.in xdg-utils-common.in
 xdg-mime: xdg-mime.in xdg-utils-common.in
 xdg-su: xdg-su.in xdg-utils-common.in
@@ -88,7 +88,7 @@ xdg-open: xdg-open.in xdg-utils-common.in
 xdg-copy: xdg-copy.in xdg-utils-common.in
 xdg-file-dialog: xdg-file-dialog.in xdg-utils-common.in
 xdg-screensaver: xdg-screensaver.in xdg-utils-common.in
-xdg-icon: xdg-icon.in xdg-utils-common.in
+xdg-icon-resource: xdg-icon-resource.in xdg-utils-common.in
 
 man/%.1: desc/%.xml
 	(cd man;$(XMLTO) man ../$<)
