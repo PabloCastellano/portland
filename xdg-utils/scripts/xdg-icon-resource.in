@@ -142,6 +142,11 @@ if [ -z "$action" ] ; then
     exit_failure_syntax "command argument missing"
 fi
 
+# Shouldn't happen
+if [ -z "$context" ] ; then
+    exit_failure_syntax "context argument missing"
+fi
+
 if [ -z "$mode" ] ; then
     exit_failure_syntax "expected --user or --system option"
 fi
@@ -238,20 +243,7 @@ if [ -n "$icon_name" ] ; then
     esac
 fi
 
-#TODO: Legacy support
-#KDE 3.4 (RH FC4) doesn't look for icons in xdg_user_dir
-#we must install to $kde_user_dir as well
-kde_dir=
-
-
-kde_global_dir=
-
-#TODO: Legacy support
-gnome_dir=
-gnome_user_dir=$HOME/.gnome/apps
-gnome_global_dir=/usr/share/gnome/apps
-[ -w $gnome_global_dir ] || gnome_global_dir=
-
+# Start KDE legacy workaround section
 function need_kde_icon_path()
 {
   local path
@@ -293,6 +285,7 @@ function need_kde_icon_path()
   return $needed
 }
 
+kde_dir=
 if [ x"$mode" = x"user" ] ; then
     xdg_dir=$xdg_base_dir/$xdg_size_name/$context
     #KDE 3.x doesn't support XDG_DATA_HOME for icons
@@ -314,11 +307,18 @@ else
     fi
     my_umask=022
 fi
+# End KDE legacy workaround section
+
+# Start GNOME legacy workaround section
+need_gnome_mime=
+[ $context = "mimetypes" ] && need_gnome_mime=true 
+# End GNOME legacy workaround section
+
+[ -n "$icon_name" ] || icon_name=`basename $icon_file`
 
 DEBUG 1 "$action icon in $xdg_dir"
 [ -z $kde_dir ] || DEBUG 1 "$action symlink in $kde_dir (KDE 3.x support)"
-
-[ -n "$icon_name" ] || icon_name=`basename $icon_file`
+[ -z $need_gnome_mime ] || DEBUG 1 "$action gnome-mime-$icon_name symlink  (GNOME 2.x support)"
 
 case $action in
     install)
@@ -331,6 +331,9 @@ case $action in
             mkdir -p $kde_dir
             ln -s $xdg_dir/$icon_name $kde_dir/$icon_name
         fi
+        if [ -n "$need_gnome_mime" ] ; then
+            ln -s $xdg_dir/$icon_name $xdg_dir/gnome-mime-$icon_name
+        fi
 
         umask $save_umask
         ;;
@@ -339,6 +342,9 @@ case $action in
         rm -f $xdg_dir/$icon_name
         if [ -n "$kde_dir" ] ; then
             rm -f $kde_dir/$icon_name
+        fi
+        if [ -n "$need_gnome_mime" ] ; then
+            rm -f $xdg_dir/gnome-mime-$icon_name
         fi
 
         ;;
