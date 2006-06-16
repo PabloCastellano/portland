@@ -117,18 +117,18 @@ fi
 
 case "$DE" in
     kde)
-    open_kde "$1"
+    open_kde "$url"
     ;;
 
     gnome)
-    open_gnome "$1"
+    open_gnome "$url"
     ;;
 
     generic)
-    open_generic "$1"
+    open_generic "$url"
     ;;
 
     *)
-    exit_failure_operation_impossible "no method available for opening '$1'"
+    exit_failure_operation_impossible "no method available for opening '$url'"
     ;;
 esac

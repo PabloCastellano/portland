@@ -115,6 +115,13 @@ _USAGE
 #   Common utility functions included in all XDG wrapper scripts
 #----------------------------------------------------------------------------
 
+DEBUG()
+{
+  [ ${xdg_utils_debug_level-0} -lt $1 ] && return 0;
+  shift
+  echo "$@"
+}
+
 #-------------------------------------------------------------
 # Exit script on successfully completing the desired operation
 
@@ -321,18 +328,18 @@ fi
 
 case "$DE" in
     kde)
-    open_kde "$1"
+    open_kde "$url"
     ;;
 
     gnome)
-    open_gnome "$1"
+    open_gnome "$url"
     ;;
 
     generic)
-    open_generic "$1"
+    open_generic "$url"
     ;;
 
     *)
-    exit_failure_operation_impossible "no method available for opening '$1'"
+    exit_failure_operation_impossible "no method available for opening '$url'"
     ;;
 esac
