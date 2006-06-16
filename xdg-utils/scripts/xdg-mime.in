@@ -68,8 +68,11 @@ defapp_kde()
     MIME=`kfile "$1" 2> /dev/null | head -n 1 | cut -d "(" -f 2 | cut -d ")" -f 1`
 
     if [ x"$MIME" != x"" ]; then
-        ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
-            | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2 | xargs basename
+        trader_result=`ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
+            | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2`
+        if [ -n "$trader_result" ] ; then
+            basename "$trader_result"
+        fi
         exit_success
     else
         exit_failure_operation_failed
