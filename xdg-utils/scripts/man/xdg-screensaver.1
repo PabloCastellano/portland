@@ -24,7 +24,19 @@ xdg-screensaver \- command line tool for controlling the screensaver
 .ad l
 .hy 0
 .HP 16
-\fBxdg\-screensaver\fR {\fB\fBsuspend\ \fIdelay\fR\fR\fR | \fB\fBrestore\fR\fR | \fB\fBactivate\fR\fR | \fB\fBreset\fR\fR | \fB\fBstatus\fR\fR}
+\fBxdg\-screensaver\fR \fBsuspend\ \fIWindowID\fR\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 16
+\fBxdg\-screensaver\fR \fBrestore\ \fIWindowID\fR\fR
+.ad
+.hy
+.ad l
+.hy 0
+.HP 16
+\fBxdg\-screensaver\fR {\fB\fBactivate\fR\fR | \fB\fBreset\fR\fR | \fB\fBstatus\fR\fR}
 .ad
 .hy
 .ad l
@@ -42,27 +54,31 @@ xdg\-screensaver provides commands to control the screensaver\&.
 .PP
 xdg\-screensaver is for use inside a desktop session only\&. It is not recommended to use xdg\-screensaver as root\&.
 
-.SH "OPTIONS"
+.SH "COMMANDS"
 
 .TP
-\fBsuspend \fIdelay\fR\fR
-Suspends the screensaver and monitor power management for the amount of time given by \fIdelay\fR, or 60 minutes if unspecified\&. This is of the form NUMBERSUFFIX, such as 45m, 4h, or 30s\&. SUFFIX may be `s' for seconds (the default), `m' for minutes, `h' for hours or `d' for days This is intended to allow preventing the screensaver coming on during a presentation, and return it to normal behavior after the specified delay\&.
+\fBsuspend \fIWindowID\fR\fR
+Suspends the screensaver and monitor power management\&. \fIWindowID\fR must be the X Window ID of an existing window of the calling application\&. The window must remain in existance for the duration of the suspension\&.
+
+The screensaver can be suspended in relation to multiple windows at the same time\&. In that case screensaver operation is only restored once the suspensions have been restored in relation to each of the windows
 
 .TP
-\fBrestore\fR
-Restores the screensaver state, timeout, etc\&. to the user's standard settings\&.
+\fBresume \fIWindowID\fR\fR
+Resume the screensaver and monitor power management after being suspended\&. \fIWindowID\fR must be the same X Window ID that was passed to a previous call of \fBxdg\-screensaver suspend\fR 
 
 .TP
 \fBactivate\fR
-Turns the screensaver on immediately\&.
+Turns the screensaver on immediately\&. This may result in the screen getting locked, depending on existing system policies\&.
 
 .TP
 \fBreset\fR
-Turns the screensaver off immediately\&.
+Turns the screensaver off immediately\&. This my result in a password prompt to unlock the screen, depending on existing system policies\&.
 
 .TP
 \fBstatus\fR
 Returns true if the screensaver is enabled to turn on after a period of inactivty, or false otherwise\&.
+
+.SH "OPTIONS"
 
 .TP
 \fB\-\-help\fR
@@ -104,10 +120,10 @@ The action failed\&.
 
 .nf
 
-xdg\-screensaver suspend 3h
+xdg\-screensaver suspend 0x1c00007
 
 .fi
- Causes the screensaver to not turn on due to inactivity, for 3 hours, after which time it will return to automatic activation\&.
+ Causes the screensaver to be disabled till \fBxdg\-screensaver resume 0x1c00007\fR is called\&. \fI0x1c00007\fR must be the X Window ID of an existing window\&.
 
 .SH "BUGSS"
 

@@ -12,9 +12,6 @@
 #
 #---------------------------------------------
 
-# Default value for delay when suspending screensaver
-DELAY=60m
-
 manualpage()
 {
 cat << _MANUALPAGE
@@ -28,6 +25,119 @@ _USAGE
 }
 
 #@xdg-utils-common@
+
+screensaver_file=$HOME/.xdg-screensaver-`echo $DISPLAY | sed 's/:/-/g'`
+lockfile_command=`which lockfile`
+
+lockfile()
+{
+  if [ -n "$lockfile_command" ] ; then
+     $lockfile_command -1 -l 10 -s 3 "$screensaver_file".lock
+  else
+     # Poor man's attempt at doing a lockfile
+     (set -o noclobber
+     local try
+     try=0
+     while ! echo > "$screensaver_file".lock ;
+     do
+        sleep 1
+        try=$(($try+1))
+        if [ $try -eq 3 ] ; then 
+            rm -f "$screensaver_file".lock || return # Can't remove lockfile
+            try=0
+        fi
+     done)
+  fi
+}
+
+unlockfile()
+{
+  rm -f "$screensaver_file".lock
+}
+
+perform_action()
+{
+  # Always set the Xorg screensaver first
+  screensaver_xset "$1"
+  xset_err=$?
+  
+  case "$DE" in
+    kde)
+      screensaver_kde "$1"
+      ;;
+
+    gnome)
+      screensaver_gnome "$1"
+      ;;
+  esac
+}
+
+cleanup_suspend()
+{
+  lockfile
+  grep -v "$window_id:" "$screensaver_file" > "$screensaver_file".new
+  mv "$screensaver_file".new "$screensaver_file"
+  unlockfile
+  if [ ! -s "$screensaver_file" ] ; then
+      # $screensaver_file is empty, do resume"
+      perform_action resume
+  fi
+}
+
+do_resume()
+{
+  lockfile # Obtain lockfile
+  # Find the PID of the trackingprocess
+  xprop_pid=`grep "$window_id:" "$screensaver_file" | cut -d ':' -f 2`
+  unlockfile # Free lockfile
+  if [ -n "$xprop_pid" ] && ps -p "$xprop_pid" 2> /dev/null | grep xprop > /dev/null; then
+     # Kill the tracking process 
+     kill -TERM $xprop_pid
+  fi
+  cleanup_suspend  
+}
+
+track_window()
+{
+  lockfile
+
+  # Filter stale entries from the xdg-screensaver status file
+  # Return if $window_id is being tracked already
+  (
+    already_tracked=0
+    IFS_save=$IFS
+    IFS=":"
+    while read wid pid; do
+      if ps -p "$pid" 2> /dev/null | grep xprop > /dev/null; then
+        echo "$wid:$pid"
+        if [ $wid = $window_id ] ; then
+          already_tracked=1
+        fi   
+      fi
+    done
+    IFS=$IFS_save
+    exit $already_tracked
+  ) < $screensaver_file > $screensaver_file.new
+  already_tracked=$?
+  mv $screensaver_file.new $screensaver_file
+
+  if [ "$already_tracked" -eq "1" ] ; then
+    # We are already tracking $window_id, don't do anything
+    unlockfile
+    return
+  fi
+
+  # Start tracking $window_id
+  xprop -id $window_id -spy > /dev/null &
+  xprop_pid=$!
+  # Add window_id and xprop_pid to the xdg-screensave status file
+  echo "$window_id:$xprop_pid" >> $screensaver_file
+  unlockfile
+  # Wait for xprop to edit, it means that the window disappeared
+  wait $xprop_pid
+  # Clean up the administration and resume the screensaver
+  cleanup_suspend
+}
 
 screensaver_xset()
 {
@@ -43,11 +153,10 @@ screensaver_xset()
     case "$1" in
         # New arg Window ID, create lockfile with $WINDOWID
         suspend)
-        delay=${2:-$DELAY}
-        xset s off -dpms && sleep $delay && xset s default &
+        xset s off -dpms
         ;;
 
-        restore)
+        resume)
         # Restores screensaver to its default settings
         xset s default "$DPMS"
         ;;
@@ -64,9 +173,9 @@ screensaver_xset()
 
         status)
         if [ ${TIMEOUT:0} -eq 0 ]; then
-            echo "Enabled:  false"
+            echo "disabled"
         else
-            echo "Enabled:  true"
+            echo "enabled"
         fi
         ;;
     esac
@@ -78,18 +187,15 @@ screensaver_kde()
 {
     case "$1" in
         suspend) 
-        delay=${2:-$DELAY}
-        dcop kdesktop KScreensaverIface enable false > /dev/null && \
-            sleep $delay && \
-            dcop kdesktop KScreensaverIface configure > /dev/null &
+        dcop kdesktop KScreensaverIface enable false
         ;;
 
-        restore)
+        resume)
         dcop kdesktop KScreensaverIface configure
         ;;
         
-        enable)
-        dcop kdesktop KScreensaverIface enable false > /dev/null
+        activate)
+        dcop kdesktop KScreensaverIface save > /dev/null
         ;;
         
         reset)
@@ -99,18 +205,18 @@ screensaver_kde()
 
         status)
         status=`dcop kdesktop KScreensaverIface isEnabled`
-        if [ status = 'true' ]; then
+        if [ x"$status" = "xtrue" ]; then
             echo "enabled"
-        elif [ status = 'false' ]; then
+        elif [ x"$status" = "xfalse" ]; then
             echo "disabled"
         else
-            echo "ERROR:  kdesktop KScreensaverIface isEnabled returned '$status'"
+            echo "ERROR:  kdesktop KScreensaverIface isEnabled returned '$status'" >&2
             return 1
         fi
         ;;
 
         *)
-        echo "ERROR:  Unknown command '$1"
+        echo "ERROR:  Unknown command '$1" >&2
         return 1
         ;;
     esac
@@ -127,24 +233,66 @@ screensaver_gnome()
 
 [ x"$1" != x"" ] || exit_failure_syntax
 
+action=
+window_id=
 
-# Always set the Xorg screensaver first
-screensaver_xset "$1" "$2"
-xset_err=$?
+case $1 in
+  suspend)
+    action=$1
+    
+    shift
+
+    if [ -z "$1" ] ; then 
+        exit_failure_syntax "WindowID argument missing"
+    fi
+    
+    window_id=$1    
+    ;;
+
+  resume)
+    action=$1
+    
+    shift
+
+    if [ -z "$1" ] ; then 
+        exit_failure_syntax "WindowID argument missing"
+    fi
+    
+    window_id=$1    
+    ;;
+
+  activate)
+    action=$1
+    ;;
+
+  reset)
+    action=$1
+    ;;
+
+  status)
+    action=$1
+    ;;
+    
+  *)
+    exit_failure_syntax "unknown command '$1'"
+    ;;
+esac
+
+
 
 detectDE
 
-# Just in case, also do the desktop environment's screensaver
-case "$DE" in
-    kde)
-    screensaver_kde  "$1" "$2"
-    ;;
+if [ "$action" = "resume" ] ; then
+    do_resume
+    exit_success
+fi
 
-    gnome)
-    screensaver_gnome "$1" "$2"
-    ;;
+perform_action "$action"
 
-esac
+if [ "$action" = "suspend" ] ; then
+    # Start tracking $window_id and resume the screensaver once it disappears
+    ( track_window  ) 2> /dev/null > /dev/null &
+fi        
 
 if [ $? -eq 0 ]; then
     exit_success
