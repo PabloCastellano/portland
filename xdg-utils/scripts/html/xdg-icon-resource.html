@@ -82,5 +82,15 @@
       <span class="citerefentry"><span class="refentrytitle">xdg-desktop-menu</span>(1)</span>,
       <span class="citerefentry"><span class="refentrytitle">xdg-mime</span>(1)</span>
     </p></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
-      TBD
+To install an icon resource to depict a launcher for the application myfoobar one can use:
+</p><pre class="programlisting">
+xdg-icon-resource install --system --size 64 myfoobar.png
+</pre><p>
+    </p><p>
+To install an icon for a new application/x-foobar file type one can use:
+</p><pre class="programlisting">
+xdg-icon-resource install --system --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
+xdg-icon-resource install --system --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
+</pre><p>This will install two icons with the name application-x-foobar.png
+but with different sizes. The icons will be installed for use by all users.
     </p></div></div></body></html>

@@ -76,7 +76,8 @@ Description
 Commands
 
    install
-           Installs FILE to the desktop of the current user.
+           Installs FILE to the desktop of the current user. FILE can be a
+           *.desktop file or any other type of file.
 
    uninstall
            Removes FILE from the desktop of the current user.
@@ -172,7 +173,33 @@ See Also
 
 Examples
 
-   TBD
+   The company ShinyThings Inc. has developed an application named
+   "WebMirror" and would like to add a launcher for for on the desktop. The
+   company will use "shinythings" as its vendor id. In order to add the
+   application to the desktop there needs to be a .desktop file for the
+   application:
+
+ webmirror.desktop:
+
+   [Desktop Entry]
+   Encoding=UTF-8
+   Type=Application
+
+   Exec=webmirror
+   Icon=webmirror
+
+   Name=WebMirror
+   Name[nl]=WebSpiegel
+
+   Now the xdg-desktop-icon tool can be used to add the webmirror.desktop
+   file to the desktop:
+
+ xdg-desktop-icon install --vendor shinythings ./webmirror.desktop
+
+   To add a README file to the desktop as well, the following command can be
+   used:
+
+ xdg-desktop-icon install ./shinythings-README
 _MANUALPAGE
 }
 
@@ -181,6 +208,13 @@ _MANUALPAGE
 #----------------------------------------------------------------------------
 #   Common utility functions included in all XDG wrapper scripts
 #----------------------------------------------------------------------------
+
+DEBUG()
+{
+  [ ${xdg_utils_debug_level-0} -lt $1 ] && return 0;
+  shift
+  echo "$@"
+}
 
 #-------------------------------------------------------------
 # Exit script on successfully completing the desired operation

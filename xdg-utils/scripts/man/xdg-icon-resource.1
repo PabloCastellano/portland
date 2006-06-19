@@ -138,7 +138,25 @@ The action failed\&.
 .SH "EXAMPLES"
 
 .PP
-TBD
+To install an icon resource to depict a launcher for the application myfoobar one can use: 
+
+.nf
+
+xdg\-icon\-resource install \-\-system \-\-size 64 myfoobar\&.png
+
+.fi
+ 
+
+.PP
+To install an icon for a new application/x\-foobar file type one can use: 
+
+.nf
+
+xdg\-icon\-resource install \-\-system \-\-context mimetypes \-\-size 48 \&./mime\-foobar\-48\&.png application\-x\-foobar\&.png
+xdg\-icon\-resource install \-\-system \-\-context mimetypes \-\-size 64 \&./mime\-foobar\-64\&.png application\-x\-foobar\&.png
+
+.fi
+This will install two icons with the name application\-x\-foobar\&.png but with different sizes\&. The icons will be installed for use by all users\&.
 
 .SH AUTHORS
 Kevin Krammer, Jeremy White.
