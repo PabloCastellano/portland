@@ -26,10 +26,11 @@ SCRIPTS		= \
 
 MANPAGES=	$(SCRIPTS:%=man/%.1)
 WEBPAGES=	$(SCRIPTS:%=%.html)
+XMLFILES=	$(SCRIPTS:%=desc/%.xml)
 
 all:		
 
-html:		$(WEBPAGES)
+html:		index.html $(WEBPAGES)
 
 scripts:	README $(SCRIPTS)
 
@@ -92,6 +93,11 @@ xdg-icon-resource: xdg-icon-resource.in xdg-utils-common.in
 
 man/%.1: desc/%.xml
 	(cd man;$(XMLTO) man ../$<)
+
+index.html: $(XMLFILES)
+	(cat html/index.html.pre; \
+         xsltproc xsl/refentry2htmlindex.xsl $(XMLFILES); \
+         cat html/index.html.post ) > html/index.html
 
 %.html: desc/%.xml
 	(cd html;$(XMLTO) html-nochunks ../$<)
