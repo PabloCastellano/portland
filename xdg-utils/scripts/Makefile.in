@@ -20,9 +20,9 @@ SCRIPTS		= \
     xdg-open \
     xdg-email \
     xdg-su \
-    xdg-screensaver \
-    xdg-copy \
-    xdg-file-dialog
+    xdg-screensaver 
+#    xdg-copy \
+#    xdg-file-dialog
 
 MANPAGES=	$(SCRIPTS:%=man/%.1)
 WEBPAGES=	$(SCRIPTS:%=%.html)
@@ -39,6 +39,7 @@ man:		$(MANPAGES)
 release:	scripts html man
 	rm -f xdg-*.in *~ HACKING
 	rm -rf desc/
+	rm -rf xsl/
 
 distclean: clean
 	rm -f Makefile
@@ -54,7 +55,7 @@ README: $(SCRIPTS)
 	    sh ./$$x --help | grep -B 100 Synopsis | sed -e '$$d' >> $@ ; \
 	done
 
-install: $(SCRIPTS) $(MANPAGES)
+install:
 	$(MKDIR) $(bindir)
 	for x in $(SCRIPTS) ; do \
 	    $(INSTALL_SCRIPT) $$x $(bindir) ; \
