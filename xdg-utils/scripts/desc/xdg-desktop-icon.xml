@@ -77,6 +77,8 @@
 	<listitem>
 	  <simpara>
 	    Installs <replaceable>FILE</replaceable> to the desktop of the current user.
+	    <replaceable>FILE</replaceable> can be a *.desktop file or any
+            other type of file.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -293,7 +295,35 @@
   <refsect1 id="examples">
     <title>Examples</title>
     <para>
-      TBD
+      The company ShinyThings Inc. has developed an application named
+      "WebMirror" and would like to add a launcher for for on the desktop.
+      The company will use "shinythings" as its vendor id.
+      In order to add the application to the desktop there needs to be a
+      .desktop file for the application:
+<programlisting>
+webmirror.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+</programlisting>
+    </para>
+    <para>Now the xdg-desktop-icon tool can be used to add the webmirror.desktop file
+    to the desktop:
+<programlisting>
+xdg-desktop-icon install --vendor shinythings ./webmirror.desktop
+</programlisting>
+    </para>
+    <para>To add a README file to the desktop as well, the following command can be used:  
+<programlisting>
+xdg-desktop-icon install ./shinythings-README
+</programlisting>
     </para>
   </refsect1>
 </refentry>

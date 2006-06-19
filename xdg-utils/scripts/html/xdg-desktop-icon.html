@@ -8,6 +8,8 @@
       are summarized below.
     </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">install</span></dt><dd>
 	    Installs <em class="replaceable"><code>FILE</code></em> to the desktop of the current user.
+	    <em class="replaceable"><code>FILE</code></em> can be a *.desktop file or any
+            other type of file.
 	  </dd><dt><span class="term">uninstall</span></dt><dd>
 	    Removes <em class="replaceable"><code>FILE</code></em> from the desktop
             of the current user.
@@ -84,5 +86,31 @@
 	    The action failed. 
 	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="seealso"></a><h2>See Also</h2><p><span class="citerefentry"><span class="refentrytitle">xdg-icon-resource</span>(1)</span>
     </p></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
-      TBD
+      The company ShinyThings Inc. has developed an application named
+      "WebMirror" and would like to add a launcher for for on the desktop.
+      The company will use "shinythings" as its vendor id.
+      In order to add the application to the desktop there needs to be a
+      .desktop file for the application:
+</p><pre class="programlisting">
+webmirror.desktop:
+
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
+
+  Exec=webmirror
+  Icon=webmirror
+
+  Name=WebMirror
+  Name[nl]=WebSpiegel
+</pre><p>
+    </p><p>Now the xdg-desktop-icon tool can be used to add the webmirror.desktop file
+    to the desktop:
+</p><pre class="programlisting">
+xdg-desktop-icon install --vendor shinythings ./webmirror.desktop
+</pre><p>
+    </p><p>To add a README file to the desktop as well, the following command can be used:  
+</p><pre class="programlisting">
+xdg-desktop-icon install ./shinythings-README
+</pre><p>
     </p></div></div></body></html>
