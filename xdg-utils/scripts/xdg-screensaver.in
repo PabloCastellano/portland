@@ -227,6 +227,11 @@ screensaver_kde()
 screensaver_gnome()
 {
 # TODO
+# There seems to be a DBUS interface for gnome-screensaver
+# See http://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2006-April/042579.html and
+# http://cvs.gnome.org/viewcvs/gnome-screensaver/src/gs-listener-dbus.c?rev=1.36&view=log
+# A problem seems to be that Inhibit is tied to the lifetime of the DBUS appname and
+# this can not be used from a script
 
     return 1
 }
