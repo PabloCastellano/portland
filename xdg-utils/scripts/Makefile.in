@@ -56,26 +56,26 @@ README: $(SCRIPTS)
 	done
 
 install:
-	$(MKDIR) $(bindir)
+	$(MKDIR) $(DESTDIR)$(bindir)
 	for x in $(SCRIPTS) ; do \
-	    $(INSTALL_SCRIPT) $$x $(bindir) ; \
+	    $(INSTALL_SCRIPT) $$x $(DESTDIR)$(bindir) ; \
 	done
-	$(MKDIR) $(mandir)
-	$(MKDIR) $(mandir)/man1
+	$(MKDIR) $(DESTDIR)$(mandir)
+	$(MKDIR) $(DESTDIR)$(mandir)/man1
 	for x in $(MANPAGES) ; do \
-	    $(INSTALL_DATA) $$x $(mandir)/man1 ; \
+	    $(INSTALL_DATA) $$x $(DESTDIR)$(mandir)/man1 ; \
 	done
 
 uninstall:
 	for x in $(MANPAGES) ; do \
-	    rm -f $(mandir)/man1/`basename $$x` ; \
+	    rm -f $(DESTDIR)$(mandir)/man1/`basename $$x` ; \
 	done
-	-$(RMDIR) $(mandir)/man1
-	-$(RMDIR) $(mandir)
+	-$(RMDIR) $(DESTDIR)$(mandir)/man1
+	-$(RMDIR) $(DESTDIR)$(mandir)
 	for x in $(SCRIPTS) ; do \
-	    rm -f $(bindir)/$$x ; \
+	    rm -f $(DESTDIR)$(bindir)/$$x ; \
 	done
-	-$(RMDIR) $(bindir)
+	-$(RMDIR) $(DESTDIR)$(bindir)
 
 %: %.in %.txt
 	awk -f generate-help-script.awk $@.in | sed -e 's/@NAME@/'$@'/g' > $@
