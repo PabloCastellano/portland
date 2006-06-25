@@ -29,7 +29,8 @@ int main()
         printf( "Temporary2: %s\n", ok ? "Ok" : "Failed" );
         free( local );
         }
-    system( "touch /tmp/remotefiletest.txt" );
+    if(system( "touch /tmp/remotefiletest.txt" ))
+	return perror("system()"), 1;
     /* local temporary will be ignored */
     local = dapi_LocalFile_Window( conn, "file:///tmp/remotefiletest.txt", "/tmp/remotefiletest2.txt", 1, 0 );
     printf( "Local file3: %s\n", local != NULL ? local : "Failed" );

@@ -15,7 +15,8 @@ int main()
         fprintf( stderr, "Cannot connect!\n" );
         return 1;
         }
-    system( "touch /tmp/mailtotest.txt" );
+    if(system( "touch /tmp/mailtotest.txt" ))
+        return perror("system()"), 1;
     attachments.count = 1;
     attachments.data = attachments_data;
     ok = dapi_MailTo_Window( conn, "Test mail", "Hi,\n\nthis is a test mail.\n",
