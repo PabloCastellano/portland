@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-screensaver</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-screensaver"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-screensaver &#8212; command line tool for controlling the screensaver</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>   <code class="option">suspend <em class="replaceable"><code>WindowID</code></em></code> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>   <code class="option">restore <em class="replaceable"><code>WindowID</code></em></code> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>  { <code class="option">activate</code>  |   <code class="option">reset</code>  |   <code class="option">status</code> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-screensaver</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-screensaver"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-screensaver &#8212; command line tool for controlling the screensaver</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>   <code class="option">suspend <em class="replaceable"><code>WindowID</code></em></code> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>   <code class="option">restore <em class="replaceable"><code>WindowID</code></em></code> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>  { <code class="option">activate</code>  |   <code class="option">reset</code>  |   <code class="option">status</code> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-screensaver</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       xdg-screensaver provides commands to control the screensaver.
     </p><p>
       xdg-screensaver is for use inside a desktop session only.
@@ -8,6 +8,11 @@
             <em class="replaceable"><code>WindowID</code></em> must be the X Window ID
             of an existing window of the calling application. The window
             must remain in existance for the duration of the suspension.
+          </p><p>
+            WindowID can be represented as either a decimal number
+            or as a hexadecimal number consisting of the prefix
+            <span class="emphasis"><em>0x</em></span> followed by one or more hexadecimal
+            digits. 
           </p><p>
             The screensaver can be suspended in relation to multiple
             windows at the same time. In that case screensaver
@@ -54,20 +59,4 @@ xdg-screensaver suspend 0x1c00007
         <span><strong class="command">xdg-screensaver resume 0x1c00007</strong></span> is called.
         <span class="emphasis"><em>0x1c00007</em></span> must be the X Window ID of an
         existing window.
-    </p></div><div class="refsect1" lang="en"><a name="bugs"></a><h2>Bugss</h2><p>
-        There is no provision for cancelling a suspend operation.  If a 
-        second suspend is started before the first one is completed,
-	then the screensaver will be restored to its original state
-	before the second suspend is able to complete.
-    </p><p>
-        For example, if a presenter completes her presentation, and a
-	second presenter starts before the delay is over, then the
-        screensaver could come on during the second presentation.
-    </p><p>
-        True suspend functionality will require cooperation from the X
-	server.  The Xorg group has implemented an extension that allows
-	an application to disable the screensaver while it is connected,
-        which will re-enable the screensaver.  xdg-screensaver should be
-	updated to take advantage of this functionality when it is
-	available.
     </p></div></div></body></html>

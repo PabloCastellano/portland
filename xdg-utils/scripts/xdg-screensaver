@@ -35,126 +35,102 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-   xdg-screensaver -- command line tool for controlling the screensaver
+xdg-screensaver — command line tool for controlling the screensaver
 
 Synopsis
 
-   xdg-screensaver suspend WindowID
+xdg-screensaver suspend WindowID
 
-   xdg-screensaver restore WindowID
+xdg-screensaver restore WindowID
 
-   xdg-screensaver { activate | reset | status }
+xdg-screensaver { activate | reset | status }
 
-   xdg-screensaver { --help | --manual | --version }
+xdg-screensaver { --help | --manual | --version }
 
 Description
 
-   xdg-screensaver provides commands to control the screensaver.
+xdg-screensaver provides commands to control the screensaver.
 
-   xdg-screensaver is for use inside a desktop session only. It is not
-   recommended to use xdg-screensaver as root.
+xdg-screensaver is for use inside a desktop session only. It is not recommended
+to use xdg-screensaver as root.
 
 Commands
 
-   suspend WindowID
+suspend WindowID
 
-           Suspends the screensaver and monitor power management. WindowID
-           must be the X Window ID of an existing window of the calling
-           application. The window must remain in existance for the duration
-           of the suspension.
+    Suspends the screensaver and monitor power management. WindowID must be the
+    X Window ID of an existing window of the calling application. The window
+    must remain in existance for the duration of the suspension.
 
-           The screensaver can be suspended in relation to multiple windows
-           at the same time. In that case screensaver operation is only
-           restored once the suspensions have been restored in relation to
-           each of the windows
+    WindowID can be represented as either a decimal number or as a hexadecimal
+    number consisting of the prefix 0x followed by one or more hexadecimal
+    digits.
 
-   resume WindowID
-           Resume the screensaver and monitor power management after being
-           suspended. WindowID must be the same X Window ID that was passed
-           to a previous call of xdg-screensaver suspend
+    The screensaver can be suspended in relation to multiple windows at the
+    same time. In that case screensaver operation is only restored once the
+    suspensions have been restored in relation to each of the windows
 
-   activate
-           Turns the screensaver on immediately. This may result in the
-           screen getting locked, depending on existing system policies.
-
-   reset
-           Turns the screensaver off immediately. This my result in a
-           password prompt to unlock the screen, depending on existing system
-           policies.
-
-   status
-           Returns true if the screensaver is enabled to turn on after a
-           period of inactivty, or false otherwise.
+resume WindowID
+    Resume the screensaver and monitor power management after being suspended.
+    WindowID must be the same X Window ID that was passed to a previous call of
+    xdg-screensaver suspend
+activate
+    Turns the screensaver on immediately. This may result in the screen getting
+    locked, depending on existing system policies.
+reset
+    Turns the screensaver off immediately. This my result in a password prompt
+    to unlock the screen, depending on existing system policies.
+status
+    Returns true if the screensaver is enabled to turn on after a period of
+    inactivty, or false otherwise.
 
 Options
 
-   --help
-           Show command synopsis.
-
-   --manual
-           Show this manualpage.
-
-   --version
-           Show the xdg-utils version information.
+--help
+    Show command synopsis.
+--manual
+    Show this manualpage.
+--version
+    Show the xdg-utils version information.
 
 Exit Codes
 
-   An exit code of 0 indicates success while a non-zero exit code indicates
-   failure. The following failure codes can be returned:
+An exit code of 0 indicates success while a non-zero exit code indicates
+failure. The following failure codes can be returned:
 
-   1
-           Error in command line syntax.
-
-   2
-           One of the files passed on the command line did not exist.
-
-   3
-           A required tool could not be found.
-
-   4
-           The action failed.
+1
+    Error in command line syntax.
+2
+    One of the files passed on the command line did not exist.
+3
+    A required tool could not be found.
+4
+    The action failed.
 
 Examples
 
- xdg-screensaver suspend 0x1c00007
+xdg-screensaver suspend 0x1c00007
 
-   Causes the screensaver to be disabled till xdg-screensaver resume
-   0x1c00007 is called. 0x1c00007 must be the X Window ID of an existing
-   window.
+Causes the screensaver to be disabled till xdg-screensaver resume 0x1c00007 is
+called. 0x1c00007 must be the X Window ID of an existing window.
 
-Bugss
-
-   There is no provision for cancelling a suspend operation. If a second
-   suspend is started before the first one is completed, then the screensaver
-   will be restored to its original state before the second suspend is able
-   to complete.
-
-   For example, if a presenter completes her presentation, and a second
-   presenter starts before the delay is over, then the screensaver could come
-   on during the second presentation.
-
-   True suspend functionality will require cooperation from the X server. The
-   Xorg group has implemented an extension that allows an application to
-   disable the screensaver while it is connected, which will re-enable the
-   screensaver. xdg-screensaver should be updated to take advantage of this
-   functionality when it is available.
 _MANUALPAGE
 }
 
 usage()
 {
 cat << _USAGE
-   xdg-screensaver -- command line tool for controlling the screensaver
+xdg-screensaver — command line tool for controlling the screensaver
 
 Synopsis
 
-   xdg-screensaver suspend WindowID
+xdg-screensaver suspend WindowID
 
-   xdg-screensaver restore WindowID
+xdg-screensaver restore WindowID
 
-   xdg-screensaver { activate | reset | status }
+xdg-screensaver { activate | reset | status }
 
-   xdg-screensaver { --help | --manual | --version }
+xdg-screensaver { --help | --manual | --version }
 
 _USAGE
 }
@@ -489,6 +465,11 @@ screensaver_kde()
 screensaver_gnome()
 {
 # TODO
+# There seems to be a DBUS interface for gnome-screensaver
+# See http://lists.mplayerhq.hu/pipermail/mplayer-dev-eng/2006-April/042579.html and
+# http://cvs.gnome.org/viewcvs/gnome-screensaver/src/gs-listener-dbus.c?rev=1.36&view=log
+# A problem seems to be that Inhibit is tied to the lifetime of the DBUS appname and
+# this can not be used from a script
 
     return 1
 }
