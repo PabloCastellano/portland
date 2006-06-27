@@ -2,7 +2,7 @@
 # shfuncs : test suite common shell functions
 # which was shipped with the TET example code.
 
-. $TEST_CODE_DIR/testfuncs.sh
+. $TEST_CODE_DIR/include/testfuncs.sh
 
 assert_exit() # execute command (saving output) and check exit code
 {

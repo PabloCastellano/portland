@@ -10,7 +10,7 @@
 ## dir1/sub/path/t.bar: UNTESTED: some other reason
 ## dir1: PASS: 12 of 15
 
-. testfuncs.sh
+. include/testfuncs.sh
 
 PASS=0
 TOTAL=0

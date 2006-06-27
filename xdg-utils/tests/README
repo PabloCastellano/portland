@@ -1,0 +1,25 @@
+README: xdg-utils tests
+
+Created 6/27/2006 by Tom Whipple <tom.whipple@intel.com>
+
+To run a test suite, assuming your current directory is the same as this README, ensure you have defined TEST_CODE_DIR.
+
+$ export TEST_CODE_DIR=`pwd`
+
+Then, run the test runner with the suite(s) as an argument.
+
+$ ./testrun xdg-mime
+NORESULT: xdg-mime/t.user_mime_install
+2 of 3 tests passed.
+See xdg-test.log for details.
+
+In this example we see that the user_mime_install had an error, so run it separately:
+
+$ xdg-mime/t.user_mime_install
+[Tue Jun 27 14:53:23 PDT 2006] xdg-mime/t.user_mime_install: user mime install: NORESULT
+<...>
+Initilization failed!
+
+In this case, a test depencency failed, so NORESULT is given instead of FAIL.
+
+Questions? Email tom.whipple@intel.com
