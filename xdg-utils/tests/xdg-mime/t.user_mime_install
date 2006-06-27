@@ -1,0 +1,28 @@
+#!/bin/bash
+
+. $TEST_CODE_DIR/include/testassertions.sh
+. $TEST_CODE_DIR/include/testdep.sh
+
+INPUT_FILE="$TEST_CODE_DIR/xdg-mime/user-mime-install.xml"
+
+test_start "user mime install"
+
+test_purpose "Verify that new mime types get installed into the user space correctly"
+
+# Dependencies section
+test_init
+
+set_no_display
+
+test_infoline "TODO: $INPUT_FILE has not been created yet -- expect failure."
+
+assert_file $INPUT_FILE
+
+# Test steps section
+test_procedure
+
+assert_exit "xdg-mime install --user $INPUT_FILE " 0
+assert_nostdout
+assert_nostderr
+
+test_result

@@ -1,0 +1,25 @@
+#!/bin/bash
+
+. $TEST_CODE_DIR/include/testassertions.sh
+. $TEST_CODE_DIR/include/testdep.sh
+
+INPUT_FILE="a-file-that-does-not-exist.xml"
+
+test_start "user mime install missing file"
+
+test_purpose "Verify that the correct error is generated when the mime file is missing."
+
+# Dependencies section
+test_init
+
+set_no_display
+assert_nofile $INPUT_FILE
+
+# Test steps section
+test_procedure
+
+assert_exit "xdg-mime install --user $INPUT_FILE " 2
+assert_stderr
+assert_nostdout
+
+test_result

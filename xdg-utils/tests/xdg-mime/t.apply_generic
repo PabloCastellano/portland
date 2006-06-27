@@ -1,0 +1,16 @@
+#!/bin/bash
+
+. $TEST_CODE_DIR/include/testassertions.sh
+
+
+test_start "apply generic tests to xdg-mime"
+test_purpose "This is a meta test to capture all of the generic tests as one"
+
+test_procedure
+
+export XDGUTIL=xdg-mime
+cd $TEST_CODE_DIR
+
+. $TEST_CODE_DIR/testrun generic
+
+test_result

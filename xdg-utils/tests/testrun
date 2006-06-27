@@ -1,0 +1,73 @@
+#!/bin/bash
+
+## Usage:
+## testrun dir1 dir2 ... 
+## testrun t.foo t.bar ...
+## Will find and run all files in dirs that begin with t.*
+
+## Result format:
+## dir1/sub/path/t.foo: FAIL: some reason
+## dir1/sub/path/t.bar: UNTESTED: some other reason
+## dir1: PASS: 12 of 15
+
+. testfuncs.sh
+
+PASS=0
+TOTAL=0
+TEST_LOG="xdg-test.log"
+
+run() {
+for TEST in $* ; do 
+	TOTAL=$((TOTAL+1))
+	if [ ! -f $TEST ]; then
+		echo -e "ERROR: $TEST not found" | tee -a $TEST_LOG
+	elif [ ! -x $TEST ]; then
+		echo -e "ERROR: $TEST not executable" | tee -a $TEST_LOG
+	else
+	# Create tempspace
+	mkworkdir
+	PREV_DIR=`pwd`
+	cd $TEST_WORK_DIR
+	
+	# Run test
+	# TODO: some sort of interactive flag
+	eval "$PREV_DIR/$TEST" >> "$PREV_DIR/$TEST_LOG"
+	CODE=$?
+	# Report result
+	if [ $CODE -eq 0 ] ; then
+		PASS=$((PASS + 1))
+	else
+		case $CODE in
+		1 ) RESULT=FAIL;;
+		5 ) RESULT=UNTESTED;;
+		7 ) RESULT=NORESULT;;
+		* ) RESULT="UNKNOWN($CODE)";;
+		esac
+		echo  "$RESULT: $TEST"
+	fi
+	
+	# Remove tempspace (option to keep?)
+	cd $PREV_DIR
+	rm -rf $TEST_WORK_DIR
+	unset TEST_WORK_DIR
+	fi
+done
+}
+
+echo "[`date`] TEST RUN START: $*" >> $TEST_LOG
+
+for TS in $* ; do 
+	run `find $TS -name 't.*' -type f`
+done
+
+echo -n "[`date`] TEST RUN END: $* - " >> $TEST_LOG
+echo "$PASS of $TOTAL tests passed." | tee -a $TEST_LOG
+echo "See $TEST_LOG for details."
+
+if [ $(( $TOTAL - $PASS )) -gt 0 ]; then
+	EC=1
+else
+	EC=0
+fi
+exit $EC
+
