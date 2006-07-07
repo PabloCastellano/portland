@@ -454,7 +454,7 @@ screensaver_kde()
         ;;
 
         *)
-        echo "ERROR:  Unknown command '$1" >&2
+        echo "ERROR:  Unknown command '$1'" >&2
         return 1
         ;;
     esac
@@ -470,8 +470,44 @@ screensaver_gnome()
 # http://cvs.gnome.org/viewcvs/gnome-screensaver/src/gs-listener-dbus.c?rev=1.36&view=log
 # A problem seems to be that Inhibit is tied to the lifetime of the DBUS appname and
 # this can not be used from a script
+    case "$1" in
+        suspend) 
+        # Don't know how to suspend properly
+        gnome-screensaver-command --exit
+        ;;
 
-    return 1
+        resume)
+        # Don't know how to suspend properly
+        # This may start the gnome-screensaver even if it wasn't running before
+        gnome-screensaver
+        ;;
+        
+        activate)
+        gnome-screensaver-command --activate
+        ;;
+        
+        reset)
+        # Turns the screensaver off right now
+        gnome-screensaver-command --deactivate
+        ;;
+
+        status)
+        # Don't know how to suspend properly
+        if gnome-screensaver-command --query 2> /dev/null >&2; then
+            echo "enabled"
+        else
+            echo "disabled"
+        fi
+        return 0
+        ;;
+
+        *)
+        echo "ERROR:  Unknown command '$1" >&2
+        return 1
+        ;;
+    esac
+
+    return $?
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
