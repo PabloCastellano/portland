@@ -6,17 +6,19 @@
 . "$TEST_CODE_DIR/include/testcontrol.sh"
 
 ## Test function
-test_user_mime_install() {
+test_system_mime_install() {
 INPUT_FILE="$TEST_CODE_DIR/xdg-mime/data/testmime.xml"
 # TODO: should follow the filename tests.
 QUERY_FILE="testfile.xdgtest"
 
 ## Begin the test.
-test_start "$FUNCNAME: install user mime type"
-test_purpose "Verify that new mime types get installed into the user space correctly"
+test_start "$FUNCNAME: install system mime type"
+test_purpose "Verify that new mime types get installed into the system space correctly"
 
 # Dependencies section
 test_init
+
+assert_exit 0 test `whoami` = root 
 
 set_no_display
 assert_file $INPUT_FILE
@@ -24,13 +26,13 @@ echo "Some text." > $QUERY_FILE
 assert_file "$QUERY_FILE"
 
 # Verify the test type is not installed already.
-assert_exit 0 "xdg-mime query filetype $QUERY_FILE"
+assert_exit 0 xdg-mime query filetype $QUERY_FILE
 assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textplain.expected"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-mime install --user "$INPUT_FILE"
+assert_exit 0 xdg-mime install --system "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
@@ -39,8 +41,8 @@ assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textxdgpattern.expected"
 assert_nostderr
 
 # TODO: this is a cleanup step
-assert_exit 0 xdg-mime uninstall --user "$INPUT_FILE"
+assert_exit 0 xdg-mime uninstall --system "$INPUT_FILE"
 
 test_result
 } 
-run_test test_user_mime_install 
+run_test test_system_mime_install 

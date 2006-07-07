@@ -6,14 +6,13 @@
 . "$TEST_CODE_DIR/include/testcontrol.sh"
 
 ## Test function
-test_user_mime_install() {
+test_double_mime_install() {
 INPUT_FILE="$TEST_CODE_DIR/xdg-mime/data/testmime.xml"
 # TODO: should follow the filename tests.
 QUERY_FILE="testfile.xdgtest"
 
 ## Begin the test.
-test_start "$FUNCNAME: install user mime type"
-test_purpose "Verify that new mime types get installed into the user space correctly"
+test_start "$FUNCNAME: verify installing an existing mime type is OK"
 
 # Dependencies section
 test_init
@@ -24,8 +23,9 @@ echo "Some text." > $QUERY_FILE
 assert_file "$QUERY_FILE"
 
 # Verify the test type is not installed already.
+assert_exit 0 xdg-mime install --user "$INPUT_FILE"
 assert_exit 0 "xdg-mime query filetype $QUERY_FILE"
-assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textplain.expected"
+assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textxdgpattern.expected"
 
 # Test steps section
 test_procedure
@@ -43,4 +43,4 @@ assert_exit 0 xdg-mime uninstall --user "$INPUT_FILE"
 
 test_result
 } 
-run_test test_user_mime_install 
+run_test test_double_mime_install 

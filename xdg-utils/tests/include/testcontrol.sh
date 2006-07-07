@@ -65,7 +65,8 @@ declare -i J=1
 while [ "$J" -le "$LENGTH" ] ; do
 	declare -i I=1
 	## Begin test function string
-	str="t$IC_NUM() {" # it is only safe to use $IC_NUM since run_test is used later in this function.
+	#str="t$IC_NUM() {" # it is only safe to use $IC_NUM since run_test is used later in this function.
+	str="$FUNC-$J-$IC_NUM() {" # it is only safe to use $IC_NUM since run_test is used later in this function.
 	while [ "$I" -le "$VARS" ] ; do
 		## Assign each value to appropriate variable
 		eval "var=\$v$I"
@@ -82,7 +83,7 @@ while [ "$J" -le "$LENGTH" ] ; do
 	}"
 	#echo "$str"
 	eval "$str"
-	run_test "t$IC_NUM"
+	run_test "$FUNC-$J-$IC_NUM"
 
 	J=$(($J+1))
 done

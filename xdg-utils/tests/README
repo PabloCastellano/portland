@@ -4,25 +4,36 @@ Created 6/27/2006 by Tom Whipple <tom.whipple@intel.com>
 
 RUNNING XDG-UTILS TESTS
 -----------------------
-To run a test suite, assuming your current directory is the same as this README, ensure you have defined TEST_CODE_DIR.
+At a minimum, you must have your current directory be the same as the directory containing this README. Then, simply execute
 
-$ export TEST_CODE_DIR=<parent to portland checkout>/portland/xdg-utils/tests
+$ ./testrun
+WARNING: guessed TEST_CODE_DIR to be /home/tw/portland/xdg-utils/tests
+TEST_LIST:  generic_bogus_arg-1-1 ... generic_version-1-50
+...
+FAIL: test_user_mime_install
+NORESULT: test_system_mime_install
+44 of 50 tests passed.
+See xdg-test.log for details.
+NOT OK!
 
-Then, run the test runner with the suite(s) as an argument. Or, use no args to run all the tests.
+FAIL indicates (not suprisingly) a test failure. 
+NORESULT indicates that the test prerequisites failed for some reason.
+
+NOTE: The test runner makes guesses about appropriate values of TEST_CODE_DIR and PATH. These values can be overriden explicitly.
+
+To run tests individually, or as smaller groups do something like
 
 $ ./testrun xdg-mime
-NORESULT: xdg-mime/t.user_mime_install
-2 of 3 tests passed.
-See xdg-test.log for details.
 
-In this example we see that the user_mime_install had an error, so run it separately:
+OR
+
+$ ./testrun xdg-mime/t.user_mime_install
+
+OR (if you have defined TEST_CODE_DIR and PATH correctly)
 
 $ xdg-mime/t.user_mime_install
-[Tue Jun 27 14:53:23 PDT 2006] xdg-mime/t.user_mime_install: user mime install: NORESULT
-<...>
-Initilization failed!
 
-In this case, a test depencency failed, so NORESULT is given instead of FAIL.
+
 
 DIRECTORY STRUCTURE
 -------------------

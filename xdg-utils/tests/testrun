@@ -10,8 +10,11 @@
 ## dir1/sub/path/t.bar: UNTESTED: some other reason
 
 if [ -z "$TEST_CODE_DIR" ] ; then
-	echo "TEST_CODE_DIR must be defined!!"
-	exit 1
+	export TEST_CODE_DIR=`pwd`
+	echo "WARNING: guessed TEST_CODE_DIR to be $TEST_CODE_DIR"
+fi
+if [ -d "$TEST_CODE_DIR/../scripts" ] ; then
+	export PATH="$PATH:$TEST_CODE_DIR/../scripts"
 fi
 
 if [ $# -eq 0 ] ; then

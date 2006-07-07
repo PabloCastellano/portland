@@ -17,9 +17,9 @@ assert_exit() # execute command (saving output) and check exit code
 	EXPECT=0;
     fi
     if [ "$EXPECT" = N -a "$CODE" -eq 0 ]; then
-	test_fail "Command ($1) gave exit code $CODE, expected nonzero"
-    elif [ "$EXPECT" -ne "$CODE" ]; then
-	test_fail "Command ($1) gave exit code $CODE, expected $EXPECT"
+	test_fail "Command ($*) gave exit code $CODE, expected nonzero"
+    elif [ "$EXPECT" != N ] && [ "$EXPECT" -ne "$CODE" ]; then
+	test_fail "Command ($*) gave exit code $CODE, expected $EXPECT"
     fi
 }
 
@@ -119,6 +119,13 @@ assert_stdout() # check that stderr matches expected error
 	;;
     *)
 	expfile="$1"
+
+	if [ ! -e "$expfile" ] ; then
+		test_status NORESULT "Could not find file '$expfile' to look up expected pattern!"
+		return
+	fi
+	#expline="$*"
+	#expfile="out.stdout"
 	OK=Y
 	exec 4<&0 0< "$expfile" 3< out.stdout
 	while read expline

@@ -1,0 +1,33 @@
+#!/bin/bash
+
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+test_query_text_plain() {
+# TODO: expand to cover file weirdness.
+INPUT_FILE='testfile.txt'
+
+test_start "$FUNCNAME: verify a query against $INPUT_FILE returns 'text/plain'"
+test_purpose "Verify that the basic query (text/plain) is working."
+
+## Check dependencies
+test_init
+
+set_no_display
+
+echo 'This is some text.' > $INPUT_FILE
+assert_file "$INPUT_FILE"
+
+## Main test
+test_procedure
+
+assert_exit 0 xdg-mime query filetype "$INPUT_FILE"
+assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textplain.expected"
+assert_nostderr
+
+
+test_result 
+}
+
+run_test test_query_text_plain
