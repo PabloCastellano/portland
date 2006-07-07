@@ -6,10 +6,12 @@
 
 assert_exit() # execute command (saving output) and check exit code
 {
+    EXPECT="$1"
+    shift 1
+
     # $1 is command, $2 is expected exit code (0 or "N" for non-zero)
-    eval $1 > out.stdout 2> out.stderr
+    ( $@ > out.stdout 2> out.stderr ) 
     CODE="$?"
-    EXPECT="$2"
 
     if [ -z "$EXPECT" ]; then
 	EXPECT=0;

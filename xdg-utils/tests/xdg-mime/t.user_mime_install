@@ -1,12 +1,16 @@
 #!/bin/bash
 
-. $TEST_CODE_DIR/include/testassertions.sh
-. $TEST_CODE_DIR/include/testdep.sh
+## Include utility functions.
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
 
+## Test function
+test_user_mime_install() {
 INPUT_FILE="$TEST_CODE_DIR/xdg-mime/user-mime-install.xml"
 
-test_start "user mime install"
-
+## Begin the test.
+test_start "$FUNCNAME: install user mime type"
 test_purpose "Verify that new mime types get installed into the user space correctly"
 
 # Dependencies section
@@ -21,8 +25,11 @@ assert_file $INPUT_FILE
 # Test steps section
 test_procedure
 
-assert_exit "xdg-mime install --user $INPUT_FILE " 0
+assert_exit 0 xdg-mime install --user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
 test_result
+}
+
+run_test test_user_mime_install 

@@ -8,30 +8,39 @@
 ## Result format:
 ## dir1/sub/path/t.foo: FAIL: some reason
 ## dir1/sub/path/t.bar: UNTESTED: some other reason
-## dir1: PASS: 12 of 15
 
-. include/testfuncs.sh
+if [ -z "$TEST_CODE_DIR" ] ; then
+	echo "TEST_CODE_DIR must be defined!!"
+	exit 1
+fi
 
-PASS=0
-TOTAL=0
+if [ $# -eq 0 ] ; then
+	TEST_GROUPS=`find "$TEST_CODE_DIR" -type d -name 'xdg-*'`
+else
+	TEST_GROUPS="$@"
+fi
+
+TEST_FILES=`find "$TEST_GROUPS" -name 't.*'`
+
+declare -i PASS=0
+declare -i TOTAL=0
 TEST_LOG="xdg-test.log"
 
-run() {
-for TEST in $* ; do 
-	TOTAL=$((TOTAL+1))
-	if [ ! -f "$TEST" ]; then
-		echo -e "ERROR: $TEST not found" | tee -a "$TEST_LOG"
-	elif [ ! -x "$TEST" ]; then
-		echo -e "ERROR: $TEST not executable" | tee -a "$TEST_LOG"
-	else
-	# Create tempspace
-	mkworkdir
-	PREV_DIR=`pwd`
-	cd "$TEST_WORK_DIR"
-	
+export USING_TEST_RUNNER="true"
+
+for t in $TEST_FILES; do
+	. "$t"
+done
+
+echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
+echo "TEST_LIST: $TEST_LIST"
+
+for t in $TEST_LIST; do
+	TOTAL=$((TOTAL + 1 ))
 	# Run test
+	# TODO: setup
 	# TODO: some sort of interactive flag
-	("$PREV_DIR/$TEST") >> "$PREV_DIR/$TEST_LOG"
+	( "$t" ) >> "$TEST_LOG"
 	CODE="$?"
 	# Report result
 	if [ "$CODE" -eq 0 ] ; then
@@ -43,31 +52,19 @@ for TEST in $* ; do
 		7 ) RESULT=NORESULT;;
 		* ) RESULT="UNKNOWN($CODE)";;
 		esac
-		echo  "$RESULT: $TEST"
+		echo  "$RESULT: $t"
 	fi
-	
-	# Remove tempspace (option to keep?)
-	cd "$PREV_DIR"
-	rm -rf "$TEST_WORK_DIR"
-	unset TEST_WORK_DIR
-	fi
+	# TODO: cleanup
 done
-}
-
-echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
-
-for TS in $* ; do 
-	run `find "$TS" -name 't.*' -type f`
-done
-
 echo -n "[`date`] TEST RUN END: $* - " >> "$TEST_LOG"
 echo "$PASS of $TOTAL tests passed." | tee -a "$TEST_LOG"
 echo "See $TEST_LOG for details."
 
 if [ $(( $TOTAL - $PASS )) -gt 0 ]; then
 	EC=1
+	echo "NOT OK!"
 else
 	EC=0
+	echo "ok"
 fi
 exit "$EC"
-

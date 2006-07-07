@@ -29,7 +29,7 @@ verify_test_context() {
 ## record the test a name.
 test_start () {
 
-	TEST_NAME="$0: $*"
+	TEST_NAME="$*"
 	verify_test_context
 	TEST_STATUS=PASS
 		
@@ -110,10 +110,10 @@ test_result() {
 #			tet_result FAIL
 #		fi
 		tet_result $TEST_STATUS
-	else
+	fi
 	# not using tet, so print nice explanation
 
-		echo -n "$TEST_STATUS"
+		[ -z "$USING_TET" ] && echo -n "$TEST_STATUS"
 
 		## Result codes MUST agree with tet_codes
 		## for LSB/tet integration.
@@ -121,18 +121,20 @@ test_result() {
 		PASS )  RESULT=0
 			;;
 		FAIL )  RESULT=1
-			echo -ne " $FAIL_MESSAGE"
+			[ -z "$USING_TET" ] && echo -ne " $FAIL_MESSAGE"
 			;;
 		UNTESTED ) RESULT=5
-			echo -ne " $FAIL_MESSAGE"
+			[ -z "$USING_TET" ] && echo -ne " $FAIL_MESSAGE" 
 			;;
 		NORESULT ) RESULT=7
-			echo -ne " $FAIL_MESSAGE"
+			[ -z "$USING_TET" ] && echo -ne " $FAIL_MESSAGE"
 			;;
-		*) 	echo -ne " - UNKNOWN STATUS\n$FAIL_MESSAGE"
+		*) 	RESULT=1
+			[ -z "$USING_TET" ] && echo -ne " - UNKNOWN STATUS\n$FAIL_MESSAGE"
+			;;
 		esac
-	fi
-	echo ""
+	#fi
+	[ -z "$USING_TET" ] && echo ""
 	exit "$RESULT"
 }
 

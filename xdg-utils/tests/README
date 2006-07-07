@@ -2,11 +2,13 @@ README: xdg-utils tests
 
 Created 6/27/2006 by Tom Whipple <tom.whipple@intel.com>
 
+RUNNING XDG-UTILS TESTS
+-----------------------
 To run a test suite, assuming your current directory is the same as this README, ensure you have defined TEST_CODE_DIR.
 
-$ export TEST_CODE_DIR=`pwd`
+$ export TEST_CODE_DIR=<parent to portland checkout>/portland/xdg-utils/tests
 
-Then, run the test runner with the suite(s) as an argument.
+Then, run the test runner with the suite(s) as an argument. Or, use no args to run all the tests.
 
 $ ./testrun xdg-mime
 NORESULT: xdg-mime/t.user_mime_install
@@ -21,5 +23,37 @@ $ xdg-mime/t.user_mime_install
 Initilization failed!
 
 In this case, a test depencency failed, so NORESULT is given instead of FAIL.
+
+DIRECTORY STRUCTURE
+-------------------
+xdg-*		tests for each util
+include		"library" code used by most tests
+generic		generic tests to be run on most utilities. See xdg-mime/t.apply_generic
+
+WRITING XDG-UTILS TESTS
+-----------------------
+See xdg-mime/t.user_mime_install as an example.
+
+Each test is as follows
+
+test_function() {		-- Tests are functions for TET integration.
+
+test_start "test description"	-- required to begin a test
+test_purpose "verbose text"	-- optionally provide a verbose description. not used.
+test_init			-- optionally begin a prerequisite section. assertions
+				   that fail here cause NORESULT rather than FAIL
+<pre-assertions>
+test_procedure			-- required to begin the actuall test assertions
+<test-assertions>
+
+test_result			-- required to generate result codes. Must be last.
+}
+
+run_test test_function
+  - OR -
+repeat_test test_function NVARS V1 ... VN V1val1 ... V1valM ... VNval1 ... VNvalM
+				-- one of the above is required. 
+				   see inlcude/testcontrol.sh for detail
+				
 
 Questions? Email tom.whipple@intel.com

@@ -1,25 +1,28 @@
 #!/bin/bash
 
-. $TEST_CODE_DIR/include/testassertions.sh
-. $TEST_CODE_DIR/include/testdep.sh
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
 
-INPUT_FILE="a-file-that-does-not-exist.xml"
-
-test_start "user mime install missing file"
-
+test_user_mime_missing_file() {
+test_start "$FUNCNAME: install mime type as user with missing file $INPUT_FILE"
 test_purpose "Verify that the correct error is generated when the mime file is missing."
 
-# Dependencies section
+## Check dependencies
 test_init
 
 set_no_display
-assert_nofile $INPUT_FILE
+assert_nofile "$INPUT_FILE"
 
-# Test steps section
+## Main test
 test_procedure
 
-assert_exit "xdg-mime install --user $INPUT_FILE " 2
+assert_exit 2 xdg-mime install --user "$INPUT_FILE"
 assert_stderr
 assert_nostdout
 
-test_result
+test_result 
+}
+
+# Do variable substitution for $INPUT_FILE 
+repeat_test test_user_mime_missing_file 1 INPUT_FILE 'non-existant-file.xml'
