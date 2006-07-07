@@ -31,22 +31,30 @@ _USAGE
 
 su_kde()
 {
-    if [ -z "$user" ] ; then
-        kdesu -c "$cmd"
-    else
-        kdesu -u "$user" -c "$cmd"
-    fi
+    KDESU=`which kdesu 2>/dev/null`
+    if [ $? -eq 0 ] ; then
+        if [ -z "$user" ] ; then
+             $KDESU -c "$cmd"
+        else
+             $KDESU -u "$user" -c "$cmd"
+        fi
 
-    if [ $? -eq 0 ]; then
-        exit_success
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
     else
-        exit_failure_operation_failed
+        su_generic
     fi
 }
 
 su_gnome()
 {
     GSU=`which gnomesu 2>/dev/null`
+    if [ $? -ne 0 ] ; then
+        GSU=`which xsu 2>/dev/null`
+    fi
     if [ $? -eq 0 ] ; then
         if [ -z "$user" ] ; then
             $GSU -c "$cmd"
@@ -66,22 +74,16 @@ su_gnome()
 
 su_generic()
 {
-    XSU=`which xsu 2>/dev/null`
-    if [ $? -eq 0 ] ; then
-        if [ -z "$user" ] ; then
-            $XSU -c "$cmd"
-        else
-            $XSU -u "$user" -c "$cmd"
-        fi
-
-        if [ $? -eq 0 ]; then
-            exit_success
-        else
-            exit_failure_operation_failed
-        fi
+    if [ -z "$user" ] ; then
+        xterm -geom 60x5 -T "xdg-su: $cmd" -e su -c "$cmd"
     else
-        [ x"$user" = x"" ] && user=root 
-        exit_failure_operation_impossible "no graphical method available for invoking '$cmd' as '$user'"
+        xterm -geom 60x5 -T "xdg-su: $cmd" -e su -u "$user" -c "$cmd"
+    fi
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
     fi
 }
 

@@ -38,74 +38,69 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-   xdg-su -- run a program as root after prompting for the root password
+xdg-su — run a program as root after prompting for the root password
 
 Synopsis
 
-   xdg-su [-u user] -c command
+xdg-su [-u user] -c command
 
-   xdg-su { --help | --manual | --version }
+xdg-su { --help | --manual | --version }
 
 Description
 
-   xdg-su provides a graphical dialog that prompts the user for a password to
-   run command as user or as root if no user was specified.
+xdg-su provides a graphical dialog that prompts the user for a password to run
+command as user or as root if no user was specified.
 
-   xdg-su is for use inside a desktop session only.
+xdg-su is for use inside a desktop session only.
 
 Options
 
-   -u user
-           run command as user. The default is to run as root.
-
-   --help
-           Show command synopsis.
-
-   --manual
-           Show this manualpage.
-
-   --version
-           Show the xdg-utils version information.
+-u user
+    run command as user. The default is to run as root.
+--help
+    Show command synopsis.
+--manual
+    Show this manualpage.
+--version
+    Show the xdg-utils version information.
 
 Exit Codes
 
-   An exit code of 0 indicates success while a non-zero exit code indicates
-   failure. The following failure codes can be returned:
+An exit code of 0 indicates success while a non-zero exit code indicates
+failure. The following failure codes can be returned:
 
-   1
-           Error in command line syntax.
-
-   2
-           One of the files passed on the command line did not exist.
-
-   3
-           A required tool could not be found.
-
-   4
-           The action failed.
+1
+    Error in command line syntax.
+2
+    One of the files passed on the command line did not exist.
+3
+    A required tool could not be found.
+4
+    The action failed.
 
 See Also
 
-   su(1)
+su(1)
 
 Examples
 
- xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
+xdg-su -u root -c "/opt/shinythings/bin/install-GUI --install fast"
 
-   Runs the /opt/shinythings/bin/install-GUI command with root permissions.
+Runs the /opt/shinythings/bin/install-GUI command with root permissions.
+
 _MANUALPAGE
 }
 
 usage()
 {
 cat << _USAGE
-   xdg-su -- run a program as root after prompting for the root password
+xdg-su — run a program as root after prompting for the root password
 
 Synopsis
 
-   xdg-su [-u user] -c command
+xdg-su [-u user] -c command
 
-   xdg-su { --help | --manual | --version }
+xdg-su { --help | --manual | --version }
 
 _USAGE
 }
@@ -115,6 +110,13 @@ _USAGE
 #----------------------------------------------------------------------------
 #   Common utility functions included in all XDG wrapper scripts
 #----------------------------------------------------------------------------
+
+DEBUG()
+{
+  [ ${xdg_utils_debug_level-0} -lt $1 ] && return 0;
+  shift
+  echo "$@"
+}
 
 #-------------------------------------------------------------
 # Exit script on successfully completing the desired operation
@@ -234,22 +236,30 @@ detectDE()
 
 su_kde()
 {
-    if [ -z "$user" ] ; then
-        kdesu -c "$cmd"
-    else
-        kdesu -u "$user" -c "$cmd"
-    fi
+    KDESU=`which kdesu 2>/dev/null`
+    if [ $? -eq 0 ] ; then
+        if [ -z "$user" ] ; then
+             $KDESU -c "$cmd"
+        else
+             $KDESU -u "$user" -c "$cmd"
+        fi
 
-    if [ $? -eq 0 ]; then
-        exit_success
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
     else
-        exit_failure_operation_failed
+        su_generic
     fi
 }
 
 su_gnome()
 {
     GSU=`which gnomesu 2>/dev/null`
+    if [ $? -ne 0 ] ; then
+        GSU=`which xsu 2>/dev/null`
+    fi
     if [ $? -eq 0 ] ; then
         if [ -z "$user" ] ; then
             $GSU -c "$cmd"
@@ -269,22 +279,16 @@ su_gnome()
 
 su_generic()
 {
-    XSU=`which xsu 2>/dev/null`
-    if [ $? -eq 0 ] ; then
-        if [ -z "$user" ] ; then
-            $XSU -c "$cmd"
-        else
-            $XSU -u "$user" -c "$cmd"
-        fi
-
-        if [ $? -eq 0 ]; then
-            exit_success
-        else
-            exit_failure_operation_failed
-        fi
+    if [ -z "$user" ] ; then
+        xterm -geom 60x5 -T "xdg-su: $cmd" -e su -c "$cmd"
     else
-        [ x"$user" = x"" ] && user=root 
-        exit_failure_operation_impossible "no graphical method available for invoking '$cmd' as '$user'"
+        xterm -geom 60x5 -T "xdg-su: $cmd" -e su -u "$user" -c "$cmd"
+    fi
+
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
     fi
 }
 
