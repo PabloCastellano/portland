@@ -20,7 +20,7 @@ else
 	TEST_GROUPS="$@"
 fi
 
-TEST_FILES=`find "$TEST_GROUPS" -name 't.*'`
+TEST_FILES=`find $TEST_GROUPS -name 't.*'`
 
 declare -i PASS=0
 declare -i TOTAL=0

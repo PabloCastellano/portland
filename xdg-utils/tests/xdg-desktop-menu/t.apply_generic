@@ -5,6 +5,6 @@
 generic_tests=`ls $TEST_CODE_DIR/generic/t.*`
 for t in $generic_tests; do 
 	. "$t"
-	repeat_test "$GENERIC_TEST" 1 "XDGUTIL" "xdg-mime"
+	repeat_test "$GENERIC_TEST" 1 "XDGUTIL" "xdg-desktop-menu"
 done
 
