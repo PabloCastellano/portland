@@ -1,0 +1,475 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl"
+   href="http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
+    "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+]>
+<refentry id="xdg-mime">
+  <refentryinfo>
+    <title>xdg-vfs Manual</title>
+    <copyright>
+      <year>2006</year>
+    </copyright>
+    <author>
+      <firstname>Norbert</firstname>
+      <surname>Frese</surname>
+    </author>
+    <address><email>nf2@scheinwelt.at</email></address>
+    <releaseinfo>This is release 0.1 of the xdg-mime Manual.</releaseinfo>
+  </refentryinfo>
+
+  <refmeta>
+    <refentrytitle>xdg-vfs</refentrytitle>
+    <manvolnum>1</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>xdg-vfs</refname>
+    <refpurpose>command line tool for accessing the desktops vfs system</refpurpose>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>xdg-vfs</command>
+      <arg choice="plain"><option>get</option></arg>
+      <arg><option>--tagged</option>
+        <arg><option>--qry-fileinfo</option>
+          <arg><option>--slow-mime</option></arg>
+        </arg>
+      </arg>
+      <arg><option>--escape-data</option></arg>
+      <arg choice="plain"><replaceable>URI</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-vfs</command>
+      <arg choice="plain"><option>put</option></arg>
+      <arg><option>--tagged</option></arg>
+      <arg><option>--escape-data</option></arg>
+      <arg><option>--overwrite</option></arg>
+      <arg choice="plain"><replaceable>URI</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-vfs</command>
+      <arg choice="plain"><option>info</option></arg>
+      <arg><option>--tagged</option></arg>
+      <arg><option>--slow-mime</option></arg>
+      <arg choice="plain"><replaceable>URI</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-vfs</command>
+      <arg choice="plain"><option>ls</option></arg>
+      <arg><option>--tagged</option></arg>
+      <arg><option>--slow-mime</option></arg>
+      <arg choice="plain"><replaceable>URI</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-vfs</command>
+      <arg choice="plain"><option>openfiledlg</option></arg>
+      <arg><option>--tagged</option>
+        <arg><option>--qry-fileinfo</option>
+          <arg><option>--slow-mime</option></arg>
+        </arg>
+      </arg>
+      <arg><option>--instant-get</option></arg>
+      <arg><option>--escape-data</option></arg>
+      <arg><replaceable>START_URI</replaceable></arg>
+    </cmdsynopsis>  
+    <cmdsynopsis>
+      <command>xdg-vfs</command>
+      <arg choice="plain"><option>savefiledlg</option></arg>
+      <arg><option>--tagged</option></arg>
+      <arg><option>--instant-put</option></arg>
+      <arg><option>--escape-data</option></arg>
+      <arg><replaceable>START_DIR_URI</replaceable></arg>
+      <arg><replaceable>DEFAULT_FILENAME</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-vfs</command>
+      <arg choice="plain"><option>shell</option></arg>
+    </cmdsynopsis>
+</refsynopsisdiv>
+
+  <refsect1 id="description">
+    <title>Description</title>
+    <para>
+      The xdg-vfs program can be used to access the desktops vfs system.
+    </para>
+  </refsect1>
+  <refsect1 id="commands">
+    <title>Commands</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>get</option></term>
+	<listitem>
+	  <simpara>
+             Download a file <replaceable>URI</replaceable> and stream contents to stdout. 
+	  </simpara>
+          <simpara>
+             In tagged mode it will return <computeroutput>[GET]</computeroutput> as section header, 
+             the filename as key/value pair 
+             <computeroutput>uri=file:///dir/filename</computeroutput> 
+              and the subsection header  <computeroutput>(>>>ESCAPED_DATA>>>)</computeroutput> or
+             <computeroutput>(>>>RAW_DATA>>>)</computeroutput> followed by the file-data.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>put</option></term>
+	<listitem>
+	  <simpara>
+             Write a file <replaceable>URI</replaceable> and stream contents from stdin.
+	  </simpara>
+          <simpara>
+             In tagged mode it will return <computeroutput>[PUT]</computeroutput> as section header, 
+             the filename as key/value pair 
+             <computeroutput>uri=file:///dir/filename</computeroutput> 
+              and the subsection header  <computeroutput>(&lt;&lt;&lt;ESCAPED_DATA&lt;&lt;&lt;)</computeroutput> or
+             <computeroutput>(&lt;&lt;&lt;RAW_DATA&lt;&lt;&lt;)</computeroutput>, waiting for the file-data on stdin.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>info</option></term>
+	<listitem>
+	  <simpara>
+             Determine file-info of <replaceable>URI</replaceable> and determine its mime-type.
+	  </simpara>
+          <simpara>
+             In tagged mode it will return <computeroutput>[FILEINFO]</computeroutput> as section header.
+          </simpara>
+          <para>
+             The attributes of the file are described by the following key=value pairs. In case the file is a 
+             Symlink, the attributes of the target file will be shown. Therefore the filetype will never be
+             'SYMLINK'.
+         <variablelist>    
+      <varlistentry>
+	<term><computeroutput>uri=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             Absolute URI of the file
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>basename=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             Filename without path
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>size=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             Byte-size of the file
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>permissions=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             Permissions (octal)
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>filetype=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             <computeroutput>UNKNOWN, REGULAR, DIRECTORY, FIFO, SOCKET, 
+             CHARDEV, BLOCKDEV</computeroutput> or <computeroutput>SYMLINK</computeroutput>
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>ctime=, atime=, mtime=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             Timestamps
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>userid=, groupid=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             User and Group-ID (Gnome-VFS)
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>user=, group=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             User- and Groupname (KIO)
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>mimetype=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             Mimetype
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><computeroutput>linkdest=</computeroutput></term>
+	<listitem>
+	  <simpara>
+             Target if the file is a symbolic link
+	  </simpara>
+	</listitem>
+      </varlistentry>
+</variablelist>
+
+             
+	  </para>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>ls</option></term>
+	<listitem>
+	  <simpara>
+             List directory <replaceable>URI</replaceable>.
+	  </simpara>
+          <simpara>
+             In tagged mode it will print <computeroutput>[LS]</computeroutput> as section header, and the 
+             Entries (same format as for 'info' command) lead by the subheader 
+             <computeroutput>(DIRENTRY)</computeroutput>.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>openfiledlg</option></term>
+	<listitem>
+	  <simpara>
+             Show an open-file-dialog and set the inital dir/filename to <replaceable>START_URI</replaceable>. Can be combined
+             with the <command>get</command> command by using the --instant-get switch.
+	  </simpara>
+          <simpara>
+             In tagged mode it will print <computeroutput>[OPENFILEDLG]</computeroutput> as section header. The 
+             returned key-value pairs are: <computeroutput>selected_localpath=</computeroutput> 
+             and <computeroutput>selected_uri=</computeroutput>. The first one will only show up for local files.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>savefiledlg</option></term>
+	<listitem>
+	  <simpara>
+             Show an save-file-dialog and set the inital dir/filename to <replaceable>START_DIR_URI</replaceable>,
+             and the default-filename <replaceable>DEFAULT_FILENAME</replaceable>.
+Can be combined
+             with the <command>put</command> command by using the --instant-put switch.
+	  </simpara>
+          <simpara>
+             In tagged mode it will print <computeroutput>[SAVEFILEDLG]</computeroutput> as section header. The 
+             returned key-value pairs are: <computeroutput>selected_localpath=</computeroutput> 
+             and <computeroutput>selected_uri=</computeroutput>. The first one will only show up for local files.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+     <varlistentry>
+	<term><option>shell</option></term>
+	<listitem>
+	  <simpara>
+              Enter interactive shell mode (like the command-line ftp client). 
+              Will always turn --tagged mode on. --escaped mode is strongly recommended 
+              when transfering files via stdin/stdout. In shell mode the
+              host application can talk to <command>xdg-vfs</command> by connecting to the
+              stdin and stdout pipes to execute a sequence of vfs commands.
+              (for instance QProcess or functions like g_spawn_async_with_pipes() allow
+              connecting to stdin and stdout of a child process)
+	  </simpara>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+
+  </refsect1>
+
+
+  <refsect1 id="options">
+    <title>Options</title>
+    <variablelist>
+      <varlistentry>
+	<term><option>--tagged, -t</option></term>
+	<listitem>
+	  <simpara>
+            Switch to machine parsable <emphasis>tagged-mode</emphasis>. 
+            Main sections will have square brackets: <replaceable>[GET]</replaceable>.
+            Subsections will have round brackets: <replaceable>(DIRENTRY)</replaceable>
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+
+      <varlistentry>
+	<term><option>--escape-data, -e</option></term>
+	<listitem>
+	  <simpara>
+	    Use an <replaceable>escape-character</replaceable> when writing/reading file-data to signal EOF.
+            Strongly recommended in <emphasis>tagged-mode</emphasis>.
+            By default '~' is the escape character. '~~' has to be treated as
+            single '~' and '~\n' as EOF. The escape-character can be changed by 
+            the <command>-e35</command> or <command>--escape-data=35</command> option. 
+            (when you want to use '#' ASCII 35 as escape
+            character)
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--qry-fileinfo, -i</option></term>
+	<listitem>
+	  <simpara>
+	    Run fileinfo <command>info</command> command before retieving a file (in commands <command>get</command>
+            or <command>openfiledlg --instant-get</command>.
+            Will only work in <command>--tagged</command> mode.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--overwrite</option></term>
+	<listitem>
+	  <simpara>
+	    Allow overwriting an existing file in command <command>put</command>.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--instant-get</option></term>
+	<listitem>
+	  <simpara>
+	    Instantly <command>get</command> data of selected file in a <command>openfiledlg</command>.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term><option>--instant-put</option></term>
+	<listitem>
+	  <simpara>
+	    Instantly <command>put</command> data of selected file in a <command>savefiledlg</command>.
+            The user will be asked if he wants to overwrite the file - therefor the --overwrite flag is assumed 'on'
+            here.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+
+      <varlistentry>
+	<term><option>--help</option></term>
+	<listitem>
+	  <simpara>
+	    Show this help.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>--version</option></term>
+        <listitem>
+          <simpara>
+            Show the xdg-vfs version information.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
+  <refsect1 id="examples">
+    <title>Examples</title>
+    <para>
+<programlisting>
+xdg-vfs get file:///etc/lilo.conf
+
+xdg-vfs get http://www.freedesktop.org
+</programlisting>
+      Will stream a remote file to stdout which could be read into the hosts
+applications memory via the C-function popen(..,'r');
+    </para>
+    <para>
+<programlisting>
+xdg-vfs openfiledlg --instant-get
+</programlisting>
+      Will open a file-dialog to browse to a remote or local file and instantly 
+      stream the file-data of the selected file to stdout.
+
+    </para>
+    <para>
+<programlisting>
+xdg-vfs openfiledlg --instant-get --qry-fileinfo --slow-mime --tagged --escape-data
+</programlisting>
+      By adding those switches xdg_vfs_gnome will also 'stat' the remote file and
+      try to detect it's mime-type, size,... Escaping file-data is always recommended in --tagged mode.
+    </para>
+    <para>
+<programlisting>
+cat /etc/passwd | xdg-vfs put ftp://user@host/mydir/file.txt
+</programlisting>
+      or use something like popen(..,'w') to stream file-data to create a remote file.
+    </para>
+    <para>
+<programlisting>
+xdg-vfs ls sftp://user@host/dir/ --tagged
+</programlisting>
+      List a remote directory. Tagged mode is recommended for listing directories.
+
+    </para>
+    <para>
+      This shows the output of a command in 'tagged' mode (when the user selects /etc/passwd):
+
+<programlisting>
+$ src/xdg_vfs_gnome openfiledlg --instant-get -i --tagged -e
+[OPENFILEDLG]
+selected_localpath=/etc/passwd
+selected_uri=file:///etc/passwd
+[FILEINFO]
+basename=passwd
+size=1389
+userid=0
+groupid=0
+permissions=644
+mtime=1149433809
+atime=1149596399
+ctime=1149433809
+filetype=REGULAR
+mimetype=text/plain
+uri=file:///etc/passwd
+[GET]
+uri=file:///etc/passwd
+(>>>ESCAPED_DATA>>>)
+root:x:0:0:root:/root:/bin/bash
+bin:x:1:1:bin:/bin:/bin/sh
+~
+$ 
+</programlisting>
+    </para>
+  </refsect1>
+  <refsect1 id="rvals">
+    <title>Return Codes</title>
+    <para>
+       Return values of the xdg-vfs backends:
+<programlisting>
+OK 0
+CANCELED 10
+USAGEERR 11
+NOTSUPPORTED 12
+GENERIC 13
+INITERR 14
+DATAERR 15
+IOERR 16
+NOTPERMITTED 17
+INVALIDURI 18
+</programlisting>
+
+
+    </para>
+  </refsect1>
+
+</refentry>

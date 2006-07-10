@@ -1,0 +1,132 @@
+XDG_VFS_GNOME
+=============
+
+xdg_vfs_gnome is a command line client for gnome-vfs. It can read and write
+files, list directories, open file-dialogs,... File-data is not stored in
+temporary files, but instead is pushed/pulled via stdin and stdout.
+
+xdg_vfs_gnome is linked to the gnomeui libraries and therefore will pop up password dialogs etc. (which the gnome-vfs command line utilities can't)
+
+The aim of 'xdg_vfs_gnome' is to give third party desktop applications access
+to Gnome-VFS without linking to the Gnome-libraries directly. It could be hidden behind a generic 'xdg_vfs' script, which switches between KIO, 
+Gnome-VFS,... command line clients.
+
+
+Samples:
+========
+
+-) reading a file
+
+$ xdg_vfs_gnome get file:///etc/lilo.conf
+
+$ xdg_vfs_gnome get http://www.freedesktop.org
+
+will stream a remote file to stdout which could be read into the hosts
+applications memory via the C-function popen(..,'r');
+
+$ xdg_vfs_gnome openfiledlg --instant-get
+
+will open a file-dialog to browse to a remote or local file and instantly 
+stream the file-data of the selected file to stdout.
+
+$ xdg_vfs_gnome openfiledlg --instant-get --qry-fileinfo --slow-mime --tagged
+
+By adding those switches xdg_vfs_gnome will also 'stat' the remote file and
+try to detect it's mime-type, size,...
+
+-) writing a file
+
+$ cat /etc/passwd | xdg_vfs_gnome put ftp://user@host/mydir/file.txt
+
+or use something like popen(..,'w') to stream file-data to create a remote file.
+
+-) listing a directory
+
+$ xdg_vfs_gnome ls sftp://user@host/dir/
+
+
+There are two operation modes: 
+==============================
+
+*) single command 
+
+*) shell mode (like the command-line ftp client). In shell mode the
+   host application can talk to 'xdg_vfs_gnome' by connecting to the
+   stdin and stdout pipes to execute a sequence of vfs commands.
+   (for instance QProcess or functions like g_spawn_async_with_pipes() allow
+   connecting to stdin and stdout of a child process)
+
+The advantage of shell mode is that passwords are kept in memory 
+(the user doesn't have log in again and again) and avoiding startup-delay
+when executing multiple commands (for instance if the client application
+is a file-manager)
+
+Tagged-mode:
+============
+
+the -t, --tagged option tells xdg_gnome_vfs to add 'labels' when a command
+returns multiple 'parts'. For instance 
+
+> xdg_vfs_gnome openfiledlg --instant-get --qry-fileinfo --tagged
+
+will return an [OpenFileDlg], a [FileInfo] and a [Data] section.
+
+Escaping file data:
+===================
+
+When operating in shell- or tagged- mode you will need an escape character 
+to signal the end of binary data. This is done via the -e and --escape-data 
+switch. By default '~' is the escape character. '~~' has to be treated as
+single '~' and '~\n' as EOF. The escape-character can be changed by 
+the -e35 or --escape-data=35 option. (when you want to use '#' ASCII 35 as escape
+character)
+
+Usage screen:
+=============
+
+Usage: xdg_vfs [command] [options] [filename]
+
+  Commands:
+      get  [filename]            : remote file->stdout
+      info [file or dir]         : stat a remote file->stdout
+      put  [filename]            : stdin->create remote file
+      ls   [dir]                 : list directory
+      openfiledlg [dir]          : show open file dialog and return selected file
+      savefiledlg [dir] [fname]  : show save file dialog and return selected file
+      shell                      : interactive mode
+
+  Options:
+      -t, --tagged               : tagged mode (file-data should be escaped)
+      -i, --qry-fileinfo         : qry file-info when retrieving a file
+      --show-metadata            : show metadata when retrieving a file
+                                   requires tagged mode!
+      -m, --slow-mime            : more accurate mime-type detection (slow)
+      -e, --escape-data          : escape file data (for end of data detection)
+      -eXXX, --escape-data=XXX   : set and use a user defined escape character
+                                   XXX = ascii code!
+      --end-seperator=           : add a custom seperator inbetween blocks
+      --overwrite                : allow overwriting files (put)
+      --instant-get              : openfiledilog instant get file->stdout
+      --instant-put              : savefiledilog instant put file from stdin
+
+
+Todo:
+=====
+
+*) Implement more VFS-Commands (set file-info, mkdir/rmdir, copy, move,...)
+
+*) Progress reporting via stdout
+
+*) multi file-open-dialog
+
+*) Improve exit codes
+
+*) Write xdg_vfs_kde
+
+*) -w switch. Is there a way to pass the window-id to Gnome for accurate placement of dialogs?
+
+*) Write a sample client application (a simple file-manager for instance)
+
+...
+
+

@@ -1,0 +1,19 @@
+#MIN_CONFIG
+
+PACKAGE=xdg-vfs-kde
+VERSION=0.1.14
+
+KDE_CHECK_HEADERS(X11/extensions/dpms.h,
+    AC_DEFINE(HAVE_DPMS, 1, [Set if DPMS is available]),,
+    [#include <X11/Xlib.h>])
+
+# LIB_DAPI='$(top_builddir)/../lib/libdapi.la'
+# AC_SUBST(LIB_DAPI)
+# dapi_includes='-I$(top_builddir)/../include'
+# all_includes="$dapi_includes $all_includes"
+
+# CFLAGS="$CFLAGS -Werror"
+# CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS -Werror"
+
+CFLAGS="$CFLAGS"
+CXXFLAGS="$CXXFLAGS $KDE_DEFAULT_CXXFLAGS"

@@ -1,0 +1,208 @@
+<html>
+  <head>
+    <title>libxdg-vfs</title>
+  </head>
+  <body>
+    <h1>libxdg-vfs</h1>
+    <p><em>libxdg-vfs</em> provides a generic API to the Virtual-File-System libraries KIO and Gnome-VFS.
+      It supports the commands 
+    <ul>
+       <li><em>backend</em> (obtain backend information)</li>
+       <li><em>get</em> (read file)</li>
+       <li><em>put</em> (write file)</li>
+       <li><em>cp</em>  (copy file)</li>
+       <li><em>mv</em> (move file)</li>
+       <li><em>rm</em>  (erase file)</li>
+       <li><em>mkdir</em> (create folder)</li>
+       <li><em>rmdir</em> (delete folder)</li>
+       <li><em>info</em> (get file-info)</li>
+       <li><em>setattrs</em> (set file attributes)</li>
+       <li><em>ls</em> (list directory)</li>
+       <li><em>openfildlg</em> (show open-file-dialog)</li>
+       <li><em>savefildlg</em> (show save-file-dialog)</li>
+    </ul>
+    </p>
+    <p>It is designed to work in synchronous as well as asynchronous context.</p>
+    <h2>Backends</h2>
+    <p>The backend executables (xdg_vfs_kde or xdg_vfs_gnome) are forked as child process and
+      the communication goes through the stdin/stdout pipes of the child-process (the <em>shell</em>-mode of the backend executables is used). The backends are in the separate packages xdg-vfs-kde.tar.gz and xdg-vfs-gnome.tar.gz.</p>
+    <h2>Sessions</h2>
+    <p>To open a session call the function:</p>
+<code>
+XdgVfsResult xdg_vfs_sess_start(XdgVfsSession ** session, char * preferredDesktop);
+</code>
+    <p>The library will launch the child-process and return a session pointer. Use "this" (or NULL) - to 
+    autodetect the current desktop - or "kde" / "gnome" for the <em>preferredDesktop</em> argument.
+    </p>
+    <h2>Running Commands</h2>
+    <p>A session can run a sequence of VFS commands. Because the backends are single-threaded and synchronous
+    you can only run one command after the other in a session (for parallel commands open a second session). 
+    Here are some examples:
+    </p>
+    <h3>Copying a file</h3>
+    <p>Let's see how a copying a file is done:</p>
+<code>
+XdgVfsResult r = xdg_vfs_sess_cmd_copyFile(session, "protocol://user@server/srcfile", "protocol://user@server/targetfile");
+</code>
+    <p>After calling this function you have to read the response items until you get a return value different from 
+    XDGVFS_RESULT_CONTINUES. Internally the 'readItem' function has only a single 'read(incoming_fd)' call per
+    iteration. This is to prevent blocking in an async application 
+    (you have to watch for read-events on the fd returned by xdg_vfs_sess_getIncomingFiledescriptor())
+    </p>
+<pre>
+XdgVfsResult r;
+XdgVfsItemType type;
+XdgVfsItem * item;
+
+while ((r = xdg_vfs_sess_readItem(session, &type, &item, NULL, NULL)) == XDGVFS_RESULT_CONTINUES) 
+{
+	switch (type)
+	{
+		case XDGVFS_ITEMTYPE_COPY_HEAD:
+		{
+				XdgVfsCopyHead * head = (XdgVfsCopyHead*) item;
+				fprintf(stderr, "copying uri_src='%s' to uri_target='%s'\n", 
+					head->uri_src, head->uri_target);
+				break;		
+		}
+		case XDGVFS_ITEMTYPE_PROGRESS:
+		{ 
+				XdgVfsProgress * progress = (XdgVfsProgress *) item;
+				fprintf(stderr, "progress: copied=%d size=%d\n", progress->copied, progress->size);
+				break;
+		}
+		case XDGVFS_ITEMTYPE_NONE:
+		{
+				break;  /* no complete item -> continue */
+		}
+		default:
+		{
+				fprintf(stderr, "unexpected item - type=%d\n", type);
+				break;
+		}
+	}
+	xdg_vfs_item_unref(item);
+}
+if (r) { /* command failed */ }
+</pre>
+    <h3>Reading a file</h3>
+    <p>When reading a file you will receive information items and data chunks.</p>
+<pre>
+XdgVfsResult r;
+r = xdg_vfs_sess_cmd_getFile(session, "protocol://user@server/file");
+if (r) { /* command init error */ }
+
+char * buf=NULL;
+int len=0;
+XdgVfsItemType type;
+XdgVfsItem * item;
+
+while ((r = xdg_vfs_sess_readItem(session, &type, &item, &buf, &len)) == XDGVFS_RESULT_CONTINUES) 
+{
+	switch (type)
+	{
+		case XDGVFS_ITEMTYPE_GET_HEAD:
+		{
+				XdgVfsSimpleHead * head = (XdgVfsSimpleHead*) item;
+				fprintf(stderr, "reading file uri='%s'\n", head->uri);
+				break;		
+		}
+		case XDGVFS_DATAIN:
+		{ 
+				fprintf(stderr, "file-data chunklen=%d\n", len);
+				fwrite (buf, 1, len, stdout); /* your file data */
+				break;
+		}
+		case XDGVFS_ITEMTYPE_DATAIN_DONE:
+		{
+				XdgVfsDataInDoneItem * dii = (XdgVfsDataInDoneItem *) item;
+				fprintf(stderr, "read done - bytecount='%d'\n", dii->bytecount);
+				break;		
+		}			
+		case XDGVFS_ITEMTYPE_NONE:
+		{
+				break;
+		}
+		default:
+		{
+				fprintf(stderr, "unexpected item - type=%d\n", type);
+				break;
+		}
+	}
+	xdg_vfs_item_unref(item);
+}
+if (r) { /* command failed */ }
+</pre>
+    <h3>Opening a file-dialog</h3>
+<pre>
+XdgVfsResult r;
+r = xdg_vfs_sess_cmd_openFileDialog(session, "protocol://user@server/directory", 0);
+if (r) { /* command init error */ }
+
+while ((r = xdg_vfs_sess_readItem(session, &type, &item, NULL, NULL)) == XDGVFS_RESULT_CONTINUES) 
+{
+	switch(type) 
+	{
+		case XDGVFS_ITEMTYPE_OPENFILEDLG_RESPONSE:
+		{
+				XdgVfsOpenFileDlgResponse * dlgResp = (XdgVfsOpenFileDlgResponse*) item;
+				fprintf(stderr, "selected_uri='%s'\n", dlgResp->selected_uri);
+				break;
+		}
+		case XDGVFS_ITEMTYPE_NONE:
+		{
+				break;
+		}
+		default:
+		{
+				fprintf(stderr, "unexpected item - type=%d\n", type);
+				break;
+		}
+	}
+	xdg_vfs_item_unref(item);
+}
+if (r) { /* command failed */ }
+</pre>
+<h3>Other Commands</h3>
+<p>For the other commands see the samples in the 'tests' directory of the tarball. 
+Also have a look at <em>xdg_vfs_client.h</em> and <em>xdg_vfs_common.h</em> (list of result codes).
+<h2>Async Applications</h2>
+<p>Check the filedescriptor of the sessions incoming pipe in your event loop before calling</p>
+<code>
+XdgVfsResult xdg_vfs_sess_readItem(XdgVfsSession * sess, XdgVfsItemType * typeOut, 
+		XdgVfsItem ** itemOut, char ** buffer, int * len);
+</code>
+<p>and the outgoing pipes filedescriptor before calling</p>
+<code>
+XdgVfsResult xdg_vfs_sess_sendData(XdgVfsSession * sess);
+</code>
+<p>(only required when writing a file).</p>
+<h2>VFS browser demo</h2>
+<p>Libxdg-vfs-demo-filebrowser is a simple file-system-browser (written in Gtk+) which uses libxdg-vfs.
+I'm trying to find out whether libxdg-vfs could be used as backend for file-choosers (like GtkFileChooser) - especially in cases
+where you need to customize file-dialogs and the simple Open/Save file-dialogs provided by libxdg-vfs won't 
+suffice.</p>
+<p><em>Root URI of the VFS-backend:</em></p>
+<p><code>XdgVfsBackendInfo</code> has a field called <code>system_uri</code> 
+which points to the virtual root folder (often listed in side-panes of file-dialogs) of the VFS backend.
+Like <em>system:/</em> on KDE or <em>computer://</em> on Gnome.
+</p>
+<p><em>Icons and Icon-themes:</em></p>
+<p><code>XdgVfsBackendInfo</code> has a field called <code>file_icon_theme</code> (which is 'crystalsvg' on KDE and 'gnome' on Gnome).
+The <code>XdgVfsFileInfo</code> structure (returned when listing directories) has an <code>iconname</code> field.
+With this information we can look up the right file-icons, without even knowing which backend is running.
+</p>
+<p>Screenshot: VFS browser using KIO and Gnome-VFS backend (pointing to root folder of the VFS):</p>
+<p><img src="imgs/libxdg-vfs-demo-filebrowser-root.png"></p>
+<p>Screenshot: VFS browser using the Gnome-VFS backend:</p>
+<p><img src="imgs/libxdg-vfs-demo-filebrowser-gnome.png"></p>
+<p>Screenshot: VFS browser using the KIO backend:</p>
+<p><img src="imgs/libxdg-vfs-demo-filebrowser-kde.png"></p>
+
+<h2>Sources/Docs</h2>
+<p>Downloads: <a href="http://www.scheinwelt.at/~norbertf/dadapt/files/xdg_utils/">http://www.scheinwelt.at/~norbertf/dadapt/files/xdg_utils/</a></p>
+<p>Backend manual: <a href="http://www.scheinwelt.at/~norbertf/dadapt/files/xdg_utils/doc/xdg-vfs.html">http://www.scheinwelt.at/~norbertf/dadapt/files/xdg_utils/doc/xdg-vfs.html</a></p>
+<p>Portland VFS task: <a href="http://portland.freedesktop.org/wiki/TaskVFS">http://portland.freedesktop.org/wiki/TaskVFS</a></p>
+<p>___ n.f. 2006 ___</p>
+  </body>
+</html>
