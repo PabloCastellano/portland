@@ -38,7 +38,7 @@ extern "C" {
 #include <string.h>
 #include <xdg_vfs_common.h>
 
-#define XDG_VFS_DEBUG_IPC 1
+#define XDG_VFS_DEBUG_IPC 0
 
 #define XDGVFS_CLIENT_BUFFERSIZE 8192
 
