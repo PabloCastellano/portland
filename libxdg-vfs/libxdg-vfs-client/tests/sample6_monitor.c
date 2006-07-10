@@ -1,5 +1,5 @@
 /*
-#   sample5_mount.c
+#   sample6_monitor.c
 #
 #   Copyright 2006, Norbert Frese
 #
@@ -74,7 +74,8 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	/* because the session is in ready state, we will not receive XDGVFS_RESULT_CONTINUES */
+	/* because the session is in READY state, we can not loop with r=XDGVFS_RESULT_CONTINUES 
+	   as with xdg-vfs commands */
 
 	XdgVfsItemType type=0;
 	XdgVfsItem * item=NULL;
