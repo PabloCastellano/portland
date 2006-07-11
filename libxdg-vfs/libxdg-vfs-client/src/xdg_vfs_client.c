@@ -361,8 +361,10 @@ static XdgVfsResult _write_command(XdgVfsSession * sess, char * command, const c
 	return XDGVFS_RESULT_OK;
 }
 
-XdgVfsResult xdg_vfs_sess_cmd_cancel(XdgVfsSession * sess) {
+XdgVfsResult xdg_vfs_sess_cancelCommand(XdgVfsSession * sess)
+{
 	/* not implemented yet */
+	fprintf(stderr, "xdg_vfs_sess_cmd_cancel() not implemented yet\n");
 	return XDGVFS_RESULT_OK;
 }
 
@@ -504,9 +506,9 @@ XdgVfsResult xdg_vfs_sess_cmd_removeMonitor(XdgVfsSession * sess, const char * u
 }
 
 
-XdgVfsResult xdg_vfs_sess_cmd_openFileDialog(XdgVfsSession * sess, const char * filename, XdgVfsFlags flags) 
+XdgVfsResult xdg_vfs_sess_cmd_openFileDialog(XdgVfsSession * sess, const char * default_uri, XdgVfsFlags flags) 
 {
-	const char * argv[] = { filename, NULL, NULL, NULL };
+	const char * argv[] = { default_uri, NULL, NULL, NULL };
 
 	if (flags & XDGVFS_FLAGS_INSTANT_GET) {
 		argv[1] = "--instant-get";
@@ -518,12 +520,19 @@ XdgVfsResult xdg_vfs_sess_cmd_openFileDialog(XdgVfsSession * sess, const char * 
 
 }
 
-XdgVfsResult xdg_vfs_sess_cmd_saveFileDialog(XdgVfsSession * sess, const char * filename, XdgVfsFlags flags) 
+XdgVfsResult xdg_vfs_sess_cmd_saveFileDialog(XdgVfsSession * sess, 
+	const char * default_folder_uri, 
+	const char * default_filename, 
+	XdgVfsFlags flags)
 {
-	const char * argv[] = { filename, NULL, NULL };
+	const char * argv[] = { default_folder_uri, default_filename, NULL, NULL };
+	
 
 	if (flags & XDGVFS_FLAGS_INSTANT_PUT) {
-		argv[1] = "--instant-put";
+		if (!default_filename)
+			argv[1] = "--instant-put";
+		else
+			argv[2] = "--instant-put";
 	} 
 	return _write_command(sess, "savefiledlg", argv);
 }
