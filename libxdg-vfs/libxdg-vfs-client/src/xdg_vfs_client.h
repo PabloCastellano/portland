@@ -300,7 +300,7 @@ XdgVfsResult xdg_vfs_sess_close(XdgVfsSession * sess);
 *  Cancel the current Command 
 *
 */
-XdgVfsResult xdg_vfs_sess_cmd_cancel(XdgVfsSession * sess);
+XdgVfsResult xdg_vfs_sess_cancelCommand(XdgVfsSession * sess);
 
 /**
 *  Watch this fd to avoid blocking in xdgvfs_sess_readItem()
@@ -332,127 +332,180 @@ void xdg_vfs_sess_set_monitor_callback(
 
 /*
 *  After running a command the session will leave the READY state and 
-*  you have to read items from the session.
+*  you have to read items by calling xdg_vfs_sess_readItem() (except for the 'simple' commands)
+*
+*  See the samples in the 'tests' directory for a tutorial.
 */
+
 /**
 *  Command: get Backend Info
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_BACKENDINFO
 */
-
 XdgVfsResult xdg_vfs_sess_cmd_backendInfo(XdgVfsSession * sess);
+
 /**
 *  Command: get File
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_GET_HEAD
+*     - XDGVFS_DATAIN (multi)
+*     - XDGVFS_ITEMTYPE_DATAIN_DONE
 */
-XdgVfsResult xdg_vfs_sess_cmd_getFile(XdgVfsSession * sess, const char * filename);
+XdgVfsResult xdg_vfs_sess_cmd_getFile(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: put File
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_PUT_HEAD
+*     - XDGVFS_DATAOUT (multi -> you have to put data into the outgoing buffer and send it)
+*     - XDGVFS_ITEMTYPE_DATAOUT_DONE
 */
-XdgVfsResult xdg_vfs_sess_cmd_putFile(XdgVfsSession * sess, const char * filename, 
+XdgVfsResult xdg_vfs_sess_cmd_putFile(XdgVfsSession * sess, const char * uri, 
 	XdgVfsFlags flags);
 
 /**
 *  Command: getFileInfo
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_FILEINFO
 */
-XdgVfsResult xdg_vfs_sess_cmd_getFileInfo(XdgVfsSession * sess, const char * filename);
+XdgVfsResult xdg_vfs_sess_cmd_getFileInfo(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: SetAttrs
+*  
+*  leave user or group NULL when you don't want to change it.
+*  set setPermFlag=0 if you don't want to change the permissions.
+*
+*  returns items:
+*     - XDGVFS_ITEMTYPE_SETATTRS_HEAD
 *
 */
 XdgVfsResult xdg_vfs_sess_cmd_setAttrs(XdgVfsSession * sess, 
-	const char * filename, int permissions, int setPermFlag, char * user, char * group);
+	const char * uri, int permissions, int setPermFlag, char * user, char * group);
 
 /**
 *  Command: CopyFile
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_COPY_HEAD
+*     - XDGVFS_ITEMTYPE_PROGRESS (multi)
 */
-XdgVfsResult xdg_vfs_sess_cmd_copyFile(XdgVfsSession * sess, const char * filename_src, const char * filename_target);
+XdgVfsResult xdg_vfs_sess_cmd_copyFile(XdgVfsSession * sess, const char * uri_src, const char * uri_target);
 
 /**
 *  Command: Move File
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_MOVE_HEAD
+*     - XDGVFS_ITEMTYPE_PROGRESS (multi)
 */
-XdgVfsResult xdg_vfs_sess_cmd_moveFile(XdgVfsSession * sess, const char * filename_src, const char * filename_target);
+XdgVfsResult xdg_vfs_sess_cmd_moveFile(XdgVfsSession * sess, const char * uri_src, const char * uri_target);
 
 /**
 *  Command: Make Directory
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_MKDIR_HEAD
+*
 */
-XdgVfsResult xdg_vfs_sess_cmd_makeDirectory(XdgVfsSession * sess, const char * filename);
+XdgVfsResult xdg_vfs_sess_cmd_makeDirectory(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: Remove Directory
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_RMDIR_HEAD
 */
-XdgVfsResult xdg_vfs_sess_cmd_removeDirectory(XdgVfsSession * sess, const char * filename);
+XdgVfsResult xdg_vfs_sess_cmd_removeDirectory(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: Delete File
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_RM_HEAD
 */
-XdgVfsResult xdg_vfs_sess_cmd_removeFile(XdgVfsSession * sess, const char * filename);
+XdgVfsResult xdg_vfs_sess_cmd_removeFile(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: List Directory
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_LS_HEAD
+*     - XDGVFS_ITEMTYPE_FILEINFO (multi)
 */
-XdgVfsResult xdg_vfs_sess_cmd_listDirectory(XdgVfsSession * sess, const char * filename);
+XdgVfsResult xdg_vfs_sess_cmd_listDirectory(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: Mount
 *
+*  returns items:
+*     (none, but you have to loop xdg_vfs_sess_readItem() to wait for the result)
 */
 XdgVfsResult xdg_vfs_sess_cmd_mount(XdgVfsSession * sess, const char * mountpoint_id);
 
 /**
 *  Command: monitor directory
-*  This is a simple command, you don't have to read items to finish.
+*  This is a simple command, you don't have to call xdg_vfs_sess_readItem().
 */
 XdgVfsResult xdg_vfs_sess_cmd_monitorDir(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: monitor file
-*  This is a simple command, you don't have to read items to finish.
+*  This is a simple command, you don't have to call xdg_vfs_sess_readItem().
 */
 XdgVfsResult xdg_vfs_sess_cmd_monitorFile(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: remove monitor
-*  This is a simple command, you don't have to read items to finish.
+*  This is a simple command, you don't have to call xdg_vfs_sess_readItem().
 */
 XdgVfsResult xdg_vfs_sess_cmd_removeMonitor(XdgVfsSession * sess, const char * uri);
 
 /**
 *  Command: Show Open-File-Dialog
 *
+*  returns items:
+*     - XDGVFS_ITEMTYPE_OPENFILEDLG_RESPONSE
 */
-XdgVfsResult xdg_vfs_sess_cmd_openFileDialog(XdgVfsSession * sess, const char * filename, XdgVfsFlags flags);
+XdgVfsResult xdg_vfs_sess_cmd_openFileDialog(XdgVfsSession * sess, const char * default_uri, XdgVfsFlags flags);
 
 /**
 *  Command: Show Save-File-Dialog
 *
+*  returns itmes:
+*     - XDGVFS_ITEMTYPE_SAVEFILEDLG_RESPONSE
 */
-XdgVfsResult xdg_vfs_sess_cmd_saveFileDialog(XdgVfsSession * sess, const char * filename, XdgVfsFlags flags);
+XdgVfsResult xdg_vfs_sess_cmd_saveFileDialog(XdgVfsSession * sess, 
+	const char * default_folder_uri, 
+	const char * default_filename, 
+	XdgVfsFlags flags);
 
 /* ============= READ / WRITE FUNCTIONS ============= */
 
 /**
 *  Read an Item or a Chunk of File-Data. Continue reading items until
-*  the return value is != XDGVFS_RESULT_CONTINUES
+*  the return value is != XDGVFS_RESULT_CONTINUES.
 *
+*  This function has to be looped after executing a xdg-vfs command (but not for the 'simple' commands).
+*  
+*  If you want to do this non-blocking check the incoming fd in your event-loop.
 */
 XdgVfsResult xdg_vfs_sess_readItem(XdgVfsSession * sess, XdgVfsItemType * typeOut, 
 		XdgVfsItem ** itemOut, char ** buffer, int * len);
 
 
+/* ------ used when writing a file with xdg_vfs_sess_cmd_putFile() -------- */
+
 /**
 *  Put a Chunk of File-Data into the outgoing buffer.
-*  set len = 0 on EOF 
-*  will return XDGVFS_RESULT_GIVE_ME_DATA (if there is no error)
+*  set len = 0 on EOF. 
+*  If there is no error this function will usually return XDGVFS_RESULT_CALL_SENDDATA_AGAIN 
+*  -> You have to call the function xdg_vfs_sess_sendData() until the outgoing 
+*  buffer is emptied.
 */
 XdgVfsResult xdg_vfs_sess_putDataChunk(XdgVfsSession * sess, char * data, int len);
 
@@ -483,7 +536,11 @@ void xdg_vfs_item_unref(XdgVfsItem * item);
 
 /* =================== tools ========================= */
 
+/*
+*  get string message for XdgVfsResult. The string is statically allocated, you don't have to free() it.
+*/
 char * xdg_vfs_resultToString(XdgVfsResult code);
+
 
 #ifdef __cplusplus
 }
