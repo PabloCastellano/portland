@@ -1,0 +1,43 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+## Test function
+test_icon_system_as_nonroot() {
+iconfile="red-32.png"
+icondir="$TEST_CODE_DIR/icons"
+ICON_PATH="$HOME/.icons:$XDG_DATA_DIRS:/usr/share/pixmaps:$HOME/.local/icons:$XDG_DATA_HOME"
+
+## Begin the test.
+test_start "$FUNCNAME: verify error for --system when run as a normal user"
+
+# Dependencies section
+test_init
+
+assert_exit 0 test `whoami` != root
+
+set_no_display
+assert_file "$icondir/$iconfile"
+
+# Verify the test icon is not installed already.
+assert_file_not_in_path "$iconfile" "$ICON_PATH"
+
+# Test steps section
+test_procedure
+
+assert_exit 3 xdg-icon-resource install --system --size 32 "$icondir/$iconfile"
+assert_nostdout
+assert_stderr
+
+assert_file_not_in_path "$iconfile" "$ICON_PATH"
+
+assert_exit 3 xdg-icon-resource uninstall --system --size 32 "$iconfile"
+assert_nostdout
+assert_stderr
+
+test_result
+} 
+run_test test_icon_system_as_nonroot

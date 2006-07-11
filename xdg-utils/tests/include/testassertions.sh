@@ -23,6 +23,25 @@ assert_exit() # execute command (saving output) and check exit code
     fi
 }
 
+assert_file_in_path() {
+	search_dirs=`echo "$2" | tr ':' ' '`
+	found_files=`find $search_dirs -name "$1" 2>/dev/null`
+
+	if [ -z "$found_files" ] ; then
+		test_fail "Did not find '$1' in '$2'"
+	fi
+}
+
+assert_file_not_in_path() {
+	search_dirs=`echo "$2" | tr ':' ' '`
+	found_files=`find $search_dirs -name "$1" 2>/dev/null`
+
+	if [ ! -z "$found_files" ] ; then
+		test_fail "Found '$found_files' in $2"
+	fi
+}
+
+
 assert_file() {
 	if [ ! -e "$1" ] ; then
 		test_fail "'$1' does not exist"
