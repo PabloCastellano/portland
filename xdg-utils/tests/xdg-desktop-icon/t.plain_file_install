@@ -1,0 +1,39 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+## Test function
+test_plain_file_install() {
+FILE="plain_file_install.txt"
+## Begin the test.
+test_start "$FUNCNAME: verify $FILE is installed correctly on the desktop"
+
+# Dependencies section
+test_init
+
+set_no_display
+
+echo "Some very boring text" > "$FILE"
+assert_file "$FILE"
+
+# Verify the test icon is not installed already.
+assert_file_not_in_path "$FILE" "$HOME/Desktop"
+
+# Test steps section
+test_procedure
+
+assert_exit 0 xdg-desktop-icon install "$FILE"
+assert_nostdout
+assert_nostderr
+
+assert_file_in_path "$FILE" "$HOME/Desktop"
+
+assert_exit 0 xdg-desktop-icon uninstall "$FILE"
+
+test_result
+} 
+
+run_test test_plain_file_install
