@@ -264,8 +264,8 @@ detectDE()
 
 
 
-screensaver_file=$HOME/.xdg-screensaver-`echo $DISPLAY | sed 's/:/-/g'`
-lockfile_command=`which lockfile`
+screensaver_file=/tmp/xdg-screensaver-$USER-`echo $DISPLAY | sed 's/:/-/g'`
+lockfile_command=`which lockfile 2> /dev/null`
 
 lockfile()
 {
@@ -273,10 +273,10 @@ lockfile()
      $lockfile_command -1 -l 10 -s 3 "$screensaver_file".lock
   else
      # Poor man's attempt at doing a lockfile
-     (set -o noclobber
+     # Be careful not to facilitate a symlink attack
      local try
      try=0
-     while ! echo > "$screensaver_file".lock ;
+     while ! ln -s "$screensaver_file".lock "$screensaver_file".lock 2> /dev/null;
      do
         sleep 1
         try=$(($try+1))
@@ -284,7 +284,7 @@ lockfile()
             rm -f "$screensaver_file".lock || return # Can't remove lockfile
             try=0
         fi
-     done)
+     done
   fi
 }
 
@@ -313,12 +313,16 @@ perform_action()
 cleanup_suspend()
 {
   lockfile
-  grep -v "$window_id:" "$screensaver_file" > "$screensaver_file".new
-  mv "$screensaver_file".new "$screensaver_file"
-  unlockfile
+  tmpfile=`mktemp`
+  grep -v "$window_id:" "$screensaver_file" > "$tmpfile" 2> /dev/null
+  mv -T "$tmpfile" "$screensaver_file"
   if [ ! -s "$screensaver_file" ] ; then
-      # $screensaver_file is empty, do resume"
+      rm "$screensaver_file"
+      unlockfile
+      # $screensaver_file is empty, do resume
       perform_action resume
+  else
+      unlockfile
   fi
 }
 
@@ -326,7 +330,7 @@ do_resume()
 {
   lockfile # Obtain lockfile
   # Find the PID of the trackingprocess
-  xprop_pid=`grep "$window_id:" "$screensaver_file" | cut -d ':' -f 2`
+  xprop_pid=`grep "$window_id:" "$screensaver_file" 2> /dev/null | cut -d ':' -f 2` 
   unlockfile # Free lockfile
   if [ -n "$xprop_pid" ] && ps -p "$xprop_pid" 2> /dev/null | grep xprop > /dev/null; then
      # Kill the tracking process 
@@ -339,27 +343,28 @@ track_window()
 {
   lockfile
 
+  tmpfile=`mktemp`
   # Filter stale entries from the xdg-screensaver status file
   # Return if $window_id is being tracked already
   (
-    already_tracked=0
+    already_tracked=1
     IFS_save=$IFS
     IFS=":"
     while read wid pid; do
       if ps -p "$pid" 2> /dev/null | grep xprop > /dev/null; then
         echo "$wid:$pid"
         if [ $wid = $window_id ] ; then
-          already_tracked=1
+          already_tracked=0
         fi   
       fi
     done
     IFS=$IFS_save
     exit $already_tracked
-  ) < $screensaver_file > $screensaver_file.new
+  ) < $screensaver_file > $tmpfile
   already_tracked=$?
-  mv $screensaver_file.new $screensaver_file
 
-  if [ "$already_tracked" -eq "1" ] ; then
+  if [ "$already_tracked" -eq "0" ] ; then
+    mv -T "$tmpfile" "$screensaver_file"
     # We are already tracking $window_id, don't do anything
     unlockfile
     return
@@ -369,7 +374,8 @@ track_window()
   xprop -id $window_id -spy > /dev/null &
   xprop_pid=$!
   # Add window_id and xprop_pid to the xdg-screensave status file
-  echo "$window_id:$xprop_pid" >> $screensaver_file
+  echo "$window_id:$xprop_pid" >> $tmpfile
+  mv -T "$tmpfile" "$screensaver_file"
   unlockfile
   # Wait for xprop to edit, it means that the window disappeared
   wait $xprop_pid
