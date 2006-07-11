@@ -25,6 +25,17 @@
 #
 #---------------------------------------------*/
 
+/*
+   demonstrates how to use the commands:
+     xdg_vfs_sess_cmd_backendInfo()
+     xdg_vfs_sess_cmd_getFileInfo()
+     xdg_vfs_sess_cmd_listDirectory()
+     xdg_vfs_sess_cmd_openFileDialog()
+     xdg_vfs_sess_cmd_saveFileDialog()
+     xdg_vfs_sess_cmd_getFile()
+*/
+
+
 #include "xdg_vfs_client.h"
 
 #include <stdio.h>
@@ -53,7 +64,7 @@ int main(int argc, char *argv[])
 	r = xdg_vfs_sess_cmd_backendInfo(session);
 	
 	if (r) {
-		fprintf(stderr, "test 0 cmd problem=%d\n", r);
+		fprintf(stderr, "test 0 cmd problem #%d %s\n", r, xdg_vfs_resultToString(r));
 		return 1;
 	}
 
@@ -85,14 +96,14 @@ int main(int argc, char *argv[])
 		}
 		xdg_vfs_item_unref(item);
 	}
-	fprintf(stderr, "test 0 result=%d\n", r);
+	fprintf(stderr, "test 0 result=%d %s\n", r, xdg_vfs_resultToString(r));
 
 	fprintf(stderr, "======= test 1 : info / =======\n", r);
 
 	r = xdg_vfs_sess_cmd_getFileInfo(session, "/");
 	
 	if (r) {
-		fprintf(stderr, "test 1 cmd problem=%d\n", r);
+		fprintf(stderr, "test 1 cmd problem #%d %s\n", r, xdg_vfs_resultToString(r));
 		return 1;
 	}
 
@@ -119,13 +130,13 @@ int main(int argc, char *argv[])
 		}
 		xdg_vfs_item_unref(item);
 	}
-	fprintf(stderr, "test 1 result=%d\n", r);
+	fprintf(stderr, "test 1 result=%d %s\n", r, xdg_vfs_resultToString(r));
 
 	fprintf(stderr, "======= test 2 : info /notexist =======\n", r);
 
 	r = xdg_vfs_sess_cmd_getFileInfo(session, "/notexist");
 	if (r) {
-		fprintf(stderr, "test 2 cmd problem=%d\n", r);
+		fprintf(stderr, "test 2 cmd problem #%d %s\n", r, xdg_vfs_resultToString(r));
 		return 1;
 	}
 
@@ -152,14 +163,14 @@ int main(int argc, char *argv[])
 		}
 		xdg_vfs_item_unref(item);
 	}
-	fprintf(stderr, "test 2 result=%d\n", r);
+	fprintf(stderr, "test 2 result=%d %s\n", r, xdg_vfs_resultToString(r));
 
 	fprintf(stderr, "======= test 3 : ls /usr/local/bin =======\n", r);
 
 	r = xdg_vfs_sess_cmd_listDirectory(session, "/usr/local/bin");
 
 	if (r) {
-		fprintf(stderr, "test 3 cmd problem=%d\n", r);
+		fprintf(stderr, "test 3 cmd problem #%d %s\n", r, xdg_vfs_resultToString(r));
 		return 1;
 	}
 
@@ -193,13 +204,13 @@ int main(int argc, char *argv[])
 		}
 		xdg_vfs_item_unref(item);
 	}
-	fprintf(stderr, "test 3 result=%d\n", r);
+	fprintf(stderr, "test 3 result=%d %s\n", r, xdg_vfs_resultToString(r));
 
 	fprintf(stderr, "======= test 4 : openfiledlg =======\n", r);
 
-	r = xdg_vfs_sess_cmd_openFileDialog(session, NULL, 0);
+	r = xdg_vfs_sess_cmd_openFileDialog(session, "/tmp", XDGVFS_FLAGS_NONE);
 	if (r) {
-		fprintf(stderr, "test 4 cmd rval=%d\n", r);
+		fprintf(stderr, "test 4 cmd problem #%d %s\n", r, xdg_vfs_resultToString(r));
 		return 1;
 	}
 
@@ -227,13 +238,13 @@ int main(int argc, char *argv[])
 		xdg_vfs_item_unref(item);
 	}
 
-	fprintf(stderr, "test 4 result=%d\n", r);
+	fprintf(stderr, "test 4 result=%d %s\n", r, xdg_vfs_resultToString(r));
 
 	fprintf(stderr, "======= test 5 : savefiledlg =======\n", r);
 
-	r = xdg_vfs_sess_cmd_saveFileDialog(session, "/tmp", 0);
+	r = xdg_vfs_sess_cmd_saveFileDialog(session, "/tmp", "test.txt", XDGVFS_FLAGS_NONE);
 	if (r) {
-		fprintf(stderr, "test 5 cmd rval=%d\n", r);
+		fprintf(stderr, "test 5 cmd problem #%d %s\n", r, xdg_vfs_resultToString(r));
 		return 1;
 	}
 
@@ -260,13 +271,13 @@ int main(int argc, char *argv[])
 		}
 		xdg_vfs_item_unref(item);
 	}
-	fprintf(stderr, "test 5 result=%d\n", r);
+	fprintf(stderr, "test 5 result=%d %s\n", r, xdg_vfs_resultToString(r));
 
 	fprintf(stderr, "======= test 6 : get /etc/passwd =======\n", r);
 
 	r = xdg_vfs_sess_cmd_getFile(session, "/etc/passwd");
 	if (r) {
-		fprintf(stderr, "test 6 cmd rval=%d\n", r);
+		fprintf(stderr, "test 6 cmd problem #%d %s\n", r, xdg_vfs_resultToString(r));
 		return 1;
 	}
 
@@ -308,7 +319,7 @@ int main(int argc, char *argv[])
 		}
 		xdg_vfs_item_unref(item);
 	}
-	fprintf(stderr, "test 6 result=%d\n", r);
+	fprintf(stderr, "test 6 result=%d %s\n", r, xdg_vfs_resultToString(r));
 	return 1;
 
 	xdg_vfs_sess_close(session);
