@@ -37,6 +37,11 @@ repeat_test() {
 # 
 # NOTE - all variables MUST have the same number of arguments
 
+if [ "$#" -lt 4 ] ; then
+	echo "TEST SYNTAX ERROR: repeat_test() requires at least 4 arguments!"
+	exit 255
+fi
+
 FUNC="$1"
 VARS="$2"
 shift 2

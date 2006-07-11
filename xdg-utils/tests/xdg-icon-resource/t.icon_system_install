@@ -1,0 +1,41 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+## Test function
+test_icon_system_install() {
+test_start "$FUNCNAME: verify $ICON is installed correctly with --system"
+
+## Begin the test.
+icondir="$TEST_CODE_DIR/icons"
+systempath="$XDG_DATA_DIRS:/usr/share/pixmaps"
+
+# Dependencies section
+test_init
+
+assert_exit 0 test `whoami` = root
+
+set_no_display
+assert_file "$icondir/$ICON"
+
+# Verify the test icon is not installed already.
+assert_file_not_in_path "$ICON" "$systempath"
+
+# Test steps section
+test_procedure
+
+assert_exit 0 xdg-icon-resource install --system --size "$SIZE" "$icondir/$ICON"
+assert_nostdout
+assert_nostderr
+
+assert_file_in_path "$ICON" "$systempath"
+
+assert_exit 0 xdg-icon-resource uninstall --system --size "$SIZE" "$icondir/$ICON"
+
+test_result
+} 
+
+repeat_test test_icon_system_install 2 ICON SIZE 'red-16.png' 'red-22.png' 'red-24.png' 'red-32.png' 'red-48.png' 'red-64.png' 'red-128.png' 16 22 24 32 48 64 128

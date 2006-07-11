@@ -1,0 +1,41 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+## Test function
+test_icon_svg_user_uninstall() {
+ICON="red-SVG.svg"
+
+test_start "$FUNCNAME: verify $ICON is uninstalled correctly"
+
+## Begin the test.
+icondir="$TEST_CODE_DIR/icons"
+userpath="$HOME/.icons:$HOME/.local:$XDG_DATA_HOME"
+systempath="$XDG_DATA_DIRS:/usr/share/pixmaps"
+
+# Dependencies section
+test_init
+
+set_no_display
+assert_file "$icondir/$ICON"
+
+# Verify the test icon is not installed already.
+assert_exit 0 xdg-icon-resource install --user "$icondir/$ICON"
+assert_file_in_path "$ICON" "$userpath"
+
+# Test steps section
+test_procedure
+
+assert_exit 0 xdg-icon-resource uninstall --user "$icondir/$ICON"
+assert_nostdout
+assert_nostderr
+
+assert_file_not_in_path "$ICON" "$userpath"
+
+test_result
+} 
+
+run_test test_icon_svg_user_uninstall
