@@ -4,6 +4,7 @@
 #TEST_CODE_DIR=
 #TET_ROOT= 
 
+export XDG_TEST_NO_INTERACTIVE="true"
 
 if [ -z "$TEST_CODE_DIR" ] ; then
 	# User didn't follow directions, make a guess.

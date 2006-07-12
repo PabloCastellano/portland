@@ -34,6 +34,11 @@ OR (if you have defined TEST_CODE_DIR and PATH correctly)
 $ xdg-mime/t.user_mime_install
 
 
+INTERACTIVE TESTS
+-----------------
+Because it is difficult to verify the way things appear to the user, some tests are interactive and require the user to verify or perform actions. This is sometimes annoying, so interactive tests can be disabled by setting
+
+$ export XDG_TEST_NO_INTERACTIVE=something
 
 DIRECTORY STRUCTURE
 -------------------

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+
+#Exec=xterm -bg black -fg red
+Exec=touch xdg-test-desktop-icon-install.tmp
+
+Name=Test Desktop Icon Install

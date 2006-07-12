@@ -23,6 +23,31 @@ assert_exit() # execute command (saving output) and check exit code
     fi
 }
 
+assert_interactive() {
+	query=$1
+	expect=$2
+	if [ ! -z "$XDG_TEST_NO_INTERACTIVE" ] ; then
+		test_infoline "Assumed '$query' is '$expect'"
+	 	return
+	fi
+	if [  ! -z "$expect" ] ; then
+		if [ "$expect" != y -a "$expect" != n ] ; then
+			echo "TEST SYNTAX ERROR: interactive assertions require 'y' or 'n' as choices."
+			exit 255
+		fi
+		echo -n "$query [y/n]: " >&2
+		read result
+
+		if [ "$result" != "$expect" ] ; then
+			test_fail "User indicated '$result' instead of '$expect' in respnonse to '$query'"
+		fi
+	else
+		echo -n "$query [enter when complete] " >&2
+		read result
+	fi
+}
+		
+
 assert_file_in_path() {
 	search_dirs=`echo "$2" | tr ':' ' '`
 	found_files=`find $search_dirs -name "$1" 2>/dev/null`
@@ -47,8 +72,8 @@ assert_file() {
 		test_fail "'$1' does not exist"
 	elif [ ! -f "$1" ] ; then
 		test_fail "'$1' is not a regular file"
-	elif [ ! -s "$1" ] ; then
-		test_fail "$1 exists, but is empty"
+#	elif [ ! -s "$1" ] ; then
+#		test_fail "$1 exists, but is empty"
 	fi
 }
 

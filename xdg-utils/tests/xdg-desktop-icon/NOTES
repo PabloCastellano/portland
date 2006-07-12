@@ -1,0 +1,4 @@
+Test notes for xdg-desktop-icon
+-------------------------------
+
+1. Double install behavior is not well defined. Should installing two files with the same name onto the desktop generate errors, or should the older be overwritten?
