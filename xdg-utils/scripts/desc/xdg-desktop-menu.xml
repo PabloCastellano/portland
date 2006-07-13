@@ -527,9 +527,10 @@ xdg-icon-resource install --system --size 64 ./wmicon-admin-64.png webmirror-adm
 <programlisting>
 webmirror.menu:
 
-  &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
-     "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd"&gt;
+  &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+     "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd"&gt;
   &lt;Menu&gt;
+    &lt;Name&gt;Applications&lt;/Name&gt;
     &lt;Menu&gt;
       &lt;Name&gt;WebMirror&lt;/Name&gt;
       &lt;Directory&gt;shinythings-webmirror.directory&lt;/Directory&gt;
