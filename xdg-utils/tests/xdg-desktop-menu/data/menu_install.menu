@@ -1,0 +1,12 @@
+<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"
+            "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd">
+<Menu>
+    <Name>Applications</Name>
+    <Menu>
+        <Name>XDG UTILS TEST</Name>
+             <Directory>menu_install.directory</Directory>
+	     <Include>
+		<Filename>menu_item_test.desktop</Filename>
+	     </Include>
+    </Menu>
+</Menu>

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+## Test function
+test_simple_menu_item_user_install() {
+## Begin the test.
+test_start "$FUNCNAME: verify a desktop file is installed in the applicatiosn menu"
+
+# Dependencies section
+test_init
+
+# Generate .desktop file
+FILE='menu_item_test.desktop'
+DIR="$TEST_CODE_DIR/xdg-desktop-menu/data"
+USERPATH="$HOME/.local:$HOME/.gnome:$HOME/.kde"
+
+set_no_display
+
+assert_file "$DIR/$FILE"
+
+# Verify the test icon is not installed already.
+assert_file_not_in_path "$FILE" "$USERPATH"
+
+# Test steps section
+test_procedure
+
+assert_exit 0 xdg-desktop-menu install "$DIR/$FILE"
+assert_nostdout
+assert_nostderr
+
+assert_file_in_path "$FILE" "$USERPATH"
+
+if [ -z "$XDG_TEST_NO_INTERACTIVE" ]; then
+assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
+assert_interactive "Please select the menu item 'Applications/Applications/Test Menu Item Install'"
+
+## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
+assert_file "$HOME/xdg-test-menu-item-install.tmp"
+rm -f "$HOME/xdg-test-menu-item-install.tmp"
+fi
+
+## Cleanup
+assert_exit 0 xdg-desktop-menu uninstall "$FILE"
+
+test_result
+} 
+
+run_test test_simple_menu_item_user_install
