@@ -1,4 +1,4 @@
-mkworkdir() {
+DELETE_mkworkdir() {
 	if [ ! -z "$TEST_WORK_DIR" -a -d "$TEST_WORK_DIR" ]; then
 		return
 	fi
@@ -18,6 +18,9 @@ mkworkdir() {
 	export TEST_WORK_DIR="$TEMP/$DIR"
 	mkdir -p "$TEST_WORK_DIR"
 }
+
+. "$TEST_CODE_DIR/include/tempfile.sh"
+
 
 verify_test_context() {
 	if [ -z "$TEST_NAME" -a ! "$USING_TET" ]; then

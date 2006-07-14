@@ -20,7 +20,11 @@ if [  ! -z "$USING_TET" -o ! -z "$USING_TEST_RUNNER" ]; then
 	export TEST_LIST="$TEST_LIST $1"
 
 else # test is being run directly.
- 	( "$1" )
+	test_setup
+	
+	## Subshell is necessary for containment
+	( "$1" )
+	test_cleanup
 fi
 IC_NUM=$(($IC_NUM+1))
 
@@ -92,5 +96,23 @@ while [ "$J" -le "$LENGTH" ] ; do
 
 	J=$(($J+1))
 done
+}
+
+test_setup() {
+	get_guid "xdgt"
+	export XDG_TEST_ID="$GUID"
+	get_tmpsubdir "$TEST_CODE_DIR/tmp"
+	export XDG_TEST_TMPDIR="$TMPSUBDIR"
+	cd "$XDG_TEST_TMPDIR"
+}
+
+test_cleanup() {
+	if [ -z "$XDG_TEST_DONT_CLEANUP" ] ; then
+		cd "$TEST_CODE_DIR"
+		# ALWAYS check what you pass to 'rm -rf'
+		[ -d "$XDG_TEST_TMPDIR" ] && rm -rf "$XDG_TEST_TMPDIR"
+#	else
+#		echo "Not removing $XDG_TEST_TMPDIR"
+	fi
 }
 
