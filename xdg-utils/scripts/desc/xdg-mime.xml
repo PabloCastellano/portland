@@ -46,6 +46,12 @@ and adding descriptions for new file types</refpurpose>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-mime</command>
+      <arg choice="plain">default</arg>
+      <arg choice="plain"><replaceable>application</replaceable></arg>
+      <arg choice="plain"><replaceable>mimetype(s)</replaceable></arg>
+    </cmdsynopsis>
+    <cmdsynopsis>
+      <command>xdg-mime</command>
       <arg choice="plain">install</arg>	
       <group choice="req">
 	<arg choice="plain"><option>--user</option></arg>
@@ -103,6 +109,37 @@ and adding descriptions for new file types</refpurpose>
 	    Returns the default application that the desktop environment uses for opening
 	    <replaceable>FILE</replaceable>. The default applications is
             identified by its *.desktop file.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>default</term>
+	<listitem>
+	  <simpara>
+	    Ask the desktop environment to make <replaceable>application</replaceable>
+	    the default application for opening
+	    files of type <replaceable>mimetype</replaceable>. An
+            application can be made the default for several file types by
+            specifying multiple mimetypes.
+	  </simpara>
+	  <simpara>
+	    <replaceable>application</replaceable> is the desktop file
+	    id of the application and has the form vendor-name.desktop
+	    <replaceable>application</replaceable> must already be installed
+	    in the desktop menu before it can be made the default handler.
+	    The aplication's desktop file must list support for all the
+	    MIME types that it wishes to be the default handler for.
+	  </simpara>
+	  <simpara>
+	    Requests to make an application a default handler may be
+	    subject to system policy or approval by the end-user. xdg-mime
+            query can be used to verify whether an application is the
+            actual default handler for a specific file type.   
+	  </simpara>
+	  <simpara>
+            The <emphasis>default</emphasis> option is for use inside a desktop session only.
+            It is not recommended to use xdg-mime default as root.
 	  </simpara>
 	</listitem>
       </varlistentry>
