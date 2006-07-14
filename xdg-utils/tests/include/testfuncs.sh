@@ -19,7 +19,7 @@ DELETE_mkworkdir() {
 	mkdir -p "$TEST_WORK_DIR"
 }
 
-. "$TEST_CODE_DIR/include/tempfile.sh"
+. "$XDG_TEST_DIR/include/tempfile.sh"
 
 
 verify_test_context() {

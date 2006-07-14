@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ## Include utility functions.
-. "$TEST_CODE_DIR/include/testassertions.sh"
-. "$TEST_CODE_DIR/include/testdep.sh"
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testdep.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
 test_desktop_icon_install() {
@@ -15,7 +15,7 @@ test_init
 
 # Generate .desktop file
 FILE='desktop_icon_install.desktop'
-DIR="$TEST_CODE_DIR/xdg-desktop-icon/data"
+DIR="$XDG_TEST_DIR/xdg-desktop-icon/data"
 
 set_no_display
 

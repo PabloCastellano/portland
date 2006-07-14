@@ -7,7 +7,7 @@ RUNNING XDG-UTILS TESTS
 At a minimum, you must have your current directory be the same as the directory containing this README. Then, simply execute
 
 $ ./testrun
-WARNING: guessed TEST_CODE_DIR to be /home/tw/portland/xdg-utils/tests
+WARNING: guessed XDG_TEST_DIR to be /home/tw/portland/xdg-utils/tests
 TEST_LIST:  generic_bogus_arg-1-1 ... generic_version-1-50
 ...
 FAIL: test_user_mime_install
@@ -19,7 +19,7 @@ NOT OK!
 FAIL indicates (not suprisingly) a test failure. 
 NORESULT indicates that the test prerequisites failed for some reason.
 
-NOTE: The test runner makes guesses about appropriate values of TEST_CODE_DIR and PATH. These values can be overriden explicitly.
+NOTE: The test runner makes guesses about appropriate values of XDG_TEST_DIR and PATH. These values can be overriden explicitly.
 
 To run tests individually, or as smaller groups do something like
 
@@ -29,7 +29,7 @@ OR
 
 $ ./testrun xdg-mime/t.user_mime_install
 
-OR (if you have defined TEST_CODE_DIR and PATH correctly)
+OR (if you have defined XDG_TEST_DIR and PATH correctly)
 
 $ xdg-mime/t.user_mime_install
 

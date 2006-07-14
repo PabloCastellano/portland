@@ -1,8 +1,8 @@
 #!/bin/bash
 
-. "$TEST_CODE_DIR/include/testassertions.sh"
-. "$TEST_CODE_DIR/include/testdep.sh"
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testdep.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
 test_system_install_missing_file() {
 INPUT_FILE='non-existant-file.xml'

@@ -1,14 +1,14 @@
 #!/bin/bash
 
 ## FILL THIS IN or be sure environment is correct.
-#TEST_CODE_DIR=
+#XDG_TEST_DIR=
 #TET_ROOT= 
 
 export XDG_TEST_NO_INTERACTIVE="true"
 
-if [ -z "$TEST_CODE_DIR" ] ; then
+if [ -z "$XDG_TEST_DIR" ] ; then
 	# User didn't follow directions, make a guess.
-	TEST_CODE_DIR=`pwd`	
+	XDG_TEST_DIR=`pwd`	
 fi
 if [ -z "$TET_ROOT" ] ; then
 	# can't really guess
@@ -16,7 +16,7 @@ if [ -z "$TET_ROOT" ] ; then
 	exit 1
 fi
 USING_TET="true"
-TEST_GROUPS=`find "$TEST_CODE_DIR" -type d -name 'xdg-*'`
+TEST_GROUPS=`find "$XDG_TEST_DIR" -type d -name 'xdg-*'`
 TEST_FILES=`find $TEST_GROUPS -name 't.*'`
 
 ## load all the tests. 
@@ -24,7 +24,7 @@ for t in $TEST_FILES; do
 	. "$t"
 done
 
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
 tet_startup="test_setup"
 tet_cleanup="test_cleanup"

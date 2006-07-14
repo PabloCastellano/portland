@@ -101,14 +101,14 @@ done
 test_setup() {
 	get_guid "xdgt"
 	export XDG_TEST_ID="$GUID"
-	get_tmpsubdir "$TEST_CODE_DIR/tmp"
+	get_tmpsubdir "$XDG_TEST_DIR/tmp"
 	export XDG_TEST_TMPDIR="$TMPSUBDIR"
 	cd "$XDG_TEST_TMPDIR"
 }
 
 test_cleanup() {
 	if [ -z "$XDG_TEST_DONT_CLEANUP" ] ; then
-		cd "$TEST_CODE_DIR"
+		cd "$XDG_TEST_DIR"
 		# ALWAYS check what you pass to 'rm -rf'
 		[ -d "$XDG_TEST_TMPDIR" ] && rm -rf "$XDG_TEST_TMPDIR"
 #	else

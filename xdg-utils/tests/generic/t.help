@@ -1,7 +1,7 @@
 #!/bin/bash
 
-. "$TEST_CODE_DIR/include/testassertions.sh"
-. "$TEST_CODE_DIR/include/testdep.sh"
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testdep.sh"
 
 generic_help() {
 test_start "$FUNCNAME: generic help message - $XDGUTIL"

@@ -1,14 +1,14 @@
 #!/bin/bash
 
 ## Include utility functions.
-. "$TEST_CODE_DIR/include/testassertions.sh"
-. "$TEST_CODE_DIR/include/testdep.sh"
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testdep.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
 test_desktop_icon_uninstall() {
 ## Begin the test.
-DIR="$TEST_CODE_DIR/xdg-desktop-icon/data"
+DIR="$XDG_TEST_DIR/xdg-desktop-icon/data"
 FILE="desktop_icon_install.desktop"
 test_start "$FUNCNAME: verify $FILE is uninstalled correctly from the desktop"
 

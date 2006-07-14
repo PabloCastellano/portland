@@ -1,13 +1,13 @@
 #!/bin/bash
 
 ## Include utility functions.
-. "$TEST_CODE_DIR/include/testassertions.sh"
-. "$TEST_CODE_DIR/include/testdep.sh"
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testdep.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
 test_system_mime_install() {
-INPUT_FILE="$TEST_CODE_DIR/xdg-mime/data/testmime.xml"
+INPUT_FILE="$XDG_TEST_DIR/xdg-mime/data/testmime.xml"
 # TODO: should follow the filename tests.
 QUERY_FILE="testfile.xdgtest"
 
@@ -27,7 +27,7 @@ assert_file "$QUERY_FILE"
 
 # Verify the test type is not installed already.
 assert_exit 0 xdg-mime query filetype $QUERY_FILE
-assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textplain.expected"
+assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
 
 # Test steps section
 test_procedure
@@ -37,7 +37,7 @@ assert_nostdout
 assert_nostderr
 
 assert_exit 0 xdg-mime query filetype $QUERY_FILE
-assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textxdgpattern.expected"
+assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textxdgpattern.expected"
 assert_nostderr
 
 # TODO: this is a cleanup step

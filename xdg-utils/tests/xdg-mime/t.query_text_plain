@@ -1,8 +1,8 @@
 #!/bin/bash
 
-. "$TEST_CODE_DIR/include/testassertions.sh"
-. "$TEST_CODE_DIR/include/testdep.sh"
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testdep.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
 test_query_text_plain() {
 # TODO: expand to cover file weirdness.
@@ -23,7 +23,7 @@ assert_file "$INPUT_FILE"
 test_procedure
 
 assert_exit 0 xdg-mime query filetype "$INPUT_FILE"
-assert_stdout "$TEST_CODE_DIR/xdg-mime/data/textplain.expected"
+assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
 assert_nostderr
 
 

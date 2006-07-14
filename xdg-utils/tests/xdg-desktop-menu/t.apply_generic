@@ -1,8 +1,8 @@
 #!/bin/bash
 
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
-generic_tests=`ls $TEST_CODE_DIR/generic/t.*`
+generic_tests=`ls $XDG_TEST_DIR/generic/t.*`
 for t in $generic_tests; do 
 	. "$t"
 	repeat_test "$GENERIC_TEST" 1 "XDGUTIL" "xdg-desktop-menu"

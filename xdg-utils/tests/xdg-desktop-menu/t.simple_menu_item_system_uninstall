@@ -1,9 +1,9 @@
 #!/bin/bash
 
 ## Include utility functions.
-. "$TEST_CODE_DIR/include/testassertions.sh"
-. "$TEST_CODE_DIR/include/testdep.sh"
-. "$TEST_CODE_DIR/include/testcontrol.sh"
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testdep.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
 test_simple_menu_item_system_uninstall() {
@@ -15,7 +15,7 @@ test_init
 
 # Generate .desktop file
 FILE='menu_item_test.desktop'
-DIR="$TEST_CODE_DIR/xdg-desktop-menu/data"
+DIR="$XDG_TEST_DIR/xdg-desktop-menu/data"
 USERPATH="$XDG_DATA_DIRS:$XDG_CONFIG_DIRS"
 
 set_no_display
