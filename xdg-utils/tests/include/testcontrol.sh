@@ -98,6 +98,8 @@ while [ "$J" -le "$LENGTH" ] ; do
 done
 }
 
+. "$XDG_TEST_DIR/include/tempfile.sh"
+
 test_setup() {
 	get_guid "xdgt"
 	export XDG_TEST_ID="$GUID"
@@ -111,8 +113,6 @@ test_cleanup() {
 		cd "$XDG_TEST_DIR"
 		# ALWAYS check what you pass to 'rm -rf'
 		[ -d "$XDG_TEST_TMPDIR" ] && rm -rf "$XDG_TEST_TMPDIR"
-#	else
-#		echo "Not removing $XDG_TEST_TMPDIR"
 	fi
 }
 

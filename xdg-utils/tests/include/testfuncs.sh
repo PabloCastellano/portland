@@ -1,27 +1,3 @@
-DELETE_mkworkdir() {
-	if [ ! -z "$TEST_WORK_DIR" -a -d "$TEST_WORK_DIR" ]; then
-		return
-	fi
-	
-	NOW=`date '+%-Y-%-m-%-d_%-k-%-M-%-S.%N'`
-	
-	if [ -z "$TEMP" ] ; then
-		TEMP="./tmp-xdg-test"
-	fi
-	
-	DIR="xdgt_$NOW" 
-	while [ -d "$DIR" ]
-	do
-		DIR="$DIR"
-	done
-	
-	export TEST_WORK_DIR="$TEMP/$DIR"
-	mkdir -p "$TEST_WORK_DIR"
-}
-
-. "$XDG_TEST_DIR/include/tempfile.sh"
-
-
 verify_test_context() {
 	if [ -z "$TEST_NAME" -a ! "$USING_TET" ]; then
 		echo "A test context must be established with 'test_start <name>'!"
@@ -141,3 +117,32 @@ test_result() {
 	exit "$RESULT"
 }
 
+## TODO: validate input
+use_file() {
+	src="$1"
+	file=${src##/*/}
+	varname="$2"
+
+	outfile="xdgtestdata-$XDG_TEST_ID-$file"
+	eval "$varname=$outfile"
+	
+	cp "$src" "$XDG_TEST_TMPDIR/$outfile"
+}
+
+## TODO: validate input
+get_unique_name() {
+	varname="$1"
+	suffix="$2"
+
+	outfile="xdgtestdata-$XDG_TEST_ID-$file"
+	eval "$varname=$outfile"
+}
+
+## TODO: validate input
+edit_file() {
+	file="$1"
+	origstr="$2"
+	newstr="$3"
+
+	sed -i -e "s/$origstr/$newstr/g" "$file"
+}
