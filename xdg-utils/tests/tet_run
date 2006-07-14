@@ -24,6 +24,11 @@ for t in $TEST_FILES; do
 	. "$t"
 done
 
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+tet_startup="test_setup"
+tet_cleanup="test_cleanup"
+
 ## $iclist and all $ic1 ... $icN variables are now defined.
 echo "iclist: $iclist"
 
