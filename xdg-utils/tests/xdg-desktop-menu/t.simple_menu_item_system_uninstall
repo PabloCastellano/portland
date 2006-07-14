@@ -1,0 +1,43 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$TEST_CODE_DIR/include/testassertions.sh"
+. "$TEST_CODE_DIR/include/testdep.sh"
+. "$TEST_CODE_DIR/include/testcontrol.sh"
+
+## Test function
+test_simple_menu_item_system_uninstall() {
+## Begin the test.
+test_start "$FUNCNAME: verify a desktop file is uninstalled from the applicatiosn menu"
+
+# Dependencies section
+test_init
+
+# Generate .desktop file
+FILE='menu_item_test.desktop'
+DIR="$TEST_CODE_DIR/xdg-desktop-menu/data"
+USERPATH="$XDG_DATA_DIRS:$XDG_CONFIG_DIRS"
+
+set_no_display
+assert_exit 0 test `whoami` = root 
+
+assert_file "$DIR/$FILE"
+
+assert_exit 0 xdg-desktop-menu install --system "$DIR/$FILE"
+
+assert_file_in_path "$FILE" "$USERPATH"
+assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
+
+# Test steps section
+test_procedure
+
+assert_exit 0 xdg-desktop-menu uninstall --system "$FILE"
+assert_nostdout
+assert_nostderr
+
+assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' still present?" n
+
+test_result
+} 
+
+run_test test_simple_menu_item_system_uninstall

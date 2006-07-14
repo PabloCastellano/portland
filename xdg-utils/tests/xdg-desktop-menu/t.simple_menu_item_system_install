@@ -6,7 +6,7 @@
 . "$TEST_CODE_DIR/include/testcontrol.sh"
 
 ## Test function
-test_simple_menu_item_user_install() {
+test_simple_menu_item_system_install() {
 ## Begin the test.
 test_start "$FUNCNAME: verify a desktop file is installed in the applicatiosn menu"
 
@@ -16,8 +16,9 @@ test_init
 # Generate .desktop file
 FILE='menu_item_test.desktop'
 DIR="$TEST_CODE_DIR/xdg-desktop-menu/data"
-USERPATH="$HOME/.local:$HOME/.gnome:$HOME/.kde"
+USERPATH="$XDG_DATA_DIRS:$XDG_CONFIG_DIRS"
 
+assert_exit 0 test `whoami` = root 
 set_no_display
 
 assert_file "$DIR/$FILE"
@@ -28,7 +29,7 @@ assert_file_not_in_path "$FILE" "$USERPATH"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu install --user "$DIR/$FILE"
+assert_exit 0 xdg-desktop-menu install --system "$DIR/$FILE"
 assert_nostdout
 assert_nostderr
 
@@ -44,9 +45,9 @@ rm -f "$HOME/xdg-test-menu-item-install.tmp"
 fi
 
 ## Cleanup
-assert_exit 0 xdg-desktop-menu uninstall --user "$FILE"
+assert_exit 0 xdg-desktop-menu uninstall --system "$FILE"
 
 test_result
 } 
 
-run_test test_simple_menu_item_user_install
+run_test test_simple_menu_item_system_install
