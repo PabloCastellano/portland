@@ -117,11 +117,15 @@ test_result() {
 	exit "$RESULT"
 }
 
-## TODO: validate input
 use_file() {
 	src="$1"
 	file=${src##/*/}
 	varname="$2"
+
+	if [ $# -lt 2 ] ; then
+		echo "TEST SYNTAX ERROR: use_file must have two arguments" >&2
+		exit 255 
+	fi
 
 	outfile="xdgtestdata-$XDG_TEST_ID-$file"
 	eval "$varname=$outfile"
@@ -129,20 +133,37 @@ use_file() {
 	cp "$src" "$XDG_TEST_TMPDIR/$outfile"
 }
 
-## TODO: validate input
 get_unique_name() {
 	varname="$1"
-	suffix="$2"
+	file="$2"
+	if [ -z "$varname" ] ; then
+		echo "TEST SYNAX ERROR: get_unique_name requries a variable name"
+		exit 255
+	fi
 
 	outfile="xdgtestdata-$XDG_TEST_ID-$file"
 	eval "$varname=$outfile"
 }
 
-## TODO: validate input
 edit_file() {
 	file="$1"
 	origstr="$2"
-	newstr="$3"
+	varname="$3"
+	newstr="$4"
+
+	if [ $# -lt 3 ] ; then
+		echo "TEST SYNTAX ERROR: edit_file must have at least 3 arguments."
+		exit 255
+	fi
+	
+	assert_file "$file"
+
+	if [ -z "$newstr" ] ; then
+		newstr="xdgtestdata-$XDG_TEST_ID-$origstr"
+	fi
+	eval "$varname=$newstr"
 
 	sed -i -e "s/$origstr/$newstr/g" "$file"
 }
+
+

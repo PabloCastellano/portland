@@ -14,27 +14,28 @@ test_start "$FUNCNAME: verify $FILE is installed correctly on the desktop"
 # Dependencies section
 test_init
 
+get_unique_name INSFILE "$FILE"
 set_no_display
+echo "Some more boring text" > "$INSFILE"
+assert_file "$INSFILE" 
 
-echo "Some very boring text" > "$FILE"
-assert_file "$FILE"
 
 # Verify the test icon is not installed already.
-assert_file_not_in_path "$FILE" "$HOME/Desktop"
+assert_file_not_in_path "$INSFILE" "$HOME/Desktop"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-icon install "$FILE"
+assert_exit 0 xdg-desktop-icon install "$INSFILE"
 assert_nostdout
 assert_nostderr
 
-assert_file_in_path "$FILE" "$HOME/Desktop"
+assert_file_in_path "$INSFILE" "$HOME/Desktop"
 
-assert_interactive "Is there an icon on the desktop with name '$FILE'?" y
+assert_interactive "Is there an icon on the desktop with name '$INSFILE'?" y
 
 ## Cleanup
-assert_exit 0 xdg-desktop-icon uninstall "$FILE"
+xdg-desktop-icon uninstall "$INSFILE"
 
 test_result
 } 

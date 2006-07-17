@@ -27,7 +27,7 @@ TEST_FILES=`find $TEST_GROUPS -name 't.*'`
 
 declare -i PASS=0
 declare -i TOTAL=0
-TEST_LOG="xdg-test.log"
+TEST_LOG="$XDG_TEST_DIR/xdg-test.log"
 
 export USING_TEST_RUNNER="true"
 
@@ -44,7 +44,7 @@ for t in $TEST_LIST; do
 	test_setup
 
 	# Run test - subshell is necessary to keep things contained.
-	( "$t") >> "$TEST_LOG"
+	( "$t" ) >> "$TEST_LOG"
 	CODE="$?"
 
 	test_cleanup

@@ -14,21 +14,22 @@ test_start "$FUNCNAME: verify uninstalling $FILE does not cause an error if it i
 # Dependencies section
 test_init
 
+get_unique_name INSFILE "$FILE"
 set_no_display
-echo "Some more boring text" > "$FILE"
-assert_file "$FILE"
+echo "Some more boring text" > "$INSFILE"
+assert_file "$INSFILE" 
 
 # Verify the test icon is not installed already.
-assert_file_not_in_path "$FILE" "$HOME/Desktop"
+assert_file_not_in_path "$INSFILE" "$HOME/Desktop"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-icon uninstall "$FILE"
+assert_exit 0 xdg-desktop-icon uninstall "$INSFILE"
 assert_nostdout
 assert_nostderr
 
-assert_file_not_in_path "$FILE" "$HOME/Desktop"
+assert_file_not_in_path "$INSFILE" "$HOME/Desktop"
 
 test_result
 } 
