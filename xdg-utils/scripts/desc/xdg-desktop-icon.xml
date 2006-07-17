@@ -244,6 +244,24 @@
       visit http://www.freedesktop.org/wiki/Standards/desktop-entry-spec
     </para>
   </refsect1>
+  <refsect1 id="env_vars">
+    <title>Environment Variables</title>
+    <para>
+      xdg-desktop-icon honours the following environment variables:
+    </para>
+    <variablelist>
+      <varlistentry>
+	<term>XDG_UTILS_DEBUG_LEVEL</term>
+	<listitem>
+	  <simpara>
+	    Setting this environment variable to a non-zero numerical value
+	    makes xdg-desktop-icon do more verbose reporting on stderr.
+	    Setting a higher value increases the verbosity.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+    </variablelist>
+  </refsect1>
   <refsect1 id="exitcodes">
     <title>Exit Codes</title>
     <para>
