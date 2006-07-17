@@ -34,7 +34,7 @@ update_mime_database()
    IFS=":"
    for x in $PATH:/opt/gnome/bin; do
       if [ -x $x/update-mime-database ] ; then
-         echo Running $x/update-mime-database $1
+         DEBUG 1 "Running $x/update-mime-database $1"
          $x/update-mime-database $1
          return
       fi
@@ -44,6 +44,7 @@ update_mime_database()
 
 info_kde()
 {
+    DEBUG 1 "Running kfile \"$1\""
     kfile "$1" 2> /dev/null | head -n 1 | cut -d "(" -f 2 | cut -d ")" -f 1
 
     exit_success
@@ -51,6 +52,7 @@ info_kde()
 
 info_gnome()
 {
+    DEBUG 1 "Running gnomevfs-info \"$1\""
     gnomevfs-info "$1" 2> /dev/null | grep MIME | cut -d ":" -f 2 | sed s/"^ "//
 
     exit_success
@@ -58,6 +60,7 @@ info_gnome()
 
 info_generic()
 {
+    DEBUG 1 "Running /usr/bin/file -i \"$1\"" 
     /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | sed s/"^ "//
 
     exit_success
@@ -75,6 +78,8 @@ make_default_kde()
     # renumber [$2 - *] sections and remove duplicate
     
     default_file=$HOME/.kde/share/config/profilerc
+    DEBUG 2 "make_default_kde $1 $2"
+    DEBUG 1 "Updating $default_file"
     awk -v application="$1" -v mimetype="$2" '
     BEGIN {
         header_start="[" mimetype " - "
@@ -110,6 +115,8 @@ make_default_generic()
     xdg_user_dir=$XDG_DATA_HOME
     [ -n "$xdg_user_dir" ] || xdg_user_dir=$HOME/.local/share
     default_file=$xdg_user_dir/applications/defaults.list
+    DEBUG 2 "make_default_generic $1 $2"
+    DEBUG 1 "Updating $default_file"
     grep -v "$2=" $default_file > ${default_file}.new 2> /dev/null
     if ! grep "[Default Applications]" ${default_file}.new > /dev/null; then
        echo "[Default Applications]" >> ${default_file}.new
@@ -121,9 +128,12 @@ make_default_generic()
 
 defapp_kde()
 {
+    DEBUG 1 "Running kfile \"$1\""
     MIME=`kfile "$1" 2> /dev/null | head -n 1 | cut -d "(" -f 2 | cut -d ")" -f 1`
+    DEBUG 2 "MIME = $MIME"
 
     if [ x"$MIME" != x"" ]; then
+        DEBUG 1 "Running ktradertest \"$MIME\" Application"
         trader_result=`ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
             | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2`
         if [ -n "$trader_result" ] ; then
@@ -137,6 +147,7 @@ defapp_kde()
 
 defapp_gnome()
 {
+    DEBUG 1 "Running gnomevfs-info \"$1\""
     gnomevfs-info "$1" 2> /dev/null | grep "Default app" | cut -d ":" -f 2 \
         | cut -d " " -f 2
 
@@ -148,6 +159,7 @@ install_xsl_listmime()
 {
 # Dump script to file, can't pipe into xsltproc directly
 xsl_file=`mktemp` || return
+DEBUG 2 "Creating temporary XSL file to list mimetypes: $xsl_file"
 cat > $xsl_file << _XSL
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0"
@@ -169,6 +181,7 @@ install_xsl_shared2mimelnk()
 {
 # Dump script to file, can't pipe into xsltproc directly
 xsl_file=`mktemp` || return
+DEBUG 2 "Creating temporary XSL file to convert XML mimetype file: $xsl_file"
 cat > $xsl_file << _XSL
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <xsl:stylesheet version="1.0"
@@ -207,6 +220,7 @@ _XSL
 
 uninstall_xsl()
 {
+  DEBUG 2 "Cleaning up temporary XSL file: $xsl_file"
   rm -f $xsl_file
   xsl_file=
 }
@@ -414,11 +428,14 @@ for x in $xdg_system_dirs ; do
 done
 IFS=$IFS_save
 [ -w $xdg_global_dir ] || xdg_global_dir=
+DEBUG 3 "xdg_user_dir: $xdg_user_dir"
+DEBUG 3 "xdg_global_dir: $xdg_global_dir"
 
 # Find KDE3 mimelnk directory
 kde_user_dir=$HOME/.kde/share/mimelnk
 kde_global_dir=
 kde_global_dirs=`kde-config --path mime`
+DEBUG 3 "kde_global_dirs: $kde_global_dirs"
 [ -n $kde_global_dirs ] || kde_global_dirs=/opt/kde3/share/mimelnk:/opt/kde/share/mimelnk:/usr/share/mimelnk
 IFS_save=$IFS
 IFS=":"
@@ -426,18 +443,23 @@ first=
 for x in $kde_global_dirs ; do
     if [ -z "$first" ] ; then
         first=false
+        #TODO: Mode check seems redundant
         [ x"$mode" = x"user" ] && kde_user_dir=$x
     elif [ -w $x ] ; then
         [ x"$mode" = x"system" ] && kde_global_dir=$x
     fi
 done
 IFS=$IFS_save
+DEBUG 3 "kde_user_dir: $kde_user_dir"
+DEBUG 3 "kde_global_dir: $kde_global_dir"
 
 # TODO: Gnome legacy support
 # See http://forums.fedoraforum.org/showthread.php?t=26875
 gnome_user_dir=$HOME/.gnome/apps
 gnome_global_dir=/usr/share/gnome/apps
 [ -w $gnome_global_dir ] || gnome_global_dir=
+DEBUG 3 "gnome_user_dir: $gnome_user_dir"
+DEBUG 3 "gnome_global_dir: $gnome_global_dir"
 
 if [ x"$mode" = x"user" ] ; then
     xdg_dir=$xdg_user_dir
@@ -460,16 +482,19 @@ fi
 # echo "[gnome|$gnome_user_dir|$gnome_global_dir]"
 # echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
 
-basefile=`basename $filename`
+basefile=`basename "$filename"`
 #[ -z $vendor ] || basefile=$vendor-$basefile
 
 mimetypes=
 if [ -n "$kde_dir" ] ; then
-    echo KDE3 mimelnk directory found
+    DEBUG 2 "KDE3 mimelnk directory found, extracting mimetypes from XML file"
     install_xsl_listmime
-    mimetypes=`xsltproc $xsl_file $filename`
+    DEBUG 1 "Running xsltproc \"$xsl_file\" \"$filename\""
+    mimetypes=`xsltproc "$xsl_file" "$filename"`
     uninstall_xsl
 fi  
+
+DEBUG 1 "$action mimetype in $xdg_dir"
 
 case $action in
     install)
@@ -488,6 +513,7 @@ case $action in
             IFS='
 '
             for x in $mimetypes ; do 
+                DEBUG 1 "Installing $kde_dir/$x.desktop (KDE 3.x support)"
                 xsltproc --stringparam type $x --stringparam source $basefile $xsl_file $filename > $kde_dir/$x.desktop
             done
             IFS=$IFS_save
@@ -508,6 +534,7 @@ case $action in
 '
         for x in $mimetypes ; do 
             if grep '^# Installed by xdg-mime' $kde_dir/$x.desktop &>/dev/null ; then
+                DEBUG 1 "Removing $kde_dir/$x.desktop (KDE 3.x support)"
                 rm -f $kde_dir/$x.desktop
             fi
         done

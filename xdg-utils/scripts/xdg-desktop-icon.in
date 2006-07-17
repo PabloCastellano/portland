@@ -1,6 +1,6 @@
 #!/bin/sh
 #---------------------------------------------
-#   xdg-desktop
+#   xdg-desktop-icon
 #
 #   Utility script to install desktop items on a Linux desktop.
 #
@@ -106,6 +106,8 @@ desktop_dir=$HOME/Desktop
 
 basefile=`basename $desktop_file`
 [ -z $vendor ] || [ x"$filetype" != x"desktop" ] || basefile=$vendor-$basefile
+
+DEBUG 1 "$action $desktop_file in $desktop_dir"
 
 case $action in
     install)

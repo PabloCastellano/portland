@@ -1,11 +1,8 @@
 #!/bin/sh
 #---------------------------------------------
-#   xdg-menu
+#   xdg-desktop-menu
 #
 #   Utility script to install menu items on a Linux desktop.
-#   Works on most XDG compliant systems; does
-#   not work everywhere.
-#
 #   Refer to the usage() function below for usage.
 #
 #   Copyright 2006, Kevin Krammer <kevin.krammer@gmx.at>
@@ -35,7 +32,7 @@ update_desktop_database()
     if [ "$mode" = "system" ] ; then
         for x in `echo $PATH | sed 's/:/ /g'` /opt/gnome/bin; do
            if [ -x $x/update-desktop-database ] ; then
-              echo Running $x/update-desktop-database
+              DEBUG 1 "Running $x/update-desktop-database"
               $x/update-desktop-database
               return
            fi
@@ -193,6 +190,12 @@ else
     fi
 fi
 
+DEBUG 3 "xdg_user_dir: $xdg_user_dir"
+DEBUG 3 "xdg_global_dir: $xdg_global_dir"
+DEBUG 3 "kde_user_dir: $kde_user_dir"
+DEBUG 3 "kde_global_dir: $kde_global_dir"
+DEBUG 3 "gnome_user_dir: $gnome_user_dir"
+DEBUG 3 "gnome_global_dir: $gnome_global_dir"
 
 if [ x"$mode" = x"user" ] ; then
     xdg_dir=$xdg_user_dir
@@ -219,6 +222,8 @@ fi
 
 basefile=`basename $desktop_file`
 [ -z $vendor ] || basefile=$vendor-$basefile
+
+DEBUG 1 "$action $desktop_file in $xdg_dir $kde_dir $gnome_dir"
 
 case $action in
     install)

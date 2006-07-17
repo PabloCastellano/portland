@@ -1,10 +1,8 @@
 #!/bin/sh
 #---------------------------------------------
-#   xdg-icon
+#   xdg-icon-resource
 #
 #   Utility script to install icons on a Linux desktop.
-#   Works on most XDG compliant systems; does
-#   not work everywhere.
 #
 #   Refer to the usage() function below for usage.
 #
