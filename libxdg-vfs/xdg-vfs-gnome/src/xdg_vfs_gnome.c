@@ -686,14 +686,21 @@ int xdg_vfs_get(const char * text_uri, int opts)
 			if (r==GNOME_VFS_ERROR_EOF) break;   /* ok EOF */
 			return print_and_translate_result(r);
 		}
+		char outBuf[bytes_read*2];
+		int oc=0;
 		for(i=0;i<bytes_read;i++) 
 		{
 			int c = (int)buffer[i];
 			/*  escape char */
+			/*
 			if (c == escChar && opts & XDGVFS_OPT_DATAESCAPED) putchar(escChar); 
 			putchar (c);
+			*/
+			if (c == escChar && opts & XDGVFS_OPT_DATAESCAPED) 
+				outBuf[oc++] = escChar; 
+			outBuf[oc++] = (char)c;
 		}
-
+		fwrite (outBuf, 1, oc, stdout);
 	}
 	if (opts & XDGVFS_OPT_DATAESCAPED) 
 	{ 
