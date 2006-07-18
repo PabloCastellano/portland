@@ -13,6 +13,8 @@ test_purpose "Verify that the correct error is generated when the mime file is m
 ## Check dependencies
 test_init
 
+assert_exit 0 test `whoami` = root 
+
 set_no_display
 assert_nofile "$INPUT_FILE"
 

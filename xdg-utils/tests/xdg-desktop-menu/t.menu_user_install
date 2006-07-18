@@ -13,19 +13,23 @@ test_start "$FUNCNAME: verify a menu is created correctly"
 # Dependencies section
 test_init
 
-# Generate .desktop file
-DESKTOP='menu_item_test.desktop'
-DIRECTORY='menu_install.directory'
-MENU='menu_install.menu'
-
-DIR="$XDG_TEST_DIR/xdg-desktop-menu/data"
-USERPATH="$HOME/.local:$HOME/.config:$HOME/.gnome:$HOME/.kde"
+USERPATH="$HOME/.local:$HOME/.config"
 
 set_no_display
 
-assert_file "$DIR/$DESKTOP"
-assert_file "$DIR/$MENU"
-assert_file "$DIR/$DIRECTORY"
+# Generate .desktop file
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_item_test.desktop" DESKTOP
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_install.directory" DIRECTORY
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_install.menu" MENU
+
+edit_file "$MENU" 'menu_install.directory' tmp "$DIRECTORY"
+edit_file "$MENU" 'menu_item_test.desktop' tmp "$DESKTOP"
+
+edit_file "$DESKTOP" 'xdg-test-menu-item-install.tmp' CREATEFILE
+
+assert_file "$DESKTOP"
+assert_file "$MENU"
+assert_file "$DIRECTORY"
 
 # Verify the test icon is not installed already.
 assert_file_not_in_path "$DESKTOP" "$USERPATH"
@@ -35,36 +39,35 @@ assert_file_not_in_path "$MENU" "$USERPATH"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu install --user "$DIR/$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --user "$DESKTOP"
 assert_nostdout
 assert_nostderr
 assert_file_in_path "$DESKTOP" "$USERPATH"
 
-assert_exit 0 xdg-desktop-menu install --user "$DIR/$DIRECTORY"
+assert_exit 0 xdg-desktop-menu install --user "$DIRECTORY"
 assert_nostdout
 assert_nostderr
 assert_file_in_path "$DIRECTORY" "$USERPATH"
 
-assert_exit 0 xdg-desktop-menu install --user "$DIR/$MENU"
+assert_exit 0 xdg-desktop-menu install --user "$MENU"
 assert_nostdout
 assert_nostderr
 assert_file_in_path "$MENU" "$USERPATH"
 
 
 if [ -z "$XDG_TEST_NO_INTERACTIVE" ]; then
-assert_interactive "Is the 'Applications/XDG UTILS TEST' menu present?" y
 assert_interactive "Is there a single item in 'Applications/XDG UTILS TEST' called 'Test Menu Item Install'?" y
 assert_interactive "Please select the menu item 'Applications/XDG UTILS TEST/Test Menu Item Install'"
 
 ## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
-assert_file "$HOME/xdg-test-menu-item-install.tmp"
-rm -f "$HOME/xdg-test-menu-item-install.tmp"
+assert_file "$HOME/$CREATEFILE"
+rm -f "$HOME/$CREATEFILE"
 fi
 
 ## Cleanup
-assert_exit 0 xdg-desktop-menu uninstall --user "$DESKTOP"
-assert_exit 0 xdg-desktop-menu uninstall --user "$DIRECTORY"
-assert_exit 0 xdg-desktop-menu uninstall --user "$MENU"
+xdg-desktop-menu uninstall --user "$DESKTOP"
+xdg-desktop-menu uninstall --user "$DIRECTORY"
+xdg-desktop-menu uninstall --user "$MENU"
 
 test_result
 } 

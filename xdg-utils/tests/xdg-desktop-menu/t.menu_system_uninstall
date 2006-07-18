@@ -6,40 +6,42 @@
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
-test_menu_system_install() {
+test_menu_system_uninstall() {
 ## Begin the test.
-test_start "$FUNCNAME: verify a menu is created correctly"
+test_start "$FUNCNAME: verify a menu is removed correctly"
 
 # Dependencies section
 test_init
 
-# Generate .desktop file
-DESKTOP='menu_item_test.desktop'
-DIRECTORY='menu_install.directory'
-MENU='menu_install.menu'
-
-DIR="$XDG_TEST_DIR/xdg-desktop-menu/data"
 USERPATH="$XDG_DATA_DIRS:$XDG_CONFIG_DIRS"
 
-set_no_display
-assert_exit 0 test `whoami` = root 
+# Generate .desktop file
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_item_test.desktop" DESKTOP
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_install.directory" DIRECTORY
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_install.menu" MENU
 
-assert_file "$DIR/$DESKTOP"
-assert_file "$DIR/$MENU"
-assert_file "$DIR/$DIRECTORY"
+edit_file "$MENU" 'menu_install.directory' tmp "$DIRECTORY"
+edit_file "$MENU" 'menu_item_test.desktop' tmp "$DESKTOP"
+
+edit_file "$DESKTOP" 'xdg-test-menu-item-install.tmp' CREATEFILE
+
+assert_file "$DESKTOP"
+assert_file "$MENU"
+assert_file "$DIRECTORY"
+
 
 # Verify the test icon is not installed already.
 assert_file_not_in_path "$DESKTOP" "$USERPATH"
 assert_file_not_in_path "$DIRECTORY" "$USERPATH"
 assert_file_not_in_path "$MENU" "$USERPATH"
 
-assert_exit 0 xdg-desktop-menu install --system "$DIR/$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --system "$DESKTOP"
 assert_file_in_path "$DESKTOP" "$USERPATH"
 
-assert_exit 0 xdg-desktop-menu install --system "$DIR/$DIRECTORY"
+assert_exit 0 xdg-desktop-menu install --system "$DIRECTORY"
 assert_file_in_path "$DIRECTORY" "$USERPATH"
 
-assert_exit 0 xdg-desktop-menu install --system "$DIR/$MENU"
+assert_exit 0 xdg-desktop-menu install --system "$MENU"
 assert_file_in_path "$MENU" "$USERPATH"
 
 assert_interactive "Is the menu item 'Applications/XDG UTILS TEST/Test Menu Item Install' present?" y
@@ -62,11 +64,10 @@ assert_nostdout
 assert_nostderr
 assert_file_not_in_path "$MENU" "$USERPATH"
 
-assert_interactive "Is the 'Applications/XDG UTILS TEST' menu still present?" n
-assert_interactive "Is there any trace of the 'Test Menu Item Install' menu item" n
+assert_interactive "Is the 'Applications/XDG UTILS TEST' (or any trace of) menu still present?" n
 
 
 test_result
 } 
 
-run_test test_menu_system_install
+run_test test_menu_system_uninstall

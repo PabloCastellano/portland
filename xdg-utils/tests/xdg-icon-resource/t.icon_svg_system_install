@@ -12,8 +12,6 @@ ICON="red-SVG.svg"
 test_start "$FUNCNAME: verify $ICON is installed correctly with --system"
 
 ## Begin the test.
-icondir="$XDG_TEST_DIR/icons"
-systempath="$HOME/.icons:$HOME/.local:$XDG_DATA_HOME"
 systempath="$XDG_DATA_DIRS:/usr/share/pixmaps"
 
 # Dependencies section
@@ -22,21 +20,22 @@ test_init
 assert_exit 0 test `whoami` = root 
 
 set_no_display
-assert_file "$icondir/$ICON"
+use_file "$XDG_TEST_DIR/icons/$ICON" ICONFILE
+assert_file "$ICONFILE"
 
 # Verify the test icon is not installed already.
-assert_file_not_in_path "$ICON" "$systempath"
+assert_file_not_in_path "$ICONFILE" "$systempath"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource install --system "$icondir/$ICON"
+assert_exit 0 xdg-icon-resource install --system "$ICONFILE"
 assert_nostdout
 assert_nostderr
 
-assert_file_in_path "$ICON" "$systempath"
+assert_file_in_path "$ICONFILE" "$systempath"
 
-assert_exit 0 xdg-icon-resource uninstall --system "$icondir/$ICON"
+assert_exit 0 xdg-icon-resource uninstall --system "$ICONFILE"
 
 test_result
 } 

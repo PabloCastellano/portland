@@ -7,8 +7,6 @@
 
 ## Test function
 test_icon_system_as_nonroot() {
-iconfile="red-32.png"
-icondir="$XDG_TEST_DIR/icons"
 ICON_PATH="$HOME/.icons:$XDG_DATA_DIRS:/usr/share/pixmaps:$HOME/.local/icons:$XDG_DATA_HOME"
 
 ## Begin the test.
@@ -20,21 +18,22 @@ test_init
 assert_exit 0 test `whoami` != root
 
 set_no_display
-assert_file "$icondir/$iconfile"
+use_file "$XDG_TEST_DIR/icons/red-32.png" ICONFILE
+assert_file "$ICONFILE"
 
 # Verify the test icon is not installed already.
-assert_file_not_in_path "$iconfile" "$ICON_PATH"
+assert_file_not_in_path "$ICONFILE" "$ICON_PATH"
 
 # Test steps section
 test_procedure
 
-assert_exit 3 xdg-icon-resource install --system --size 32 "$icondir/$iconfile"
+assert_exit 3 xdg-icon-resource install --system --size 32 "$ICONFILE"
 assert_nostdout
 assert_stderr
 
-assert_file_not_in_path "$iconfile" "$ICON_PATH"
+assert_file_not_in_path "$ICONFILE" "$ICON_PATH"
 
-assert_exit 3 xdg-icon-resource uninstall --system --size 32 "$iconfile"
+assert_exit 3 xdg-icon-resource uninstall --system --size 32 "$ICONFILE"
 assert_nostdout
 assert_stderr
 

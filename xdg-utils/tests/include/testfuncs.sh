@@ -127,6 +127,8 @@ use_file() {
 		exit 255 
 	fi
 
+	assert_file "$src"
+
 	outfile="xdgtestdata-$XDG_TEST_ID-$file"
 	eval "$varname=$outfile"
 	

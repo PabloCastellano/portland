@@ -7,7 +7,6 @@
 
 ## Test function
 test_notexist_mime_uninstall() {
-INPUT_FILE="$XDG_TEST_DIR/xdg-mime/data/testmime.xml"
 # TODO: should follow the filename tests.
 QUERY_FILE="testfile.xdgtest"
 
@@ -18,13 +17,16 @@ test_start "$FUNCNAME: uninstall mime type that is not present"
 test_init
 
 set_no_display
+
+use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE
+edit_file "$INPUT_FILE" "x-xdg-testpattern" TEST_MIME "x-$XDG_TEST_ID" 
 assert_file $INPUT_FILE
+
 echo "Some text." > $QUERY_FILE
 assert_file "$QUERY_FILE"
 
 # Install & verify mime type is installed
-assert_exit 0 xdg-mime query filetype $QUERY_FILE
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
+assert_exit 0 xdg-mime query filetype "$QUERY_FILE" >mimesave.expected
 
 # Test steps section
 test_procedure
@@ -33,9 +35,9 @@ assert_exit 0 xdg-mime uninstall --user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
-## Verify uninstall
-assert_exit 0 xdg-mime query filetype $QUERY_FILE
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
+## Verify no change
+assert_exit 0 xdg-mime query filetype "$QUERY_FILE"
+assert_stdout mimesave.expected
 
 test_result
 } 

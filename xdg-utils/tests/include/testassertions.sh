@@ -26,6 +26,14 @@ assert_exit() # execute command (saving output) and check exit code
 assert_interactive() {
 	query=$1
 	expect=$2
+# It seems valuable to see what happens even if the test has failed. 
+# (eg fail on stdout.)
+#	if [ "$TEST_STATUS" = 'FAIL' ] ; then
+#		## Don't waste user's time if test has already failed.
+#		test_infoline "Test has already FAILed. Not bothering to ask '$query'" 
+#		return
+#	fi
+
 	if [ ! -z "$XDG_TEST_NO_INTERACTIVE" ] ; then
 		test_infoline "Assumed '$query' is '$expect'"
 	 	return

@@ -14,23 +14,24 @@ test_start "$FUNCNAME: verify a desktop file is uninstalled from the applicatios
 test_init
 
 # Generate .desktop file
-FILE='menu_item_test.desktop'
-DIR="$XDG_TEST_DIR/xdg-desktop-menu/data"
 USERPATH="$HOME/.local:$HOME/.gnome:$HOME/.kde"
 
 set_no_display
 
-assert_file "$DIR/$FILE"
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_item_test.desktop" DESKTOP
+edit_file "$DESKTOP" 'xdg-test-menu-item-install.tmp' CREATEFILE
 
-assert_exit 0 xdg-desktop-menu install --user "$DIR/$FILE"
+assert_file "$DESKTOP"
 
-assert_file_in_path "$FILE" "$USERPATH"
+assert_exit 0 xdg-desktop-menu install --user "$DESKTOP"
+
+assert_file_in_path "$DESKTOP" "$USERPATH"
 assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu uninstall --user "$FILE"
+assert_exit 0 xdg-desktop-menu uninstall --user "$DESKTOP"
 assert_nostdout
 assert_nostderr
 

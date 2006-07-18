@@ -7,9 +7,7 @@
 
 ## Test function
 test_double_mime_install() {
-INPUT_FILE="$XDG_TEST_DIR/xdg-mime/data/testmime.xml"
 # TODO: should follow the filename tests.
-QUERY_FILE="testfile.xdgtest"
 
 ## Begin the test.
 test_start "$FUNCNAME: verify installing an existing mime type is OK"
@@ -18,14 +16,18 @@ test_start "$FUNCNAME: verify installing an existing mime type is OK"
 test_init
 
 set_no_display
-assert_file $INPUT_FILE
-echo "Some text." > $QUERY_FILE
-assert_file "$QUERY_FILE"
+use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE
+edit_file "$INPUT_FILE" "x-xdg-testpattern" TEST_MIME "x-$XDG_TEST_ID"
+assert_file "$INPUT_FILE"
+echo "text/$TEST_MIME" >testmime.expected
+
+echo "Some text." >testfile.xdgtest
+assert_file testfile.xdgtest
 
 # Verify the test type is not installed already.
 assert_exit 0 xdg-mime install --user "$INPUT_FILE"
-assert_exit 0 "xdg-mime query filetype $QUERY_FILE"
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textxdgpattern.expected"
+assert_exit 0 xdg-mime query filetype testfile.xdgtest
+assert_stdout testmime.expected
 
 # Test steps section
 test_procedure
@@ -34,12 +36,12 @@ assert_exit 0 xdg-mime install --user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-mime query filetype $QUERY_FILE
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textxdgpattern.expected"
+assert_exit 0 xdg-mime query filetype testfile.xdgtest
+assert_stdout testmime.expected
 assert_nostderr
 
-# TODO: this is a cleanup step
-assert_exit 0 xdg-mime uninstall --user "$INPUT_FILE"
+# this is a cleanup step
+xdg-mime uninstall --user "$INPUT_FILE"
 
 test_result
 } 

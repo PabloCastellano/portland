@@ -10,29 +10,28 @@ test_icon_user_install() {
 test_start "$FUNCNAME: verify $ICON is installed correctly"
 
 ## Begin the test.
-icondir="$XDG_TEST_DIR/icons"
 userpath="$HOME/.icons:$HOME/.local:$XDG_DATA_HOME"
-systempath="$XDG_DATA_DIRS:/usr/share/pixmaps"
 
 # Dependencies section
 test_init
 
 set_no_display
-assert_file "$icondir/$ICON"
+use_file "$XDG_TEST_DIR/icons/$ICON" ICONFILE
+assert_file "$ICONFILE"
 
 # Verify the test icon is not installed already.
-assert_file_not_in_path "$ICON" "$userpath"
+assert_file_not_in_path "$ICONFILE" "$userpath"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource install --user --size "$SIZE" "$icondir/$ICON"
+assert_exit 0 xdg-icon-resource install --user --size "$SIZE" "$ICONFILE"
 assert_nostdout
 assert_nostderr
 
-assert_file_in_path "$ICON" "$userpath"
+assert_file_in_path "$ICONFILE" "$userpath"
 
-assert_exit 0 xdg-icon-resource uninstall --user --size "$SIZE" "$icondir/$ICON"
+xdg-icon-resource uninstall --user --size "$SIZE" "$ICONFILE"
 
 test_result
 } 

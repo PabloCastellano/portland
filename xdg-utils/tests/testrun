@@ -36,11 +36,13 @@ for t in $TEST_FILES; do
 done
 
 echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
-echo "TEST_LIST: $TEST_LIST"
+#echo "TEST_LIST: $TEST_LIST"
 
 for t in $TEST_LIST; do
 	TOTAL=$((TOTAL + 1 ))
 
+	echo -n "$t: "
+	
 	test_setup
 
 	# Run test - subshell is necessary to keep things contained.
@@ -52,6 +54,7 @@ for t in $TEST_LIST; do
 	# Report result
 	if [ "$CODE" -eq 0 ] ; then
 		PASS=$((PASS + 1))
+		RESULT=pass
 	else
 		case "$CODE" in
 		1 ) RESULT=FAIL;;
@@ -59,8 +62,9 @@ for t in $TEST_LIST; do
 		7 ) RESULT=NORESULT;;
 		* ) RESULT="UNKNOWN($CODE)";;
 		esac
-		echo  "$RESULT: $t"
+		#echo  "$RESULT: $t"
 	fi
+	echo "$RESULT"
 done
 echo -n "[`date`] TEST RUN END: $* - " >> "$TEST_LOG"
 echo "$PASS of $TOTAL tests passed." | tee -a "$TEST_LOG"
