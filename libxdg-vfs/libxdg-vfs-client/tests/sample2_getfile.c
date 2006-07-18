@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 			}
 			case XDGVFS_DATAIN:
 			{ 
-					fprintf(stderr, "file-data chunklen=%d\n", len);
+					/* fprintf(stderr, "file-data chunklen=%d\n", len); */
 					fwrite (buf, 1, len, stdout); /* your file data */
 					break;
 			}
