@@ -4,19 +4,55 @@
 ## testrun dir1 dir2 ... 
 ## testrun t.foo t.bar ...
 ## Will find and run all files in dirs that begin with t.*
+usage() {
+cat << _ENDUSAGE_ 
+Usage:
+$0 [-iIcCh] [test|testgroup] [...]
 
-## Result format:
-## dir1/sub/path/t.foo: FAIL: some reason
-## dir1/sub/path/t.bar: UNTESTED: some other reason
+Options:
+     [-h]      Show this message and exit.
 
+     [-I|-i]   Turn off/on interactive tests. 
+               (overrides XDG_TEST_NO_INTERACTIVE)
+  
+     [-C|-c]   Turn off/on deletion of tempfiles.
+               (overrides XDG_TEST_DONT_CLEANUP)
+
+
+Arguments:
+
+After options, all arguments correspond to tests to run. The default is to run all tests, which consist of all files matching 'xdg-*/t.*'.
+
+Supplied testgroups can be a list of directories or a list of individual tests.
+
+
+_ENDUSAGE_
+exit 1
+}
+## Set up prerequisites
 if [ -z "$XDG_TEST_DIR" ] ; then
 	export XDG_TEST_DIR=`pwd`
 	echo "WARNING: guessed XDG_TEST_DIR to be $XDG_TEST_DIR"
 fi
-if [ -d "$XDG_TEST_DIR/../scripts" ] ; then
+if [ -z `which xdg-mime` ] && [ -d "$XDG_TEST_DIR/../scripts" ] ; then
 	export PATH="$PATH:$XDG_TEST_DIR/../scripts"
+	echo "WARNING: modified PATH to add '$XDG_TEST_DIR/../scripts'"
 fi
 
+## Read options
+while getopts "iIcCh" opt; do
+	case $opt in
+		I ) export XDG_TEST_NO_INTERACTIVE="set" ;;
+		i ) unset XDG_TEST_NO_INTERACTIVE ;;
+		C ) export XDG_TEST_DONT_CLEANUP="set" ;;
+		c ) unset XDG_TEST_DONT_CLEANUP ;;
+		h ) usage ;;
+		\? ) usage ;;
+	esac
+done
+shift $(($OPTIND - 1))
+
+## Read test groups
 if [ $# -eq 0 ] ; then
 	TEST_GROUPS=`find "$XDG_TEST_DIR" -type d -name 'xdg-*'`
 else
