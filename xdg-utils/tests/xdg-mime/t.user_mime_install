@@ -27,7 +27,9 @@ assert_file testfile.xdgtest
 
 # Verify the test type is not installed already.
 assert_exit 0 xdg-mime query filetype testfile.xdgtest
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
+assert_stdout 
+mv out.stdout out.save1
+assert_exit 1 diff out.save1 testmime.expected
 
 # Test steps section
 test_procedure
@@ -36,7 +38,7 @@ assert_exit 0 xdg-mime install --user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-mime query filetype $QUERY_FILE
+assert_exit 0 xdg-mime query filetype testfile.xdgtest
 assert_stdout testmime.expected
 assert_nostderr
 

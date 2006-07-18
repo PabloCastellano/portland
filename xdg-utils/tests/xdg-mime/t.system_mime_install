@@ -15,7 +15,7 @@ test_purpose "Verify that new mime types get installed into the system space cor
 # Dependencies section
 test_init
 
-assert_exit 0 test `whoami` = root 
+require_root
 
 set_no_display
 use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE

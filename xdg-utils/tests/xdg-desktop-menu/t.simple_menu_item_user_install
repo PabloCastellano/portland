@@ -36,8 +36,8 @@ assert_nostderr
 assert_file_in_path "$DESKTOP" "$USERPATH"
 
 if [ -z "$XDG_TEST_NO_INTERACTIVE" ]; then
-assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
-assert_interactive "Please select the menu item 'Applications/Applications/Test Menu Item Install'"
+assert_interactive_notroot "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
+assert_interactive_notroot "Please select the menu item 'Applications/Applications/Test Menu Item Install'"
 
 ## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
 assert_file "$HOME/$CREATEFILE"

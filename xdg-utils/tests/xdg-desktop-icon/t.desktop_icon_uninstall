@@ -25,7 +25,7 @@ set_no_display
 assert_exit 0 xdg-desktop-icon install  "$XDG_TEST_TMPDIR/$DESK_FILE"
 
 assert_file_in_path "$DESK_FILE" "$HOME/Desktop"
-assert_interactive "Is an icon named 'Test Desktop Icon Install' present on the desktop?" y
+assert_interactive_notroot "Is an icon named 'Test Desktop Icon Install' present on the desktop?" y
 
 # Test steps section
 test_procedure
@@ -35,7 +35,7 @@ assert_nostdout
 assert_nostderr
 
 assert_file_not_in_path "$DESK_FILE" "$HOME/Desktop"
-assert_interactive "Is an icon named 'Test Desktop Icon Install' still present on the desktop?" n
+assert_interactive_notroot "Is an icon named 'Test Desktop Icon Install' still present on the desktop?" n
 
 test_result
 } 

@@ -45,7 +45,7 @@ assert_file_in_path "$DIRECTORY" "$USERPATH"
 assert_exit 0 xdg-desktop-menu install --user "$MENU"
 assert_file_in_path "$MENU" "$USERPATH"
 
-assert_interactive "Is the menu item 'Applications/XDG UTILS TEST/Test Menu Item Install' present?" y
+assert_interactive_notroot "Is the menu item 'Applications/XDG UTILS TEST/Test Menu Item Install' present?" y
 
 # Test steps section
 test_procedure
@@ -65,7 +65,7 @@ assert_nostdout
 assert_nostderr
 assert_file_not_in_path "$MENU" "$USERPATH"
 
-assert_interactive "Is the 'Applications/XDG UTILS TEST' menu (or any traceterof) still present?" n
+assert_interactive_notroot "Is the 'Applications/XDG UTILS TEST' menu (or any traceterof) still present?" n
 
 test_result
 } 

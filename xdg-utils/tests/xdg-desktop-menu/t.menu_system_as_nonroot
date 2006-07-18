@@ -15,9 +15,9 @@ test_start "$FUNCNAME: verify error for --system when run as a normal user"
 # Dependencies section
 test_init
 
-assert_exit 0 test `whoami` != root
-
+require_notroot
 set_no_display
+
 use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_item_test.desktop" DESKTOP
 edit_file "$DESKTOP" 'xdg-test-menu-item-install.tmp' CREATEFILE
 assert_file "$DESKTOP"

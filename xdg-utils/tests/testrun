@@ -54,7 +54,7 @@ shift $(($OPTIND - 1))
 
 ## Read test groups
 if [ $# -eq 0 ] ; then
-	TEST_GROUPS=`find "$XDG_TEST_DIR" -type d -name 'xdg-*'`
+	TEST_GROUPS=`ls -d $XDG_TEST_DIR/xdg-*`
 else
 	TEST_GROUPS="$@"
 fi
@@ -63,6 +63,7 @@ TEST_FILES=`find $TEST_GROUPS -name 't.*'`
 
 declare -i PASS=0
 declare -i TOTAL=0
+declare -i ATTEMPT=0
 TEST_LOG="$XDG_TEST_DIR/xdg-test.log"
 
 export USING_TEST_RUNNER="true"
@@ -76,6 +77,7 @@ echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
 
 for t in $TEST_LIST; do
 	TOTAL=$((TOTAL + 1 ))
+	ATTEMPT=$((ATTEMPT + 1 ))
 
 	echo -n "$t: "
 	
@@ -90,12 +92,14 @@ for t in $TEST_LIST; do
 	# Report result
 	if [ "$CODE" -eq 0 ] ; then
 		PASS=$((PASS + 1))
-		RESULT=pass
+		RESULT=PASS
 	else
 		case "$CODE" in
 		1 ) RESULT=FAIL;;
-		5 ) RESULT=UNTESTED;;
-		7 ) RESULT=NORESULT;;
+		5 ) RESULT=UNTESTED
+		    TOTAL=$((TOTAL - 1 )) ## HACK: we don't want to count tests that don't run.
+		    ;;
+		7 ) RESULT=NORESULT ;; 
 		* ) RESULT="UNKNOWN($CODE)";;
 		esac
 		#echo  "$RESULT: $t"
@@ -103,7 +107,7 @@ for t in $TEST_LIST; do
 	echo "$RESULT"
 done
 echo -n "[`date`] TEST RUN END: $* - " >> "$TEST_LOG"
-echo "$PASS of $TOTAL tests passed." | tee -a "$TEST_LOG"
+echo "$PASS of $TOTAL tests passed. ($ATTEMPT attempted)" | tee -a "$TEST_LOG"
 echo "See $TEST_LOG for details."
 
 if [ $(( $TOTAL - $PASS )) -gt 0 ]; then

@@ -56,8 +56,8 @@ assert_file_in_path "$MENU" "$USERPATH"
 
 
 if [ -z "$XDG_TEST_NO_INTERACTIVE" ]; then
-assert_interactive "Is there a single item in 'Applications/XDG UTILS TEST' called 'Test Menu Item Install'?" y
-assert_interactive "Please select the menu item 'Applications/XDG UTILS TEST/Test Menu Item Install'"
+assert_interactive_notroot "Is there a single item in 'Applications/XDG UTILS TEST' called 'Test Menu Item Install'?" y
+assert_interactive_notroot "Please select the menu item 'Applications/XDG UTILS TEST/Test Menu Item Install'"
 
 ## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
 assert_file "$HOME/$CREATEFILE"

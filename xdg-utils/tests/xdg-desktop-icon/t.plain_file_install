@@ -32,7 +32,7 @@ assert_nostderr
 
 assert_file_in_path "$INSFILE" "$HOME/Desktop"
 
-assert_interactive "Is there an icon on the desktop with name '$INSFILE'?" y
+assert_interactive_notroot "Is there an icon on the desktop with name '$INSFILE'?" y
 
 ## Cleanup
 xdg-desktop-icon uninstall "$INSFILE"

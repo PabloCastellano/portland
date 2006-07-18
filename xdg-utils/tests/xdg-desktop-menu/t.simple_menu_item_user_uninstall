@@ -26,7 +26,7 @@ assert_file "$DESKTOP"
 assert_exit 0 xdg-desktop-menu install --user "$DESKTOP"
 
 assert_file_in_path "$DESKTOP" "$USERPATH"
-assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
+assert_interactive_notroot "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
 
 # Test steps section
 test_procedure
@@ -35,7 +35,7 @@ assert_exit 0 xdg-desktop-menu uninstall --user "$DESKTOP"
 assert_nostdout
 assert_nostderr
 
-assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' still present?" n
+assert_interactive_notroot "Is the menu item 'Applications/Applications/Test Menu Item Install' still present?" n
 
 test_result
 } 

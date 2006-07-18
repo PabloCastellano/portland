@@ -23,6 +23,12 @@ assert_exit() # execute command (saving output) and check exit code
     fi
 }
 
+assert_interactive_notroot() {
+	if [ `whoami` != 'root' ] ; then
+		assert_interactive $@
+	fi
+}
+
 assert_interactive() {
 	query=$1
 	expect=$2
@@ -217,4 +223,16 @@ infofile() # write file to journal using tet_infoline
     do
 	test_infoline "$prefix$line"
     done < "$1"
+}
+
+require_root() {
+    if [ `whoami` != 'root' ] ; then
+	test_result UNTESTED "not running as root, but test requires su privlages"
+    fi
+}
+
+require_notroot() {
+    if [ `whoami` = 'root' ] ; then
+	test_result UNTESTED "running as root, but test must be run as a normal user"
+    fi
 }

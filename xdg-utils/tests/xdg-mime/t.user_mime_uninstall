@@ -26,7 +26,9 @@ echo "text/$TEST_MIME" >testmime.expected
 echo "Some text." >testfile.xdgtest
 assert_file testfile.xdgtest
 
-xdg-mime query filetype testfile.xdgtest >origmime.save
+assert_exit 0 xdg-mime query filetype testfile.xdgtest
+assert_stdout
+mv out.stdout origmime.save
 
 # Install & verify mime type is installed
 assert_exit 0 xdg-mime install --user "$INPUT_FILE"

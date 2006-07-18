@@ -15,7 +15,7 @@ test_start "$FUNCNAME: verify error for --system when run as a normal user"
 # Dependencies section
 test_init
 
-assert_exit 0 test `whoami` != root
+require_notroot
 
 set_no_display
 
@@ -30,7 +30,8 @@ assert_file "$QUERY_FILE"
 
 # Verify the test type is not installed already.
 assert_exit 0 xdg-mime query filetype $QUERY_FILE
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
+assert_stdout
+mv out.stdout out.saved1
 
 # Test steps section
 test_procedure
@@ -39,8 +40,8 @@ assert_exit 3 xdg-mime install --system "$INPUT_FILE"
 assert_nostdout
 assert_stderr
 
-assert_exit 0 xdg-mime query filetype $QUERY_FILE
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
+assert_exit 0 xdg-mime query filetype "$QUERY_FILE"
+assert_stdout out.saved1
 assert_nostderr
 
 assert_exit 3 xdg-mime uninstall --system "$INPUT_FILE"

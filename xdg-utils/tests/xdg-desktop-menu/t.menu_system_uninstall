@@ -13,6 +13,8 @@ test_start "$FUNCNAME: verify a menu is removed correctly"
 # Dependencies section
 test_init
 
+set_no_display
+
 USERPATH="$XDG_DATA_DIRS:$XDG_CONFIG_DIRS"
 
 # Generate .desktop file
