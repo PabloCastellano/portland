@@ -236,3 +236,20 @@ require_notroot() {
 	test_result UNTESTED "running as root, but test must be run as a normal user"
     fi
 }
+
+set_no_display() {
+	unset DISPLAY
+}
+
+assert_display() {
+	if [ -z "$DISPLAY" ] ; then 
+		test_fail "DISPLAY not set!"
+	fi
+}
+
+assert_util_var() {
+if [ "x$XDGUTIL" = x ]; then
+	test_fail "XDGUTIL variable not set"
+fi
+}
+

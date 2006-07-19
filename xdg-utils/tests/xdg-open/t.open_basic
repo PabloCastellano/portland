@@ -1,0 +1,29 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_open_basic() {
+test_start "$FUNCTNAME: verify basic file open test."
+
+test_init
+use_file "$XDG_TEST_DIR/xdg-open/data/open.txt" TARG
+
+## Require a running X server
+assert_exit 0 [ ! -z "$DISPLAY" ]
+
+test_procedure
+
+assert_exit 0 xdg-open $TARG
+assert_nostdout
+assert_nostderr
+
+assert_interactive "Did a text editor open a file containing the string 'I am open.'?" y
+
+test_result
+}
+
+run_test test_open_basic

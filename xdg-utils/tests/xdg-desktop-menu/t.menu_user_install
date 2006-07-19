@@ -2,7 +2,7 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-. "$XDG_TEST_DIR/include/testdep.sh"
+
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function

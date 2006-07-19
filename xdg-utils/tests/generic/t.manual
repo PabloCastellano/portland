@@ -1,7 +1,7 @@
 #!/bin/bash
 
 . "$XDG_TEST_DIR/include/testassertions.sh"
-. "$XDG_TEST_DIR/include/testdep.sh"
+
 
 generic_manual() {
 test_start "$FUNCNAME: generic manual - $XDGUTIL"

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_open_dir() {
+test_start "$FUNCTNAME: verify basic directory open test."
+
+test_init
+
+## Require a running X server
+assert_exit 0 [ ! -z "$DISPLAY" ]
+
+test_procedure
+
+assert_exit 0 xdg-open "$XDG_TEST_DIR"
+assert_nostdout
+assert_nostderr
+
+assert_interactive "Did a file browser open to $XDG_TEST_DIR?" y
+
+test_result
+}
+
+run_test test_open_dir
