@@ -12,7 +12,7 @@ test_start "$FUNCTNAME: verify basic directory open test."
 test_init
 
 ## Require a running X server
-assert_exit 0 [ ! -z "$DISPLAY" ]
+assert_display
 
 test_procedure
 

@@ -10,7 +10,7 @@ assert_exit() # execute command (saving output) and check exit code
     shift 1
 
     # $1 is command, $2 is expected exit code (0 or "N" for non-zero)
-    ( $@ > out.stdout 2> out.stderr ) 
+    ( "$@" > out.stdout 2> out.stderr ) 
     CODE="$?"
 
     if [ -z "$EXPECT" ]; then
@@ -44,6 +44,7 @@ assert_interactive() {
 		test_infoline "Assumed '$query' is '$expect'"
 	 	return
 	fi
+	echo ""
 	if [  ! -z "$expect" ] ; then
 		if [ "$expect" != y -a "$expect" != n ] ; then
 			echo "TEST SYNTAX ERROR: interactive assertions require 'y' or 'n' as choices."
