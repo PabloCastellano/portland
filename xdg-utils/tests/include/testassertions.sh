@@ -25,7 +25,7 @@ assert_exit() # execute command (saving output) and check exit code
 
 assert_interactive_notroot() {
 	if [ `whoami` != 'root' ] ; then
-		assert_interactive $@
+		assert_interactive "$@"
 	fi
 }
 
@@ -47,7 +47,7 @@ assert_interactive() {
 	echo ""
 	if [  ! -z "$expect" ] ; then
 		if [ "$expect" != y -a "$expect" != n ] ; then
-			echo "TEST SYNTAX ERROR: interactive assertions require 'y' or 'n' as choices."
+			echo "TEST SYNTAX ERROR: interactive assertions require 'y' or 'n' as choices. (found '$expect')"
 			exit 255
 		fi
 		echo -n "$query [y/n]: " >&2
@@ -224,6 +224,12 @@ infofile() # write file to journal using tet_infoline
     do
 	test_infoline "$prefix$line"
     done < "$1"
+}
+
+require_interactive() {
+    if [ ! -z "$XDG_TEST_NO_INTERACTIVE" ] ; then
+	test_result UNTESTED "XDG_TEST_NO_INTERACTIVE is set, but this test needs interactive"
+    fi
 }
 
 require_root() {

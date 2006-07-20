@@ -1,0 +1,22 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_su_no_carg() {
+test_start "$FUNCTNAME: expected error when -c has no option"
+
+test_procedure
+
+assert_exit 1 xdg-su -c ''
+assert_nostdout
+assert_stderr
+
+assert_interactive "Were you prompted for the admin password?" n
+
+test_result
+}
+
+run_test test_su_no_carg
