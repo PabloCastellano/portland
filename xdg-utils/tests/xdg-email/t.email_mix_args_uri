@@ -5,8 +5,8 @@
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
-test_email_uri() {
-test_start "$FUNCTNAME: verify uri email compose"
+test_email_mix_args_uri() {
+test_start "$FUNCTNAME: verify an email is generated correctly when called with both a uri and not."
 
 ADDR="$XDG_TEST_ID@portland.freedesktop.org"
 
@@ -17,7 +17,7 @@ assert_display
 
 test_procedure
 
-assert_exit 0 xdg-email "mailto:$ADDR?subject=Test%20Subject&cc=cc-$ADDR&body=Test%20Body"
+assert_exit 0 xdg-email --cc "ccarg-$ADDR" --subject "Subject arg"  "mailto:$ADDR?cc=ccuri-$ADDR&body=Body URI" "t2-$ADDR"
 
 assert_nostdout
 assert_nostderr
@@ -27,4 +27,4 @@ assert_interactive "Did a new email open with To/CC/Subject/Body fields complete
 test_result
 }
 
-run_test test_email_uri
+run_test test_email_mix_args_uri

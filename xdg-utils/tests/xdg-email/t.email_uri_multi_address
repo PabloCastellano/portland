@@ -5,7 +5,7 @@
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
-test_email_uri() {
+test_email_uri_multi_address() {
 test_start "$FUNCTNAME: verify uri email compose"
 
 ADDR="$XDG_TEST_ID@portland.freedesktop.org"
@@ -17,14 +17,14 @@ assert_display
 
 test_procedure
 
-assert_exit 0 xdg-email "mailto:$ADDR?subject=Test%20Subject&cc=cc-$ADDR&body=Test%20Body"
+assert_exit 0 xdg-email "mailto:$ADDR?to=t2-$ADDR&subject=Test%20Subject&cc=cc-$ADDR&cc2-$ADDR&body=Test%20Body"
 
 assert_nostdout
 assert_nostderr
 
-assert_interactive "Did a new email open with To/CC/Subject/Body fields complete?" y
+assert_interactive "Did a new email open with two addresses in the To/CC fields and the Subject/Body fields complete?" y
 
 test_result
 }
 
-run_test test_email_uri
+run_test test_email_uri_multi_address
