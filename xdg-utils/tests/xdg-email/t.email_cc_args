@@ -1,0 +1,31 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_cc_args() {
+test_start "$FUNCTNAME: verify cc/bcc/subject/body/attach arguments work"
+
+ADDR="$XDG_TEST_ID@portland.freedesktop.org"
+
+test_init
+
+## Require a running X server
+assert_display
+
+test_procedure
+
+assert_exit 0 xdg-email --cc "$PRE-cc-$ADDR" --bcc "$PRE-bcc-$ADDR" \
+ --subject 'I am the subject' --body 'I am the body' "$PRE-$ADDR"
+
+assert_nostdout
+assert_nostderr
+
+assert_interactive "Did a new email open with each of To/CC/BCC/Subject/Body complete?" y
+
+test_result
+}
+
+repeat_test test_cc_args 1 PRE "t" "mailto:t"

@@ -1,0 +1,30 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_email_subj() {
+test_start "$FUNCTNAME: verify subject argument works"
+
+ADDR="$XDG_TEST_ID@portland.freedesktop.org"
+
+test_init
+
+## Require a running X server
+assert_display
+
+test_procedure
+
+assert_exit 0 xdg-email --subject 'A subject line that is several words long but not quite a paragraph.' "$ADDR"
+
+assert_nostdout
+assert_nostderr
+
+assert_interactive "Did a new email open with each of To/Subject completed?" y
+
+test_result
+}
+
+run_test test_email_subj

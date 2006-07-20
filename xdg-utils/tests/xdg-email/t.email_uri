@@ -1,0 +1,32 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_email_uri() {
+test_start "$FUNCTNAME: verify uri email compose"
+
+ADDR="$XDG_TEST_ID@portland.freedesktop.org"
+
+test_init
+
+## Require a running X server
+assert_display
+
+test_procedure
+
+set -x
+assert_exit 0 xdg-email "mailto:$ADDR?subject=Test%20Subject&cc=cc-$ADDR&body=Test%20Body"
+set +x
+
+assert_nostdout
+assert_nostderr
+
+assert_interactive "Did a new email open with To/CC/Subject/Body fields complete?" y
+
+test_result
+}
+
+run_test test_email_uri
