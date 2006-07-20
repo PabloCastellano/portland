@@ -2,7 +2,7 @@
 .\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
 .\" Instead of manually editing it, you probably should edit the DocBook XML
 .\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "XDG\-DESKTOP\-MENU" "1" "07/13/2006" "This is release 0.5 of the xdg\-desktop\-m" ""
+.TH "XDG\-DESKTOP\-MENU" "1" "07/17/2006" "This is release 0.5 of the xdg\-desktop\-m" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -120,6 +120,12 @@ MimeType=\fIMimetypes\fR
 A list of mimetypes separated by semi\-colons. This field is used to indicate which file types the application is able to open.
 .PP
 For a complete oveview of the *.desktop file format please visit http://www.freedesktop.org/wiki/Standards/desktop\-entry\-spec
+.SH "ENVIRONMENT VARIABLES"
+.PP
+xdg\-desktop\-menu honours the following environment variables:
+.TP
+XDG_UTILS_DEBUG_LEVEL
+Setting this environment variable to a non\-zero numerical value makes xdg\-desktop\-menu do more verbose reporting on stderr. Setting a higher value increases the verbosity.
 .SH "EXIT CODES"
 .PP
 An exit code of 0 indicates success while a non\-zero exit code indicates failure. The following failure codes can be returned:

@@ -68,7 +68,13 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
 	    Show this manualpage.
 	  </dd><dt><span class="term"><code class="option">--version</code></span></dt><dd>
             Show the xdg-utils version information.
-          </dd></dl></div></div><div class="refsect1" lang="en"><a name="exitcodes"></a><h2>Exit Codes</h2><p>
+          </dd></dl></div></div><div class="refsect1" lang="en"><a name="env_vars"></a><h2>Environment Variables</h2><p>
+      xdg-mime honours the following environment variables:
+    </p><div class="variablelist"><dl><dt><span class="term">XDG_UTILS_DEBUG_LEVEL</span></dt><dd>
+	    Setting this environment variable to a non-zero numerical value
+	    makes xdg-mime do more verbose reporting on stderr.
+	    Setting a higher value increases the verbosity.
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="exitcodes"></a><h2>Exit Codes</h2><p>
       An exit code of 0 indicates success while a non-zero exit code
       indicates failure. The following failure codes can be returned:
     </p><div class="variablelist"><dl><dt><span class="term"><code class="option">1</code></span></dt><dd>

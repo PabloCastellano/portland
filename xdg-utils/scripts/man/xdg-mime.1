@@ -2,7 +2,7 @@
 .\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
 .\" Instead of manually editing it, you probably should edit the DocBook XML
 .\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "XDG\-MIME" "1" "07/13/2006" "This is release 0.5 of the xdg\-mime Manu" ""
+.TH "XDG\-MIME" "1" "07/17/2006" "This is release 0.5 of the xdg\-mime Manu" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -96,6 +96,12 @@ Show this manualpage.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information.
+.SH "ENVIRONMENT VARIABLES"
+.PP
+xdg\-mime honours the following environment variables:
+.TP
+XDG_UTILS_DEBUG_LEVEL
+Setting this environment variable to a non\-zero numerical value makes xdg\-mime do more verbose reporting on stderr. Setting a higher value increases the verbosity.
 .SH "EXIT CODES"
 .PP
 An exit code of 0 indicates success while a non\-zero exit code indicates failure. The following failure codes can be returned:

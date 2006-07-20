@@ -113,9 +113,9 @@ _USAGE
 
 DEBUG()
 {
-  [ ${xdg_utils_debug_level-0} -lt $1 ] && return 0;
+  [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt $1 ] && return 0;
   shift
-  echo "$@"
+  echo "$@" >&2
 }
 
 #-------------------------------------------------------------

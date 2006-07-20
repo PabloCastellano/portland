@@ -143,9 +143,9 @@ _USAGE
 
 DEBUG()
 {
-  [ ${xdg_utils_debug_level-0} -lt $1 ] && return 0;
+  [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt $1 ] && return 0;
   shift
-  echo "$@"
+  echo "$@" >&2
 }
 
 #-------------------------------------------------------------
@@ -339,8 +339,29 @@ do_resume()
   cleanup_suspend  
 }
 
+XPROP=`which xprop 2> /dev/null`
+
+check_window_id()
+{
+  if [ -z "$XPROP" ]; then
+     DEBUG 3 "xprop not found"
+     return
+  fi 
+  DEBUG 2 "Running $XPROP -id $window_id"
+  if $XPROP -id $window_id > /dev/null 2> /dev/null; then
+     DEBUG 3 Window $window_id exists
+  else
+     DEBUG 3 Window $window_id does not exist
+     exit_failure_operation_failed "Window $window_id does not exist"
+  fi
+}
+
 track_window()
 {
+  if [ -z "$XPROP" ]; then
+     # Don't track window if we don't have xprop
+     return
+  fi
   lockfile
 
   tmpfile=`mktemp`
@@ -371,7 +392,7 @@ track_window()
   fi
 
   # Start tracking $window_id
-  xprop -id $window_id -spy > /dev/null &
+  $XPROP -id $window_id -spy > /dev/null &
   xprop_pid=$!
   # Add window_id and xprop_pid to the xdg-screensave status file
   echo "$window_id:$xprop_pid" >> $tmpfile
@@ -479,27 +500,27 @@ screensaver_gnome()
     case "$1" in
         suspend) 
         # Don't know how to suspend properly
-        gnome-screensaver-command --exit
+        gnome-screensaver-command --exit > /dev/null 2> /dev/null
         ;;
 
         resume)
         # Don't know how to suspend properly
         # This may start the gnome-screensaver even if it wasn't running before
-        gnome-screensaver
+        gnome-screensaver > /dev/null 2> /dev/null
         ;;
         
         activate)
-        gnome-screensaver-command --activate
+        gnome-screensaver-command --activate > /dev/null 2> /dev/null
         ;;
         
         reset)
         # Turns the screensaver off right now
-        gnome-screensaver-command --deactivate
+        gnome-screensaver-command --deactivate > /dev/null 2> /dev/null
         ;;
 
         status)
         # Don't know how to suspend properly
-        if gnome-screensaver-command --query 2> /dev/null >&2; then
+        if gnome-screensaver-command --query > /dev/null 2> /dev/null >&2; then
             echo "enabled"
         else
             echo "disabled"
@@ -531,7 +552,8 @@ case $1 in
         exit_failure_syntax "WindowID argument missing"
     fi
     
-    window_id=$1    
+    window_id=$1
+    check_window_id
     ;;
 
   resume)
@@ -544,6 +566,7 @@ case $1 in
     fi
     
     window_id=$1    
+    check_window_id
     ;;
 
   activate)
