@@ -30,6 +30,7 @@ _USAGE
 
 open_kde()
 {
+    DEBUG 1 "Running kfmclient exec \"$1\""
     kfmclient exec "$1"
 
     if [ $? -eq 0 ]; then
@@ -41,6 +42,7 @@ open_kde()
 
 open_gnome()
 {
+    DEBUG 1 "Running gnome-open \"$1\""
     gnome-open "$1"
 
     if [ $? -eq 0 ]; then
@@ -53,6 +55,7 @@ open_gnome()
 
 open_xfce()
 {
+    DEBUG 1 "Running exo-open \"$1\""
     exo-open "$1"
 
     if [ $? -eq 0 ]; then
@@ -162,6 +165,10 @@ while [ $# -gt 0 ] ; do
         exit_failure_syntax "unexpected option '$parm'"
         ;;
 
+      mailto:*)
+        mailto="$parm"
+        ;;
+
       *@*)
         url_encode "$parm"
         if [ -z "${mailto}" ] ; then
@@ -169,10 +176,6 @@ while [ $# -gt 0 ] ; do
         else
             options=${options}"to="${result}"&"
         fi
-        ;;
-
-      mailto:*)
-        mailto="$parm"
         ;;
 
       *)

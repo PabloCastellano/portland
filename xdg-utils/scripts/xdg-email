@@ -89,6 +89,15 @@ Options
 --version
     Show the xdg-utils version information.
 
+Environment Variables
+
+xdg-email honours the following environment variables:
+
+XDG_UTILS_DEBUG_LEVEL
+    Setting this environment variable to a non-zero numerical value makes
+    xdg-email do more verbose reporting on stderr. Setting a higher value
+    increases the verbosity.
+
 Exit Codes
 
 An exit code of 0 indicates success while a non-zero exit code indicates
@@ -265,6 +274,7 @@ detectDE()
 
 open_kde()
 {
+    DEBUG 1 "Running kfmclient exec \"$1\""
     kfmclient exec "$1"
 
     if [ $? -eq 0 ]; then
@@ -276,6 +286,7 @@ open_kde()
 
 open_gnome()
 {
+    DEBUG 1 "Running gnome-open \"$1\""
     gnome-open "$1"
 
     if [ $? -eq 0 ]; then
@@ -288,6 +299,7 @@ open_gnome()
 
 open_xfce()
 {
+    DEBUG 1 "Running exo-open \"$1\""
     exo-open "$1"
 
     if [ $? -eq 0 ]; then
@@ -397,6 +409,10 @@ while [ $# -gt 0 ] ; do
         exit_failure_syntax "unexpected option '$parm'"
         ;;
 
+      mailto:*)
+        mailto="$parm"
+        ;;
+
       *@*)
         url_encode "$parm"
         if [ -z "${mailto}" ] ; then
@@ -404,10 +420,6 @@ while [ $# -gt 0 ] ; do
         else
             options=${options}"to="${result}"&"
         fi
-        ;;
-
-      mailto:*)
-        mailto="$parm"
         ;;
 
       *)
