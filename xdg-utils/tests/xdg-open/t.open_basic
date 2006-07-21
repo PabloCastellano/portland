@@ -2,7 +2,6 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
@@ -10,12 +9,16 @@ test_open_basic() {
 test_start "$FUNCTNAME: verify basic file open test."
 
 test_init
+
+require_notroot
+
+## Require a running X server
+assert_display
+
 get_unique_name TARG 'open.txt'
 echo "I am open." > $TARG
 assert_file "$TARG"
 
-## Require a running X server
-assert_display
 
 test_procedure
 

@@ -1,0 +1,32 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_screensave_activate() {
+test_start "$FUNCTNAME: verify screensaver activate"
+
+test_init
+
+require_notroot
+## Require a running X server
+assert_display
+
+test_procedure
+
+assert_interactive "Screensaver will activate 1s from now. Please press shift when it does."
+
+sleep 1
+
+assert_exit 0 xdg-screensaver activate
+assert_nostdout
+assert_nostderr
+
+assert_interactive "Did the screensaver activate?" y
+
+test_result
+}
+
+run_test test_screensave_activate

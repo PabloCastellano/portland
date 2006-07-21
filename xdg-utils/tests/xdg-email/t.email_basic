@@ -12,6 +12,7 @@ ADDR="$XDG_TEST_ID@portland.freedesktop.org"
 
 test_init
 
+require_notroot
 ## Require a running X server
 assert_display
 
