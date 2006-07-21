@@ -116,7 +116,7 @@ case $action in
 
         for x in $desktop_dir ; do
             mkdir -p $x
-            cp $desktop_file $x/$basefile
+            eval 'cp $desktop_file $x/$basefile'$xdg_redirect_output
         done
 
         umask $save_umask

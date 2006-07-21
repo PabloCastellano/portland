@@ -255,6 +255,13 @@ check_common_commands()
 }
 
 check_common_commands "$@"
+if [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt 1 ]; then
+    # Be silent
+    xdg_redirect_output=" > /dev/null 2> /dev/null" 
+else
+    # All output to stderr
+    xdg_redirect_output=" >&2"
+fi
 
 #--------------------------------------
 # Checks for known desktop environments

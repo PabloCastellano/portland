@@ -33,7 +33,7 @@ update_desktop_database()
         for x in `echo $PATH | sed 's/:/ /g'` /opt/gnome/bin; do
            if [ -x $x/update-desktop-database ] ; then
               DEBUG 1 "Running $x/update-desktop-database"
-              $x/update-desktop-database
+              eval '$x/update-desktop-database'$xdg_redirect_output
               return
            fi
         done
@@ -232,7 +232,7 @@ case $action in
 
         for x in $xdg_dir $kde_dir $gnome_dir ; do
             mkdir -p $x
-            cp $desktop_file $x/$basefile
+            eval 'cp $desktop_file $x/$basefile'$xdg_redirect_output
         done
 
         if [ -f $kde_dir/$basefile ] ; then

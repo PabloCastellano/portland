@@ -444,6 +444,13 @@ check_common_commands()
 }
 
 check_common_commands "$@"
+if [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt 1 ]; then
+    # Be silent
+    xdg_redirect_output=" > /dev/null 2> /dev/null" 
+else
+    # All output to stderr
+    xdg_redirect_output=" >&2"
+fi
 
 #--------------------------------------
 # Checks for known desktop environments
@@ -468,7 +475,7 @@ update_desktop_database()
         for x in `echo $PATH | sed 's/:/ /g'` /opt/gnome/bin; do
            if [ -x $x/update-desktop-database ] ; then
               DEBUG 1 "Running $x/update-desktop-database"
-              $x/update-desktop-database
+              eval '$x/update-desktop-database'$xdg_redirect_output
               return
            fi
         done
@@ -667,7 +674,7 @@ case $action in
 
         for x in $xdg_dir $kde_dir $gnome_dir ; do
             mkdir -p $x
-            cp $desktop_file $x/$basefile
+            eval 'cp $desktop_file $x/$basefile'$xdg_redirect_output
         done
 
         if [ -f $kde_dir/$basefile ] ; then

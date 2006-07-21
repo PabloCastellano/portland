@@ -35,7 +35,7 @@ update_mime_database()
    for x in $PATH:/opt/gnome/bin; do
       if [ -x $x/update-mime-database ] ; then
          DEBUG 1 "Running $x/update-mime-database $1"
-         $x/update-mime-database $1
+         eval '$x/update-mime-database $1'$xdg_redirect_output
          return
       fi
    done
@@ -503,7 +503,7 @@ case $action in
 
         for x in $xdg_dir ; do
             mkdir -p $x
-            cp $filename $x/$basefile
+            eval 'cp $filename $x/$basefile'$xdg_redirect_output
         done
 
         if [ -n "$mimetypes" ] ; then

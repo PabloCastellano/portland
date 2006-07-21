@@ -33,8 +33,8 @@ update_icon_database()
    IFS=":"
    for x in $PATH:/opt/gnome/bin; do
       if [ -x $x/gtk-update-icon-cache ] ; then
-         DEBUG 1 "Running $x/gtk-update-icon-cache -f -t $1"
-         $x/gtk-update-icon-cache -f -t $1
+         DEBUG 1 "Running $x/gtk-update-icon-cache -f -t \"$1\""
+         eval '$x/gtk-update-icon-cache -f -t "$1"'$xdg_redirect_output
          return
       fi
    done
@@ -245,7 +245,7 @@ fi
 function need_kde_icon_path()
 {
   local path
-  path=`readlink -f "$1"` # Normalize path
+  path=`readlink -f "$1" 2> /dev/null` # Normalize path
   DEBUG 2 "need_kde_icon_path $path"
   if [ -z $path ] ; then
      DEBUG 2 "need_kde_icon_path RETURN 1 (not needed, no xdg icon dir)"
@@ -328,16 +328,16 @@ case $action in
         umask $my_umask
 
         mkdir -p $xdg_dir
-        cp $icon_file $xdg_dir/$icon_name
+        eval 'cp $icon_file $xdg_dir/$icon_name'$xdg_redirect_output
         if [ -f "$icon_icon_file" ] ; then
-            cp $icon_icon_file $xdg_dir/$icon_icon_name
+            eval 'cp $icon_icon_file $xdg_dir/$icon_icon_name'$xdg_redirect_output
         fi
         if [ -n "$kde_dir" ] ; then
             mkdir -p $kde_dir
-            ln -s $xdg_dir/$icon_name $kde_dir/$icon_name
+            eval 'ln -s $xdg_dir/$icon_name $kde_dir/$icon_name'$xdg_redirect_output
         fi
         if [ -n "$need_gnome_mime" ] ; then
-            ln -s $xdg_dir/$icon_name $xdg_dir/gnome-mime-$icon_name
+            eval 'ln -s $xdg_dir/$icon_name $xdg_dir/gnome-mime-$icon_name'$xdg_redirect_output
         fi
 
         umask $save_umask

@@ -306,6 +306,13 @@ check_common_commands()
 }
 
 check_common_commands "$@"
+if [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt 1 ]; then
+    # Be silent
+    xdg_redirect_output=" > /dev/null 2> /dev/null" 
+else
+    # All output to stderr
+    xdg_redirect_output=" >&2"
+fi
 
 #--------------------------------------
 # Checks for known desktop environments
@@ -412,7 +419,7 @@ case $action in
 
         for x in $desktop_dir ; do
             mkdir -p $x
-            cp $desktop_file $x/$basefile
+            eval 'cp $desktop_file $x/$basefile'$xdg_redirect_output
         done
 
         umask $save_umask
