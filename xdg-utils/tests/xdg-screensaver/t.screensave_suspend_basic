@@ -1,0 +1,31 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_screensave_suspend_basic() {
+test_start "$FUNCTNAME: verify screensaver suspend doesn't error"
+
+test_init
+
+require_notroot
+## Require a running X server
+assert_display
+
+assert_exit 0 test ! -z "$WINDOWID"
+
+test_procedure
+
+assert_exit 0 xdg-screensaver suspend "$WINDOWID"
+assert_nostdout
+assert_nostderr
+
+# cleanup 
+xdg-screensaver restore "$WINDOWID" >/dev/null 2>&1
+
+test_result
+}
+
+run_test test_screensave_suspend_basic

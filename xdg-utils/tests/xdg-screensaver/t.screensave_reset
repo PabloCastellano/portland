@@ -5,7 +5,7 @@
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
-test_screensave_activate() {
+test_screensave_reset() {
 test_start "$FUNCTNAME: verify screensaver activate"
 
 test_init
@@ -15,20 +15,22 @@ require_interactive
 ## Require a running X server
 assert_display
 
-test_procedure
-
-assert_interactive "Screensaver will activate 1s from now. Please press shift when it does."
+assert_interactive "Screensaver will activate in 1sec, then deactivate in 1sec. Please be careful not to deactivate it manually."
 
 sleep 1
-
 assert_exit 0 xdg-screensaver activate
+sleep 1
+test_procedure
+
+assert_exit 0 xdg-screensaver reset
+
 assert_nostdout
 assert_nostderr
 
-assert_interactive "Did the screensaver activate?" y
+assert_interactive "Did the screensaver deactivate automatically?" y
 assert_interactive "If must normally enter a password, were you prompted for it? (enter 'y' if NA)" y
 
 test_result
 }
 
-run_test test_screensave_activate
+run_test test_screensave_reset
