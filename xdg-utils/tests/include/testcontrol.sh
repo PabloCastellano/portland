@@ -57,7 +57,6 @@ while [ "$I" -le "$VARS" ]; do
 	shift 1
 
 	eval "out=\$v$I"
-	#echo "v$I=$out"
 	I=$(($I+1))
 done
 
@@ -68,18 +67,18 @@ declare -i LENGTH=$(( $# / $VARS ))
 #echo "list size: $LENGTH"
 
 ## Main loop: create a test function for each set of values.
-declare -i I=1
 declare -i J=1
-#set -x
 while [ "$J" -le "$LENGTH" ] ; do
 	declare -i I=1
 	## Begin test function string
-	#str="t$IC_NUM() {" # it is only safe to use $IC_NUM since run_test is used later in this function.
-	str="$FUNC-$J-$IC_NUM() {" # it is only safe to use $IC_NUM since run_test is used later in this function.
+
+	# it is only safe to use $IC_NUM since run_test is used later in this function.
+	str="$FUNC-$J-$IC_NUM() {" 
+
 	while [ "$I" -le "$VARS" ] ; do
 		## Assign each value to appropriate variable
 		eval "var=\$v$I"
-		eval "value=\$$(( ($I-1)*$VARS+$J ))"
+		eval "value=\$$(( ($I-1)*$LENGTH+$J ))"
 		#echo "$var: $value"
 		str="$str
 		$var=\"$value\""
@@ -96,6 +95,7 @@ while [ "$J" -le "$LENGTH" ] ; do
 
 	J=$(($J+1))
 done
+
 }
 
 . "$XDG_TEST_DIR/include/tempfile.sh"

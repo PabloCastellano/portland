@@ -46,14 +46,16 @@ THESE TESTS CHANGE YOUR USER ENVIRONMENT. Effort is made to keep pollution to a 
 
 INTERACTIVE TESTS
 -----------------
-Because it is difficult to verify the way things appear to the user, some tests are interactive and require the user to verify or perform actions. This is sometimes annoying, so interactive tests can be disabled with the -I flag.
+Because it is difficult to verify the way things appear to the user, some tests are interactive and require the user to verify or perform actions. This is sometimes annoying, so interactive tests can be disabled with the -I flag. Note that if you run tests non-interactively, some tests (xdg-email) may generate strange errors on the screen, since the test cleans up support files before the email client tries to read them. Use the -C option to work around this.
 
 
 PRIVLAGED TESTS
 ---------------
 BACK UP YOUR SYSTEM. See above.
 
-Some tests require root (e.g. those commands with a --system option). So, tests in this group return UNTESTED if they are not run as root. You MAY use sudo, but be aware that some tests may fail since the environment does not get reset. It is recommended to use su - to reset the environment.
+Some tests require root (e.g. those commands with a --system option). So, tests in this group return UNTESTED if they are not run as root. 
+ 
+It is STRONGLY recommended to do 'su -' and then run the tests, rather than using sudo or su -c, since both of the latter methods leave various environment variables (HOME, etc) unchanged from the login user's shell. 
 
 
 CLEANUP

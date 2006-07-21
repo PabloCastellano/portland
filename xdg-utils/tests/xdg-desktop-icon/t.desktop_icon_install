@@ -34,9 +34,9 @@ assert_nostderr
 
 assert_file_in_path "$DESK_FILE" "$HOME/Desktop"
 
-if [ -z "$XDG_TEST_NO_INTERACTIVE" ]; then
-assert_interactive_notroot "Is there an icon on the desktop with name 'Test Desktop Icon Install'?" y
-assert_interactive_notroot "Please double click the 'Test Desktop Icon Install' icon."
+if [ -z "$XDG_TEST_NO_INTERACTIVE" ] && [ `whoami` != root ] ; then
+assert_interactive "Is there an icon on the desktop with name 'Test Desktop Icon Install'?" y
+assert_interactive "Please double click the 'Test Desktop Icon Install' icon."
 
 ## Double clicking will result in the command 'touch xdg-test-desktop-icon-install.tmp' to be run
 assert_file "$HOME/$CREATE_FILE"

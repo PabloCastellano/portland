@@ -16,7 +16,7 @@ test_init
 
 get_unique_name INSFILE "$FILE"
 set_no_display
-echo "Some more boring text" > "$INSFILE"
+echo "Some more boring text. $XDG_TEST_ID" > "$INSFILE"
 assert_file "$INSFILE" 
 
 

@@ -62,6 +62,7 @@ fi
 TEST_FILES=`find $TEST_GROUPS -name 't.*'`
 
 declare -i PASS=0
+declare -i FAILCOUNT=0
 declare -i TOTAL=0
 declare -i ATTEMPT=0
 TEST_LOG="$XDG_TEST_DIR/xdg-test.log"
@@ -90,24 +91,24 @@ for t in $TEST_LIST; do
 	test_cleanup
 
 	# Report result
-	if [ "$CODE" -eq 0 ] ; then
-		PASS=$((PASS + 1))
-		RESULT=PASS
-	else
-		case "$CODE" in
-		1 ) RESULT=FAIL;;
+	case "$CODE" in
+		0 ) PASS=$((PASS + 1))
+		    RESULT=PASS
+		    ;;
+
+		1 ) RESULT=FAIL
+		    FAILCOUNT=$((FAILCOUNT +1))
+		    ;;
 		5 ) RESULT=UNTESTED
 		    TOTAL=$((TOTAL - 1 )) ## HACK: we don't want to count tests that don't run.
 		    ;;
 		7 ) RESULT=NORESULT ;; 
 		* ) RESULT="UNKNOWN($CODE)";;
-		esac
-		#echo  "$RESULT: $t"
-	fi
+	esac
 	echo "$RESULT"
 done
 echo -n "[`date`] TEST RUN END: $* - " >> "$TEST_LOG"
-echo "$PASS of $TOTAL tests passed. ($ATTEMPT attempted)" | tee -a "$TEST_LOG"
+echo "$FAILCOUNT tests failed, $PASS of $TOTAL tests passed. ($ATTEMPT attempted)" | tee -a "$TEST_LOG"
 echo "See $TEST_LOG for details."
 
 if [ $(( $TOTAL - $PASS )) -gt 0 ]; then
