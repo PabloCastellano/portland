@@ -156,7 +156,8 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "file argument missing for --attach option"
         fi
-        url_encode "$1"
+        file=`readlink -f "$1"` # Normalize path
+        url_encode "$file"
         options=${options}"attach="${result}"&" 
         shift
         ;;
