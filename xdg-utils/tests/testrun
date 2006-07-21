@@ -31,7 +31,7 @@ exit 1
 }
 ## Set up prerequisites
 if [ -z "$XDG_TEST_DIR" ] ; then
-	export XDG_TEST_DIR=`pwd`
+	export XDG_TEST_DIR="$PWD"
 	echo "WARNING: guessed XDG_TEST_DIR to be $XDG_TEST_DIR"
 fi
 if [ -z `which xdg-mime` ] && [ -d "$XDG_TEST_DIR/../scripts" ] ; then
@@ -74,6 +74,7 @@ for t in $TEST_FILES; do
 done
 
 echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
+"$XDG_TEST_DIR/include/system_info" >>"$TEST_LOG"
 #echo "TEST_LIST: $TEST_LIST"
 
 for t in $TEST_LIST; do
