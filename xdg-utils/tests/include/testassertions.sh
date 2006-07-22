@@ -234,7 +234,7 @@ require_interactive() {
 
 require_root() {
     if [ `whoami` != 'root' ] ; then
-	test_result UNTESTED "not running as root, but test requires su privlages"
+	test_result UNTESTED "not running as root, but test requires root privileges"
     fi
 }
 

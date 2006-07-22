@@ -49,7 +49,7 @@ INTERACTIVE TESTS
 Because it is difficult to verify the way things appear to the user, some tests are interactive and require the user to verify or perform actions. This is sometimes annoying, so interactive tests can be disabled with the -I flag. Note that if you run tests non-interactively, some tests (xdg-email) may generate strange errors on the screen, since the test cleans up support files before the email client tries to read them. Use the -C option to work around this.
 
 
-PRIVLAGED TESTS
+PRIVILEGED TESTS
 ---------------
 BACK UP YOUR SYSTEM. See above.
 
