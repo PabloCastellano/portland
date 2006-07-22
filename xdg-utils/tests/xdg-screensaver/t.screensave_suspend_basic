@@ -23,7 +23,7 @@ assert_nostdout
 assert_nostderr
 
 # cleanup 
-xdg-screensaver restore "$WINDOWID" >/dev/null 2>&1
+xdg-screensaver resume "$WINDOWID" >/dev/null 2>&1
 
 test_result
 }
