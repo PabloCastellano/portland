@@ -7,6 +7,7 @@
 ## Test function
 test_screensave_restore_basic() {
 test_start "$FUNCTNAME: verify screensaver restore doesn't error"
+test_procedure "see also bug 7593"
 
 test_init
 
@@ -20,7 +21,7 @@ assert_exit 0 xdg-screensaver suspend "$WINDOWID"
 test_procedure
 
 assert_exit 0 xdg-screensaver restore "$WINDOWID"
-assert_stdout
+assert_nostdout
 assert_nostderr
 
 test_result
