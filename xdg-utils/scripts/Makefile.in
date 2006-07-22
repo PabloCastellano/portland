@@ -37,7 +37,7 @@ scripts:	README $(SCRIPTS)
 man:		$(MANPAGES)
 
 release:	scripts html man
-	rm -f xdg-*.in *~ HACKING
+	rm -f xdg-*.in *~ HACKING generate-help-script.awk
 	rm -rf desc/
 	rm -rf xsl/
 
