@@ -35,7 +35,7 @@
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-screensaver</command>
-      <arg choice="plain"><option>restore <replaceable>WindowID</replaceable></option></arg>
+      <arg choice="plain"><option>resume <replaceable>WindowID</replaceable></option></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-screensaver</command>
@@ -86,8 +86,8 @@
           <simpara>
             The screensaver can be suspended in relation to multiple
             windows at the same time. In that case screensaver
-            operation is only restored once the suspensions have been
-            restored in relation to each of the windows
+            operation is only restored once the screensaver has been
+            resumed in relation to each of the windows
           </simpara>
         </listitem>
       </varlistentry>

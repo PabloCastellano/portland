@@ -41,7 +41,7 @@ Synopsis
 
 xdg-screensaver suspend WindowID
 
-xdg-screensaver restore WindowID
+xdg-screensaver resume WindowID
 
 xdg-screensaver { activate | reset | status }
 
@@ -68,7 +68,7 @@ suspend WindowID
 
     The screensaver can be suspended in relation to multiple windows at the
     same time. In that case screensaver operation is only restored once the
-    suspensions have been restored in relation to each of the windows
+    screensaver has been resumed in relation to each of the windows
 
 resume WindowID
     Resume the screensaver and monitor power management after being suspended.
@@ -126,7 +126,7 @@ Synopsis
 
 xdg-screensaver suspend WindowID
 
-xdg-screensaver restore WindowID
+xdg-screensaver resume WindowID
 
 xdg-screensaver { activate | reset | status }
 
