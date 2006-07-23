@@ -7,7 +7,7 @@
 ## Test function
 test_open_url() {
 test_start "$FUNCTNAME: HTTP open test."
-URL="http://portland.freedesktop.org/"
+URL="http://portland.freedesktop.org/wiki/"
 
 test_init
 
