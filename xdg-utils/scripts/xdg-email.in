@@ -33,7 +33,8 @@ open_kde()
     DEBUG 1 "Running kfmclient exec \"$1\""
     kfmclient exec "$1"
 
-    if [ $? -eq 0 ]; then
+    # kfmclient exec always returns 1 in KDE 3.4 and earlier
+    if [ $? -lt 2 ]; then
         exit_success
     else
         exit_failure_operation_failed
