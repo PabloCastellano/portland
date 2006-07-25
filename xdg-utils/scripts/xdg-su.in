@@ -92,15 +92,15 @@ su_generic()
 user=
 cmd=
 while [ $# -gt 0 ] ; do
-    parm=$1
+    parm="$1"
     shift
 
-    case $parm in
+    case "$parm" in
       -u)
         if [ -z "$1" ] ; then
             exit_failure_syntax "user argument missing for -u"
         fi
-        user=$1
+        user="$1"
         shift
         ;;
 
@@ -108,7 +108,7 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "command argument missing for -c"
         fi
-        cmd=$1
+        cmd="$1"
         shift
         ;;
 

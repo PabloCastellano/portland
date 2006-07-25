@@ -81,7 +81,12 @@ Options
     before actually sending the e-mail, this can be used to provide the user
     with a template for the e-mail. text may contain linebreaks.
 --attach file
+
     Specify an attachment for the e-mail. file must point to an existing file.
+
+    Some e-mail applications require the file to remain present after xdg-email
+    returns.
+
 --help
     Show command synopsis.
 --manual
@@ -231,10 +236,10 @@ exit_failure_operation_failed()
 check_common_commands()
 {
     while [ $# -gt 0 ] ; do
-        parm=$1
+        parm="$1"
         shift
 
-        case $parm in
+        case "$parm" in
             --help)
             usage
             echo "Use 'man xdg-email' or 'xdg-email --manual' for additional info." 
@@ -351,10 +356,10 @@ options=
 mailto=
 utf8="iconv -t utf8"
 while [ $# -gt 0 ] ; do
-    parm=$1
+    parm="$1"
     shift
 
-    case $parm in
+    case "$parm" in
       --utf8)
         utf8="cat"
         ;;
@@ -364,7 +369,7 @@ while [ $# -gt 0 ] ; do
             exit_failure_syntax "email address argument missing for --to"
         fi
         url_encode "$1"
-        options=${options}"to="${result}"&" 
+        options="${options}to=${result}&" 
         shift
         ;;
 
@@ -373,16 +378,16 @@ while [ $# -gt 0 ] ; do
              exit_failure_syntax "email address argument missing for --cc"
         fi
         url_encode "$1"
-        options=${options}"cc="${result}"&" 
+        options="${options}cc=${result}&"
         shift
         ;;
 
       --bcc)
         if [ -z "$1" ] ; then
-            exit_failure_syntax "email address argument missing for --cc"
+            exit_failure_syntax "email address argument missing for --bcc"
         fi
         url_encode "$1"
-        options=${options}"bcc="${result}"&" 
+        options="${options}bcc=${result}&"
         shift
         ;;
 
@@ -391,7 +396,7 @@ while [ $# -gt 0 ] ; do
             exit_failure_syntax "text argument missing for --subject option"
         fi
         url_encode "$1"
-        options=${options}"subject="${result}"&" 
+        options="${options}subject=${result}&"
         shift
         ;;
 
@@ -400,7 +405,7 @@ while [ $# -gt 0 ] ; do
             exit_failure_syntax "text argument missing for --body option"
         fi
         url_encode "$1"
-        options=${options}"body="${result}"&" 
+        options="${options}body=${result}&" 
         shift
         ;;
 
@@ -414,7 +419,7 @@ while [ $# -gt 0 ] ; do
         fi
 
         url_encode "$file"
-        options=${options}"attach="${result}"&" 
+        options="${options}attach=${result}&"
         shift
         ;;
 
@@ -431,7 +436,7 @@ while [ $# -gt 0 ] ; do
         if [ -z "${mailto}" ] ; then
             mailto="mailto:"${result}"?"
         else
-            options=${options}"to="${result}"&"
+            options="${options}to=${result}&"
         fi
         ;;
 
@@ -447,17 +452,20 @@ fi
 
 case $mailto in
       *\?)
-        mailto=${mailto}${options}
+        mailto="${mailto}${options}"
         ;;
 
       *\?*)
-        mailto=${mailto}"&"${options}
+        mailto="${mailto}&${options}"
         ;;
 
       *)
-        mailto=${mailto}"?"${options}
+        mailto="${mailto}?${options}"
         ;;
 esac
+
+# Strip trailing ? and &
+mailto=`echo "${mailto}"| sed 's/[?&]$//'`
 
 # Shouldn't happen
 [ x"${mailto}" != x"" ] || exit_failure_syntax

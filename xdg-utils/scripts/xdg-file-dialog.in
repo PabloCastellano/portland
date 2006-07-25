@@ -272,10 +272,10 @@ esac
 shift
 
 while [ $# -gt 0 ] ; do
-    parm=$1
+    parm="$1"
     shift
 
-    case $parm in
+    case "$parm" in
       --title)
         if [ -z "$1" ] ; then
             exit_failure_syntax "TITLE argument missing for --title"

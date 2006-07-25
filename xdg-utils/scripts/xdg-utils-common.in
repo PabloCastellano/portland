@@ -85,10 +85,10 @@ exit_failure_operation_failed()
 check_common_commands()
 {
     while [ $# -gt 0 ] ; do
-        parm=$1
+        parm="$1"
         shift
 
-        case $parm in
+        case "$parm" in
             --help)
             usage
             echo "Use 'man @NAME@' or '@NAME@ --manual' for additional info." 

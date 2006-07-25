@@ -29,16 +29,14 @@ _USAGE
 
 update_icon_database()
 {
-   IFS_save=$IFS
-   IFS=":"
-   for x in $PATH:/opt/gnome/bin; do
+   for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
+      DEBUG 3 "Checking $x for gtk-update-icon-cache"
       if [ -x $x/gtk-update-icon-cache ] ; then
          DEBUG 1 "Running $x/gtk-update-icon-cache -f -t \"$1\""
          eval '$x/gtk-update-icon-cache -f -t "$1"'$xdg_redirect_output
          return
       fi
    done
-   IFS=$IFS_save
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
@@ -74,7 +72,7 @@ shift
 
 
 while [ $# -gt 0 ] ; do
-    parm=$1
+    parm="$1"
     shift
 
     case $parm in
@@ -94,7 +92,7 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "theme argument missing for --theme"
         fi
-        theme=$1
+        theme="$1"
         shift
         ;;
 
@@ -102,7 +100,7 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "size argument missing for --size"
         fi
-        size=$1
+        size="$1"
         shift
         ;;
 
@@ -110,7 +108,7 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "context argument missing for --context"
         fi
-        context=$1
+        context="$1"
         shift
         ;;
 
@@ -122,14 +120,14 @@ while [ $# -gt 0 ] ; do
         if [ -n "$icon_name" ] ; then
             exit_failure_syntax "unexpected argument '$parm'"
         elif [ -n "$icon_file" ] ; then
-            icon_name=$parm
+            icon_name="$parm"
         else
             if [ "$action" = "install" ] ; then
                 if [ ! -f "$parm" ] ; then
                     exit_failure_file_missing "file '$parm' does not exist"
                 fi
             fi
-            icon_file=$parm
+            icon_file="$parm"
         fi
         ;;
     esac
@@ -149,33 +147,30 @@ if [ -z "$mode" ] ; then
     exit_failure_syntax "expected --user or --system option"
 fi
 
-xdg_dir_name=icons/$theme
+xdg_dir_name="icons/$theme"
 
-xdg_user_dir=$XDG_DATA_HOME
-[ -n "$xdg_user_dir" ] || xdg_user_dir=$HOME/.local/share
-xdg_user_prefix=$xdg_user_dir/icons
-xdg_user_dir=$xdg_user_dir/$xdg_dir_name
+xdg_user_dir="$XDG_DATA_HOME"
+[ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
+xdg_user_prefix="$xdg_user_dir/icons"
+xdg_user_dir="$xdg_user_dir/$xdg_dir_name"
 
 xdg_global_dir=
 xdg_global_prefix=
-xdg_system_dirs=$XDG_DATA_DIRS
-[ -n "$xdg_system_dirs" ] || xdg_system_dirs=/usr/local/share/:/usr/share/
-IFS_save=$IFS
-IFS=":"
-for x in $xdg_system_dirs ; do
+xdg_system_dirs="$XDG_DATA_DIRS"
+[ -n "$xdg_system_dirs" ] || xdg_system_dirs="/usr/local/share/:/usr/share/"
+for x in `echo "$xdg_system_dirs" | sed 's/:/ /g'`; do
    if [ -w $x/$xdg_dir_name ] ; then
-      xdg_global_prefix=$x/icons
-      xdg_global_dir=$x/$xdg_dir_name
+      xdg_global_prefix="$x/icons"
+      xdg_global_dir="$x/$xdg_dir_name"
       break
    fi
 done
-IFS=$IFS_save
 [ -w $xdg_global_dir ] || xdg_global_dir=
 
 if [ x"$mode" = x"user" ] ; then
-    xdg_base_dir=$xdg_user_dir
+    xdg_base_dir="$xdg_user_dir"
 else
-    xdg_base_dir=$xdg_global_dir
+    xdg_base_dir="$xdg_global_dir"
     if [ -z "$xdg_base_dir" ] ; then
         [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
         exit_failure_operation_impossible "No writable system icon directory found. $rootmsg"
@@ -206,14 +201,14 @@ case $icon_file in
      if [ -z "$size" ] ; then
          exit_failure_syntax "*.xpm icons must have the icon size specified with --size"
      fi
-     xdg_size_name=${size}x${size}
+     xdg_size_name="${size}x${size}"
      ;;
   *.png)
      filetype=bitmap
      if [ -z "$size" ] ; then
          exit_failure_syntax "*.png icons must have the icon size specified with --size"
      fi
-     xdg_size_name=${size}x${size}
+     xdg_size_name="${size}x${size}"
      ;;
   *.svg)
      fileype=svg
@@ -247,36 +242,33 @@ function need_kde_icon_path()
   local path
   path=`readlink -f "$1" 2> /dev/null` # Normalize path
   DEBUG 2 "need_kde_icon_path $path"
-  if [ -z $path ] ; then
+  if [ -z "$path" ] ; then
      DEBUG 2 "need_kde_icon_path RETURN 1 (not needed, no xdg icon dir)"
      return 1; # Not needed
   fi
 
   # if kde-config not found... return 0
-  kde_icon_dirs=`kde-config --path icon`
+  kde_icon_dirs=`kde-config --path icon|sed 's/:/ /g'`
   DEBUG 3 "kde_icon_dirs: $kde_icon_dirs"
-  if [ -z $kde_icon_dirs ] ; then
+  if [ -z "$kde_icon_dirs" ] ; then
      DEBUG 3 "no result from kde-config --path icon"
      DEBUG 2 "need_kde_icon_path RETURN 1 (not needed, no kde icon path)"
      return 1; # Not needed
   fi
   needed=0 # Needed
-  IFS_save=$IFS
-  IFS=":"
   for y in $kde_icon_dirs ; do
     x=`readlink -f "$y"` # Normalize path
     DEBUG 3 "Normalize $y --> $x"
     if [ -n "$x" ] ; then
-      if [ $x = $path ] ; then
+      if [ "$x" = "$path" ] ; then
         needed=1 # Not needed
       fi
-      if [ -w $x ] ; then
-        kde_global_prefix=$x
+      if [ -w "$x" ] ; then
+        kde_global_prefix="$x"
         # Take last writable dir
       fi
     fi
   done
-  IFS=$IFS_save
   DEBUG 2 "kde_global_prefix: $kde_global_prefix"
   [ $needed -eq "1" ] && DEBUG 2 "need_kde_icon_path RETURN $needed (not needed)"
   [ $needed -eq "0" ] && DEBUG 2 "need_kde_icon_path RETURN $needed (needed)"
@@ -285,23 +277,23 @@ function need_kde_icon_path()
 
 kde_dir=
 if [ x"$mode" = x"user" ] ; then
-    xdg_dir=$xdg_base_dir/$xdg_size_name/$context
+    xdg_dir="$xdg_base_dir/$xdg_size_name/$context"
     #KDE 3.x doesn't support XDG_DATA_HOME for icons
     #Check if xdg_dir prefix is listed by kde-config --path icon
     #If not, install additional symlink to kdedir 
     if need_kde_icon_path "$xdg_user_prefix" ; then
-        kde_user_dir=$HOME/.kde/share/icons/$theme
-        kde_dir=$kde_user_dir/$xdg_size_name/$context
+        kde_user_dir="$HOME/.kde/share/icons/$theme"
+        kde_dir="$kde_user_dir/$xdg_size_name/$context"
     fi
     my_umask=077
 else
-    xdg_dir=$xdg_base_dir/$xdg_size_name/$context
+    xdg_dir="$xdg_base_dir/$xdg_size_name/$context"
     #KDE 3.x doesn't support XDG_DATA_DIRS for icons
     #Check if xdg_dir prefix is listed by kde-config --path icon
     #If not, install additional symlink to kdedir 
     if need_kde_icon_path "$xdg_global_prefix" ; then
-        kde_global_dir=$kde_global_prefix/$theme
-        kde_dir=$kde_global_dir/$xdg_size_name/$context
+        kde_global_dir="$kde_global_prefix/$theme"
+        kde_dir="$kde_global_dir/$xdg_size_name/$context"
     fi
     my_umask=022
 fi
@@ -357,7 +349,7 @@ case $action in
 esac
 
 if [ x"$update" = x"yes" ] ; then
-    update_icon_database $xdg_base_dir
+    update_icon_database "$xdg_base_dir"
 fi
 
 exit_success

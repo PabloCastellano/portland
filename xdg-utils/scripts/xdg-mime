@@ -294,10 +294,10 @@ exit_failure_operation_failed()
 check_common_commands()
 {
     while [ $# -gt 0 ] ; do
-        parm=$1
+        parm="$1"
         shift
 
-        case $parm in
+        case "$parm" in
             --help)
             usage
             echo "Use 'man xdg-mime' or 'xdg-mime --manual' for additional info." 
@@ -344,16 +344,13 @@ detectDE()
 
 update_mime_database()
 {
-   IFS_save=$IFS
-   IFS=":"
-   for x in $PATH:/opt/gnome/bin; do
+   for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
       if [ -x $x/update-mime-database ] ; then
          DEBUG 1 "Running $x/update-mime-database $1"
          eval '$x/update-mime-database $1'$xdg_redirect_output
          return
       fi
    done
-   IFS=$IFS_save
 }
 
 info_kde()
@@ -391,7 +388,7 @@ make_default_kde()
     # Remove all [$2 - *] sections, or even better,
     # renumber [$2 - *] sections and remove duplicate
     
-    default_file=$HOME/.kde/share/config/profilerc
+    default_file="$HOME/.kde/share/config/profilerc"
     DEBUG 2 "make_default_kde $1 $2"
     DEBUG 1 "Updating $default_file"
     awk -v application="$1" -v mimetype="$2" '
@@ -426,9 +423,9 @@ make_default_generic()
     # $1 is vendor-name.desktop
     # $2 is mime/type 
     # Add $2=$1 to XDG_DATA_HOME/applications/defaults.list
-    xdg_user_dir=$XDG_DATA_HOME
-    [ -n "$xdg_user_dir" ] || xdg_user_dir=$HOME/.local/share
-    default_file=$xdg_user_dir/applications/defaults.list
+    xdg_user_dir="$XDG_DATA_HOME"
+    [ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
+    default_file="$xdg_user_dir/applications/defaults.list"
     DEBUG 2 "make_default_generic $1 $2"
     DEBUG 1 "Updating $default_file"
     grep -v "$2=" $default_file > ${default_file}.new 2> /dev/null
@@ -535,7 +532,7 @@ _XSL
 uninstall_xsl()
 {
   DEBUG 2 "Cleaning up temporary XSL file: $xsl_file"
-  rm -f $xsl_file
+  rm -f "$xsl_file"
   xsl_file=
 }
 
@@ -590,7 +587,7 @@ case $1 in
         ;;
 
       *.desktop)
-        filename=$1
+        filename="$1"
         ;;
 
       *)
@@ -618,7 +615,7 @@ if [ "$action" = "makedefault" ]; then
             exit_failure_syntax "unexpected option '$1'"
             ;;
         esac
-        mimetype=$1
+        mimetype="$1"
         shift
         
         make_default_kde "$filename" "$mimetype"
@@ -628,7 +625,7 @@ if [ "$action" = "makedefault" ]; then
 fi
 
 while [ $# -gt 0 ] ; do
-    parm=$1
+    parm="$1"
     shift
 
     case $parm in
@@ -651,7 +648,7 @@ while [ $# -gt 0 ] ; do
         if [ ! -f "$parm" ] ; then
             exit_failure_file_missing "file '$parm' does not exist"
         fi
-        filename=$parm
+        filename="$parm"
         ;;
     esac
 done
@@ -724,66 +721,60 @@ fi
 xdg_base_dir=
 xdg_dir_name=mime/packages/
 
-xdg_user_dir=$XDG_DATA_HOME
-[ -n "$xdg_user_dir" ] || xdg_user_dir=$HOME/.local/share
-[ x"$mode" = x"user" ] && xdg_base_dir=$xdg_user_dir/mime
-xdg_user_dir=$xdg_user_dir/$xdg_dir_name
+xdg_user_dir="$XDG_DATA_HOME"
+[ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
+[ x"$mode" = x"user" ] && xdg_base_dir="$xdg_user_dir/mime"
+xdg_user_dir="$xdg_user_dir/$xdg_dir_name"
 
-xdg_system_dirs=$XDG_DATA_DIRS
+xdg_system_dirs="$XDG_DATA_DIRS"
 [ -n "$xdg_system_dirs" ] || xdg_system_dirs=/usr/local/share/:/usr/share/
-IFS_save=$IFS
-IFS=":"
-for x in $xdg_system_dirs ; do
+for x in `echo $xdg_system_dirs | sed 's/:/ /g'`; do
     if [ -w $x/$xdg_dir_name ] ; then
-        [ x"$mode" = x"system" ] && xdg_base_dir=$x/mime
-        xdg_global_dir=$x/$xdg_dir_name
+        [ x"$mode" = x"system" ] && xdg_base_dir="$x/mime"
+        xdg_global_dir="$x/$xdg_dir_name"
         break
     fi
 done
-IFS=$IFS_save
 [ -w $xdg_global_dir ] || xdg_global_dir=
 DEBUG 3 "xdg_user_dir: $xdg_user_dir"
 DEBUG 3 "xdg_global_dir: $xdg_global_dir"
 
 # Find KDE3 mimelnk directory
-kde_user_dir=$HOME/.kde/share/mimelnk
+kde_user_dir="$HOME/.kde/share/mimelnk"
 kde_global_dir=
 kde_global_dirs=`kde-config --path mime`
 DEBUG 3 "kde_global_dirs: $kde_global_dirs"
 [ -n $kde_global_dirs ] || kde_global_dirs=/opt/kde3/share/mimelnk:/opt/kde/share/mimelnk:/usr/share/mimelnk
-IFS_save=$IFS
-IFS=":"
 first=
-for x in $kde_global_dirs ; do
+for x in `echo $kde_global_dirs | sed 's/:/ /g'` ; do
     if [ -z "$first" ] ; then
         first=false
         #TODO: Mode check seems redundant
-        [ x"$mode" = x"user" ] && kde_user_dir=$x
+        [ x"$mode" = x"user" ] && kde_user_dir="$x"
     elif [ -w $x ] ; then
-        [ x"$mode" = x"system" ] && kde_global_dir=$x
+        [ x"$mode" = x"system" ] && kde_global_dir="$x"
     fi
 done
-IFS=$IFS_save
 DEBUG 3 "kde_user_dir: $kde_user_dir"
 DEBUG 3 "kde_global_dir: $kde_global_dir"
 
 # TODO: Gnome legacy support
 # See http://forums.fedoraforum.org/showthread.php?t=26875
-gnome_user_dir=$HOME/.gnome/apps
+gnome_user_dir="$HOME/.gnome/apps"
 gnome_global_dir=/usr/share/gnome/apps
 [ -w $gnome_global_dir ] || gnome_global_dir=
 DEBUG 3 "gnome_user_dir: $gnome_user_dir"
 DEBUG 3 "gnome_global_dir: $gnome_global_dir"
 
 if [ x"$mode" = x"user" ] ; then
-    xdg_dir=$xdg_user_dir
-    kde_dir=$kde_user_dir
-    gnome_dir=$gnome_user_dir
+    xdg_dir="$xdg_user_dir"
+    kde_dir="$kde_user_dir"
+    gnome_dir="$gnome_user_dir"
     my_umask=077
 else
-    xdg_dir=$xdg_global_dir
-    kde_dir=$kde_global_dir
-    gnome_dir=$gnome_global_dir
+    xdg_dir="$xdg_global_dir"
+    kde_dir="$kde_global_dir"
+    gnome_dir="$gnome_global_dir"
     my_umask=022
     if [ -z "${xdg_dir}${kde_dir}${gnome_dir}" ] ; then
         [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
@@ -797,7 +788,7 @@ fi
 # echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
 
 basefile=`basename "$filename"`
-#[ -z $vendor ] || basefile=$vendor-$basefile
+#[ -z $vendor ] || basefile="$vendor-$basefile"
 
 mimetypes=
 if [ -n "$kde_dir" ] ; then
@@ -823,15 +814,12 @@ case $action in
         if [ -n "$mimetypes" ] ; then
             install_xsl_shared2mimelnk
         
-            IFS_save=$IFS
-            IFS='
-'
+            # No quotes around $mimetypes
             for x in $mimetypes ; do 
                 DEBUG 1 "Installing $kde_dir/$x.desktop (KDE 3.x support)"
                 mkdir -p `dirname $kde_dir/$x.desktop`
                 xsltproc --stringparam type $x --stringparam source $basefile $xsl_file $filename > $kde_dir/$x.desktop
             done
-            IFS=$IFS_save
 
             uninstall_xsl
         fi
@@ -844,17 +832,13 @@ case $action in
             rm -f $x/$basefile
         done
 
-        IFS_save=$IFS
-        IFS='
-'
+        # No quotes around $mimetypes
         for x in $mimetypes ; do 
             if grep '^# Installed by xdg-mime' $kde_dir/$x.desktop &>/dev/null ; then
                 DEBUG 1 "Removing $kde_dir/$x.desktop (KDE 3.x support)"
                 rm -f $kde_dir/$x.desktop
             fi
         done
-        IFS=$IFS_save
-
         ;;
 esac
 

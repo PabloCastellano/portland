@@ -38,7 +38,7 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-xdg-su — run a program as root after prompting for the root password
+xdg-su — run a GUI program as root after prompting for the root password
 
 Synopsis
 
@@ -52,6 +52,8 @@ xdg-su provides a graphical dialog that prompts the user for a password to run
 command as user or as root if no user was specified.
 
 xdg-su is for use inside a desktop session only.
+
+xdg-su discards any stdout and stderr output from command.
 
 Options
 
@@ -94,7 +96,7 @@ _MANUALPAGE
 usage()
 {
 cat << _USAGE
-xdg-su — run a program as root after prompting for the root password
+xdg-su — run a GUI program as root after prompting for the root password
 
 Synopsis
 
@@ -193,10 +195,10 @@ exit_failure_operation_failed()
 check_common_commands()
 {
     while [ $# -gt 0 ] ; do
-        parm=$1
+        parm="$1"
         shift
 
-        case $parm in
+        case "$parm" in
             --help)
             usage
             echo "Use 'man xdg-su' or 'xdg-su --manual' for additional info." 
@@ -304,15 +306,15 @@ su_generic()
 user=
 cmd=
 while [ $# -gt 0 ] ; do
-    parm=$1
+    parm="$1"
     shift
 
-    case $parm in
+    case "$parm" in
       -u)
         if [ -z "$1" ] ; then
             exit_failure_syntax "user argument missing for -u"
         fi
-        user=$1
+        user="$1"
         shift
         ;;
 
@@ -320,7 +322,7 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "command argument missing for -c"
         fi
-        cmd=$1
+        cmd="$1"
         shift
         ;;
 

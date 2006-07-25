@@ -26,7 +26,7 @@ _USAGE
 
 #@xdg-utils-common@
 
-screensaver_file=/tmp/xdg-screensaver-$USER-`echo $DISPLAY | sed 's/:/-/g'`
+screensaver_file="/tmp/xdg-screensaver-$USER-"`echo $DISPLAY | sed 's/:/-/g'`
 lockfile_command=`which lockfile 2> /dev/null`
 
 lockfile()
@@ -131,7 +131,7 @@ track_window()
   # Return if $window_id is being tracked already
   (
     already_tracked=1
-    IFS_save=$IFS
+    IFS_save="$IFS"
     IFS=":"
     while read wid pid; do
       if ps -p "$pid" 2> /dev/null | grep xprop > /dev/null; then
@@ -141,7 +141,7 @@ track_window()
         fi   
       fi
     done
-    IFS=$IFS_save
+    IFS="$IFS_save"
     exit $already_tracked
   ) < $screensaver_file > $tmpfile
   already_tracked=$?
@@ -306,7 +306,7 @@ window_id=
 
 case $1 in
   suspend)
-    action=$1
+    action="$1"
     
     shift
 
@@ -314,12 +314,12 @@ case $1 in
         exit_failure_syntax "WindowID argument missing"
     fi
     
-    window_id=$1
+    window_id="$1"
     check_window_id
     ;;
 
   resume)
-    action=$1
+    action="$1"
     
     shift
 
@@ -327,20 +327,20 @@ case $1 in
         exit_failure_syntax "WindowID argument missing"
     fi
     
-    window_id=$1    
+    window_id="$1"
     check_window_id
     ;;
 
   activate)
-    action=$1
+    action="$1"
     ;;
 
   reset)
-    action=$1
+    action="$1"
     ;;
 
   status)
-    action=$1
+    action="$1"
     ;;
     
   *)
