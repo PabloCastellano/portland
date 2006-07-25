@@ -742,7 +742,7 @@ DEBUG 3 "xdg_global_dir: $xdg_global_dir"
 # Find KDE3 mimelnk directory
 kde_user_dir="$HOME/.kde/share/mimelnk"
 kde_global_dir=
-kde_global_dirs=`kde-config --path mime`
+kde_global_dirs=`kde-config --path mime 2> /dev/null`
 DEBUG 3 "kde_global_dirs: $kde_global_dirs"
 [ -n $kde_global_dirs ] || kde_global_dirs=/opt/kde3/share/mimelnk:/opt/kde/share/mimelnk:/usr/share/mimelnk
 first=
