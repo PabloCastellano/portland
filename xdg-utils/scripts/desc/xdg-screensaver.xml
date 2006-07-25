@@ -130,8 +130,11 @@
         <term><option>status</option></term>
         <listitem>
           <simpara>
-            Returns true if the screensaver is enabled to turn on after
-            a period of inactivty, or false otherwise.
+            Prints <emphasis>enabled</emphasis> to stdout if the
+            screensaver is enabled to turn on after a period of
+            inactivity and prints
+            <emphasis>disabled</emphasis> if the screensaver is
+            not enabled.
           </simpara>
         </listitem>
       </varlistentry>

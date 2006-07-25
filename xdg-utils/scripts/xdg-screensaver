@@ -81,8 +81,8 @@ reset
     Turns the screensaver off immediately. This my result in a password prompt
     to unlock the screen, depending on existing system policies.
 status
-    Returns true if the screensaver is enabled to turn on after a period of
-    inactivty, or false otherwise.
+    Prints enabled to stdout if the screensaver is enabled to turn on after a
+    period of inactivity and prints disabled if the screensaver is not enabled.
 
 Options
 
@@ -303,8 +303,10 @@ unlockfile()
 perform_action()
 {
   # Always set the Xorg screensaver first
-  screensaver_xset "$1"
-  xset_err=$?
+  #screensaver_xset "$1"
+  #xset_err=$?
+  xset_err=0
+  result=1
   
   case "$DE" in
     kde)
@@ -460,23 +462,28 @@ screensaver_kde()
     case "$1" in
         suspend) 
         dcop kdesktop KScreensaverIface enable false
+        result=$?
         ;;
 
         resume)
         dcop kdesktop KScreensaverIface configure
+        result=$?
         ;;
         
         activate)
         dcop kdesktop KScreensaverIface save > /dev/null
+        result=$?
         ;;
         
         reset)
         # Turns the screensaver off right now
         dcop kdesktop KScreensaverIface quit
+        result=$?
         ;;
 
         status)
         status=`dcop kdesktop KScreensaverIface isEnabled`
+        result=$?
         if [ x"$status" = "xtrue" ]; then
             echo "enabled"
         elif [ x"$status" = "xfalse" ]; then
@@ -492,8 +499,6 @@ screensaver_kde()
         return 1
         ;;
     esac
-
-    return $?
 }
 
 screensaver_gnome()
@@ -508,31 +513,35 @@ screensaver_gnome()
         suspend) 
         # Don't know how to suspend properly
         gnome-screensaver-command --exit > /dev/null 2> /dev/null
+        result=0
         ;;
 
         resume)
         # Don't know how to suspend properly
         # This may start the gnome-screensaver even if it wasn't running before
         gnome-screensaver > /dev/null 2> /dev/null
+        result=0
         ;;
         
         activate)
         gnome-screensaver-command --activate > /dev/null 2> /dev/null
+        result=$?
         ;;
         
         reset)
         # Turns the screensaver off right now
         gnome-screensaver-command --deactivate > /dev/null 2> /dev/null
+        result=$?
         ;;
 
         status)
         # Don't know how to suspend properly
+        result=0
         if gnome-screensaver-command --query > /dev/null 2> /dev/null >&2; then
             echo "enabled"
         else
             echo "disabled"
         fi
-        return 0
         ;;
 
         *)
@@ -540,8 +549,6 @@ screensaver_gnome()
         return 1
         ;;
     esac
-
-    return $?
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
@@ -609,7 +616,7 @@ if [ "$action" = "suspend" ] ; then
     ( track_window  ) 2> /dev/null > /dev/null &
 fi        
 
-if [ $? -eq 0 ]; then
+if [ $result -eq 0 ]; then
     exit_success
 elif [ $xset_err -eq 0 ]; then
     exit_success
