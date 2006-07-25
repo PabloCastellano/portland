@@ -34,16 +34,17 @@ assert_interactive() {
 	expect=$2
 # It seems valuable to see what happens even if the test has failed. 
 # (eg fail on stdout.)
-#	if [ "$TEST_STATUS" = 'FAIL' ] ; then
-#		## Don't waste user's time if test has already failed.
-#		test_infoline "Test has already FAILed. Not bothering to ask '$query'" 
-#		return
-#	fi
+	if [ "$TEST_STATUS" = 'FAIL' -a -z "$XDG_UTILS_DEBUG_LEVEL" ] ; then
+		## Don't waste user's time if test has already failed.
+		test_infoline "Test has already failed. Not bothering to ask '$query'" 
+		return
+	fi
 
 	if [ ! -z "$XDG_TEST_NO_INTERACTIVE" ] ; then
 		test_infoline "Assumed '$query' is '$expect'"
 	 	return
 	fi
+
 	echo ""
 	if [  ! -z "$expect" ] ; then
 		if [ "$expect" != y -a "$expect" != n ] ; then
@@ -57,7 +58,7 @@ assert_interactive() {
 			test_fail "User indicated '$result' instead of '$expect' in respnonse to '$query'"
 		fi
 	else
-		echo -n "$query [enter when complete] " >&2
+		echo -n "$query [enter to continue] " >&2
 		read result
 	fi
 }

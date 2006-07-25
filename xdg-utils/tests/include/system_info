@@ -10,7 +10,12 @@ fi
 
 echo "distribution: $distro"
 
+. "$parentdir/desktop_environment"
+
 detail=`uname -a`
 echo "uname: $detail"
 
-. "$parentdir/desktop_environment"
+echo "xset data:"
+echo "-------------------------------------"
+xset q
+echo "-------------------------------------"

@@ -83,11 +83,6 @@ test_result() {
 		test_infoline $2
 	fi
 	if [ "$USING_TET" ]; then
-#		if [ $FAIL = N ] ; then
-#			tet_result ${1-PASS}
-#		else
-#			tet_result FAIL
-#		fi
 		tet_result $TEST_STATUS
 	fi
 	# not using tet, so print nice explanation
@@ -163,7 +158,8 @@ edit_file() {
 	if [ -z "$newstr" ] ; then
 		newstr="xdgtestdata-$XDG_TEST_ID-$origstr"
 	fi
-	eval "$varname=$newstr"
+
+	eval "$varname=\"$newstr\""
 
 	sed -i -e "s/$origstr/$newstr/g" "$file"
 }

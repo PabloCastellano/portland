@@ -106,6 +106,9 @@ test_setup() {
 	get_tmpsubdir "$XDG_TEST_DIR/tmp"
 	export XDG_TEST_TMPDIR="$TMPSUBDIR"
 	cd "$XDG_TEST_TMPDIR"
+	
+	get_shortid "$XDG_TEST_DIR/tmp/shortid"
+	export XDG_TEST_SHORTID="$SHORTID"
 }
 
 test_cleanup() {
