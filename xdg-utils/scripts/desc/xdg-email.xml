@@ -143,6 +143,10 @@
 	    Specify an attachment for the e-mail. <replaceable>file</replaceable>
 	    must point to an existing file.
 	  </simpara>
+	  <simpara>
+	    Some e-mail applications require the file to remain present
+            after xdg-email returns.
+	  </simpara>
 	</listitem>
       </varlistentry>
       

@@ -30,7 +30,7 @@
 
   <refnamediv>
     <refname>xdg-su</refname>
-    <refpurpose>run a program as root after prompting for the root password</refpurpose>
+    <refpurpose>run a GUI program as root after prompting for the root password</refpurpose>
   </refnamediv>
 
   <refsynopsisdiv>
@@ -58,6 +58,10 @@
     </para>
     <para>
       xdg-su is for use inside a desktop session only.
+    </para>
+    <para>
+      xdg-su discards any stdout and stderr output from
+      <replaceable>command</replaceable>.
     </para>
   </refsect1>
   <refsect1 id="options">
