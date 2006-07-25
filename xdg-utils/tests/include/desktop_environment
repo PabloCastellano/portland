@@ -28,11 +28,12 @@ else
     echo "gnome: not present (didn't find gnome-session)"
 fi
 
-# From massonnet on FreeNode/#xfce
 which xfce4-session >/dev/null 2>&1
 if [ "$?" -eq 0 ] ; then 
-	xfce4_version=`xfce4-session --version | grep xfce4-session | cut -d' ' -f2 2> /dev/null`
-	if [ `pidof xfce4-session` ]; then
+        xfce_version=`xfce4-session --version | grep '(Xfce ' | cut -d '(' -f 2 | cut -d ' ' -f2 | cut -d ')' -f1`
+	# From massonnet on FreeNode/#xfce
+	#if [ `pidof xfce4-session` ]; then
+	if [ "$GDMSESSION" = 'xfce4' ] ; then
 		running="xfce $running"
 	fi
 
