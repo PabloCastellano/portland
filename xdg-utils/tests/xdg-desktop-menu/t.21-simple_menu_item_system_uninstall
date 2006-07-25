@@ -2,13 +2,12 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
 test_simple_menu_item_system_uninstall() {
 ## Begin the test.
-test_start "$FUNCNAME: verify a desktop file is uninstalled from the applicatiosn menu"
+test_start "$FUNCNAME: verify a desktop file is uninstalled from the system applications menu"
 
 # Dependencies section
 test_init
@@ -21,13 +20,14 @@ set_no_display
 
 use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_item_test.desktop" DESKTOP
 edit_file "$DESKTOP" 'xdg-test-menu-item-install.tmp' CREATEFILE
+edit_file "$DESKTOP" 'Test Menu Item Install' ITEM_TEXT "TEST $XDG_TEST_SHORTID"
 
 assert_file "$DESKTOP"
 
 assert_exit 0 xdg-desktop-menu install --system "$DESKTOP"
 
 assert_file_in_path "$DESKTOP" "$USERPATH"
-assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' present?" y
+assert_interactive "Is there an 'Applications' menu under <main> that contains '$ITEM_TEXT'" y
 
 # Test steps section
 test_procedure
@@ -36,7 +36,9 @@ assert_exit 0 xdg-desktop-menu uninstall --system "$DESKTOP"
 assert_nostdout
 assert_nostderr
 
-assert_interactive "Is the menu item 'Applications/Applications/Test Menu Item Install' still present?" n
+assert_file_not_in_path "$DESKTOP" "$USERPATH"
+
+assert_interactive "Is the menu item '<main>/Applications/$ITEM_TEXT' still present?" n
 
 test_result
 } 

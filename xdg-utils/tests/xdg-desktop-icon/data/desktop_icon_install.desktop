@@ -5,4 +5,4 @@ Type=Application
 
 Exec=touch xdg-test-desktop-icon-install.tmp
 
-Name=Test Desktop Icon Install
+Name=Desktop_Icon

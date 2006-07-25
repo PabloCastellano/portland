@@ -18,7 +18,7 @@ get_tmpsubdir() {
 		get_guid
 	fi
 	TMPSUBDIR="$tmp/$GUID-$$"
-	(umask 077 && mkdir -p $TMPSUBDIR) || {
+	(umask 000 && mkdir -p $TMPSUBDIR) || {
 		echo "Could not create temporary directory!" >&2 
 		exit 255
 	}

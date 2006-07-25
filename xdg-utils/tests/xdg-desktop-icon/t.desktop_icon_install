@@ -13,10 +13,10 @@ test_start "$FUNCNAME: verify a desktop file installed correctly on the desktop"
 # Dependencies section
 test_init
 
-
 # Generate .desktop file
 use_file "$XDG_TEST_DIR/xdg-desktop-icon/data/desktop_icon_install.desktop" DESK_FILE
 edit_file "$DESK_FILE" 'xdg-test-desktop-icon-install.tmp' CREATE_FILE
+edit_file "$DESK_FILE" 'Desktop_Icon' ICON_TEXT "Desktop Install $XDG_TEST_SHORTID"
 assert_file "$DESK_FILE"
 
 set_no_display
@@ -35,8 +35,8 @@ assert_nostderr
 assert_file_in_path "$DESK_FILE" "$HOME/Desktop"
 
 if [ -z "$XDG_TEST_NO_INTERACTIVE" ] && [ `whoami` != root ] ; then
-assert_interactive "Is there an icon on the desktop with name 'Test Desktop Icon Install'?" y
-assert_interactive "Please double click the 'Test Desktop Icon Install' icon."
+assert_interactive "Is there an icon on the desktop with name '$ICON_TEXT'?" y
+assert_interactive "Please double click the '$ICON_TEXT' icon."
 
 ## Double clicking will result in the command 'touch xdg-test-desktop-icon-install.tmp' to be run
 assert_file "$HOME/$CREATE_FILE"
@@ -45,7 +45,7 @@ assert_file "$HOME/$CREATE_FILE"
 ## Cleanup
 rm -f "$HOME/$CREATE_FILE"
 fi
-xdg-desktop-icon uninstall "$DESK_FILE"
+xdg-desktop-icon uninstall "$DESK_FILE" >/dev/null 2>&1
 
 test_result
 } 

@@ -45,7 +45,7 @@ assert_interactive() {
 	 	return
 	fi
 
-	echo ""
+	#echo ""
 	if [  ! -z "$expect" ] ; then
 		if [ "$expect" != y -a "$expect" != n ] ; then
 			echo "TEST SYNTAX ERROR: interactive assertions require 'y' or 'n' as choices. (found '$expect')"

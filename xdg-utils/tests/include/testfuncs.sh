@@ -161,7 +161,7 @@ edit_file() {
 
 	eval "$varname=\"$newstr\""
 
-	sed -i -e "s/$origstr/$newstr/g" "$file"
+	sed -i -e "s|$origstr|$newstr|g" "$file"
 }
 
 

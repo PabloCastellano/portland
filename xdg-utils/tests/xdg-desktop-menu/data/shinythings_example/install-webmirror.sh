@@ -21,7 +21,9 @@ xdg-icon-resource "$c" "$p" --size 64 ../../../icons/red-64.png webmirror-admint
 #xdg-desktop-menu "$c" "$p" --vendor shinythings ./webmirror.directory
 #xdg-desktop-menu "$c" "$p" --vendor shinythings ./webmirror.menu
 
-xdg-desktop-menu "$c" "$p" ./webmirror.desktop
-xdg-desktop-menu "$c" "$p" ./webmirror-admin.desktop
-xdg-desktop-menu "$c" "$p" ./webmirror.directory
-xdg-desktop-menu "$c" "$p" ./webmirror.menu
+xdg-desktop-menu "$c" "$p" --noupdate ./webmirror.desktop
+xdg-desktop-menu "$c" "$p" --noupdate ./webmirror-admin.desktop
+xdg-desktop-menu "$c" "$p" --noupdate ./webmirror.directory
+xdg-desktop-menu "$c" "$p" --noupdate ./webmirror.menu
+
+xdg-desktop-menu forceupdate "$p"

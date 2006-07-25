@@ -34,11 +34,11 @@ distclean: clean
 clean:	tests-clean
 
 tests-userclean:
-	rm -rf tmp
+	rm -rf tmp/xdgt*
 	find ${HOME} -name 'xdgtestdata*' | xargs rm -f
 
 tests-clean:	tests-userclean
-	find `echo "${XDG_DATA_DIRS}:${XDG_CONFIG_DIRS}" | sed -e 's/:/ /g'` -name 'xdgtestdata*' | xargs rm -f
+	find `echo "${XDG_DATA_DIRS}:${XDG_CONFIG_DIRS}" | sed -e 's/:/ /g'` -name 'xdgtestdata*' | xargs rm -f	
 
 install:
 
