@@ -9,6 +9,9 @@ assert_exit() # execute command (saving output) and check exit code
     EXPECT="$1"
     shift 1
 
+    # make sure nothing is hanging around from a prev. test.
+    rm -f out.stdout out.stderr
+
     # $1 is command, $2 is expected exit code (0 or "N" for non-zero)
     ( "$@" > out.stdout 2> out.stderr ) 
     CODE="$?"
@@ -45,20 +48,28 @@ assert_interactive() {
 	 	return
 	fi
 
-	echo -ne "\n\t" >&2
 	if [  ! -z "$expect" ] ; then
-		if [ "$expect" != y -a "$expect" != n ] ; then
-			echo "TEST SYNTAX ERROR: interactive assertions require 'y' or 'n' as choices. (found '$expect')"
+		if [ "$expect" != y -a "$expect" != n -a "$expect" != s ] ; then
+			echo "TEST SYNTAX ERROR: interactive assertions require one of (y,n,s) as choices. (found '$expect')" >&2
 			exit 255
 		fi
-		echo -n "$query [y/n]: " >&2
-		read result
+		unset result
+		while [ "$result" != y -a "$result" != n ] ; do 
+			echo -ne "\n\t$query [y/n]: " >&2
+			read result
+		done
 
-		if [ "$result" != "$expect" ] ; then
+		if [ "$expect" = s ] ; then
+			if [ -z "$3" ] ; then
+				echo "TEST SYNTAX ERROR: 's' requires a variable name"
+				exit 255
+			fi
+			eval "$3=$result"
+		elif [ "$result" != "$expect" ] ; then
 			test_fail "User indicated '$result' instead of '$expect' in respnonse to '$query'"
 		fi
 	else
-		echo -n "$query [enter to continue] " >&2
+		echo -ne "\n\t$query [enter to continue] " >&2
 		read result
 	fi
 }
@@ -116,8 +127,10 @@ assert_nostdout() # check that nothing went to stdout
 
 assert_nostderr() # check that nothing went to stderr
 {
-    if [ -s out.stderr ]
-    then
+    if [ ! -z "$XDG_UTILS_DEBUG_LEVEL" ] ; then
+	test_infoline "not checking STDERR because XDG_UTILS_DEBUG_LEVEL=$XDG_UTILS_DEBUG_LEVEL"
+	test_infoline out.stderr stderr:
+    elif [ -s out.stderr ] ; then
 	test_infoline "Unexpected output written to stderr, as shown below:"
 	infofile out.stderr stderr:
 	test_fail
