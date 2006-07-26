@@ -16,14 +16,18 @@ test_init
 
 set_no_display
 
+assert_exit 0 test -z "$DISPLAY"
+
 echo 'This is some text.' > $INPUT_FILE
 assert_file "$INPUT_FILE"
+
+echo 'text/plain' > out.plain
 
 ## Main test
 test_procedure
 
 assert_exit 0 xdg-mime query filetype "$INPUT_FILE"
-assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
+assert_stdout out.plain
 assert_nostderr
 
 
