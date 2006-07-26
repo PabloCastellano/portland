@@ -8,7 +8,7 @@
 test_email_missing_attach() {
 test_start "$FUNCTNAME: verify an error when --attach does not have a valid file"
 
-ADDR="$XDG_TEST_ID@portland.freedesktop.org"
+ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org"
 
 test_init
 

@@ -8,7 +8,7 @@
 test_email_attach_full_path() {
 test_start "$FUNCTNAME: verify attach argument works"
 
-ADDR="$XDG_TEST_ID@portland.freedesktop.org"
+ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org" 
 
 test_init
 
@@ -26,7 +26,10 @@ assert_exit 0 xdg-email --attach "$XDG_TEST_TMPDIR/$TARG" "$ADDR"
 assert_nostdout
 assert_nostderr
 
-assert_interactive "Did a new email open with an attachment?" y
+assert_interactive "Did an email open to '$ADDR'?" y
+assert_interactive "Does it have an attachment?" y
+
+assert_interactive "Please close any email windows opened by the test."
 
 test_result
 }

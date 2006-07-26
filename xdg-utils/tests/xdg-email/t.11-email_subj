@@ -8,7 +8,8 @@
 test_email_subj() {
 test_start "$FUNCTNAME: verify subject argument works"
 
-ADDR="$XDG_TEST_ID@portland.freedesktop.org"
+ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org"
+SUBJ="A subject line for test $XDG_TEST_SHORTID"
 
 test_init
 
@@ -18,12 +19,14 @@ assert_display
 
 test_procedure
 
-assert_exit 0 xdg-email --subject 'A subject line that is several words long but not quite a paragraph.' "$ADDR"
+assert_exit 0 xdg-email --subject "$SUBJ" "$ADDR"
 
 assert_nostdout
 assert_nostderr
 
-assert_interactive "Did a new email open with each of To/Subject completed?" y
+assert_interactive "Did an email open To: '$ADDR'?" y
+assert_interactive "Is the Subject: '$SUBJ'?" y
+assert_interactive "Please close any email windows opened by the test."
 
 test_result
 }

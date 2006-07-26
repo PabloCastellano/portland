@@ -17,7 +17,7 @@ test_init
 
 use_file "$XDG_TEST_DIR/xdg-desktop-icon/data/desktop_icon_install.desktop" DESK_FILE
 edit_file "$XDG_TEST_TMPDIR/$DESK_FILE" 'xdg-test-desktop-icon-install.tmp' CREATE_FILE
-edit_file "$DESK_FILE" 'Desktop_Icon' ICON_TEXT "Desktop Uninstall $XDG_TEST_SHORTID"
+edit_file "$DESK_FILE" 'Desktop_Icon' ICON_TEXT "Uninstall $XDG_TEST_SHORTID"
 assert_file "$XDG_TEST_TMPDIR/$DESK_FILE"
 
 set_no_display
