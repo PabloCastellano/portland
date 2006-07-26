@@ -15,7 +15,12 @@ require_interactive
 ## Require a running X server
 assert_display
 
-assert_interactive "Screensaver will activate in 1sec, then deactivate in 1sec. Please be careful not to deactivate it manually."
+assert_exit 0 xdg-screensaver status
+assert_stdout
+mv out.stdout out.stat
+
+assert_interactive "Are you normally required to enter your password to de-activate the screensaver?" s USEPASS
+assert_interactive "Screensaver will activate 1sec after you press enter, then deactivate in 1sec. Please be careful not to deactivate it manually."
 
 sleep 1
 assert_exit 0 xdg-screensaver activate
@@ -23,12 +28,14 @@ sleep 1
 test_procedure
 
 assert_exit 0 xdg-screensaver reset
-
 assert_nostdout
 assert_nostderr
 
 assert_interactive "Did the screensaver deactivate automatically?" y
-assert_interactive "If must normally enter a password, were you prompted for it? (enter 'y' if NA)" y
+assert_interactive "Were you prompted for your password?" "$USEPASS"
+
+assert_exit 0 xdg-screensaver status
+assert_stdout out.stat
 
 test_result
 }
