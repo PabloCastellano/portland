@@ -11,11 +11,13 @@ test_purpose "Verify bug 7136 has been corrected"
 
 test_procedure
 
+assert_interactive "Please close any open password prompt windows."
+
 assert_exit 1 xdg-su whoami
 assert_nostdout
 assert_stderr
 
-assert_interactive "Were you prompted for the admin password?" n
+assert_interactive "Did a password prompt window appear?" n
 
 test_result
 }

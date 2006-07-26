@@ -22,9 +22,11 @@ test_procedure
 
 assert_interactive "Please enter the admin password when prompted."
 
-assert_exit 0 xdg-su -c whoami
-assert_stdout out.expected
+assert_exit 0 xdg-su -c 'whoami >out.who'
+assert_nostdout
 assert_nostderr
+
+assert_file out.who out.expected
 
 assert_interactive "Were you prompted for the admin password?" y
 

@@ -88,8 +88,12 @@ assert_file() {
 		test_fail "'$1' does not exist"
 	elif [ ! -f "$1" ] ; then
 		test_fail "'$1' is not a regular file"
-#	elif [ ! -s "$1" ] ; then
-#		test_fail "$1 exists, but is empty"
+	fi
+	if [ -f "$2" ] ; then
+		compare=`diff -wB "$1" "$2"`
+		if [ ! -z "$compare" ] ; then
+			test_fail "'$1' is different from '$2'. Diff is:\n$compare"
+		fi
 	fi
 }
 

@@ -34,7 +34,7 @@ if [ -z "$XDG_TEST_DIR" ] ; then
 	export XDG_TEST_DIR="$PWD"
 	echo "WARNING: guessed XDG_TEST_DIR to be $XDG_TEST_DIR"
 fi
-if [ -z `which xdg-mime` ] && [ -d "$XDG_TEST_DIR/../scripts" ] ; then
+if [ -z `which xdg-mime 2>/dev/null` ] && [ -d "$XDG_TEST_DIR/../scripts" ] ; then
 	export PATH="$PATH:$XDG_TEST_DIR/../scripts"
 	echo "WARNING: modified PATH to add '$XDG_TEST_DIR/../scripts'"
 fi
