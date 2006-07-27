@@ -2,7 +2,6 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
@@ -15,7 +14,8 @@ test_purpose "Verify that new mime types get installed into the user space corre
 # Dependencies section
 test_init
 
-set_no_display
+require_notroot
+
 use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE
 edit_file "$INPUT_FILE" "x-xdg-testpattern" TEST_MIME "x-$XDG_TEST_ID"
 assert_file "$INPUT_FILE"
@@ -37,6 +37,8 @@ test_procedure
 assert_exit 0 xdg-mime install --user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
+
+sleep 1
 
 assert_exit 0 xdg-mime query filetype testfile.xdgtest
 assert_stdout testmime.expected

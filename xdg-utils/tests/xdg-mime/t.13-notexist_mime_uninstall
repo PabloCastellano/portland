@@ -16,7 +16,7 @@ test_start "$FUNCNAME: uninstall mime type that is not present"
 # Dependencies section
 test_init
 
-set_no_display
+require_notroot
 
 use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE
 edit_file "$INPUT_FILE" "x-xdg-testpattern" TEST_MIME "x-$XDG_TEST_ID" 

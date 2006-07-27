@@ -1,7 +1,6 @@
 #!/bin/bash
 
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 test_query_text_plain() {
@@ -14,9 +13,7 @@ test_purpose "Verify that the basic query (text/plain) is working."
 ## Check dependencies
 test_init
 
-set_no_display
-
-assert_exit 0 test -z "$DISPLAY"
+require_notroot
 
 echo 'This is some text.' > $INPUT_FILE
 assert_file "$INPUT_FILE"

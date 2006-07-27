@@ -2,7 +2,6 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
@@ -17,7 +16,8 @@ test_purpose "Verify that mime types get removed from the user space correctly."
 # Dependencies section
 test_init
 
-set_no_display
+require_notroot
+
 use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE
 edit_file "$INPUT_FILE" "x-xdg-testpattern" TEST_MIME "x-$XDG_TEST_ID"
 assert_file "$INPUT_FILE"

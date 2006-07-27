@@ -2,7 +2,6 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
@@ -15,7 +14,8 @@ test_start "$FUNCNAME: verify installing an existing mime type is OK"
 # Dependencies section
 test_init
 
-set_no_display
+require_notroot
+
 use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE
 edit_file "$INPUT_FILE" "x-xdg-testpattern" TEST_MIME "x-$XDG_TEST_ID"
 assert_file "$INPUT_FILE"
@@ -41,7 +41,7 @@ assert_stdout testmime.expected
 assert_nostderr
 
 # this is a cleanup step
-xdg-mime uninstall --user "$INPUT_FILE"
+xdg-mime uninstall --user "$INPUT_FILE" >/dev/null 2>&1
 
 test_result
 } 

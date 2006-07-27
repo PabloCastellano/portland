@@ -19,6 +19,7 @@ assert_exit 0 test ! -z "$WINDOWID"
 echo "disabled" >out.after
 
 test_procedure
+set -x
 
 assert_exit 0 xdg-screensaver suspend "$WINDOWID"
 assert_nostdout
@@ -27,6 +28,7 @@ assert_nostderr
 assert_exit 0 xdg-screensaver status
 assert_stdout out.after
 
+sleep 1
 # cleanup 
 xdg-screensaver resume "$WINDOWID" >/dev/null 2>&1
 

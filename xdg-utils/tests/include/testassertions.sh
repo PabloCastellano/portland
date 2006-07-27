@@ -13,8 +13,10 @@ assert_exit() # execute command (saving output) and check exit code
     rm -f out.stdout out.stderr
 
     # $1 is command, $2 is expected exit code (0 or "N" for non-zero)
-    ( "$@" > out.stdout 2> out.stderr ) 
+    ( "$@" > out.stdout 2> out.stderr )
     CODE="$?"
+
+    LASTCOMMAND="$*"
 
     if [ -z "$EXPECT" ]; then
 	EXPECT=0;
@@ -119,7 +121,7 @@ assert_nostdout() # check that nothing went to stdout
 {
     if [ -s out.stdout ]
     then
-	test_infoline "Unexpected output written to stdout, as shown below:"
+	test_infoline "Unexpected output from '$LASTCOMMAND' written to stdout, as shown below:"
 	infofile out.stdout stdout:
 	test_fail
     fi
@@ -128,10 +130,10 @@ assert_nostdout() # check that nothing went to stdout
 assert_nostderr() # check that nothing went to stderr
 {
     if [ ! -z "$XDG_UTILS_DEBUG_LEVEL" ] ; then
-	test_infoline "not checking STDERR because XDG_UTILS_DEBUG_LEVEL=$XDG_UTILS_DEBUG_LEVEL"
+	test_infoline "not checking STDERR from '$LASTCOMMAND' because XDG_UTILS_DEBUG_LEVEL=$XDG_UTILS_DEBUG_LEVEL"
 	test_infoline out.stderr stderr:
     elif [ -s out.stderr ] ; then
-	test_infoline "Unexpected output written to stderr, as shown below:"
+	test_infoline "Unexpected output from '$LASTCOMMAND' written to stderr, as shown below:"
 	infofile out.stderr stderr:
 	test_fail
     fi
@@ -146,7 +148,7 @@ assert_stderr() # check that stderr matches expected error
     "")
 	if [ ! -s out.stderr ]
 	then
-	    test_infoline "Expected output to stderr, but none written"
+	    test_infoline "Expected output from '$LASTCOMMAND' to stderr, but none written"
 	    test_fail
 	fi
 	;;
@@ -172,7 +174,7 @@ assert_stderr() # check that stderr matches expected error
 	exec 0<&4 3<&- 4<&-
 	if [ "$OK" = N ]
 	then
-	    test_infoline "Incorrect output written to stderr, as shown below"
+	    test_infoline "Incorrect output from '$LASTCOMMAND' written to stderr, as shown below"
 	    infofile "$expfile" "expected stderr:"
 	    infofile out.stderr "received stderr:"
 	    test_fail
@@ -190,7 +192,7 @@ assert_stdout() # check that stderr matches expected error
     "")
 	if [ ! -s out.stdout ]
 	then
-	    test_infoline "Expected output to stdout, but none written"
+	    test_infoline "Expected output from '$LASTCOMMAND' to stdout, but none written"
 	    test_fail
 	fi
 	;;
@@ -223,7 +225,7 @@ assert_stdout() # check that stderr matches expected error
 	exec 0<&4 3<&- 4<&-
 	if [ "$OK" = N ]
 	then
-	    test_infoline "Incorrect output written to stdout, as shown below"
+	    test_infoline "Incorrect output from '$LASTCOMMAND' written to stdout, as shown below"
 	    infofile "$expfile" "expected stdout:"
 	    infofile out.stdout "received stdout:"
 	    test_fail

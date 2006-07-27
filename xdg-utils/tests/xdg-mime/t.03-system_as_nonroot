@@ -2,7 +2,6 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
@@ -16,8 +15,6 @@ test_start "$FUNCNAME: verify error for --system when run as a normal user"
 test_init
 
 require_notroot
-
-set_no_display
 
 use_file "$XDG_TEST_DIR/xdg-mime/data/testmime.xml" INPUT_FILE
 edit_file "$INPUT_FILE" "x-xdg-testpattern" TEST_MIME "x-$XDG_TEST_ID"
