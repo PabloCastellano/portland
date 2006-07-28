@@ -20,13 +20,19 @@ assert_exit 0 xdg-screensaver status
 assert_stdout
 mv out.stdout out.prev
 
+sleep 1
+
 assert_exit 0 xdg-screensaver suspend "$WINDOWID"
 
 test_procedure
 
+sleep 1
+
 assert_exit 0 xdg-screensaver resume "$WINDOWID"
 assert_nostdout
 assert_nostderr
+
+sleep 1
 
 assert_exit 0 xdg-screensaver status
 assert_stdout out.prev
