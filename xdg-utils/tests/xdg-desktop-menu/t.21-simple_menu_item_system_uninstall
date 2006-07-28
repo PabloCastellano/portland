@@ -27,7 +27,8 @@ assert_file "$DESKTOP"
 assert_exit 0 xdg-desktop-menu install --system "$DESKTOP"
 
 assert_file_in_path "$DESKTOP" "$USERPATH"
-assert_interactive "Is there an 'Applications' menu under <main> that contains '$ITEM_TEXT'" y
+assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?" y
+
 
 # Test steps section
 test_procedure
@@ -38,7 +39,7 @@ assert_nostderr
 
 assert_file_not_in_path "$DESKTOP" "$USERPATH"
 
-assert_interactive "Is the menu item '<main>/Applications/$ITEM_TEXT' still present?" n
+assert_interactive "Is the menu item '$ITEM_TEXT' still present?" n
 
 test_result
 } 

@@ -26,7 +26,7 @@ assert_nostderr
 
 assert_interactive "Did an email open To: '$ADDR'?" y
 assert_interactive "Is the Subject: '$SUBJ'?" y
-assert_interactive "Please close any email windows opened by the test."
+assert_interactive "Please close any email windows opened by the test." C
 
 test_result
 }

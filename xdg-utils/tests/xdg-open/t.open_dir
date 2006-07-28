@@ -22,6 +22,7 @@ assert_nostdout
 assert_nostderr
 
 assert_interactive "Did a file browser open to $XDG_TEST_DIR?" y
+assert_interactive "Please close any windows opened by this test." C
 
 test_result
 }

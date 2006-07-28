@@ -23,11 +23,11 @@ assert_nostdout
 assert_nostderr
 
 assert_interactive "Did an email open to both '$ADDR' and 't2-$ADDR'?" y
-assert_interactive "Are both 'cc-$ADDR' and 'cc2-$ADDR' in the cc: line?" y
+assert_interactive "Are both 'cc-$ADDR' and 'cc2-$ADDR' CC'd?" y
 assert_interactive "Is the subject 'Test Subject'?" y
 assert_interactive "Is the body 'Test Body'?" y
 
-assert_interactive "Please close any email windows opened by the test."
+assert_interactive "Please close any email windows opened by the test." C
 
 
 test_result

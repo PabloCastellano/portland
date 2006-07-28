@@ -35,11 +35,22 @@ assert_interactive_notroot() {
 }
 
 assert_interactive() {
+# Useage:
+# assert_interactive {msg} [y|n|C|s varname]
+#
+# msg is the text to print.
+# y -> expect y for [y/n]
+# n -> expect n for [y/n]
+# s -> save y or n into varname. Then, (presumably) $varname can be 
+#      given in place of y or n in subsequent calls to assert_interactive
+# C -> cleanup msg. Always print "msg [enter to continue]" despite test failure.
+# if no argument is given after msg, print "msg [enter to continue]"
+
 	query=$1
 	expect=$2
 # It seems valuable to see what happens even if the test has failed. 
 # (eg fail on stdout.)
-	if [ "$TEST_STATUS" = 'FAIL' -a -z "$XDG_UTILS_DEBUG_LEVEL" ] ; then
+	if [ "$TEST_STATUS" = 'FAIL' -a -z "$XDG_UTILS_DEBUG_LEVEL" -a "$expect" != C ] ; then
 		## Don't waste user's time if test has already failed.
 		test_infoline "Test has already failed. Not bothering to ask '$query'" 
 		return
@@ -50,9 +61,9 @@ assert_interactive() {
 	 	return
 	fi
 
-	if [  ! -z "$expect" ] ; then
-		if [ "$expect" != y -a "$expect" != n -a "$expect" != s ] ; then
-			echo "TEST SYNTAX ERROR: interactive assertions require one of (y,n,s) as choices. (found '$expect')" >&2
+	if [  ! -z "$expect" -a "$expect" != C ] ; then
+		if [ "$expect" != y -a "$expect" != n -a "$expect" != s -a "$expect" != C ] ; then
+			echo "TEST SYNTAX ERROR: interactive assertions require one of (y,n,s,C) as choices. (found '$expect')" >&2
 			exit 255
 		fi
 		unset result

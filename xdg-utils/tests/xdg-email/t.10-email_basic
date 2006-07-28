@@ -23,7 +23,7 @@ assert_nostdout
 assert_nostderr
 
 assert_interactive "Did a new email open to '$ADDR' with only the to: field complete?" y
-assert_interactive "Please close any email windows opened by the test."
+assert_interactive "Please close any email windows opened by the test." C
 
 test_result
 }

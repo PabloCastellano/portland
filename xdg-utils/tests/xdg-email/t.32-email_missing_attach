@@ -26,6 +26,7 @@ assert_nostdout
 assert_stderr
 
 assert_interactive "Did a new email open?" n
+assert_interactive "Please close any email windows opened by the test." C
 
 test_result
 }

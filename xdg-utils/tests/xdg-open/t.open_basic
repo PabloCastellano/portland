@@ -27,6 +27,7 @@ assert_nostdout
 assert_nostderr
 
 assert_interactive "Did a text editor open a file containing the string 'I am open.'?" y
+assert_interactive "Please close any windows opened by this test." C
 
 test_result
 }
