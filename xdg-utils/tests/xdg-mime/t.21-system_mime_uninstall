@@ -2,7 +2,6 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
@@ -26,6 +25,11 @@ echo "text/$TEST_MIME" >testmime.expected
 echo "Some text." >testfile.xdgtest
 assert_file testfile.xdgtest
 
+# TODO: query requires a desktop environment
+#assert_exit 0 xdg-mime query filetipe testfile.xdgtest
+#assert_stdout
+#mv out.stout out.save
+
 # Install & verify mime type is installed
 assert_exit 0 xdg-mime install --system "$INPUT_FILE"
 
@@ -42,7 +46,7 @@ assert_nostderr
 
 ## Verify uninstall
 #assert_exit 0 xdg-mime query filetype $QUERY_FILE
-#assert_stdout "$XDG_TEST_DIR/xdg-mime/data/textplain.expected"
+#assert_stdout out.save
 
 test_result
 } 
