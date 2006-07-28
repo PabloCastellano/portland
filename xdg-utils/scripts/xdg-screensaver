@@ -78,8 +78,8 @@ activate
     Turns the screensaver on immediately. This may result in the screen getting
     locked, depending on existing system policies.
 reset
-    Turns the screensaver off immediately. This my result in a password prompt
-    to unlock the screen, depending on existing system policies.
+    Turns the screensaver off immediately. On some systems the user may be
+    asked to authenticate first before the screen is unlocked.
 status
     Prints enabled to stdout if the screensaver is enabled to turn on after a
     period of inactivity and prints disabled if the screensaver is not enabled.

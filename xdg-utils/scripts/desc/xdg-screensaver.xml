@@ -119,9 +119,9 @@
         <term><option>reset</option></term>
         <listitem>
           <simpara>
-            Turns the screensaver off immediately. This my result in a
-            password prompt to unlock the screen, depending on existing
-            system policies.
+            Turns the screensaver off immediately. On some systems the
+            user may be asked to authenticate first before the screen is
+            unlocked.
           </simpara>
         </listitem>
       </varlistentry>
