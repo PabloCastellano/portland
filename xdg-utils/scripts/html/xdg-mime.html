@@ -1,20 +1,19 @@
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-mime</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-mime"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-mime &#8212; command line tool for querying information about file type handling
-and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   query  { filetype  |   default }  <em class="replaceable"><code>FILE</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   default   <em class="replaceable"><code>application</code></em>   <em class="replaceable"><code>mimetype(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   install  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   uninstall  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   query  { filetype  |   default }  ... </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   default   <em class="replaceable"><code>application</code></em>   <em class="replaceable"><code>mimetype(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   install  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   uninstall  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-mime program can be used to query information about file types
       and to add descriptions for new file types.
     </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">query</span></dt><dd><p>
-	    Returns information related to the file type of
-            <em class="replaceable"><code>FILE</code></em>.
+	    Returns information related to file types.
 	  </p><p>
             The <span class="emphasis"><em>query</em></span> option is for use inside a desktop session only.
             It is not recommended to use xdg-mime query as root.
 	  </p><p>
             The following queries are supported:
-	  </p><p><span class="emphasis"><em>filetype</em></span>:
+	  </p><p>query filetype <em class="replaceable"><code>FILE</code></em>:
 	    Returns the file type of <em class="replaceable"><code>FILE</code></em> in the form of a MIME type.
-	  </p><p><span class="emphasis"><em>default</em></span>:
+	  </p><p>query default <em class="replaceable"><code>mimetype</code></em>:
 	    Returns the default application that the desktop environment uses for opening
-	    <em class="replaceable"><code>FILE</code></em>. The default applications is
+	    files of type <em class="replaceable"><code>mimetype</code></em>. The default application is
             identified by its *.desktop file.
 	  </p></dd><dt><span class="term">default</span></dt><dd><p>
 	    Ask the desktop environment to make <em class="replaceable"><code>application</code></em>

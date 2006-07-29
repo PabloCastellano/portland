@@ -2,7 +2,7 @@
 .\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
 .\" Instead of manually editing it, you probably should edit the DocBook XML
 .\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "XDG\-MIME" "1" "07/17/2006" "This is release 0.5 of the xdg\-mime Manu" ""
+.TH "XDG\-MIME" "1" "07/28/2006" "This is release 0.5 of the xdg\-mime Manu" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -11,7 +11,7 @@
 xdg\-mime \- command line tool for querying information about file type handling and adding descriptions for new file types
 .SH "SYNOPSIS"
 .HP 9
-\fBxdg\-mime\fR query {filetype default} \fIFILE\fR
+\fBxdg\-mime\fR query {filetype default} ...
 .HP 9
 \fBxdg\-mime\fR default \fIapplication\fR \fImimetype(s)\fR
 .HP 9
@@ -26,8 +26,7 @@ The xdg\-mime program can be used to query information about file types and to a
 .SH "COMMANDS"
 .TP
 query
-Returns information related to the file type of
-\fIFILE\fR.
+Returns information related to file types.
 .sp
 The
 \fIquery\fR
@@ -35,12 +34,14 @@ option is for use inside a desktop session only. It is not recommended to use xd
 .sp
 The following queries are supported:
 .sp
-\fIfiletype\fR: Returns the file type of
+query filetype
+\fIFILE\fR: Returns the file type of
 \fIFILE\fR
 in the form of a MIME type.
 .sp
-\fIdefault\fR: Returns the default application that the desktop environment uses for opening
-\fIFILE\fR. The default applications is identified by its *.desktop file.
+query default
+\fImimetype\fR: Returns the default application that the desktop environment uses for opening files of type
+\fImimetype\fR. The default application is identified by its *.desktop file.
 .TP
 default
 Ask the desktop environment to make

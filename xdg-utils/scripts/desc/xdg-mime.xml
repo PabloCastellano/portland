@@ -42,7 +42,7 @@ and adding descriptions for new file types</refpurpose>
 	<arg choice="plain">filetype</arg>
 	<arg choice="plain">default</arg>
       </group>
-      <arg choice="plain"><replaceable>FILE</replaceable></arg>
+      <arg choice="plain">...</arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-mime</command>
@@ -92,8 +92,7 @@ and adding descriptions for new file types</refpurpose>
 	<term>query</term>
 	<listitem>
 	  <simpara>
-	    Returns information related to the file type of
-            <replaceable>FILE</replaceable>.
+	    Returns information related to file types.
 	  </simpara>
 	  <simpara>
             The <emphasis>query</emphasis> option is for use inside a desktop session only.
@@ -102,12 +101,12 @@ and adding descriptions for new file types</refpurpose>
 	  <simpara>
             The following queries are supported:
 	  </simpara>
-	  <simpara><emphasis>filetype</emphasis>:
+	  <simpara>query filetype <replaceable>FILE</replaceable>:
 	    Returns the file type of <replaceable>FILE</replaceable> in the form of a MIME type.
 	  </simpara>
-	  <simpara><emphasis>default</emphasis>:
+	  <simpara>query default <replaceable>mimetype</replaceable>:
 	    Returns the default application that the desktop environment uses for opening
-	    <replaceable>FILE</replaceable>. The default applications is
+	    files of type <replaceable>mimetype</replaceable>. The default application is
             identified by its *.desktop file.
 	  </simpara>
 	</listitem>

@@ -125,29 +125,37 @@ make_default_generic()
 
 defapp_kde()
 {
-    DEBUG 1 "Running kfile \"$1\""
-    MIME=`kfile "$1" 2> /dev/null | head -n 1 | cut -d "(" -f 2 | cut -d ")" -f 1`
-    DEBUG 2 "MIME = $MIME"
-
-    if [ x"$MIME" != x"" ]; then
-        DEBUG 1 "Running ktradertest \"$MIME\" Application"
-        trader_result=`ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
+    MIME="$1"
+    DEBUG 1 "Running ktradertest \"$MIME\" Application"
+    trader_result=`ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
             | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2`
-        if [ -n "$trader_result" ] ; then
-            basename "$trader_result"
-        fi
+    if [ -n "$trader_result" ] ; then
+        basename "$trader_result"
         exit_success
     else
         exit_failure_operation_failed
     fi
 }
 
-defapp_gnome()
+defapp_generic()
 {
-    DEBUG 1 "Running gnomevfs-info \"$1\""
-    gnomevfs-info "$1" 2> /dev/null | grep "Default app" | cut -d ":" -f 2 \
-        | cut -d " " -f 2
+# FIXME:
+# Find XDG-DATA-DIRS/applications/defaults.list
+    MIME="$1"
+    xdg_user_dir="$XDG_DATA_HOME"
+    [ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
+    xdg_user_dir="$xdg_user_dir/$xdg_dir_name"
+    xdg_system_dirs="$XDG_DATA_DIRS"
+    [ -n "$xdg_system_dirs" ] || xdg_system_dirs=/usr/local/share/:/usr/share/
 
+    for x in `echo "$xdg_user_dir:$xdg_system_dirs" | sed 's/:/ /g'`; do
+       DEBUG 2 "Checking $x/applications/defaults.list"
+       trader_result=`grep "$MIME=" $x/applications/defaults.list 2> /dev/null | cut -d '=' -f 2`
+       if [ -n "$trader_result" ] ; then
+          echo $trader_result
+          exit_success
+       fi
+    done
     exit_success
 }
 
@@ -228,6 +236,7 @@ uninstall_xsl()
 mode=
 action=
 filename=
+mimetype=
 
 case $1 in
   install)
@@ -248,10 +257,40 @@ case $1 in
     case $1 in
       filetype)
         action=info
+
+        filename="$2"
+        if [ -z "$filename" ] ; then 
+            exit_failure_syntax "FILE argument missing"
+        fi
+        case $filename in
+          -*)
+            exit_failure_syntax "unexpected option '$filename'"
+            ;;
+        esac
+        if [ ! -f "$filename" ] ; then
+            exit_failure_file_missing "file '$filename' does not exist"
+        fi
         ;;
 
       default)
         action=defapp
+        mimetype="$2"
+        if [ -z "$mimetype" ] ; then 
+            exit_failure_syntax "mimetype argument missing"
+        fi
+        case $mimetype in
+          -*)
+            exit_failure_syntax "unexpected option '$mimetype'"
+            ;;
+
+          */*)
+            # Ok
+            ;;
+
+          *)
+            exit_failure_syntax "mimetype '$mimetype' is not in the form 'minor/major'"
+            ;;
+        esac
         ;;
 
       *)
@@ -310,6 +349,46 @@ if [ "$action" = "makedefault" ]; then
     exit_success
 fi
 
+if [ "$action" = "info" ]; then
+    detectDE
+
+    if [ x"$DE" = x"" ]; then
+        if [ -x /usr/bin/file ]; then
+            DE=generic
+        fi
+    fi
+
+    case "$DE" in
+        kde)
+        info_kde "$filename"
+        ;;
+
+        gnome)
+        info_gnome "$filename"
+        ;;
+
+        generic)
+        info_generic "$filename"
+        ;;
+    esac
+    exit_failure_operation_impossible "no method available for quering MIME type of '$filename'"
+fi
+
+if [ "$action" = "defapp" ]; then
+    detectDE
+
+    case "$DE" in
+        kde)
+        defapp_kde "$mimetype"
+        ;;
+
+        *)
+        defapp_generic "$mimetype"
+        ;;
+    esac
+    exit_failure_operation_impossible "no method available for quering default application for '$mimetype'"
+fi
+
 while [ $# -gt 0 ] ; do
     parm="$1"
     shift
@@ -343,59 +422,6 @@ if [ -z "$action" ] ; then
     exit_failure_syntax "command argument missing"
 fi
 
-if [ "$action" = "info" ]; then
-    if [ -n "$mode" ] ; then
-        exit_failure_syntax "unexpected option '--$mode'"
-    fi
-    if [ -z "$filename" ] ; then
-        exit_failure_syntax "FILE argument missing"
-    fi
-
-    detectDE
-
-    if [ x"$DE" = x"" ]; then
-        if [ -x /usr/bin/file ]; then
-            DE=generic
-        fi
-    fi
-
-    case "$DE" in
-        kde)
-        info_kde "$filename"
-        ;;
-
-        gnome)
-        info_gnome "$filename"
-        ;;
-
-        generic)
-        info_generic "$filename"
-        ;;
-    esac
-    exit_failure_operation_impossible "no method available for quering MIME type of '$filename'"
-fi
-
-if [ "$action" = "defapp" ]; then
-    if [ -n "$mode" ] ; then
-        exit_failure_syntax "unexpected option '--$mode'"
-    fi
-    if [ -z "$filename" ] ; then
-        exit_failure_syntax "FILE argument missing"
-    fi
-
-    detectDE
-
-    case "$DE" in
-        kde)
-        defapp_kde "$filename"
-        ;;
-
-        gnome)
-        defapp_gnome "$filename"
-        ;;
-    esac
-    exit_failure_operation_impossible "no method available for quering default application for file '$filename'"
-fi
 
 if [ -z "$mode" ] ; then
     exit_failure_syntax "expected --user or --system option"
