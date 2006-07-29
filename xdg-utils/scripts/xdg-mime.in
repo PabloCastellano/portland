@@ -350,6 +350,8 @@ if [ "$action" = "makedefault" ]; then
 fi
 
 if [ "$action" = "info" ]; then
+    check_input_file "$filename"
+
     detectDE
 
     if [ x"$DE" = x"" ]; then
