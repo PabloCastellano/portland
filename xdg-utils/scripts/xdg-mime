@@ -156,12 +156,12 @@ Examples
 
 xdg-mime query filetype /tmp/foobar.png
 
-Prints the MIME type of the file /tmp/foobar.png
+Prints the MIME type of the file /tmp/foobar.png, in this case image/png
 
-xdg-mime query default /tmp/foobar.png
+xdg-mime query default image/png
 
-Prints the name of the .desktop file of the application which is registered to
-open files of the MIME type the file /tmp/foobar.png has
+Prints the .desktop filename of the application which is registered to open PNG
+files.
 
 xdg-mime install --system diff.xml
 
@@ -465,7 +465,7 @@ defapp_generic()
 
     for x in `echo "$xdg_user_dir:$xdg_system_dirs" | sed 's/:/ /g'`; do
        DEBUG 2 "Checking $x/applications/defaults.list"
-       trader_result=`grep "$MIME=" $x/applications/defaults.list 2> /dev/null | cut -d '=' -f 2`
+       trader_result=`grep "$MIME=" $x/applications/defaults.list 2> /dev/null | cut -d '=' -f 2 | cut -d ';' -f 1`
        if [ -n "$trader_result" ] ; then
           echo $trader_result
           exit_success

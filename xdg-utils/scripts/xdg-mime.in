@@ -150,7 +150,7 @@ defapp_generic()
 
     for x in `echo "$xdg_user_dir:$xdg_system_dirs" | sed 's/:/ /g'`; do
        DEBUG 2 "Checking $x/applications/defaults.list"
-       trader_result=`grep "$MIME=" $x/applications/defaults.list 2> /dev/null | cut -d '=' -f 2`
+       trader_result=`grep "$MIME=" $x/applications/defaults.list 2> /dev/null | cut -d '=' -f 2 | cut -d ';' -f 1`
        if [ -n "$trader_result" ] ; then
           echo $trader_result
           exit_success
