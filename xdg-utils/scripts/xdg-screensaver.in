@@ -216,12 +216,12 @@ screensaver_kde()
 {
     case "$1" in
         suspend) 
-        dcop kdesktop KScreensaverIface enable false
+        dcop kdesktop KScreensaverIface enable false > /dev/null
         result=$?
         ;;
 
         resume)
-        dcop kdesktop KScreensaverIface configure
+        dcop kdesktop KScreensaverIface configure > /dev/null
         result=$?
         ;;
         
@@ -232,7 +232,7 @@ screensaver_kde()
         
         reset)
         # Turns the screensaver off right now
-        dcop kdesktop KScreensaverIface quit
+        dcop kdesktop KScreensaverIface quit > /dev/null
         result=$?
         ;;
 
