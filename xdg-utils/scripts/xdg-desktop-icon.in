@@ -70,9 +70,7 @@ while [ $# -gt 0 ] ; do
             exit_failure_syntax "unexpected argument '$parm'"
         fi
         if [ "$action" = "install" ] ; then
-            if [ ! -f "$parm" ] ; then
-                exit_failure_file_missing "file '$parm' does not exist"
-            fi
+            check_input_file "$parm"
         fi
         desktop_file=$parm
         ;;

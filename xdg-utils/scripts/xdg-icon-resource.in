@@ -123,9 +123,7 @@ while [ $# -gt 0 ] ; do
             icon_name="$parm"
         else
             if [ "$action" = "install" ] ; then
-                if [ ! -f "$parm" ] ; then
-                    exit_failure_file_missing "file '$parm' does not exist"
-                fi
+                check_input_file "$parm"
             fi
             icon_file="$parm"
         fi

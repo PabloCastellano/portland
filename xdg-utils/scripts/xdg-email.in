@@ -157,6 +157,7 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "file argument missing for --attach option"
         fi
+        check_input_file "$1"
         file=`readlink -f "$1"` # Normalize path
         if [ -z "$file" -o ! -f "$file" ] ; then
             exit_failure_file_missing "file '$1' does not exist"
