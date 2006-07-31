@@ -150,7 +150,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "@NAME@ 1.0beta1"
+            echo "@NAME@ 1.0beta2"
             exit_success
             ;;
         esac
