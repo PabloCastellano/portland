@@ -31,7 +31,7 @@ assert_file_not_in_path "$DESKTOP" "$USERPATH"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu install --system "$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --mode system "$DESKTOP"
 assert_nostdout
 assert_nostderr
 
@@ -47,7 +47,7 @@ assert_file "$WORK_DIR/$CREATEFILE"
 fi
 
 ## Cleanup
-xdg-desktop-menu uninstall --system "$DESKTOP" >/dev/null 2>&1
+xdg-desktop-menu uninstall --mode system "$DESKTOP" >/dev/null 2>&1
 
 test_result
 } 

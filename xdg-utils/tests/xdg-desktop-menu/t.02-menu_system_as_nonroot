@@ -10,7 +10,7 @@ test_menu_system_as_nonroot() {
 USERPATH="$XDG_DATA_DIRS:$HOME/.local:$HOME/.config:$XDG_DATA_HOME"
 
 ## Begin the test.
-test_start "$FUNCNAME: verify error for --system when run as a normal user"
+test_start "$FUNCNAME: verify error for --mode system when run as a normal user"
 
 # Dependencies section
 test_init
@@ -25,13 +25,13 @@ assert_file "$DESKTOP"
 # Test steps section
 test_procedure
 
-assert_exit 3 xdg-desktop-menu install --system "$DESKTOP"
+assert_exit 3 xdg-desktop-menu install --mode system "$DESKTOP"
 assert_nostdout
 assert_stderr
 
 assert_file_not_in_path "$DESKTOP" "$USERPATH"
 
-assert_exit 3 xdg-desktop-menu uninstall --system "$DESKTOP"
+assert_exit 3 xdg-desktop-menu uninstall --mode system "$DESKTOP"
 assert_nostdout
 assert_stderr 
 

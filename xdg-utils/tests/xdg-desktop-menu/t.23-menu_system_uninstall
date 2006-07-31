@@ -43,11 +43,11 @@ assert_file_not_in_path "$DESKTOP" "$USERPATH"
 assert_file_not_in_path "$DIRECTORY" "$USERPATH"
 assert_file_not_in_path "$MENU" "$USERPATH"
 
-assert_exit 0 xdg-desktop-menu install --noupdate --system "$DESKTOP"
-assert_exit 0 xdg-desktop-menu install --noupdate --system "$DESKTOP2"
-assert_exit 0 xdg-desktop-menu install --noupdate --system "$DIRECTORY"
-assert_exit 0 xdg-desktop-menu install --noupdate --system "$MENU"
-assert_exit 0 xdg-desktop-menu forceupdate --system
+assert_exit 0 xdg-desktop-menu install --noupdate --mode system "$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode system "$DESKTOP2"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode system "$DIRECTORY"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode system "$MENU"
+assert_exit 0 xdg-desktop-menu forceupdate --mode system
 
 assert_file_in_path "$DESKTOP" "$USERPATH"
 assert_file_in_path "$DESKTOP" "$USERPATH2"
@@ -59,23 +59,23 @@ assert_interactive "Is the menu '<main>/$MENU_NAME present with items 'EXTRA_ITE
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --system "$DESKTOP"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode system "$DESKTOP"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --system "$DESKTOP2"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode system "$DESKTOP2"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --system "$DIRECTORY"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode system "$DIRECTORY"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --system "$MENU"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode system "$MENU"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu forceupdate --system
+assert_exit 0 xdg-desktop-menu forceupdate --mode system
 assert_nostdout
 assert_nostderr
 

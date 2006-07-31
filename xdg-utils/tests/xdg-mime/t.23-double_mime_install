@@ -25,14 +25,14 @@ echo "Some text." >testfile.xdgtest
 assert_file testfile.xdgtest
 
 # Verify the test type is not installed already.
-assert_exit 0 xdg-mime install --user "$INPUT_FILE"
+assert_exit 0 xdg-mime install --mode user "$INPUT_FILE"
 assert_exit 0 xdg-mime query filetype testfile.xdgtest
 assert_stdout testmime.expected
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-mime install --user "$INPUT_FILE"
+assert_exit 0 xdg-mime install --mode user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
@@ -41,7 +41,7 @@ assert_stdout testmime.expected
 assert_nostderr
 
 # this is a cleanup step
-xdg-mime uninstall --user "$INPUT_FILE" >/dev/null 2>&1
+xdg-mime uninstall --mode user "$INPUT_FILE" >/dev/null 2>&1
 
 test_result
 } 

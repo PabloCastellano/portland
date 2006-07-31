@@ -18,7 +18,7 @@ assert_nofile "$INPUT_FILE"
 ## Main test
 test_procedure
 
-assert_exit 2 xdg-mime install --user "$INPUT_FILE"
+assert_exit 2 xdg-mime install --mode user "$INPUT_FILE"
 assert_stderr
 assert_nostdout
 

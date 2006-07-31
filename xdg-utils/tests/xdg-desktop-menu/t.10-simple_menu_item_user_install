@@ -30,7 +30,7 @@ assert_file_not_in_path "$DESKTOP" "$USERPATH"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu install --user "$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --mode user "$DESKTOP"
 assert_nostdout
 assert_nostderr
 
@@ -39,7 +39,7 @@ assert_file_in_path "$DESKTOP" "$USERPATH"
 if [ -z "$XDG_TEST_NO_INTERACTIVE" -a `whoami` != 'root' ]; then
 
 # TODO: HACK: this shouldn't be necessary.
-assert_exit 0 xdg-desktop-menu forceupdate --user 
+assert_exit 0 xdg-desktop-menu forceupdate --mode user 
 if [ "$GDMSESSION" = "kde" ] ; then
 	assert_interactive_notroot "You are running KDE. Please note that KDE takes time to update it's menus. Please refresh the menu several times prior to answering the following questions."
 fi
@@ -53,7 +53,7 @@ assert_file "$WORK_DIR/$CREATEFILE"
 fi
 
 ## Cleanup
-xdg-desktop-menu uninstall --user "$DESKTOP" >/dev/null 2>&1
+xdg-desktop-menu uninstall --mode user "$DESKTOP" >/dev/null 2>&1
 
 test_result
 } 

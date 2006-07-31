@@ -7,7 +7,7 @@
 
 ## Test function
 test_icon_system_install() {
-test_start "$FUNCNAME: verify $ICON is installed correctly with --system"
+test_start "$FUNCNAME: verify $ICON is installed correctly with --mode system"
 
 ## Begin the test.
 icondir="$XDG_TEST_DIR/icons"
@@ -28,14 +28,14 @@ assert_file_not_in_path "$ICONFILE" "$systempath"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource install --system --size "$SIZE" "$ICONFILE"
+assert_exit 0 xdg-icon-resource install --mode system --size "$SIZE" "$ICONFILE"
 assert_nostdout
 assert_nostderr
 
 assert_file_in_path "$ICONFILE" "$systempath"
 
 ## Cleanup
-xdg-icon-resource uninstall --system --size "$SIZE" "$ICONFILE"
+xdg-icon-resource uninstall --mode system --size "$SIZE" "$ICONFILE"
 
 test_result
 } 

@@ -45,23 +45,23 @@ assert_file_not_in_path "$MENU" "$USERPATH"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$DESKTOP"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$DESKTOP2"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$DESKTOP2"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$DIRECTORY"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$DIRECTORY"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$MENU"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$MENU"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu forceupdate --system
+assert_exit 0 xdg-desktop-menu forceupdate --mode system
 assert_nostdout
 assert_nostderr
 
@@ -85,11 +85,11 @@ assert_file "$WORK_DIR/$CREATEFILE"
 fi
 
 ## Cleanup
-xdg-desktop-menu uninstall --user "$DESKTOP" >/dev/null 2>&1
-xdg-desktop-menu uninstall --user "$DESKTOP2" >/dev/null 2>&1
-xdg-desktop-menu uninstall --user "$DIRECTORY" >/dev/null 2>&1
-xdg-desktop-menu uninstall --user "$MENU" >/dev/null 2>&1
-xdg-desktop-menu forceupdate --user >/dev/null 2>&1
+xdg-desktop-menu uninstall --mode user "$DESKTOP" >/dev/null 2>&1
+xdg-desktop-menu uninstall --mode user "$DESKTOP2" >/dev/null 2>&1
+xdg-desktop-menu uninstall --mode user "$DIRECTORY" >/dev/null 2>&1
+xdg-desktop-menu uninstall --mode user "$MENU" >/dev/null 2>&1
+xdg-desktop-menu forceupdate --mode user >/dev/null 2>&1
 
 test_result
 } 

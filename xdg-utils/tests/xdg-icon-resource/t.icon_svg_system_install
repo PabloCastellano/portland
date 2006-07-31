@@ -9,7 +9,7 @@
 test_icon_svg_system_install() {
 ICON="red-SVG.svg"
 
-test_start "$FUNCNAME: verify $ICON is installed correctly with --system"
+test_start "$FUNCNAME: verify $ICON is installed correctly with --mode system"
 
 ## Begin the test.
 systempath="$XDG_DATA_DIRS:/usr/share/pixmaps"
@@ -29,13 +29,13 @@ assert_file_not_in_path "$ICONFILE" "$systempath"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource install --system "$ICONFILE"
+assert_exit 0 xdg-icon-resource install --mode system "$ICONFILE"
 assert_nostdout
 assert_nostderr
 
 assert_file_in_path "$ICONFILE" "$systempath"
 
-assert_exit 0 xdg-icon-resource uninstall --system "$ICONFILE"
+assert_exit 0 xdg-icon-resource uninstall --mode system "$ICONFILE"
 
 test_result
 } 

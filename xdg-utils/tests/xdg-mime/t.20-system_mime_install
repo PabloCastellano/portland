@@ -31,7 +31,7 @@ assert_file testfile.xdgtest
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-mime install --system "$INPUT_FILE"
+assert_exit 0 xdg-mime install --mode system "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
@@ -40,7 +40,7 @@ assert_nostderr
 #assert_stdout testmime.expected
 #assert_nostderr
 
-xdg-mime uninstall --system "$INPUT_FILE" >/dev/null 2>&1
+xdg-mime uninstall --mode system "$INPUT_FILE" >/dev/null 2>&1
 
 test_result
 } 

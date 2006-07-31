@@ -9,7 +9,7 @@ test_system_as_nonroot() {
 # TODO: should follow the filename tests.
 
 ## Begin the test.
-test_start "$FUNCNAME: verify error for --system when run as a normal user"
+test_start "$FUNCNAME: verify error for --mode system when run as a normal user"
 
 # Dependencies section
 test_init
@@ -33,7 +33,7 @@ mv out.stdout out.saved1
 # Test steps section
 test_procedure
 
-assert_exit 3 xdg-mime install --system "$INPUT_FILE"
+assert_exit 3 xdg-mime install --mode system "$INPUT_FILE"
 assert_nostdout
 assert_stderr
 
@@ -41,7 +41,7 @@ assert_exit 0 xdg-mime query filetype "$QUERY_FILE"
 assert_stdout out.saved1
 assert_nostderr
 
-assert_exit 3 xdg-mime uninstall --system "$INPUT_FILE"
+assert_exit 3 xdg-mime uninstall --mode system "$INPUT_FILE"
 assert_nostdout
 assert_stderr
 

@@ -31,7 +31,7 @@ assert_exit 0 xdg-mime query filetype "$QUERY_FILE" >mimesave.expected
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-mime uninstall --user "$INPUT_FILE"
+assert_exit 0 xdg-mime uninstall --mode user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 

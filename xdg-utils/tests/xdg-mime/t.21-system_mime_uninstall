@@ -31,7 +31,7 @@ assert_file testfile.xdgtest
 #mv out.stout out.save
 
 # Install & verify mime type is installed
-assert_exit 0 xdg-mime install --system "$INPUT_FILE"
+assert_exit 0 xdg-mime install --mode system "$INPUT_FILE"
 
 # TODO: query requires a running desktop environment
 #assert_exit 0 xdg-mime query filetype $QUERY_FILE
@@ -40,7 +40,7 @@ assert_exit 0 xdg-mime install --system "$INPUT_FILE"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-mime uninstall --system "$INPUT_FILE"
+assert_exit 0 xdg-mime uninstall --mode system "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 

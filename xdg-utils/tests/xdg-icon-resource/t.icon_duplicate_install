@@ -20,20 +20,20 @@ use_file "$XDG_TEST_DIR/icons/$ICON" ICON_FILE
 assert_file "$ICON_FILE"
 
 # Verify the test icon is not installed already.
-assert_exit 0 xdg-icon-resource install --user --size "$SIZE" "$ICON_FILE"
+assert_exit 0 xdg-icon-resource install --mode user --size "$SIZE" "$ICON_FILE"
 assert_file_in_path "$ICON_FILE" "$userpath"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource install --user --size "$SIZE" "$ICON_FILE"
+assert_exit 0 xdg-icon-resource install --mode user --size "$SIZE" "$ICON_FILE"
 assert_nostdout
 assert_nostderr
 
 assert_file_in_path "$ICON_FILE" "$userpath"
 
 # Cleanup
-xdg-icon-resource uninstall --user --size "$SIZE" "$ICON_FILE"
+xdg-icon-resource uninstall --mode user --size "$SIZE" "$ICON_FILE"
 
 test_result
 } 

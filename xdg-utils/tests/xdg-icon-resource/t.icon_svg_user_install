@@ -27,13 +27,13 @@ assert_file_not_in_path "$ICONFILE" "$userpath"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource install --user "$ICONFILE"
+assert_exit 0 xdg-icon-resource install --mode user "$ICONFILE"
 assert_nostdout
 assert_nostderr
 
 assert_file_in_path "$ICONFILE" "$userpath"
 
-assert_exit 0 xdg-icon-resource uninstall --user "$ICONFILE"
+assert_exit 0 xdg-icon-resource uninstall --mode user "$ICONFILE"
 
 test_result
 } 

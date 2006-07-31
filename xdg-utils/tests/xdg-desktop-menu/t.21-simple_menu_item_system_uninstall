@@ -24,7 +24,7 @@ edit_file "$DESKTOP" 'Test Menu Item Install' ITEM_TEXT "TEST $XDG_TEST_SHORTID"
 
 assert_file "$DESKTOP"
 
-assert_exit 0 xdg-desktop-menu install --system "$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --mode system "$DESKTOP"
 
 assert_file_in_path "$DESKTOP" "$USERPATH"
 assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?\n(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
@@ -33,7 +33,7 @@ assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, p
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu uninstall --system "$DESKTOP"
+assert_exit 0 xdg-desktop-menu uninstall --mode system "$DESKTOP"
 assert_nostdout
 assert_nostderr
 

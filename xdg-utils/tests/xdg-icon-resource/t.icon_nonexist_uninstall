@@ -25,7 +25,7 @@ assert_file_not_in_path "$ICON_FILE" "$userpath"
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource uninstall --user --size "$SIZE" "$ICON_FILE"
+assert_exit 0 xdg-icon-resource uninstall --mode user --size "$SIZE" "$ICON_FILE"
 assert_nostdout
 assert_nostderr
 

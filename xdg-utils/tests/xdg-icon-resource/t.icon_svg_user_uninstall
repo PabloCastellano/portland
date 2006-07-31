@@ -22,13 +22,13 @@ use_file "$XDG_TEST_DIR/icons/$ICON" ICONFILE
 assert_file "$ICONFILE"
 
 # Verify the test icon is not installed already.
-assert_exit 0 xdg-icon-resource install --user "$ICONFILE"
+assert_exit 0 xdg-icon-resource install --mode user "$ICONFILE"
 assert_file_in_path "$ICONFILE" "$userpath"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource uninstall --user "$ICONFILE"
+assert_exit 0 xdg-icon-resource uninstall --mode user "$ICONFILE"
 assert_nostdout
 assert_nostderr
 

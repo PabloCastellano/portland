@@ -31,14 +31,14 @@ assert_stdout
 mv out.stdout origmime.save
 
 # Install & verify mime type is installed
-assert_exit 0 xdg-mime install --user "$INPUT_FILE"
+assert_exit 0 xdg-mime install --mode user "$INPUT_FILE"
 assert_exit 0 xdg-mime query filetype testfile.xdgtest
 assert_stdout testmime.expected
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-mime uninstall --user "$INPUT_FILE"
+assert_exit 0 xdg-mime uninstall --mode user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 

@@ -6,7 +6,7 @@
 
 ## test function
 test_menu_system_forceupdate() {
-test_start "$FUNCNAME: verify forceupdate doesn't error for --system"
+test_start "$FUNCNAME: verify forceupdate doesn't error for --mode system"
 
 test_init
 
@@ -15,7 +15,7 @@ require_root
 
 test_procedure
 
-assert_exit 0 xdg-desktop-menu forceupdate --system
+assert_exit 0 xdg-desktop-menu forceupdate --mode system
 assert_nostdout
 assert_nostderr
 

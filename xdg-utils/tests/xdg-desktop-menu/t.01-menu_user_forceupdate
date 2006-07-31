@@ -6,7 +6,7 @@
 
 ## test function
 test_menu_user_forceupdate() {
-test_start "$FUNCNAME: verify forceupdate doesn't error for --user"
+test_start "$FUNCNAME: verify forceupdate doesn't error for --mode user"
 
 test_init
 
@@ -14,7 +14,7 @@ set_no_display
 
 test_procedure
 
-assert_exit 0 xdg-desktop-menu forceupdate --user
+assert_exit 0 xdg-desktop-menu forceupdate --mode user
 assert_nostdout
 assert_nostderr
 

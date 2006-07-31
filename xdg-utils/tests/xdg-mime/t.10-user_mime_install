@@ -34,7 +34,7 @@ assert_exit 1 diff out.save1 testmime.expected
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-mime install --user "$INPUT_FILE"
+assert_exit 0 xdg-mime install --mode user "$INPUT_FILE"
 assert_nostdout
 assert_nostderr
 
@@ -45,7 +45,7 @@ assert_stdout testmime.expected
 assert_nostderr
 
 # TODO: this is a cleanup step
-xdg-mime uninstall --user "$INPUT_FILE"
+xdg-mime uninstall --mode user "$INPUT_FILE"
 
 test_result
 } 

@@ -9,7 +9,7 @@
 test_icon_svg_system_uninstall() {
 ICON="red-SVG.svg"
 
-test_start "$FUNCNAME: verify $ICON is uninstalled correctly with --system"
+test_start "$FUNCNAME: verify $ICON is uninstalled correctly with --mode system"
 
 ## Begin the test.
 icondir="$XDG_TEST_DIR/icons"
@@ -25,13 +25,13 @@ use_file "$XDG_TEST_DIR/icons/$ICON" ICONFILE
 assert_file "$ICONFILE"
 
 # Verify the test icon is not installed already.
-assert_exit 0 xdg-icon-resource install --system "$ICONFILE"
+assert_exit 0 xdg-icon-resource install --mode system "$ICONFILE"
 assert_file_in_path "$ICONFILE" "$systempath"
 
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-icon-resource uninstall --system "$ICONFILE"
+assert_exit 0 xdg-icon-resource uninstall --mode system "$ICONFILE"
 assert_nostdout
 assert_nostderr
 

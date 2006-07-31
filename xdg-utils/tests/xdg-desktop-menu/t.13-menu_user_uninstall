@@ -36,11 +36,11 @@ assert_file "$DESKTOP"
 assert_file "$MENU"
 assert_file "$DIRECTORY"
 
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$DESKTOP"
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$DESKTOP2"
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$DIRECTORY"
-assert_exit 0 xdg-desktop-menu install --noupdate --user "$MENU"
-assert_exit 0 xdg-desktop-menu forceupdate --user
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$DESKTOP"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$DESKTOP2"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$DIRECTORY"
+assert_exit 0 xdg-desktop-menu install --noupdate --mode user "$MENU"
+assert_exit 0 xdg-desktop-menu forceupdate --mode user
 
 assert_file_in_path "$DESKTOP" "$USERPATH"
 assert_file_in_path "$DESKTOP" "$USERPATH2"
@@ -57,23 +57,23 @@ assert_interactive_notroot "Is the menu '<main>/$MENU_NAME present with items 'E
 # Test steps section
 test_procedure
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --user "$DESKTOP"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode user "$DESKTOP"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --user "$DESKTOP2"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode user "$DESKTOP2"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --user "$DIRECTORY"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode user "$DIRECTORY"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu uninstall --noupdate --user "$MENU"
+assert_exit 0 xdg-desktop-menu uninstall --noupdate --mode user "$MENU"
 assert_nostdout
 assert_nostderr
 
-assert_exit 0 xdg-desktop-menu forceupdate --user
+assert_exit 0 xdg-desktop-menu forceupdate --mode user
 assert_nostdout
 assert_nostderr
 
