@@ -7,14 +7,13 @@
 
 ## Test function
 test_plain_file_install() {
-FILE="plain_file_install.txt"
 ## Begin the test.
 test_start "$FUNCNAME: verify $FILE is installed correctly on the desktop"
 
 # Dependencies section
 test_init
 
-get_unique_name INSFILE "$FILE"
+INSFILE="xdgtestdata-$XDG_TEST_SHORTID.txt"
 set_no_display
 echo "Some more boring text. $XDG_TEST_ID" > "$INSFILE"
 assert_file "$INSFILE" 

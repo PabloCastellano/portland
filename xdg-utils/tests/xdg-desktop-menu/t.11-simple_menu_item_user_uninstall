@@ -34,7 +34,7 @@ if [ "$GDMSESSION" = "kde" ] ; then
 fi
 # end HACK
 
-assert_interactive_notroot "Is there an 'Applications' menu under <main> that contains '$ITEM_TEXT'" y
+assert_interactive_notroot "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?" y
 
 # Test steps section
 test_procedure
@@ -45,7 +45,7 @@ assert_nostderr
 
 assert_file_not_in_path "$DESKTOP" "$USERPATH"
 
-assert_interactive_notroot "Is the menu item '<main>/Applications/$ITEM_TEXT' still present?" n
+assert_interactive_notroot "Is the menu item '$ITEM_TEXT' still present?" n
 
 test_result
 } 

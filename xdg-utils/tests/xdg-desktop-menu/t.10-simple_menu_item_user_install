@@ -45,9 +45,8 @@ if [ "$GDMSESSION" = "kde" ] ; then
 fi
 # end HACK
 
-assert_interactive "Is there a generic applications menu present under the main menu?" y
-assert_interactive "Is there an item in '<main>/Applications' called '$ITEM_TEXT'?" y
-assert_interactive "Please select the menu item '<main>/Applications/$ITEM_TEXT'"
+assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?" y
+assert_interactive "Please select the menu item '$ITEM_TEXT'"
 
 ## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
 assert_file "$WORK_DIR/$CREATEFILE"

@@ -30,9 +30,9 @@ get_shortid() {
 	today=`date '+%m-%d'`
 
 	if [ -f "$seqfile" ] ; then	
-		seqdate=`cat $seqfile | cut -d '.' -f 1 -`
+		seqdate=`cat $seqfile | cut -d '+' -f 1 -`
 		if [ "$today" = "$seqdate" ] ; then
-			seq=$(( `cat $seqfile | cut -d '.' -f 2 -` + 1 ))
+			seq=$(( `cat $seqfile | cut -d '+' -f 2 -` + 1 ))
 		else
 			seq=1
 		fi
@@ -40,7 +40,7 @@ get_shortid() {
 		seq=1
 	fi
 
-	SHORTID="$today.$seq"
+	SHORTID="$today+$seq"
 	echo "$SHORTID" > "$seqfile"
 
 }

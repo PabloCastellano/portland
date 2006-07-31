@@ -54,7 +54,7 @@ assert_file_in_path "$DESKTOP" "$USERPATH2"
 assert_file_in_path "$DIRECTORY" "$USERPATH"
 assert_file_in_path "$MENU" "$USERPATH"
 
-assert_interactive "Is the menu '<main>/$MENU_NAME present with items 'EXTRA_ITEM' and '$ITEM_TEXT'" y
+assert_interactive "Is the menu '<main>/$MENU_NAME present with items 'EXTRA_ITEM' and '$ITEM_TEXT'.\n(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
 
 # Test steps section
 test_procedure
@@ -84,7 +84,7 @@ assert_file_not_in_path "$DESKTOP2" "$USERPATH"
 assert_file_not_in_path "$DIRECTORY" "$USERPATH"
 assert_file_not_in_path "$MENU" "$USERPATH"
 
-assert_interactive "Is the menu '<main>/$MENU_NAME' still present?" n
+assert_interactive "Is the menu '<main>/$MENU_NAME' still present?\n(NOTE: If you are using KDE, it may take a few seconds to disappear.)" n
 assert_interactive "Is '$ITEM_TEXT' present anywhere in the menu tree?" n
 
 test_result

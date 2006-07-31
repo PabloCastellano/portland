@@ -12,11 +12,16 @@ $0 [-iIcCh] [test|testgroup] [...]
 Options:
      [-h]      Show this message and exit.
 
-     [-I|-i]   Turn off/on interactive tests. 
+     [-I|-i]   Turn off/on interactive tests. Default: on
                (overrides XDG_TEST_NO_INTERACTIVE)
   
-     [-C|-c]   Turn off/on deletion of tempfiles.
+     [-C|-c]   Turn off/on deletion of tempfiles. Default: on
                (overrides XDG_TEST_DONT_CLEANUP)
+
+     [-R]      Turn off su to root tests.
+	       You will be prompted for the root password at the beginning of the testrun.
+
+     [-f]      RESERVED -- state flag for self reference. DON'T USE.
 
 
 Arguments:
@@ -24,7 +29,6 @@ Arguments:
 After options, all arguments correspond to tests to run. The default is to run all tests, which consist of all files matching 'xdg-*/t.*'.
 
 Supplied testgroups can be a list of directories or a list of individual tests.
-
 
 _ENDUSAGE_
 exit 1
@@ -39,18 +43,26 @@ if [ -z `which xdg-mime 2>/dev/null` ] && [ -d "$XDG_TEST_DIR/../scripts" ] ; th
 	echo "WARNING: modified PATH to add '$XDG_TEST_DIR/../scripts'"
 fi
 
+MYARGS="$@"
+
 ## Read options
-while getopts "iIcCh" opt; do
+while getopts "iIcChRf:" opt; do
 	case $opt in
 		I ) export XDG_TEST_NO_INTERACTIVE="set" ;;
 		i ) unset XDG_TEST_NO_INTERACTIVE ;;
 		C ) export XDG_TEST_DONT_CLEANUP="set" ;;
 		c ) unset XDG_TEST_DONT_CLEANUP ;;
+		R ) XDG_TEST_DONT_SU="set" ;;
+		f ) XDG_TEST_SELF_LAUNCH="$OPTARG" ;;
 		h ) usage ;;
 		\? ) usage ;;
 	esac
 done
 shift $(($OPTIND - 1))
+
+if [ `whoami` == root ] ; then
+	XDG_TEST_DONT_SU="set"
+fi
 
 ## Read test groups
 if [ $# -eq 0 ] ; then
@@ -73,8 +85,24 @@ for t in $TEST_FILES; do
 	. "$t"
 done
 
-echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
-"$XDG_TEST_DIR/include/system_info" >>"$TEST_LOG"
+if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then
+	echo "======================================================" >> "$TEST_LOG"
+ 	echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
+	"$XDG_TEST_DIR/include/system_info" >>"$TEST_LOG"
+
+	if [ -z "$XDG_TEST_DONT_SU" ] ; then
+		echo "Please enter the root password for system tests."
+		su -l -c "cd $PWD && $0 -f $$ $MYARGS"
+	fi
+
+	TEST_STATUS_FILE="$XDG_TEST_DIR/tmp/xdgtest_status-$$"
+	USERCLASS="normal user"
+else 
+	TEST_STATUS_FILE="$XDG_TEST_DIR/tmp/xdgtest_status-$XDG_TEST_SELF_LAUNCH"
+	USERCLASS="root"
+fi
+
+echo "[`date`] ---- $USERCLASS run start: $*" >> "$TEST_LOG"
 #echo "TEST_LIST: $TEST_LIST"
 
 for t in $TEST_LIST; do
@@ -108,15 +136,48 @@ for t in $TEST_LIST; do
 	esac
 	echo "$RESULT"
 done
-echo -n "[`date`] TEST RUN END: $* - " >> "$TEST_LOG"
-echo "$FAILCOUNT tests failed, $PASS of $TOTAL tests passed. ($ATTEMPT attempted)" | tee -a "$TEST_LOG"
-echo "See $TEST_LOG for details."
 
-if [ $(( $TOTAL - $PASS )) -gt 0 ]; then
-	EC=1
-	echo "NOT OK!"
-else
-	EC=0
-	echo "ok"
+echo -n "[`date`] ---- " >> "$TEST_LOG"
+echo "$USERCLASS run end: $FAILCOUNT tests failed, $PASS of $TOTAL tests passed. ($ATTEMPT attempted)" | tee -a "$TEST_LOG"
+
+if [ -z "$XDG_TEST_SELF_LAUNCH" ] ; then # not su'd
+	if [ -f "$TEST_STATUS_FILE" ] ; then
+		RFAIL=`grep 'FAIL' "$TEST_STATUS_FILE" | cut -d ':' -f2`
+		RPASS=`grep 'PASS' "$TEST_STATUS_FILE" | cut -d ':' -f2`
+		RTOTAL=`grep 'TOTAL' "$TEST_STATUS_FILE" | cut -d ':' -f2`
+		RATTEMPT=`grep 'ATTEMPT' "$TEST_STATUS_FILE" | cut -d ':' -f2`
+
+		rm -f "$TEST_STATUS_FILE"
+	fi
+
+	GFAIL=$(( $FAILCOUNT + ${RFAIL-0} ))
+	GPASS=$(( $PASS + ${RPASS-0} ))
+	GTOTAL=$(( $TOTAL + ${RTOTAL-0} ))
+	GATTEMPT=$(( $ATTEMPT + ${RATTEMPT-0} ))
+
+	echo -n "[`date`] TEST RUN END: $* - " >> "$TEST_LOG"
+	echo -n "TOTAL: "
+	echo "$GFAIL tests failed, $GPASS of $GTOTAL tests passed. ($GATTEMPT attempted)" | tee -a "$TEST_LOG"
+
+	if [ $(( $GTOTAL - $GPASS )) -gt 0 ]; then
+		EC=1
+		echo "NOT OK!  --  See $TEST_LOG for details."
+	else
+		EC=0
+		echo "ok"
+	fi
+
+	exit "$EC"
+else ## Running su'd. save results.
+	echo "FAIL:$FAILCOUNT" 	> $TEST_STATUS_FILE
+	echo "PASS:$PASS" 	>> $TEST_STATUS_FILE
+	echo "TOTAL:$TOTAL" 	>> $TEST_STATUS_FILE
+	echo "ATTEMPT:$ATTEMPT"	>> $TEST_STATUS_FILE
+
+	if [ $(( $TOTAL - $PASS)) -gt 0 ] ; then
+		exit -1
+	else
+		exit 0
+	fi
 fi
-exit "$EC"
+

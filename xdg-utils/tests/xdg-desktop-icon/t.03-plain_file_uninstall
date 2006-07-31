@@ -2,19 +2,17 @@
 
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
 test_plain_file_uninstall() {
 ## Begin the test.
-FILE="pain_file_uninstall.txt"
 test_start "$FUNCNAME: verify $FILE is uninstalled correctly from the desktop"
 
 # Dependencies section
 test_init
 
-get_unique_name INSFILE "$FILE"
+INSFILE="xdgtestdata-$XDG_TEST_SHORTID.txt"
 set_no_display
 echo "Some more boring text" > "$INSFILE"
 assert_file "$INSFILE" 
