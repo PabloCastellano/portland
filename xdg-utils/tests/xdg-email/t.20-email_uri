@@ -29,7 +29,7 @@ assert_interactive "Is the subject line 'Test Subject'?" y
 assert_interactive "Is the body 'Test Body'?" y
 
 assert_interactive "Please close any email windows opened by the test." C
-a
+
 test_result
 }
 
