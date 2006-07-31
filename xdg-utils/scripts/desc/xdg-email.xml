@@ -79,6 +79,10 @@
       xdg-email is for use inside a desktop session only.
       It is not recommended to use xdg-email as root.
     </para>
+    <para>
+      See http://portland.freedesktop.org/EmailConfig for information on
+      how the user can change the e-mail composer that is used.
+    </para>
   </refsect1>
   <refsect1 id="options">
     <title>Options</title>
@@ -245,6 +249,11 @@
 	</listitem>
       </varlistentry>
     </variablelist>
+  </refsect1>
+  <refsect1 id="seealso">
+    <title>See Also</title>
+    <para>http://portland.freedesktop.org/EmailConfig
+    </para>
   </refsect1>
   <refsect1 id="examples">
     <title>Examples</title>
