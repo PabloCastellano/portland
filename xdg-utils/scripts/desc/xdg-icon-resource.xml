@@ -20,7 +20,7 @@
       <surname>White</surname>
     </author>
     <address><email>jwhite@codeweavers.com</email></address>
-    <releaseinfo>This is release 0.5 of the xdg-icon-resource Manual.</releaseinfo>
+    <releaseinfo>xdg-utils 1.0 beta2</releaseinfo>
   </refentryinfo>
 
   <refmeta>
@@ -41,10 +41,7 @@
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
       <arg><option>--size <replaceable>size</replaceable></option></arg>
-      <group choice="req">
-	<arg choice="plain"><option>--user</option></arg>
-	<arg choice="plain"><option>--system</option></arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <arg choice="plain"><replaceable>icon-file</replaceable></arg>
       <arg><replaceable>icon-name</replaceable></arg>
     </cmdsynopsis>
@@ -55,20 +52,14 @@
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
       <arg><option>--size <replaceable>size</replaceable></option></arg>
-      <group choice="req">
-	<arg choice="plain"><option>--user</option></arg>
-	<arg choice="plain"><option>--system</option></arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <arg choice="plain"><replaceable>icon-name</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-icon-resource</command>
       <arg choice="plain">forceupdate</arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
-      <group choice="req">
-	<arg choice="plain">--user</arg>
-	<arg choice="plain">--system</arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-icon-resource</command>
@@ -201,20 +192,18 @@
       </varlistentry>
 
       <varlistentry>
-	<term><option>--user</option></term>
+	<term><option>--mode</option> <replaceable>mode</replaceable></term>
 	<listitem>
-	  <simpara>
-	    Installs or uninstalls the icon for the current user only.
+	  <simpara><replaceable>mode</replaceable> can be
+            <emphasis>user</emphasis> or <emphasis>system</emphasis>.
+            In user mode the file is (un)installed for the current user
+            only. In system mode the file is (un)installed for all users
+            on the system. Usually only root is allowed to install in
+            system mode.
 	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term><option>--system</option></term>
-	<listitem>
 	  <simpara>
-	    Installs or uninstalls the icon for all users on the system.
-            Usually only root is allowed to do this.
+	    The default is to use system mode when called by root
+	    and to use user mode when called by a non-root user.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -335,16 +324,16 @@
     <para>
 To install an icon resource to depict a launcher for the application myfoobar one can use:
 <programlisting>
-xdg-icon-resource install --system --size 64 myfoobar.png
+xdg-icon-resource install --size 64 myfoobar.png
 </programlisting>
     </para>
     <para>
 To install an icon for a new application/x-foobar file type one can use:
 <programlisting>
-xdg-icon-resource install --system --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
-xdg-icon-resource install --system --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
+xdg-icon-resource install --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
+xdg-icon-resource install --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
 </programlisting>This will install two icons with the name application-x-foobar.png
-but with different sizes. The icons will be installed for use by all users.
+but with different sizes.
     </para>
   </refsect1>
 </refentry>

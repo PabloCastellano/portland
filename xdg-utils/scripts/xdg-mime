@@ -46,9 +46,9 @@ Synopsis
 
    xdg-mime default application mimetype(s)
 
-   xdg-mime install { --user | --system } mimetypes-file
+   xdg-mime install [--mode mode] mimetypes-file
 
-   xdg-mime uninstall { --user | --system } mimetypes-file
+   xdg-mime uninstall [--mode mode] mimetypes-file
 
    xdg-mime { --help | --manual | --version }
 
@@ -117,12 +117,15 @@ Commands
 
 Options
 
-   --user
-           Adds or removes file type descriptions for the current user only.
+   --mode mode
 
-   --system
-           Adds or removes file type descriptions for all users on the
-           system. Usually only root is allowed to do this.
+           mode can be user or system. In user mode the file is (un)installed
+           for the current user only. In system mode the file is
+           (un)installed for all users on the system. Usually only root is
+           allowed to install in system mode.
+
+           The default is to use system mode when called by root and to use
+           user mode when called by a non-root user.
 
    --help
            Show command synopsis.
@@ -177,10 +180,10 @@ Examples
    Prints the .desktop filename of the application which is registered to
    open PNG files.
 
- xdg-mime install --system diff.xml
+ xdg-mime install diff.xml
 
-   Adds a file type description for "diff"-files for all users on the system.
-   The file type description could look as folows.
+   Adds a file type description for "diff"-files. The file type description
+   could look as folows.
 
  diff.xml:
 
@@ -195,7 +198,7 @@ Examples
 
    An icon for this new file type must alsobe installed, for example with:
 
- xdg-icon-resource install --system --context mimetypes --size 64 text-x-diff.png
+ xdg-icon-resource install --context mimetypes --size 64 text-x-diff.png
 _MANUALPAGE
 }
 
@@ -211,9 +214,9 @@ Synopsis
 
    xdg-mime default application mimetype(s)
 
-   xdg-mime install { --user | --system } mimetypes-file
+   xdg-mime install [--mode mode] mimetypes-file
 
-   xdg-mime uninstall { --user | --system } mimetypes-file
+   xdg-mime uninstall [--mode mode] mimetypes-file
 
    xdg-mime { --help | --manual | --version }
 
@@ -776,12 +779,24 @@ while [ $# -gt 0 ] ; do
     shift
 
     case $parm in
-      --user)
-        mode=user
-        ;;
+      --mode)
+        if [ -z "$1" ] ; then
+            exit_failure_syntax "mode argument missing for --mode"
+        fi
+        case "$1" in
+          user)
+            mode=user
+            ;;
 
-      --system)
-        mode=system
+          system)
+            mode=system
+            ;;
+            
+          *)
+            exit_failure_syntax "unknown mode '$1'"
+            ;;
+        esac
+        shift
         ;;
 
       -*)
@@ -803,10 +818,14 @@ if [ -z "$action" ] ; then
     exit_failure_syntax "command argument missing"
 fi
 
-
 if [ -z "$mode" ] ; then
-    exit_failure_syntax "expected --user or --system option"
+    if [ `whoami` = "root" ] ; then
+       mode=system
+    else
+       mode=user
+    fi
 fi
+
 if [ -z "$filename" ] ; then
     exit_failure_syntax "mimetypes-file argument missing"
 fi
@@ -868,8 +887,7 @@ else
     gnome_dir="$gnome_global_dir"
     my_umask=022
     if [ -z "${xdg_dir}${kde_dir}${gnome_dir}" ] ; then
-        [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
-        exit_failure_operation_impossible "No writable system mimetype directory found. $rootmsg"
+        exit_failure_operation_impossible "No writable system mimetype directory found."
     fi
 fi
 

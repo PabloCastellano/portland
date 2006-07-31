@@ -20,7 +20,7 @@
       <surname>White</surname>
     </author>
     <address><email>jwhite@codeweavers.com</email></address>
-    <releaseinfo>This is release 0.5 of the xdg-desktop-menu Manual.</releaseinfo>
+    <releaseinfo>xdg-utils 1.0 beta2</releaseinfo>
   </refentryinfo>
 
   <refmeta>
@@ -39,10 +39,7 @@
       <arg choice="plain">install</arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
-      <group choice="req">
-	<arg choice="plain"><option>--user</option></arg>
-	<arg choice="plain"><option>--system</option></arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <group choice="req">
 	<arg choice="plain"><replaceable>desktop-file</replaceable></arg>
 	<arg choice="plain"><replaceable>menu-file</replaceable></arg>
@@ -54,10 +51,7 @@
       <arg choice="plain">uninstall</arg>
       <arg><option>--noupdate</option></arg>
       <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
-      <group choice="req">
-	<arg choice="plain"><option>--user</option></arg>
-	<arg choice="plain"><option>--system</option></arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <group choice="req">
 	<arg choice="plain"><replaceable>desktop-file</replaceable></arg>
 	<arg choice="plain"><replaceable>menu-file</replaceable></arg>
@@ -67,10 +61,7 @@
     <cmdsynopsis>
       <command>xdg-desktop-menu</command>
       <arg choice="plain">forceupdate</arg>
-      <group choice="req">
-	<arg choice="plain"><option>--user</option></arg>
-	<arg choice="plain"><option>--system</option></arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-desktop-menu</command>
@@ -169,20 +160,18 @@
       </varlistentry>
 
       <varlistentry>
-	<term><option>--user</option></term>
+	<term><option>--mode</option> <replaceable>mode</replaceable></term>
 	<listitem>
-	  <simpara>
-	    Installs or uninstalls the file for the current user only.
+	  <simpara><replaceable>mode</replaceable> can be
+            <emphasis>user</emphasis> or <emphasis>system</emphasis>.
+            In user mode the file is (un)installed for the current user
+            only. In system mode the file is (un)installed for all users
+            on the system. Usually only root is allowed to install in
+            system mode.
 	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term><option>--system</option></term>
-	<listitem>
 	  <simpara>
-	    Installs or uninstalls the file for all users on the system.
-            Usually only root is allowed to do this.
+	    The default is to use system mode when called by root
+	    and to use user mode when called by a non-root user.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -458,7 +447,7 @@ webmirror.desktop:
     <para>Now the xdg-desktop-menu tool can be used to add the webmirror.desktop file
     to the desktop application menu:
 <programlisting>
-xdg-desktop-menu install --system --vendor shinythings ./webmirror.desktop
+xdg-desktop-menu install --vendor shinythings ./webmirror.desktop
 </programlisting>
     </para>
     <para>
@@ -505,8 +494,8 @@ webmirror-admin.desktop:
     <para>
       The files can be installed with:
 <programlisting>
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.desktop
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.desktop
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror-admin.desktop
 </programlisting>
     </para>
     <para>
@@ -531,7 +520,7 @@ webmirror.directory:
     <para>
       This webmirror.directory file can be installed with:
 <programlisting>
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.directory
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.directory
 </programlisting>
     </para>
     <para>
@@ -541,12 +530,12 @@ xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.di
       sizes, once with a size of 22x22 pixels and once with a size
       of 64x64 pixels:
 <programlisting>
-xdg-icon-resource install --system --size 22 ./wmicon-22.png webmirror.png
-xdg-icon-resource install --system --size 22 ./wmicon-menu-22.png webmirror-menu.png
-xdg-icon-resource install --system --size 22 ./wmicon-admin-22.png webmirror-admin.png
-xdg-icon-resource install --system --size 64 ./wmicon-64.png webmirror.png
-xdg-icon-resource install --system --size 64 ./wmicon-menu-64.png webmirror-menu.png
-xdg-icon-resource install --system --size 64 ./wmicon-admin-64.png webmirror-admin.png
+xdg-icon-resource install --size 22 ./wmicon-22.png webmirror.png
+xdg-icon-resource install --size 22 ./wmicon-menu-22.png webmirror-menu.png
+xdg-icon-resource install --size 22 ./wmicon-admin-22.png webmirror-admin.png
+xdg-icon-resource install --size 64 ./wmicon-64.png webmirror.png
+xdg-icon-resource install --size 64 ./wmicon-menu-64.png webmirror-menu.png
+xdg-icon-resource install --size 64 ./wmicon-admin-64.png webmirror-admin.png
 </programlisting>
     </para>
     <para>
@@ -573,14 +562,14 @@ webmirror.menu:
     <para>
       The webmirror.menu file can be installed with:
 <programlisting>
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.menu
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.menu
 </programlisting>
     </para>
     <para>
       After installing multiple files with <option>--noupdate</option> make sure
       to force an update:
 <programlisting>
-xdg-desktop-menu forceupdate --system
+xdg-desktop-menu forceupdate
 </programlisting>
     </para>
   </refsect1>

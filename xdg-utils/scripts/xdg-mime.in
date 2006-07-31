@@ -399,12 +399,24 @@ while [ $# -gt 0 ] ; do
     shift
 
     case $parm in
-      --user)
-        mode=user
-        ;;
+      --mode)
+        if [ -z "$1" ] ; then
+            exit_failure_syntax "mode argument missing for --mode"
+        fi
+        case "$1" in
+          user)
+            mode=user
+            ;;
 
-      --system)
-        mode=system
+          system)
+            mode=system
+            ;;
+            
+          *)
+            exit_failure_syntax "unknown mode '$1'"
+            ;;
+        esac
+        shift
         ;;
 
       -*)
@@ -426,10 +438,14 @@ if [ -z "$action" ] ; then
     exit_failure_syntax "command argument missing"
 fi
 
-
 if [ -z "$mode" ] ; then
-    exit_failure_syntax "expected --user or --system option"
+    if [ `whoami` = "root" ] ; then
+       mode=system
+    else
+       mode=user
+    fi
 fi
+
 if [ -z "$filename" ] ; then
     exit_failure_syntax "mimetypes-file argument missing"
 fi
@@ -491,8 +507,7 @@ else
     gnome_dir="$gnome_global_dir"
     my_umask=022
     if [ -z "${xdg_dir}${kde_dir}${gnome_dir}" ] ; then
-        [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
-        exit_failure_operation_impossible "No writable system mimetype directory found. $rootmsg"
+        exit_failure_operation_impossible "No writable system mimetype directory found."
     fi
 fi
 

@@ -1,5 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-mime</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-mime"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-mime &#8212; command line tool for querying information about file type handling
-and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   query  { filetype  |   default }  ... </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   default   <em class="replaceable"><code>application</code></em>   <em class="replaceable"><code>mimetype(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   install  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   uninstall  { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-mime</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-mime"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-mime &#8212; command line tool for querying information about file type handling
+and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   query  { filetype  |   default }  ... </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   default   <em class="replaceable"><code>application</code></em>   <em class="replaceable"><code>mimetype(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   install  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   uninstall  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-mime program can be used to query information about file types
       and to add descriptions for new file types.
     </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">query</span></dt><dd><p>
@@ -56,12 +56,16 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
             must be a XML file that follows the freedesktop.org
             Shared MIME-info Database specification
             and that has a mime-info element as its document root.
-	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--user</code></span></dt><dd>
-	    Adds or removes file type descriptions for the current user only.
-	  </dd><dt><span class="term"><code class="option">--system</code></span></dt><dd>
-	    Adds or removes file type descriptions for all users on the system.
-            Usually only root is allowed to do this.
-	  </dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--mode</code> <em class="replaceable"><code>mode</code></em></span></dt><dd><p><em class="replaceable"><code>mode</code></em> can be
+            <span class="emphasis"><em>user</em></span> or <span class="emphasis"><em>system</em></span>.
+            In user mode the file is (un)installed for the current user
+            only. In system mode the file is (un)installed for all users
+            on the system. Usually only root is allowed to install in
+            system mode.
+	  </p><p>
+	    The default is to use system mode when called by root
+	    and to use user mode when called by a non-root user.
+	  </p></dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
 	    Show command synopsis.
 	  </dd><dt><span class="term"><code class="option">--manual</code></span></dt><dd>
 	    Show this manualpage.
@@ -101,9 +105,9 @@ xdg-mime query default image/png
       registered to open PNG files.
     </p><p>
 </p><pre class="programlisting">
-xdg-mime install --system diff.xml
-</pre><p>Adds a file type description for "diff"-files for all users on the
-      system. The file type description could look as folows.  
+xdg-mime install diff.xml
+</pre><p>Adds a file type description for "diff"-files.
+      The file type description could look as folows.  
 </p><pre class="programlisting">
 diff.xml:
 
@@ -118,6 +122,6 @@ diff.xml:
 </pre><p>An icon for this new file type must alsobe installed, for
 example with:
 </p><pre class="programlisting">
-xdg-icon-resource install --system --context mimetypes --size 64 text-x-diff.png
+xdg-icon-resource install --context mimetypes --size 64 text-x-diff.png
 </pre><p>
     </p></div></div></body></html>

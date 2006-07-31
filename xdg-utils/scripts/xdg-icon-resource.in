@@ -80,12 +80,24 @@ while [ $# -gt 0 ] ; do
         update=no
         ;;
 
-      --user)
-        mode=user
-        ;;
+      --mode)
+        if [ -z "$1" ] ; then
+            exit_failure_syntax "mode argument missing for --mode"
+        fi
+        case "$1" in
+          user)
+            mode=user
+            ;;
 
-      --system)
-        mode=system
+          system)
+            mode=system
+            ;;
+            
+          *)
+            exit_failure_syntax "unknown mode '$1'"
+            ;;
+        esac
+        shift
         ;;
 
       --theme)
@@ -142,7 +154,11 @@ if [ -z "$context" ] ; then
 fi
 
 if [ -z "$mode" ] ; then
-    exit_failure_syntax "expected --user or --system option"
+    if [ `whoami` = "root" ] ; then
+       mode=system
+    else
+       mode=user
+    fi
 fi
 
 xdg_dir_name="icons/$theme"
@@ -170,8 +186,7 @@ if [ x"$mode" = x"user" ] ; then
 else
     xdg_base_dir="$xdg_global_dir"
     if [ -z "$xdg_base_dir" ] ; then
-        [ `whoami` = "root" ] || rootmsg="Try as root or use --user."
-        exit_failure_operation_impossible "No writable system icon directory found. $rootmsg"
+        exit_failure_operation_impossible "No writable system icon directory found."
     fi
 fi
 

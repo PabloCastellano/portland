@@ -15,7 +15,7 @@
       <surname>Harrington</surname>
     </author>
     <address><email>bryce@osdl.org</email></address>
-    <releaseinfo>This is release 0.1 of the xdg-screensaver Manual.</releaseinfo>
+    <releaseinfo>xdg-utils 1.0 beta2</releaseinfo>
   </refentryinfo>
 
   <refmeta>
@@ -187,14 +187,6 @@
 	</listitem>
       </varlistentry>
       <varlistentry>
-	<term><option>2</option></term>
-	<listitem>
-	  <simpara>
-	    One of the files passed on the command line did not exist.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-      <varlistentry>
 	<term><option>3</option></term>
 	<listitem>
 	  <simpara>
@@ -217,8 +209,7 @@
     <para>
 <programlisting>
 xdg-screensaver suspend 0x1c00007
-</programlisting>
-        Causes the screensaver to be disabled till
+</programlisting>Causes the screensaver to be disabled till
         <command>xdg-screensaver resume 0x1c00007</command> is called.
         <emphasis>0x1c00007</emphasis> must be the X Window ID of an
         existing window.

@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-icon-resource</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-icon-resource"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-icon-resource &#8212; command line tool for (un)installing icon resources</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>icon-file</code></em>  [<em class="replaceable"><code>icon-name</code></em>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> }  <em class="replaceable"><code>icon-name</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   forceupdate  [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] { --user  |   --system }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-icon-resource</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-icon-resource"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-icon-resource &#8212; command line tool for (un)installing icon resources</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>icon-file</code></em>  [<em class="replaceable"><code>icon-name</code></em>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>icon-name</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   forceupdate  [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-icon-resource program can be used to install icon resources
       into the desktop icon system in order to illustrate menu entries,
       to depict desktop icons or to graphically represent file types.
@@ -56,12 +56,16 @@
 	    16, 22, 32, 48, 64 and 128.  
 	    Common sizes for icons in the mimetypes context are:
 	    16, 22, 32, 48, 64 and 128
-	  </dd><dt><span class="term"><code class="option">--user</code></span></dt><dd>
-	    Installs or uninstalls the icon for the current user only.
-	  </dd><dt><span class="term"><code class="option">--system</code></span></dt><dd>
-	    Installs or uninstalls the icon for all users on the system.
-            Usually only root is allowed to do this.
-	  </dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
+	  </dd><dt><span class="term"><code class="option">--mode</code> <em class="replaceable"><code>mode</code></em></span></dt><dd><p><em class="replaceable"><code>mode</code></em> can be
+            <span class="emphasis"><em>user</em></span> or <span class="emphasis"><em>system</em></span>.
+            In user mode the file is (un)installed for the current user
+            only. In system mode the file is (un)installed for all users
+            on the system. Usually only root is allowed to install in
+            system mode.
+	  </p><p>
+	    The default is to use system mode when called by root
+	    and to use user mode when called by a non-root user.
+	  </p></dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
 	    Show command synopsis.
 	  </dd><dt><span class="term"><code class="option">--manual</code></span></dt><dd>
 	    Show this manualpage.
@@ -93,13 +97,13 @@
     </p></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
 To install an icon resource to depict a launcher for the application myfoobar one can use:
 </p><pre class="programlisting">
-xdg-icon-resource install --system --size 64 myfoobar.png
+xdg-icon-resource install --size 64 myfoobar.png
 </pre><p>
     </p><p>
 To install an icon for a new application/x-foobar file type one can use:
 </p><pre class="programlisting">
-xdg-icon-resource install --system --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
-xdg-icon-resource install --system --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
+xdg-icon-resource install --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
+xdg-icon-resource install --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
 </pre><p>This will install two icons with the name application-x-foobar.png
-but with different sizes. The icons will be installed for use by all users.
+but with different sizes.
     </p></div></div></body></html>

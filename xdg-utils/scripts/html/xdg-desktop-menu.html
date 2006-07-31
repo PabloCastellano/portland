@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-desktop-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-desktop-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-desktop-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> } { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] { <code class="option">--user</code>  |   <code class="option">--system</code> } { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   forceupdate  { <code class="option">--user</code>  |   <code class="option">--system</code> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-desktop-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-desktop-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-desktop-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>] { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--vendor <em class="replaceable"><code>vendor-id</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>] { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   forceupdate  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-desktop-menu program can be used to install new items to the
       desktop's application menu.
     </p><p>
@@ -34,12 +34,16 @@
 	  </dd><dt><span class="term"> <code class="option">--vendor</code> <em class="replaceable"><code>vendor-id</code></em></span></dt><dd>
 	    Adds <em class="replaceable"><code>vendor-id</code></em> as a prefix when installing desktop
             and directory files.
-	  </dd><dt><span class="term"><code class="option">--user</code></span></dt><dd>
-	    Installs or uninstalls the file for the current user only.
-	  </dd><dt><span class="term"><code class="option">--system</code></span></dt><dd>
-	    Installs or uninstalls the file for all users on the system.
-            Usually only root is allowed to do this.
-	  </dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
+	  </dd><dt><span class="term"><code class="option">--mode</code> <em class="replaceable"><code>mode</code></em></span></dt><dd><p><em class="replaceable"><code>mode</code></em> can be
+            <span class="emphasis"><em>user</em></span> or <span class="emphasis"><em>system</em></span>.
+            In user mode the file is (un)installed for the current user
+            only. In system mode the file is (un)installed for all users
+            on the system. Usually only root is allowed to install in
+            system mode.
+	  </p><p>
+	    The default is to use system mode when called by root
+	    and to use user mode when called by a non-root user.
+	  </p></dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
 	    Show command synopsis.
 	  </dd><dt><span class="term"><code class="option">--manual</code></span></dt><dd>
 	    Show this manualpage.
@@ -153,7 +157,7 @@ webmirror.desktop:
     </p><p>Now the xdg-desktop-menu tool can be used to add the webmirror.desktop file
     to the desktop application menu:
 </p><pre class="programlisting">
-xdg-desktop-menu install --system --vendor shinythings ./webmirror.desktop
+xdg-desktop-menu install --vendor shinythings ./webmirror.desktop
 </pre><p>
     </p><p>
       Note that for the purpose of this example the menu items are available
@@ -196,8 +200,8 @@ webmirror-admin.desktop:
     </p><p>
       The files can be installed with:
 </p><pre class="programlisting">
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.desktop
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror-admin.desktop
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.desktop
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror-admin.desktop
 </pre><p>
     </p><p>
       Because multiple items are added the <code class="option">--noupdate</code>
@@ -219,7 +223,7 @@ webmirror.directory:
     </p><p>
       This webmirror.directory file can be installed with:
 </p><pre class="programlisting">
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.directory
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.directory
 </pre><p>
     </p><p>
       The *.desktop and *.directory files reference icons with the names
@@ -228,12 +232,12 @@ xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.di
       sizes, once with a size of 22x22 pixels and once with a size
       of 64x64 pixels:
 </p><pre class="programlisting">
-xdg-icon-resource install --system --size 22 ./wmicon-22.png webmirror.png
-xdg-icon-resource install --system --size 22 ./wmicon-menu-22.png webmirror-menu.png
-xdg-icon-resource install --system --size 22 ./wmicon-admin-22.png webmirror-admin.png
-xdg-icon-resource install --system --size 64 ./wmicon-64.png webmirror.png
-xdg-icon-resource install --system --size 64 ./wmicon-menu-64.png webmirror-menu.png
-xdg-icon-resource install --system --size 64 ./wmicon-admin-64.png webmirror-admin.png
+xdg-icon-resource install --size 22 ./wmicon-22.png webmirror.png
+xdg-icon-resource install --size 22 ./wmicon-menu-22.png webmirror-menu.png
+xdg-icon-resource install --size 22 ./wmicon-admin-22.png webmirror-admin.png
+xdg-icon-resource install --size 64 ./wmicon-64.png webmirror.png
+xdg-icon-resource install --size 64 ./wmicon-menu-64.png webmirror-menu.png
+xdg-icon-resource install --size 64 ./wmicon-admin-64.png webmirror-admin.png
 </pre><p>
     </p><p>
       The last step is to provide a .menu file that links it all
@@ -258,12 +262,12 @@ webmirror.menu:
     </p><p>
       The webmirror.menu file can be installed with:
 </p><pre class="programlisting">
-xdg-desktop-menu install --system --noupdate --vendor shinythings ./webmirror.menu
+xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.menu
 </pre><p>
     </p><p>
       After installing multiple files with <code class="option">--noupdate</code> make sure
       to force an update:
 </p><pre class="programlisting">
-xdg-desktop-menu forceupdate --system
+xdg-desktop-menu forceupdate
 </pre><p>
     </p></div></div></body></html>

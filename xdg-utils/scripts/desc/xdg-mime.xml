@@ -20,7 +20,7 @@
       <surname>White</surname>
     </author>
     <address><email>jwhite@codeweavers.com</email></address>
-    <releaseinfo>This is release 0.5 of the xdg-mime Manual.</releaseinfo>
+    <releaseinfo>xdg-utils 1.0 beta2</releaseinfo>
   </refentryinfo>
 
   <refmeta>
@@ -53,19 +53,13 @@ and adding descriptions for new file types</refpurpose>
     <cmdsynopsis>
       <command>xdg-mime</command>
       <arg choice="plain">install</arg>	
-      <group choice="req">
-	<arg choice="plain"><option>--user</option></arg>
-	<arg choice="plain"><option>--system</option></arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <arg choice="plain"><replaceable>mimetypes-file</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-mime</command>
       <arg choice="plain">uninstall</arg>	
-      <group choice="req">
-	<arg choice="plain"><option>--user</option></arg>
-	<arg choice="plain"><option>--system</option></arg>
-      </group>
+      <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <arg choice="plain"><replaceable>mimetypes-file</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
@@ -183,20 +177,18 @@ and adding descriptions for new file types</refpurpose>
     <title>Options</title>
     <variablelist>
       <varlistentry>
-	<term><option>--user</option></term>
+	<term><option>--mode</option> <replaceable>mode</replaceable></term>
 	<listitem>
-	  <simpara>
-	    Adds or removes file type descriptions for the current user only.
+	  <simpara><replaceable>mode</replaceable> can be
+            <emphasis>user</emphasis> or <emphasis>system</emphasis>.
+            In user mode the file is (un)installed for the current user
+            only. In system mode the file is (un)installed for all users
+            on the system. Usually only root is allowed to install in
+            system mode.
 	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term><option>--system</option></term>
-	<listitem>
 	  <simpara>
-	    Adds or removes file type descriptions for all users on the system.
-            Usually only root is allowed to do this.
+	    The default is to use system mode when called by root
+	    and to use user mode when called by a non-root user.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -325,9 +317,9 @@ xdg-mime query default image/png
     </para>
     <para>
 <programlisting>
-xdg-mime install --system diff.xml
-</programlisting>Adds a file type description for "diff"-files for all users on the
-      system. The file type description could look as folows.  
+xdg-mime install diff.xml
+</programlisting>Adds a file type description for "diff"-files.
+      The file type description could look as folows.  
 <programlisting>
 diff.xml:
 
@@ -342,7 +334,7 @@ diff.xml:
 </programlisting>An icon for this new file type must alsobe installed, for
 example with:
 <programlisting>
-xdg-icon-resource install --system --context mimetypes --size 64 text-x-diff.png
+xdg-icon-resource install --context mimetypes --size 64 text-x-diff.png
 </programlisting>
     </para>
   </refsect1>
