@@ -267,9 +267,7 @@ case $1 in
             exit_failure_syntax "unexpected option '$filename'"
             ;;
         esac
-        if [ ! -f "$filename" ] ; then
-            exit_failure_file_missing "file '$filename' does not exist"
-        fi
+        check_input_file "$filename"
         ;;
 
       default)
@@ -350,8 +348,6 @@ if [ "$action" = "makedefault" ]; then
 fi
 
 if [ "$action" = "info" ]; then
-    check_input_file "$filename"
-
     detectDE
 
     if [ x"$DE" = x"" ]; then
@@ -412,10 +408,9 @@ while [ $# -gt 0 ] ; do
         if [ -n "$filename" ] ; then
             exit_failure_syntax "unexpected argument '$parm'"
         fi
-        if [ ! -f "$parm" ] ; then
-            exit_failure_file_missing "file '$parm' does not exist"
-        fi
+
         filename="$parm"
+        check_input_file "$filename"
         ;;
     esac
 done

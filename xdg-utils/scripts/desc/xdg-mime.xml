@@ -288,6 +288,15 @@ and adding descriptions for new file types</refpurpose>
 	  </simpara>
 	</listitem>
       </varlistentry>
+      <varlistentry>
+	<term><option>5</option></term>
+	<listitem>
+	  <simpara>
+	    No permission to read one of the files passed on the command
+            line.
+	  </simpara>
+	</listitem>
+      </varlistentry>
     </variablelist>
   </refsect1>
   <refsect1 id="seealso">

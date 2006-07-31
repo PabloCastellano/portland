@@ -147,6 +147,8 @@ failure. The following failure codes can be returned:
     A required tool could not be found.
 4
     The action failed.
+5
+    No permission to read one of the files passed on the command line.
 
 See Also
 
@@ -246,7 +248,7 @@ exit_failure_syntax()
         echo "Try 'xdg-mime --help' for more information." >&2
     else
         usage
-        echo "Use 'man xdg-mime' or 'xdg-mime --manual' for additional info." 
+        echo "Use 'man xdg-mime' or 'xdg-mime --manual' for additional info."
     fi
 
     exit 1
@@ -288,6 +290,55 @@ exit_failure_operation_failed()
     exit 4
 }
 
+#------------------------------------------------------------
+# Exit script on insufficient permission to read a specified file
+
+exit_failure_file_permission_read()
+{
+    if [ $# -gt 0 ]; then
+        echo "xdg-mime: $@" >&2
+    fi
+
+    exit 5
+}
+
+#------------------------------------------------------------
+# Exit script on insufficient permission to read a specified file
+
+exit_failure_file_permission_write()
+{
+    if [ $# -gt 0 ]; then
+        echo "xdg-mime: $@" >&2
+    fi
+
+    exit 6
+}
+
+check_input_file()
+{
+    if [ ! -e "$1" ]; then
+        exit_failure_file_missing "file '$1' does not exist"
+    fi
+    if [ ! -r "$1" ]; then
+        exit_failure_file_permission_read "no permission to read file '$1'"
+    fi
+}
+
+check_output_file()
+{
+    # if the file exists, check if it is writeable
+    # if it does not exists, check if we are allowed to write on the directory
+    if [ -e "$1" ]; then
+        if [ ! -w "$1" ]; then
+            exit_failure_file_permission_write "no permission to write to file '$1'"
+        fi
+    else
+        DIR=`dirname "$1"`
+        if [ ! -w "$DIR" -o ! -x "$DIR" ]; then
+            exit_failure_file_permission_write "no permission to create file '$1'"
+        fi
+    fi
+}
 
 #----------------------------------------
 # Checks for shared commands, e.g. --help
@@ -301,7 +352,7 @@ check_common_commands()
         case "$parm" in
             --help)
             usage
-            echo "Use 'man xdg-mime' or 'xdg-mime --manual' for additional info." 
+            echo "Use 'man xdg-mime' or 'xdg-mime --manual' for additional info."
             exit_success
             ;;
 
@@ -321,7 +372,7 @@ check_common_commands()
 check_common_commands "$@"
 if [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt 1 ]; then
     # Be silent
-    xdg_redirect_output=" > /dev/null 2> /dev/null" 
+    xdg_redirect_output=" > /dev/null 2> /dev/null"
 else
     # All output to stderr
     xdg_redirect_output=" >&2"
@@ -582,9 +633,7 @@ case $1 in
             exit_failure_syntax "unexpected option '$filename'"
             ;;
         esac
-        if [ ! -f "$filename" ] ; then
-            exit_failure_file_missing "file '$filename' does not exist"
-        fi
+        check_input_file "$filename"
         ;;
 
       default)
@@ -725,10 +774,9 @@ while [ $# -gt 0 ] ; do
         if [ -n "$filename" ] ; then
             exit_failure_syntax "unexpected argument '$parm'"
         fi
-        if [ ! -f "$parm" ] ; then
-            exit_failure_file_missing "file '$parm' does not exist"
-        fi
+
         filename="$parm"
+        check_input_file "$filename"
         ;;
     esac
 done
