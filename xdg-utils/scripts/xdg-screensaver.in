@@ -27,7 +27,7 @@ _USAGE
 #@xdg-utils-common@
 
 # Check if we can use "mv -T" 
-if mv -T ... ... 2>&1 | grep '\.\.\.'; then
+if mv -T ... ... 2>&1 | grep '\.\.\.' > /dev/null ; then
    # We can securely move files in /tmp with mv -T
    DEBUG 1 "mv -T available"
    MV="mv -T"
