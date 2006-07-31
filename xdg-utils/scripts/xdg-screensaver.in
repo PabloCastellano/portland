@@ -26,7 +26,18 @@ _USAGE
 
 #@xdg-utils-common@
 
-screensaver_file="/tmp/xdg-screensaver-$USER-"`echo $DISPLAY | sed 's/:/-/g'`
+# Check if we can use "mv -T" 
+if mv -T ... ... 2>&1 | grep '\.\.\.'; then
+   # We can securely move files in /tmp with mv -T
+   DEBUG 1 "mv -T available"
+   MV="mv -T"
+   screensaver_file="/tmp/xdg-screensaver-$USER-"`echo $DISPLAY | sed 's/:/-/g'`
+else
+   # No secure moves available, use home dir
+   DEBUG 1 "mv -T not available"
+   MV="mv"
+   screensaver_file="$HOME/.xdg-screensaver-"`echo $HOSTNAME-$DISPLAY | sed 's/:/-/g'`
+fi
 lockfile_command=`which lockfile 2> /dev/null`
 
 lockfile()
@@ -79,7 +90,7 @@ cleanup_suspend()
   lockfile
   tmpfile=`mktemp`
   grep -v "$window_id:" "$screensaver_file" > "$tmpfile" 2> /dev/null
-  mv -T "$tmpfile" "$screensaver_file"
+  $MV "$tmpfile" "$screensaver_file"
   if [ ! -s "$screensaver_file" ] ; then
       rm "$screensaver_file"
       unlockfile
@@ -149,7 +160,7 @@ track_window()
   already_tracked=$?
 
   if [ "$already_tracked" -eq "0" ] ; then
-    mv -T "$tmpfile" "$screensaver_file"
+    $MV "$tmpfile" "$screensaver_file"
     # We are already tracking $window_id, don't do anything
     unlockfile
     return
@@ -160,7 +171,7 @@ track_window()
   xprop_pid=$!
   # Add window_id and xprop_pid to the xdg-screensave status file
   echo "$window_id:$xprop_pid" >> $tmpfile
-  mv -T "$tmpfile" "$screensaver_file"
+  $MV "$tmpfile" "$screensaver_file"
   unlockfile
   # Wait for xprop to edit, it means that the window disappeared
   wait $xprop_pid
