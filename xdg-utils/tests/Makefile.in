@@ -12,21 +12,9 @@ exec_prefix     = @exec_prefix@
 bindir          = @bindir@
 mandir          = @mandir@
 
-TESTS		= \
-    t.xdg-desktop \
-    t.xdg-copy
-
 all:
 
-test:	$(TESTS)
-	for x in $(TESTS) ; do \
-        	./$$x ; \
-        done
-
-
-release:	tests
-	rm -f *~ HACKING
-	rm -rf desc/
+release:
 
 distclean: clean
 	rm -f Makefile
@@ -37,6 +25,7 @@ tests-userclean:
 	rm -rf tmp/xdgt*
 	find ${HOME} -name 'xdgtestdata*' | xargs rm -f
 	find ${HOME} -name 'x-xdgt*.xml' | xargs rm -f
+	find ${HOME}/.kde/share/mimelnk -name 'x-xdg*.desktop' | xargs rm -f
 
 tests-clean:	tests-userclean
 	find `echo "${XDG_DATA_DIRS}:${XDG_CONFIG_DIRS}" | sed -e 's/:/ /g'` -name 'xdgtestdata*' | xargs rm -f
