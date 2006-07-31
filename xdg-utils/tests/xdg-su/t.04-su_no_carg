@@ -6,7 +6,7 @@
 
 ## Test function
 test_su_no_carg() {
-test_start "$FUNCTNAME: expected error when -c has no option"
+test_start "$FUNCNAME: expected error when -c has no option"
 
 test_procedure
 

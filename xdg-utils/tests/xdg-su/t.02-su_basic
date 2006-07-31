@@ -6,7 +6,7 @@
 
 ## Test function
 test_su_basic() {
-test_start "$FUNCTNAME: basic su - up-privilege"
+test_start "$FUNCNAME: basic su - up-privilege"
 
 test_init
 

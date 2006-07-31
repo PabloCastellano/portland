@@ -6,7 +6,7 @@
 
 ## Test function
 test_cc_args() {
-test_start "$FUNCTNAME: verify cc/bcc/subject/body/attach arguments work"
+test_start "$FUNCNAME: verify cc/bcc/subject/body/attach arguments work"
 
 
 addr="$XDG_TEST_SHORTID@portland.freedesktop.org"

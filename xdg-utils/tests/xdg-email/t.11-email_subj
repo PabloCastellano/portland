@@ -6,7 +6,7 @@
 
 ## Test function
 test_email_subj() {
-test_start "$FUNCTNAME: verify subject argument works"
+test_start "$FUNCNAME: verify subject argument works"
 
 ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org"
 SUBJ="A subject line for test $XDG_TEST_SHORTID"

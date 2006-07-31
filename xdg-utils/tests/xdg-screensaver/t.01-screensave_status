@@ -6,7 +6,7 @@
 
 ## Test function
 test_screensave_status() {
-test_start "$FUNCTNAME: verify screensaver status returns 'enabled' or 'disabled'"
+test_start "$FUNCNAME: verify screensaver status returns 'enabled' or 'disabled'"
 test_purpose "The screensaver may have status 'enabled' or 'disabled'. (Not both as bug 7592.)"
 
 test_init

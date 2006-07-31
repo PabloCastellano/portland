@@ -6,7 +6,7 @@
 
 ## Test function
 test_email_attach() {
-test_start "$FUNCTNAME: verify attach argument works"
+test_start "$FUNCNAME: verify attach argument works"
 
 ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org"
 

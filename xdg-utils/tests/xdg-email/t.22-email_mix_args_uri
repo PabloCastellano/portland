@@ -6,7 +6,7 @@
 
 ## Test function
 test_email_mix_args_uri() {
-test_start "$FUNCTNAME: verify an email is generated correctly when called with both a uri and not."
+test_start "$FUNCNAME: verify an email is generated correctly when called with both a uri and not."
 
 ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org"
 

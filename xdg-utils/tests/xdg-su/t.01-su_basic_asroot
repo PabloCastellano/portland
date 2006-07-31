@@ -6,7 +6,7 @@
 
 ## Test function
 test_su_basic_asroot() {
-test_start "$FUNCTNAME: basic su already root"
+test_start "$FUNCNAME: basic su already root"
 
 test_init
 

@@ -6,7 +6,7 @@
 
 ## Test function
 test_email_uri() {
-test_start "$FUNCTNAME: verify uri email compose"
+test_start "$FUNCNAME: verify uri email compose"
 
 ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org"
 

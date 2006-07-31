@@ -6,7 +6,7 @@
 
 ## Test function
 test_email_basic() {
-test_start "$FUNCTNAME: verify basic email compose"
+test_start "$FUNCNAME: verify basic email compose"
 
 ADDR="$XDG_TEST_SHORTID@portland.freedesktop.org"
 

@@ -6,7 +6,7 @@
 
 ## Test function
 test_su_no_cflag() {
-test_start "$FUNCTNAME: expected error when no -c arg is present"
+test_start "$FUNCNAME: expected error when no -c arg is present"
 test_purpose "Verify bug 7136 has been corrected"
 
 test_procedure

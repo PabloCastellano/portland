@@ -6,7 +6,7 @@
 
 ## Test function
 test_open_dir() {
-test_start "$FUNCTNAME: verify basic directory open test."
+test_start "$FUNCNAME: verify basic directory open test."
 
 test_init
 

@@ -6,7 +6,7 @@
 
 ## Test function
 test_screensave_activate() {
-test_start "$FUNCTNAME: verify screensaver activate"
+test_start "$FUNCNAME: verify screensaver activate"
 
 test_init
 

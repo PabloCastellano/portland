@@ -6,7 +6,7 @@
 
 ## Test function
 test_multi_address() {
-test_start "$FUNCTNAME: verify multiple to/cc/bcc arguments work"
+test_start "$FUNCNAME: verify multiple to/cc/bcc arguments work"
 
 addr="$XDG_TEST_SHORTID@portland.freedesktop.org"
 TO1="to-1-$addr"
