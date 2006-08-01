@@ -11,7 +11,7 @@ test_start "$FUNCNAME: verify $ICON is installed correctly with --mode system"
 
 ## Begin the test.
 icondir="$XDG_TEST_DIR/icons"
-systempath="$XDG_DATA_DIRS:/usr/share/pixmaps"
+systempath="${XDG_DATA_DIRS-/usr/local/share:/usr/share}:/usr/share/pixmaps"
 
 # Dependencies section
 test_init

@@ -13,7 +13,7 @@ test_start "$FUNCNAME: verify a desktop file is installed in the system applicat
 test_init
 
 # Generate .desktop file
-USERPATH="$XDG_DATA_DIRS:$XDG_CONFIG_DIRS"
+USERPATH="${XDG_DATA_DIRS-/usr/local/share:/usr/share}:${XDG_CONFIG_DIRS-/etc/xdg}"
 
 require_root
 set_no_display

@@ -12,7 +12,7 @@ test_start "$FUNCNAME: verify a system menu is created correctly"
 # Dependencies section
 test_init
 
-USERPATH="$XDG_DATA_DIRS:$XDG_CONFIG_DIRS"
+USERPATH="${XDG_DATA_DIRS-/usr/local/share:/usr/share}:${XDG_CONFIG_DIRS-/etc/xdg}"
 
 require_root
 set_no_display

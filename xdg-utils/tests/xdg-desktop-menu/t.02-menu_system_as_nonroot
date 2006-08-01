@@ -7,7 +7,7 @@
 
 ## Test function
 test_menu_system_as_nonroot() {
-USERPATH="$XDG_DATA_DIRS:$HOME/.local:$HOME/.config:$XDG_DATA_HOME"
+USERPATH="${XDG_DATA_DIRS-/usr/local/share:/usr/share}:$HOME/.local:$HOME/.config:$XDG_DATA_HOME"
 
 ## Begin the test.
 test_start "$FUNCNAME: verify error for --mode system when run as a normal user"

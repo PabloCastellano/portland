@@ -7,7 +7,7 @@
 
 ## Test function
 test_icon_system_as_nonroot() {
-ICON_PATH="$HOME/.icons:$XDG_DATA_DIRS:/usr/share/pixmaps:$HOME/.local/icons:$XDG_DATA_HOME"
+ICON_PATH="$HOME/.icons:${XDG_DATA_DIRS-/usr/local/share:/usr/share}:/usr/share/pixmaps:$HOME/.local/icons:$XDG_DATA_HOME"
 
 ## Begin the test.
 test_start "$FUNCNAME: verify error for --mode system when run as a normal user"
