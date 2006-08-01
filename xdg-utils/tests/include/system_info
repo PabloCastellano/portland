@@ -10,6 +10,8 @@ fi
 
 echo "distribution: $distro"
 
+echo "xdg-utils:" `xdg-mime --version | cut -d ' ' -f 2`
+
 . "$parentdir/desktop_environment"
 
 detail=`uname -a`
