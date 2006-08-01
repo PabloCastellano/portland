@@ -48,17 +48,14 @@ esac
 
 shift
 
+vendor=true
 while [ $# -gt 0 ] ; do
     parm=$1
     shift
 
     case $parm in
-      --vendor)
-        if [ -z "$1" ] ; then
-            exit_failure_syntax "vendor-id argument missing for --vendor"
-        fi
-        vendor=$1
-        shift
+      --novendor)
+        vendor=false
         ;;
 
       -*)
@@ -90,6 +87,9 @@ filetype=
 case $desktop_file in
   *.desktop)
      filetype=desktop
+     if [ "$vendor" = "true" -a "$action" = "install" ] ; then
+        check_vendor_prefix "$desktop_file"
+     fi
      ;;
   *)
      filetype=other
@@ -103,7 +103,6 @@ desktop_dir=$HOME/Desktop
 # echo "[using|$desktop_dir]"
 
 basefile=`basename $desktop_file`
-[ -z $vendor ] || [ x"$filetype" != x"desktop" ] || basefile=$vendor-$basefile
 
 DEBUG 1 "$action $desktop_file in $desktop_dir"
 

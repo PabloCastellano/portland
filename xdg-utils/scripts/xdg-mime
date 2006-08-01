@@ -37,188 +37,189 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-   xdg-mime -- command line tool for querying information about file type
-   handling and adding descriptions for new file types
+xdg-mime — command line tool for querying information about file type handling
+and adding descriptions for new file types
 
 Synopsis
 
-   xdg-mime query { filetype | default } ...
+xdg-mime query { filetype | default } ...
 
-   xdg-mime default application mimetype(s)
+xdg-mime default application mimetype(s)
 
-   xdg-mime install [--mode mode] mimetypes-file
+xdg-mime install [--mode mode] [--novendor] mimetypes-file
 
-   xdg-mime uninstall [--mode mode] mimetypes-file
+xdg-mime uninstall [--mode mode] mimetypes-file
 
-   xdg-mime { --help | --manual | --version }
+xdg-mime { --help | --manual | --version }
 
 Description
 
-   The xdg-mime program can be used to query information about file types and
-   to add descriptions for new file types.
+The xdg-mime program can be used to query information about file types and to
+add descriptions for new file types.
 
 Commands
 
-   query
+query
 
-           Returns information related to file types.
+    Returns information related to file types.
 
-           The query option is for use inside a desktop session only. It is
-           not recommended to use xdg-mime query as root.
+    The query option is for use inside a desktop session only. It is not
+    recommended to use xdg-mime query as root.
 
-           The following queries are supported:
+    The following queries are supported:
 
-           query filetype FILE: Returns the file type of FILE in the form of
-           a MIME type.
+    query filetype FILE: Returns the file type of FILE in the form of a MIME
+    type.
 
-           query default mimetype: Returns the default application that the
-           desktop environment uses for opening files of type mimetype. The
-           default application is identified by its *.desktop file.
+    query default mimetype: Returns the default application that the desktop
+    environment uses for opening files of type mimetype. The default
+    application is identified by its *.desktop file.
 
-   default
+default
 
-           Ask the desktop environment to make application the default
-           application for opening files of type mimetype. An application can
-           be made the default for several file types by specifying multiple
-           mimetypes.
+    Ask the desktop environment to make application the default application for
+    opening files of type mimetype. An application can be made the default for
+    several file types by specifying multiple mimetypes.
 
-           application is the desktop file id of the application and has the
-           form vendor-name.desktop application must already be installed in
-           the desktop menu before it can be made the default handler. The
-           aplication's desktop file must list support for all the MIME types
-           that it wishes to be the default handler for.
+    application is the desktop file id of the application and has the form
+    vendor-name.desktop application must already be installed in the desktop
+    menu before it can be made the default handler. The aplication's desktop
+    file must list support for all the MIME types that it wishes to be the
+    default handler for.
 
-           Requests to make an application a default handler may be subject
-           to system policy or approval by the end-user. xdg-mime query can
-           be used to verify whether an application is the actual default
-           handler for a specific file type.
+    Requests to make an application a default handler may be subject to system
+    policy or approval by the end-user. xdg-mime query can be used to verify
+    whether an application is the actual default handler for a specific file
+    type.
 
-           The default option is for use inside a desktop session only. It is
-           not recommended to use xdg-mime default as root.
+    The default option is for use inside a desktop session only. It is not
+    recommended to use xdg-mime default as root.
 
-   install
-           Adds the file type descriptions provided in mimetypes-file to the
-           desktop environment. mimetypes-file must be a XML file that
-           follows the freedesktop.org Shared MIME-info Database
-           specification and that has a mime-info element as its document
-           root. For each new file type one or more icons with name
-           major-minor must be installed with the xdg-icon-resource command
-           in the mimetypes context. For example the
-           application/vnd.oasis.opendocument.text filetype requires an icon
-           by the name of application-vnd.oasis.opendocument.text to be
-           installed.
-
-   uninstall
-           Removes the file type descriptions provided in mimetypes-file and
-           previously added with xdg-mime install from the desktop
-           environment. mimetypes-file must be a XML file that follows the
-           freedesktop.org Shared MIME-info Database specification and that
-           has a mime-info element as its document root.
+install
+    Adds the file type descriptions provided in mimetypes-file to the desktop
+    environment. mimetypes-file must be a XML file that follows the
+    freedesktop.org Shared MIME-info Database specification and that has a
+    mime-info element as its document root. For each new file type one or more
+    icons with name major-minor must be installed with the xdg-icon-resource
+    command in the mimetypes context. For example the application/
+    vnd.oasis.opendocument.text filetype requires an icon by the name of
+    application-vnd.oasis.opendocument.text to be installed.
+uninstall
+    Removes the file type descriptions provided in mimetypes-file and
+    previously added with xdg-mime install from the desktop environment.
+    mimetypes-file must be a XML file that follows the freedesktop.org Shared
+    MIME-info Database specification and that has a mime-info element as its
+    document root.
 
 Options
 
-   --mode mode
+--mode mode
 
-           mode can be user or system. In user mode the file is (un)installed
-           for the current user only. In system mode the file is
-           (un)installed for all users on the system. Usually only root is
-           allowed to install in system mode.
+    mode can be user or system. In user mode the file is (un)installed for the
+    current user only. In system mode the file is (un)installed for all users
+    on the system. Usually only root is allowed to install in system mode.
 
-           The default is to use system mode when called by root and to use
-           user mode when called by a non-root user.
+    The default is to use system mode when called by root and to use user mode
+    when called by a non-root user.
 
-   --help
-           Show command synopsis.
+--novendor
 
-   --manual
-           Show this manualpage.
+    Normally, xdg-mime checks to ensure that the mimetypes-file to be installed
+    has a proper vendor prefix. This option can be used to disable that check.
 
-   --version
-           Show the xdg-utils version information.
+    A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated
+    with a dash ("-"). Companies and organizations are encouraged to use a word
+    or phrase, preferably the organizations name, for which they hold a
+    trademark as their vendor prefix. The purpose of the vendor prefix is to
+    prevent name conflicts.
+
+--help
+    Show command synopsis.
+--manual
+    Show this manualpage.
+--version
+    Show the xdg-utils version information.
 
 Environment Variables
 
-   xdg-mime honours the following environment variables:
+xdg-mime honours the following environment variables:
 
-   XDG_UTILS_DEBUG_LEVEL
-           Setting this environment variable to a non-zero numerical value
-           makes xdg-mime do more verbose reporting on stderr. Setting a
-           higher value increases the verbosity.
+XDG_UTILS_DEBUG_LEVEL
+    Setting this environment variable to a non-zero numerical value makes
+    xdg-mime do more verbose reporting on stderr. Setting a higher value
+    increases the verbosity.
 
 Exit Codes
 
-   An exit code of 0 indicates success while a non-zero exit code indicates
-   failure. The following failure codes can be returned:
+An exit code of 0 indicates success while a non-zero exit code indicates
+failure. The following failure codes can be returned:
 
-   1
-           Error in command line syntax.
-
-   2
-           One of the files passed on the command line did not exist.
-
-   3
-           A required tool could not be found.
-
-   4
-           The action failed.
-
-   5
-           No permission to read one of the files passed on the command line.
+1
+    Error in command line syntax.
+2
+    One of the files passed on the command line did not exist.
+3
+    A required tool could not be found.
+4
+    The action failed.
+5
+    No permission to read one of the files passed on the command line.
 
 See Also
 
-   xdg-icon-resource(1), xdg-desktop-menu(1)
+xdg-icon-resource(1), xdg-desktop-menu(1)
 
 Examples
 
- xdg-mime query filetype /tmp/foobar.png
+xdg-mime query filetype /tmp/foobar.png
 
-   Prints the MIME type of the file /tmp/foobar.png, in this case image/png
+Prints the MIME type of the file /tmp/foobar.png, in this case image/png
 
- xdg-mime query default image/png
+xdg-mime query default image/png
 
-   Prints the .desktop filename of the application which is registered to
-   open PNG files.
+Prints the .desktop filename of the application which is registered to open PNG
+files.
 
- xdg-mime install diff.xml
+xdg-mime install shinythings-shiny.xml
 
-   Adds a file type description for "diff"-files. The file type description
-   could look as folows.
+Adds a file type description for "shiny"-files. "shinythings-" is used as the
+vendor prefix. The file type description could look as folows.
 
- diff.xml:
+shinythings-shiny.xml:
 
- <?xml version="1.0"?>
- <mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-   <mime-type type="text/x-diff">
-     <comment>Differences between files</comment>
-     <glob pattern="*.diff"/>
-     <glob pattern="*.patch"/>
-   </mime-type>
- </mime-info>
+<?xml version="1.0"?>
+<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
+  <mime-type type="text/x-shiny">
+    <comment>Shiny new file type</comment>
+    <glob pattern="*.shiny"/>
+    <glob pattern="*.shi"/>
+  </mime-type>
+</mime-info>
 
-   An icon for this new file type must alsobe installed, for example with:
+An icon for this new file type must also be installed, for example with:
 
- xdg-icon-resource install --context mimetypes --size 64 text-x-diff.png
+xdg-icon-resource install --context mimetypes --size 64 text-x-shiny.png
+
 _MANUALPAGE
 }
 
 usage()
 {
 cat << _USAGE
-   xdg-mime -- command line tool for querying information about file type
-   handling and adding descriptions for new file types
+xdg-mime — command line tool for querying information about file type handling
+and adding descriptions for new file types
 
 Synopsis
 
-   xdg-mime query { filetype | default } ...
+xdg-mime query { filetype | default } ...
 
-   xdg-mime default application mimetype(s)
+xdg-mime default application mimetype(s)
 
-   xdg-mime install [--mode mode] mimetypes-file
+xdg-mime install [--mode mode] [--novendor] mimetypes-file
 
-   xdg-mime uninstall [--mode mode] mimetypes-file
+xdg-mime uninstall [--mode mode] mimetypes-file
 
-   xdg-mime { --help | --manual | --version }
+xdg-mime { --help | --manual | --version }
 
 _USAGE
 }
@@ -338,6 +339,22 @@ check_input_file()
     fi
 }
 
+check_vendor_prefix()
+{
+    file=`basename "$1"`
+    case "$file" in
+       [a-zA-Z]*-*)
+         return
+         ;;
+    esac
+
+    echo "xdg-mime: filename '$file' does not have a proper vendor prefix" >&2
+    echo 'A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated' >&2
+    echo 'with a dash ("-"). An example filename is '"'example-$file'" >&2
+    echo "Use --novendor to override or 'xdg-mime --manual' for additional info." >&2
+    exit 1
+}
+
 check_output_file()
 {
     # if the file exists, check if it is writeable
@@ -376,7 +393,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-mime 1.0beta1"
+            echo "xdg-mime 1.0beta2"
             exit_success
             ;;
         esac
@@ -774,6 +791,7 @@ if [ "$action" = "defapp" ]; then
     exit_failure_operation_impossible "no method available for quering default application for '$mimetype'"
 fi
 
+vendor=true
 while [ $# -gt 0 ] ; do
     parm="$1"
     shift
@@ -797,6 +815,10 @@ while [ $# -gt 0 ] ; do
             ;;
         esac
         shift
+        ;;
+
+      --novendor)
+        vendor=false
         ;;
 
       -*)
@@ -828,6 +850,10 @@ fi
 
 if [ -z "$filename" ] ; then
     exit_failure_syntax "mimetypes-file argument missing"
+fi
+
+if [ "$vendor" =  "true" -a "$action" = "install" ] ; then
+    check_vendor_prefix "$filename"
 fi
 
 xdg_base_dir=

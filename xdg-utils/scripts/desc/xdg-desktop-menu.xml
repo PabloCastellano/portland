@@ -38,7 +38,7 @@
       <command>xdg-desktop-menu</command>
       <arg choice="plain">install</arg>
       <arg><option>--noupdate</option></arg>
-      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <arg><option>--novendor</option></arg>
       <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <group choice="req">
 	<arg choice="plain"><replaceable>desktop-file</replaceable></arg>
@@ -50,7 +50,6 @@
       <command>xdg-desktop-menu</command>
       <arg choice="plain">uninstall</arg>
       <arg><option>--noupdate</option></arg>
-      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <arg><option>--mode <replaceable>mode</replaceable></option></arg>
       <group choice="req">
 	<arg choice="plain"><replaceable>desktop-file</replaceable></arg>
@@ -150,12 +149,21 @@
       </varlistentry>
 
       <varlistentry>
-	<term> <option>--vendor</option> <replaceable>vendor-id</replaceable></term>
+	<term><option>--novendor</option></term>
 	<listitem>
 	  <simpara>
-	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
-            and directory files.
+	    Normally, xdg-desktop-menu checks to ensure that any *.desktop,
+            *.directory and *.menu files to be installed has
+            a vendor prefix. This option can be used to disable that check.
 	  </simpara>
+	  <simpara>
+            A vendor prefix consists of alpha characters ([a-zA-Z]) and is
+            terminated with a dash ("-").
+            Companies and organizations are encouraged to use a word
+            or phrase, preferably the organizations name, for which they hold
+            a trademark as their vendor prefix.
+            The purpose of the vendor prefix is to prevent name conflicts.
+          </simpara>
 	</listitem>
       </varlistentry>
 
@@ -429,7 +437,7 @@
       In order to add the application to the menu there needs to be a
       .desktop file with a suitable <emphasis>Categories</emphasis> entry:
 <programlisting>
-webmirror.desktop:
+shinythings-webmirror.desktop:
 
   [Desktop Entry]
   Encoding=UTF-8
@@ -444,10 +452,10 @@ webmirror.desktop:
   Categories=Network;WebDevelopment;
 </programlisting>
     </para>
-    <para>Now the xdg-desktop-menu tool can be used to add the webmirror.desktop file
-    to the desktop application menu:
+    <para>Now the xdg-desktop-menu tool can be used to add the
+    shinythings-webmirror.desktop file to the desktop application menu:
 <programlisting>
-xdg-desktop-menu install --vendor shinythings ./webmirror.desktop
+xdg-desktop-menu install ./shinythings-webmirror.desktop
 </programlisting>
     </para>
     <para>
@@ -465,27 +473,27 @@ xdg-desktop-menu install --vendor shinythings ./webmirror.desktop
       First the company needs to create two .desktop files that describe
       the two menu items, this time no Categories item is needed:
 <programlisting>
-webmirror.desktop:
+shinythings-webmirror.desktop:
 
   [Desktop Entry]
   Encoding=UTF-8
   Type=Application
 
   Exec=webmirror
-  Icon=webmirror
+  Icon=shinythings-webmirror
 
   Name=WebMirror
   Name[nl]=WebSpiegel
 
 
-webmirror-admin.desktop:
+shinythings-webmirror-admin.desktop:
 
   [Desktop Entry]
   Encoding=UTF-8
   Type=Application
 
   Exec=webmirror-admintool
-  Icon=webmirror-admintool
+  Icon=shinythings-webmirror-admintool
 
   Name=WebMirror Admin Tool
   Name[nl]=WebSpiegel Administratie Tool
@@ -494,8 +502,8 @@ webmirror-admin.desktop:
     <para>
       The files can be installed with:
 <programlisting>
-xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.desktop
-xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror-admin.desktop
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.desktop
+xdg-desktop-menu install --noupdate ./shinythings-webmirror-admin.desktop
 </programlisting>
     </para>
     <para>
@@ -506,12 +514,12 @@ xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror-admin.deskt
       In addition a .directory file needs to be created to provide a title and icon
       for the sub-menu itself:
 <programlisting>
-webmirror.directory:
+shinythings-webmirror.directory:
 
   [Desktop Entry]
   Encoding=UTF-8
 
-  Icon=webmirror-menu
+  Icon=shinythings-webmirror-menu
 
   Name=WebMirror
   Name[nl]=WebSpiegel
@@ -520,7 +528,7 @@ webmirror.directory:
     <para>
       This webmirror.directory file can be installed with:
 <programlisting>
-xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.directory
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.directory
 </programlisting>
     </para>
     <para>
@@ -530,19 +538,19 @@ xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.directory
       sizes, once with a size of 22x22 pixels and once with a size
       of 64x64 pixels:
 <programlisting>
-xdg-icon-resource install --size 22 ./wmicon-22.png webmirror.png
-xdg-icon-resource install --size 22 ./wmicon-menu-22.png webmirror-menu.png
-xdg-icon-resource install --size 22 ./wmicon-admin-22.png webmirror-admin.png
-xdg-icon-resource install --size 64 ./wmicon-64.png webmirror.png
-xdg-icon-resource install --size 64 ./wmicon-menu-64.png webmirror-menu.png
-xdg-icon-resource install --size 64 ./wmicon-admin-64.png webmirror-admin.png
+xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror.png
+xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu.png
+xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin.png
+xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror.png
+xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu.png
+xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin.png
 </programlisting>
     </para>
     <para>
       The last step is to provide a .menu file that links it all
       togther:
 <programlisting>
-webmirror.menu:
+shinythings-webmirror.menu:
 
   &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
      "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd"&gt;
@@ -560,9 +568,9 @@ webmirror.menu:
 </programlisting>
     </para>
     <para>
-      The webmirror.menu file can be installed with:
+      The shinythings-webmirror.menu file can be installed with:
 <programlisting>
-xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.menu
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.menu
 </programlisting>
     </para>
     <para>

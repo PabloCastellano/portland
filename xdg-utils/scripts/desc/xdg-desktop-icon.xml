@@ -37,13 +37,12 @@
     <cmdsynopsis>
       <command>xdg-desktop-icon</command>
       <arg choice="plain">install</arg>
-      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
+      <arg><option>--novendor</option></arg>
       <arg choice="plain"><replaceable>FILE</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
       <command>xdg-desktop-icon</command>
       <arg choice="plain">uninstall</arg>
-      <arg><option>--vendor <replaceable>vendor-id</replaceable></option></arg>
       <arg choice="plain"><replaceable>FILE</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
@@ -98,12 +97,21 @@
     <title>Options</title>
     <variablelist>
       <varlistentry>
-	<term><option>--vendor</option> <replaceable>vendor-id</replaceable></term>
+	<term><option>--novendor</option></term>
 	<listitem>
 	  <simpara>
-	    Adds <replaceable>vendor-id</replaceable> as a prefix when installing desktop
-            files.
+	    Normally, xdg-desktop-icon checks to ensure that a *.desktop file
+	    to be installed has a vendor prefix. This option can be
+	    used to disable that check.
 	  </simpara>
+	  <simpara>
+            A vendor prefix consists of alpha characters ([a-zA-Z]) and is
+            terminated with a dash ("-").
+            Companies and organizations are encouraged to use a word
+            or phrase, preferably the organizations name, for which they hold
+            a trademark as their vendor prefix.
+            The purpose of the vendor prefix is to prevent name conflicts.
+          </simpara>
 	</listitem>
       </varlistentry>
 
@@ -328,14 +336,14 @@
       In order to add the application to the desktop there needs to be a
       .desktop file for the application:
 <programlisting>
-webmirror.desktop:
+shinythings-webmirror.desktop:
 
   [Desktop Entry]
   Encoding=UTF-8
   Type=Application
 
   Exec=webmirror
-  Icon=webmirror
+  Icon=shinythings-webmirror
 
   Name=WebMirror
   Name[nl]=WebSpiegel
@@ -344,7 +352,7 @@ webmirror.desktop:
     <para>Now the xdg-desktop-icon tool can be used to add the webmirror.desktop file
     to the desktop:
 <programlisting>
-xdg-desktop-icon install --vendor shinythings ./webmirror.desktop
+xdg-desktop-icon install ./shinythings-webmirror.desktop
 </programlisting>
     </para>
     <para>To add a README file to the desktop as well, the following command can be used:  

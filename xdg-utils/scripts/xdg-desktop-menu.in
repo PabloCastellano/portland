@@ -67,8 +67,7 @@ esac
 
 shift
 
-
-
+vendor=true
 while [ $# -gt 0 ] ; do
     parm="$1"
     shift
@@ -98,12 +97,8 @@ while [ $# -gt 0 ] ; do
         shift
         ;;
 
-      --vendor)
-        if [ -z "$1" ] ; then
-            exit_failure_syntax "vendor-id argument missing for --vendor"
-        fi
-        vendor="$1"
-        shift
+      --novendor)
+        vendor=false
         ;;
 
       -*)
@@ -163,6 +158,10 @@ case $desktop_file in
      exit_failure_syntax "file to $action must be a *.desktop, *.directory or *.menu file"
      ;;
 esac
+
+if [ "$vendor" =  "true" -a "$action" = "install" ] ; then
+    check_vendor_prefix "$desktop_file"
+fi
 
 if [ x"$filetype" = x"menu" ] ; then
     xdg_user_dir="$XDG_CONFIG_HOME"
@@ -234,7 +233,6 @@ fi
 # echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
 
 basefile=`basename $desktop_file`
-[ -z $vendor ] || basefile="$vendor-$basefile"
 
 DEBUG 1 "$action $desktop_file in $xdg_dir $kde_dir $gnome_dir"
 

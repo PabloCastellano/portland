@@ -38,6 +38,7 @@
       <command>xdg-icon-resource</command>
       <arg choice="plain">install</arg>
       <arg><option>--noupdate</option></arg>
+      <arg><option>--novendor</option></arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
       <arg><option>--size <replaceable>size</replaceable></option></arg>
@@ -145,6 +146,25 @@
 	    additional changes will follow and that it is not
             necassery to update the desktop icon system right away.
 	  </simpara>
+	</listitem>
+      </varlistentry>
+      <varlistentry>
+	<term><option>--novendor</option></term>
+	<listitem>
+	  <simpara>
+	    Normally, xdg-icon-resource checks to ensure that an icon file
+	    to be installed in the <emphasis>apps</emphasis> context has
+	    a proper vendor prefix. This option can be used to disable
+	    that check.
+	  </simpara>
+	  <simpara>
+            A vendor prefix consists of alpha characters ([a-zA-Z]) and is
+            terminated with a dash ("-").
+            Companies and organizations are encouraged to use a word
+            or phrase, preferably the organizations name, for which they hold
+            a trademark as their vendor prefix.
+            The purpose of the vendor prefix is to prevent name conflicts.
+          </simpara>
 	</listitem>
       </varlistentry>
 
@@ -322,9 +342,10 @@
   <refsect1 id="examples">
     <title>Examples</title>
     <para>
-To install an icon resource to depict a launcher for the application myfoobar one can use:
+To install an icon resource to depict a launcher for the application
+myfoobar, the company ShinyThings Inc. can use:
 <programlisting>
-xdg-icon-resource install --size 64 myfoobar.png
+xdg-icon-resource install --size 64 shinythings-myfoobar.png
 </programlisting>
     </para>
     <para>

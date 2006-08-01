@@ -54,6 +54,7 @@ and adding descriptions for new file types</refpurpose>
       <command>xdg-mime</command>
       <arg choice="plain">install</arg>	
       <arg><option>--mode <replaceable>mode</replaceable></option></arg>
+      <arg><option>--novendor</option></arg>
       <arg choice="plain"><replaceable>mimetypes-file</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
@@ -192,6 +193,25 @@ and adding descriptions for new file types</refpurpose>
 	  </simpara>
 	</listitem>
       </varlistentry>
+      <varlistentry>
+	<term><option>--novendor</option></term>
+	<listitem>
+	  <simpara>
+	    Normally, xdg-mime checks to ensure that the
+	    <replaceable>mimetypes-file</replaceable> to be installed
+	    has a proper vendor prefix. This option can be
+	    used to disable that check.
+	  </simpara>
+	  <simpara>
+            A vendor prefix consists of alpha characters ([a-zA-Z]) and is
+            terminated with a dash ("-").
+            Companies and organizations are encouraged to use a word
+            or phrase, preferably the organizations name, for which they hold
+            a trademark as their vendor prefix.
+            The purpose of the vendor prefix is to prevent name conflicts.
+          </simpara>
+	</listitem>
+      </varlistentry>
 
       <varlistentry>
 	<term><option>--help</option></term>
@@ -317,24 +337,25 @@ xdg-mime query default image/png
     </para>
     <para>
 <programlisting>
-xdg-mime install diff.xml
-</programlisting>Adds a file type description for "diff"-files.
+xdg-mime install shinythings-shiny.xml
+</programlisting>Adds a file type description for "shiny"-files.
+      "shinythings-" is used as the vendor prefix.
       The file type description could look as folows.  
 <programlisting>
-diff.xml:
+shinythings-shiny.xml:
 
 &lt;?xml version="1.0"?&gt;
 &lt;mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'&gt;
-  &lt;mime-type type="text/x-diff"&gt;
-    &lt;comment&gt;Differences between files&lt;/comment&gt;
-    &lt;glob pattern="*.diff"/&gt;
-    &lt;glob pattern="*.patch"/&gt;
+  &lt;mime-type type="text/x-shiny"&gt;
+    &lt;comment&gt;Shiny new file type&lt;/comment&gt;
+    &lt;glob pattern="*.shiny"/&gt;
+    &lt;glob pattern="*.shi"/&gt;
   &lt;/mime-type&gt;
 &lt;/mime-info&gt;
-</programlisting>An icon for this new file type must alsobe installed, for
+</programlisting>An icon for this new file type must also be installed, for
 example with:
 <programlisting>
-xdg-icon-resource install --context mimetypes --size 64 text-x-diff.png
+xdg-icon-resource install --context mimetypes --size 64 text-x-shiny.png
 </programlisting>
     </para>
   </refsect1>

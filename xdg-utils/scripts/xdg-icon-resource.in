@@ -70,7 +70,7 @@ esac
 
 shift
 
-
+vendor=true
 while [ $# -gt 0 ] ; do
     parm="$1"
     shift
@@ -122,6 +122,10 @@ while [ $# -gt 0 ] ; do
         fi
         context="$1"
         shift
+        ;;
+
+      --novendor)
+        vendor=false
         ;;
 
       -*)
@@ -318,6 +322,10 @@ need_gnome_mime=
 # End GNOME legacy workaround section
 
 [ -n "$icon_name" ] || icon_name=`basename $icon_file`
+
+if [ "$vendor" = "true" -a "$action" = "install" -a "$context" = "apps" ] ; then
+    check_vendor_prefix "$icon_name"
+fi
 
 icon_icon_file=`echo "$icon_file" | sed 's/\.[^\.]*$/.icon/'`
 icon_icon_name=`echo "$icon_name" | sed 's/\.[^\.]*$/.icon/'`

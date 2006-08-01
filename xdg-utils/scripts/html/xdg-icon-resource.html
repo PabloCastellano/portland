@@ -1,4 +1,4 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-icon-resource</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-icon-resource"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-icon-resource &#8212; command line tool for (un)installing icon resources</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>icon-file</code></em>  [<em class="replaceable"><code>icon-name</code></em>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>icon-name</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   forceupdate  [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-icon-resource</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-icon-resource"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-icon-resource &#8212; command line tool for (un)installing icon resources</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--novendor</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>icon-file</code></em>  [<em class="replaceable"><code>icon-name</code></em>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--context <em class="replaceable"><code>context</code></em></code>] [<code class="option">--size <em class="replaceable"><code>size</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>icon-name</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>   forceupdate  [<code class="option">--theme <em class="replaceable"><code>theme</code></em></code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-icon-resource</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-icon-resource program can be used to install icon resources
       into the desktop icon system in order to illustrate menu entries,
       to depict desktop icons or to graphically represent file types.
@@ -34,7 +34,19 @@
 	    added in sequence this flag can be used to indicate that
 	    additional changes will follow and that it is not
             necassery to update the desktop icon system right away.
-	  </dd><dt><span class="term"><code class="option">--theme</code> <em class="replaceable"><code>theme</code></em></span></dt><dd>
+	  </dd><dt><span class="term"><code class="option">--novendor</code></span></dt><dd><p>
+	    Normally, xdg-icon-resource checks to ensure that an icon file
+	    to be installed in the <span class="emphasis"><em>apps</em></span> context has
+	    a proper vendor prefix. This option can be used to disable
+	    that check.
+	  </p><p>
+            A vendor prefix consists of alpha characters ([a-zA-Z]) and is
+            terminated with a dash ("-").
+            Companies and organizations are encouraged to use a word
+            or phrase, preferably the organizations name, for which they hold
+            a trademark as their vendor prefix.
+            The purpose of the vendor prefix is to prevent name conflicts.
+          </p></dd><dt><span class="term"><code class="option">--theme</code> <em class="replaceable"><code>theme</code></em></span></dt><dd>
 	    Installs or removes the icon file as part of 
 	    <em class="replaceable"><code>theme</code></em>. If no theme is specified the
 	    icons will be installed as part of the default <span class="emphasis"><em>hicolor</em></span> theme.
@@ -95,9 +107,10 @@
       <span class="citerefentry"><span class="refentrytitle">xdg-desktop-menu</span>(1)</span>,
       <span class="citerefentry"><span class="refentrytitle">xdg-mime</span>(1)</span>
     </p></div><div class="refsect1" lang="en"><a name="examples"></a><h2>Examples</h2><p>
-To install an icon resource to depict a launcher for the application myfoobar one can use:
+To install an icon resource to depict a launcher for the application
+myfoobar, the company ShinyThings Inc. can use:
 </p><pre class="programlisting">
-xdg-icon-resource install --size 64 myfoobar.png
+xdg-icon-resource install --size 64 shinythings-myfoobar.png
 </pre><p>
     </p><p>
 To install an icon for a new application/x-foobar file type one can use:

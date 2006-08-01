@@ -1,5 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-mime</title><meta name="generator" content="DocBook XSL Stylesheets V1.68.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-mime"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-mime &#8212; command line tool for querying information about file type handling
-and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   query  { filetype  |   default }  ... </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   default   <em class="replaceable"><code>application</code></em>   <em class="replaceable"><code>mimetype(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   install  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   uninstall  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-mime</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-mime"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-mime &#8212; command line tool for querying information about file type handling
+and adding descriptions for new file types</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   query  { filetype  |   default }  ... </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   default   <em class="replaceable"><code>application</code></em>   <em class="replaceable"><code>mimetype(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   install  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>] [<code class="option">--novendor</code>]  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>   uninstall  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>mimetypes-file</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-mime</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
       The xdg-mime program can be used to query information about file types
       and to add descriptions for new file types.
     </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">query</span></dt><dd><p>
@@ -65,7 +65,19 @@ and adding descriptions for new file types</p></div><div class="refsynopsisdiv">
 	  </p><p>
 	    The default is to use system mode when called by root
 	    and to use user mode when called by a non-root user.
-	  </p></dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
+	  </p></dd><dt><span class="term"><code class="option">--novendor</code></span></dt><dd><p>
+	    Normally, xdg-mime checks to ensure that the
+	    <em class="replaceable"><code>mimetypes-file</code></em> to be installed
+	    has a proper vendor prefix. This option can be
+	    used to disable that check.
+	  </p><p>
+            A vendor prefix consists of alpha characters ([a-zA-Z]) and is
+            terminated with a dash ("-").
+            Companies and organizations are encouraged to use a word
+            or phrase, preferably the organizations name, for which they hold
+            a trademark as their vendor prefix.
+            The purpose of the vendor prefix is to prevent name conflicts.
+          </p></dd><dt><span class="term"><code class="option">--help</code></span></dt><dd>
 	    Show command synopsis.
 	  </dd><dt><span class="term"><code class="option">--manual</code></span></dt><dd>
 	    Show this manualpage.
@@ -105,23 +117,24 @@ xdg-mime query default image/png
       registered to open PNG files.
     </p><p>
 </p><pre class="programlisting">
-xdg-mime install diff.xml
-</pre><p>Adds a file type description for "diff"-files.
+xdg-mime install shinythings-shiny.xml
+</pre><p>Adds a file type description for "shiny"-files.
+      "shinythings-" is used as the vendor prefix.
       The file type description could look as folows.  
 </p><pre class="programlisting">
-diff.xml:
+shinythings-shiny.xml:
 
 &lt;?xml version="1.0"?&gt;
 &lt;mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'&gt;
-  &lt;mime-type type="text/x-diff"&gt;
-    &lt;comment&gt;Differences between files&lt;/comment&gt;
-    &lt;glob pattern="*.diff"/&gt;
-    &lt;glob pattern="*.patch"/&gt;
+  &lt;mime-type type="text/x-shiny"&gt;
+    &lt;comment&gt;Shiny new file type&lt;/comment&gt;
+    &lt;glob pattern="*.shiny"/&gt;
+    &lt;glob pattern="*.shi"/&gt;
   &lt;/mime-type&gt;
 &lt;/mime-info&gt;
-</pre><p>An icon for this new file type must alsobe installed, for
+</pre><p>An icon for this new file type must also be installed, for
 example with:
 </p><pre class="programlisting">
-xdg-icon-resource install --context mimetypes --size 64 text-x-diff.png
+xdg-icon-resource install --context mimetypes --size 64 text-x-shiny.png
 </pre><p>
     </p></div></div></body></html>

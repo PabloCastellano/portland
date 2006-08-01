@@ -35,331 +35,315 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-   xdg-desktop-menu -- command line tool for (un)installing desktop menu
-   items
+xdg-desktop-menu — command line tool for (un)installing desktop menu items
 
 Synopsis
 
-   xdg-desktop-menu install [--noupdate] [--vendor vendor-id] [--mode mode] {
-   desktop-file | menu-file | directory-file }
+xdg-desktop-menu install [--noupdate] [--novendor] [--mode mode] { desktop-file
+| menu-file | directory-file }
 
-   xdg-desktop-menu uninstall [--noupdate] [--vendor vendor-id] [--mode mode]
-   { desktop-file | menu-file | directory-file }
+xdg-desktop-menu uninstall [--noupdate] [--mode mode] { desktop-file |
+menu-file | directory-file }
 
-   xdg-desktop-menu forceupdate [--mode mode]
+xdg-desktop-menu forceupdate [--mode mode]
 
-   xdg-desktop-menu { --help | --manual | --version }
+xdg-desktop-menu { --help | --manual | --version }
 
 Description
 
-   The xdg-desktop-menu program can be used to install new items to the
-   desktop's application menu.
+The xdg-desktop-menu program can be used to install new items to the desktop's
+application menu.
 
-   The application menu works according to the XDG Desktop Menu Specification
-   at http://www.freedesktop.org/Standards/menu-spec
+The application menu works according to the XDG Desktop Menu Specification at
+http://www.freedesktop.org/Standards/menu-spec
 
 Commands
 
-   install
+install
 
-           Install applications or submenus into the desktop menu system.
+    Install applications or submenus into the desktop menu system.
 
-           desktop-file: Installs the *.desktop file indicated by
-           desktop-file to the menu system. A desktop file represents a
-           single application in the menu. Desktop files are defined by the
-           freedesktop.org Desktop Entry Specification. The most important
-           aspects of *.desktop files are summarized below.
+    desktop-file: Installs the *.desktop file indicated by desktop-file to the
+    menu system. A desktop file represents a single application in the menu.
+    Desktop files are defined by the freedesktop.org Desktop Entry
+    Specification. The most important aspects of *.desktop files are summarized
+    below.
 
-           menu-file: Installs the *.menu file indicated by menu-file to the
-           menu system. A menu file describes the location and contents for
-           one or more new submenus. Each submenu must reference a
-           *.directory file.
+    menu-file: Installs the *.menu file indicated by menu-file to the menu
+    system. A menu file describes the location and contents for one or more new
+    submenus. Each submenu must reference a *.directory file.
 
-           directory-file: Installs the *.directory file indicated by
-           directory-file to the menu system. A directory file provides the
-           name and icon for a submenu.
+    directory-file: Installs the *.directory file indicated by directory-file
+    to the menu system. A directory file provides the name and icon for a
+    submenu.
 
-   uninstall
-           Remove applications or submenus from the desktop menu system
-           previously installed with xdg-desktop-menu install.
-
-   forceupdate
-           Force an update of the menu system. This is only useful if the
-           last call to xdg-desktop-menu included the --noupdate option.
+uninstall
+    Remove applications or submenus from the desktop menu system previously
+    installed with xdg-desktop-menu install.
+forceupdate
+    Force an update of the menu system. This is only useful if the last call to
+    xdg-desktop-menu included the --noupdate option.
 
 Options
 
-   --noupdate
-           Postpone updating the menu system. If multiple updates to the menu
-           system are made in sequence this flag can be used to indicate that
-           additional changes will follow and that it is not necassery to
-           update the menu system right away.
+--noupdate
+    Postpone updating the menu system. If multiple updates to the menu system
+    are made in sequence this flag can be used to indicate that additional
+    changes will follow and that it is not necassery to update the menu system
+    right away.
+--novendor
 
-   --vendor vendor-id
-           Adds vendor-id as a prefix when installing desktop and directory
-           files.
+    Normally, xdg-desktop-menu checks to ensure that any *.desktop, *.directory
+    and *.menu files to be installed has a vendor prefix. This option can be
+    used to disable that check.
 
-   --mode mode
+    A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated
+    with a dash ("-"). Companies and organizations are encouraged to use a word
+    or phrase, preferably the organizations name, for which they hold a
+    trademark as their vendor prefix. The purpose of the vendor prefix is to
+    prevent name conflicts.
 
-           mode can be user or system. In user mode the file is (un)installed
-           for the current user only. In system mode the file is
-           (un)installed for all users on the system. Usually only root is
-           allowed to install in system mode.
+--mode mode
 
-           The default is to use system mode when called by root and to use
-           user mode when called by a non-root user.
+    mode can be user or system. In user mode the file is (un)installed for the
+    current user only. In system mode the file is (un)installed for all users
+    on the system. Usually only root is allowed to install in system mode.
 
-   --help
-           Show command synopsis.
+    The default is to use system mode when called by root and to use user mode
+    when called by a non-root user.
 
-   --manual
-           Show this manualpage.
-
-   --version
-           Show the xdg-utils version information.
+--help
+    Show command synopsis.
+--manual
+    Show this manualpage.
+--version
+    Show the xdg-utils version information.
 
 Desktop Files
 
-   An application item in the application menu is represented by a *.desktop
-   file. A *.desktop file consists of a [Desktop Entry] header followed by
-   several Key=Value lines.
+An application item in the application menu is represented by a *.desktop file.
+A *.desktop file consists of a [Desktop Entry] header followed by several Key=
+Value lines.
 
-   A *.desktop file can provide a name and description for an application in
-   several different languages. This is done by adding a language code as
-   used by LC_MESSAGES in square brackets behind the Key. This way one can
-   specify different values for the same Key depending on the currently
-   selected language.
+A *.desktop file can provide a name and description for an application in
+several different languages. This is done by adding a language code as used by
+LC_MESSAGES in square brackets behind the Key. This way one can specify
+different values for the same Key depending on the currently selected language.
 
-   The following keys are often used:
+The following keys are often used:
 
-   Value=1.0
-           This is a mandatory field to indicate that the *.desktop file
-           follows the 1.0 version of the specification.
+Value=1.0
+    This is a mandatory field to indicate that the *.desktop file follows the
+    1.0 version of the specification.
+Type=Application
+    This is a mandatory field that indicates that the *.desktop file describes
+    an application launcher.
+Name=Application Name
+    The name of the application. For example Mozilla
+GenericName=Generic Name
+    A generic description of the application. For example Web Browser
+Comment=Comment
+    Optional field to specify a tooltip for the application. For example Visit
+    websites on the Internet
+Icon=Icon File
+    The icon to use for the application. This can either be an absolute path to
+    an image file or an icon-name. If an icon-name is provided an image lookup
+    by name is done in the user's current icon theme. The xdg-icon-resource
+    command can be used to install image files into icon themes. The advantage
+    of using an icon-name instead of an absolute path is that with an icon-name
+    the application icon can be provided in several different sizes as well as
+    in several differently themed styles.
+Exec=Command Line
+    The command line to start the application. If the application can open
+    files the %f placeholder should be specified. When a file is dropped on the
+    application launcher the %f is replaced with the file path of the dropped
+    file. If multiple files can be specified on the command line the %F
+    placeholder should be used instead of %f. If the application is able to
+    open URLs in addition to local files then %u or %U can be used instead of
+    %f or %F.
+Categories=Categories
+    A list of categories separated by semi-colons. A category is a keyword that
+    describes and classifies the application. By default applications are
+    organized in the application menu based on category. The XDG Desktop Menu
+    Specification defines a large number of predefined categories.
+MimeType=Mimetypes
+    A list of mimetypes separated by semi-colons. This field is used to
+    indicate which file types the application is able to open.
 
-   Type=Application
-           This is a mandatory field that indicates that the *.desktop file
-           describes an application launcher.
-
-   Name=Application Name
-           The name of the application. For example Mozilla
-
-   GenericName=Generic Name
-           A generic description of the application. For example Web Browser
-
-   Comment=Comment
-           Optional field to specify a tooltip for the application. For
-           example Visit websites on the Internet
-
-   Icon=Icon File
-           The icon to use for the application. This can either be an
-           absolute path to an image file or an icon-name. If an icon-name is
-           provided an image lookup by name is done in the user's current
-           icon theme. The xdg-icon-resource command can be used to install
-           image files into icon themes. The advantage of using an icon-name
-           instead of an absolute path is that with an icon-name the
-           application icon can be provided in several different sizes as
-           well as in several differently themed styles.
-
-   Exec=Command Line
-           The command line to start the application. If the application can
-           open files the %f placeholder should be specified. When a file is
-           dropped on the application launcher the %f is replaced with the
-           file path of the dropped file. If multiple files can be specified
-           on the command line the %F placeholder should be used instead of
-           %f. If the application is able to open URLs in addition to local
-           files then %u or %U can be used instead of %f or %F.
-
-   Categories=Categories
-           A list of categories separated by semi-colons. A category is a
-           keyword that describes and classifies the application. By default
-           applications are organized in the application menu based on
-           category. The XDG Desktop Menu Specification defines a large
-           number of predefined categories.
-
-   MimeType=Mimetypes
-           A list of mimetypes separated by semi-colons. This field is used
-           to indicate which file types the application is able to open.
-
-   For a complete oveview of the *.desktop file format please visit
-   http://www.freedesktop.org/wiki/Standards/desktop-entry-spec
+For a complete oveview of the *.desktop file format please visit http://
+www.freedesktop.org/wiki/Standards/desktop-entry-spec
 
 Environment Variables
 
-   xdg-desktop-menu honours the following environment variables:
+xdg-desktop-menu honours the following environment variables:
 
-   XDG_UTILS_DEBUG_LEVEL
-           Setting this environment variable to a non-zero numerical value
-           makes xdg-desktop-menu do more verbose reporting on stderr.
-           Setting a higher value increases the verbosity.
+XDG_UTILS_DEBUG_LEVEL
+    Setting this environment variable to a non-zero numerical value makes
+    xdg-desktop-menu do more verbose reporting on stderr. Setting a higher
+    value increases the verbosity.
 
 Exit Codes
 
-   An exit code of 0 indicates success while a non-zero exit code indicates
-   failure. The following failure codes can be returned:
+An exit code of 0 indicates success while a non-zero exit code indicates
+failure. The following failure codes can be returned:
 
-   1
-           Error in command line syntax.
-
-   2
-           One of the files passed on the command line did not exist.
-
-   3
-           A required tool could not be found.
-
-   4
-           The action failed.
-
-   5
-           No permission to read one of the files passed on the command line.
+1
+    Error in command line syntax.
+2
+    One of the files passed on the command line did not exist.
+3
+    A required tool could not be found.
+4
+    The action failed.
+5
+    No permission to read one of the files passed on the command line.
 
 See Also
 
-   xdg-desktop-icon(1), xdg-icon-resource(1), xdg-mime(1)
+xdg-desktop-icon(1), xdg-icon-resource(1), xdg-mime(1)
 
 Examples
 
-   The company ShinyThings Inc. has developed an application named
-   "WebMirror" and would like to add it to the application menu. The company
-   will use "shinythings" as its vendor id. In order to add the application
-   to the menu there needs to be a .desktop file with a suitable Categories
-   entry:
+The company ShinyThings Inc. has developed an application named "WebMirror" and
+would like to add it to the application menu. The company will use
+"shinythings" as its vendor id. In order to add the application to the menu
+there needs to be a .desktop file with a suitable Categories entry:
 
- webmirror.desktop:
+shinythings-webmirror.desktop:
 
-   [Desktop Entry]
-   Encoding=UTF-8
-   Type=Application
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
 
-   Exec=webmirror
-   Icon=webmirror
+  Exec=webmirror
+  Icon=webmirror
 
-   Name=WebMirror
-   Name[nl]=WebSpiegel
+  Name=WebMirror
+  Name[nl]=WebSpiegel
 
-   Categories=Network;WebDevelopment;
+  Categories=Network;WebDevelopment;
 
-   Now the xdg-desktop-menu tool can be used to add the webmirror.desktop
-   file to the desktop application menu:
+Now the xdg-desktop-menu tool can be used to add the
+shinythings-webmirror.desktop file to the desktop application menu:
 
- xdg-desktop-menu install --vendor shinythings ./webmirror.desktop
+xdg-desktop-menu install ./shinythings-webmirror.desktop
 
-   Note that for the purpose of this example the menu items are available in
-   two languages, English and Dutch. The language code for Dutch is nl.
+Note that for the purpose of this example the menu items are available in two
+languages, English and Dutch. The language code for Dutch is nl.
 
-   In the next example the company ShinyThings Inc. wants to add its own
-   submenu to the desktop application menu consisting of a "WebMirror" menu
-   item and a "WebMirror Admin Tool" menu item.
+In the next example the company ShinyThings Inc. wants to add its own submenu
+to the desktop application menu consisting of a "WebMirror" menu item and a
+"WebMirror Admin Tool" menu item.
 
-   First the company needs to create two .desktop files that describe the two
-   menu items, this time no Categories item is needed:
+First the company needs to create two .desktop files that describe the two menu
+items, this time no Categories item is needed:
 
- webmirror.desktop:
+shinythings-webmirror.desktop:
 
-   [Desktop Entry]
-   Encoding=UTF-8
-   Type=Application
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
 
-   Exec=webmirror
-   Icon=webmirror
+  Exec=webmirror
+  Icon=shinythings-webmirror
 
-   Name=WebMirror
-   Name[nl]=WebSpiegel
+  Name=WebMirror
+  Name[nl]=WebSpiegel
 
 
- webmirror-admin.desktop:
+shinythings-webmirror-admin.desktop:
 
-   [Desktop Entry]
-   Encoding=UTF-8
-   Type=Application
+  [Desktop Entry]
+  Encoding=UTF-8
+  Type=Application
 
-   Exec=webmirror-admintool
-   Icon=webmirror-admintool
+  Exec=webmirror-admintool
+  Icon=shinythings-webmirror-admintool
 
-   Name=WebMirror Admin Tool
-   Name[nl]=WebSpiegel Administratie Tool
+  Name=WebMirror Admin Tool
+  Name[nl]=WebSpiegel Administratie Tool
 
-   The files can be installed with:
+The files can be installed with:
 
- xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.desktop
- xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror-admin.desktop
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.desktop
+xdg-desktop-menu install --noupdate ./shinythings-webmirror-admin.desktop
 
-   Because multiple items are added the --noupdate option has been used.
+Because multiple items are added the --noupdate option has been used.
 
-   In addition a .directory file needs to be created to provide a title and
-   icon for the sub-menu itself:
+In addition a .directory file needs to be created to provide a title and icon
+for the sub-menu itself:
 
- webmirror.directory:
+shinythings-webmirror.directory:
 
-   [Desktop Entry]
-   Encoding=UTF-8
+  [Desktop Entry]
+  Encoding=UTF-8
 
-   Icon=webmirror-menu
+  Icon=shinythings-webmirror-menu
 
-   Name=WebMirror
-   Name[nl]=WebSpiegel
+  Name=WebMirror
+  Name[nl]=WebSpiegel
 
-   This webmirror.directory file can be installed with:
+This webmirror.directory file can be installed with:
 
- xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.directory
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.directory
 
-   The *.desktop and *.directory files reference icons with the names
-   webmirror, webmirror-admin and webmirror-menu which should also be
-   installed. In this example the icons are installed in two different sizes,
-   once with a size of 22x22 pixels and once with a size of 64x64 pixels:
+The *.desktop and *.directory files reference icons with the names webmirror,
+webmirror-admin and webmirror-menu which should also be installed. In this
+example the icons are installed in two different sizes, once with a size of
+22x22 pixels and once with a size of 64x64 pixels:
 
- xdg-icon-resource install --size 22 ./wmicon-22.png webmirror.png
- xdg-icon-resource install --size 22 ./wmicon-menu-22.png webmirror-menu.png
- xdg-icon-resource install --size 22 ./wmicon-admin-22.png webmirror-admin.png
- xdg-icon-resource install --size 64 ./wmicon-64.png webmirror.png
- xdg-icon-resource install --size 64 ./wmicon-menu-64.png webmirror-menu.png
- xdg-icon-resource install --size 64 ./wmicon-admin-64.png webmirror-admin.png
+xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror.png
+xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu.png
+xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin.png
+xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror.png
+xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu.png
+xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin.png
 
-   The last step is to provide a .menu file that links it all togther:
+The last step is to provide a .menu file that links it all togther:
 
- webmirror.menu:
+shinythings-webmirror.menu:
 
-   <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
-      "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
-   <Menu>
-     <Name>Applications</Name>
-     <Menu>
-       <Name>WebMirror</Name>
-       <Directory>shinythings-webmirror.directory</Directory>
-       <Include>
-         <Filename>shinythings-webmirror.desktop</Filename>
-         <Filename>shinythings-webmirror-admin.desktop</Filename>
-       </Include>
-     </Menu>
-   </Menu>
+  <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
+     "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">
+  <Menu>
+    <Name>Applications</Name>
+    <Menu>
+      <Name>WebMirror</Name>
+      <Directory>shinythings-webmirror.directory</Directory>
+      <Include>
+        <Filename>shinythings-webmirror.desktop</Filename>
+        <Filename>shinythings-webmirror-admin.desktop</Filename>
+      </Include>
+    </Menu>
+  </Menu>
 
-   The webmirror.menu file can be installed with:
+The shinythings-webmirror.menu file can be installed with:
 
- xdg-desktop-menu install --noupdate --vendor shinythings ./webmirror.menu
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.menu
 
-   After installing multiple files with --noupdate make sure to force an
-   update:
+After installing multiple files with --noupdate make sure to force an update:
 
- xdg-desktop-menu forceupdate
+xdg-desktop-menu forceupdate
+
 _MANUALPAGE
 }
 
 usage()
 {
 cat << _USAGE
-   xdg-desktop-menu -- command line tool for (un)installing desktop menu
-   items
+xdg-desktop-menu — command line tool for (un)installing desktop menu items
 
 Synopsis
 
-   xdg-desktop-menu install [--noupdate] [--vendor vendor-id] [--mode mode] {
-   desktop-file | menu-file | directory-file }
+xdg-desktop-menu install [--noupdate] [--novendor] [--mode mode] { desktop-file
+| menu-file | directory-file }
 
-   xdg-desktop-menu uninstall [--noupdate] [--vendor vendor-id] [--mode mode]
-   { desktop-file | menu-file | directory-file }
+xdg-desktop-menu uninstall [--noupdate] [--mode mode] { desktop-file |
+menu-file | directory-file }
 
-   xdg-desktop-menu forceupdate [--mode mode]
+xdg-desktop-menu forceupdate [--mode mode]
 
-   xdg-desktop-menu { --help | --manual | --version }
+xdg-desktop-menu { --help | --manual | --version }
 
 _USAGE
 }
@@ -479,6 +463,22 @@ check_input_file()
     fi
 }
 
+check_vendor_prefix()
+{
+    file=`basename "$1"`
+    case "$file" in
+       [a-zA-Z]*-*)
+         return
+         ;;
+    esac
+
+    echo "xdg-desktop-menu: filename '$file' does not have a proper vendor prefix" >&2
+    echo 'A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated' >&2
+    echo 'with a dash ("-"). An example filename is '"'example-$file'" >&2
+    echo "Use --novendor to override or 'xdg-desktop-menu --manual' for additional info." >&2
+    exit 1
+}
+
 check_output_file()
 {
     # if the file exists, check if it is writeable
@@ -517,7 +517,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-desktop-menu 1.0beta1"
+            echo "xdg-desktop-menu 1.0beta2"
             exit_success
             ;;
         esac
@@ -590,8 +590,7 @@ esac
 
 shift
 
-
-
+vendor=true
 while [ $# -gt 0 ] ; do
     parm="$1"
     shift
@@ -621,12 +620,8 @@ while [ $# -gt 0 ] ; do
         shift
         ;;
 
-      --vendor)
-        if [ -z "$1" ] ; then
-            exit_failure_syntax "vendor-id argument missing for --vendor"
-        fi
-        vendor="$1"
-        shift
+      --novendor)
+        vendor=false
         ;;
 
       -*)
@@ -686,6 +681,10 @@ case $desktop_file in
      exit_failure_syntax "file to $action must be a *.desktop, *.directory or *.menu file"
      ;;
 esac
+
+if [ "$vendor" =  "true" -a "$action" = "install" ] ; then
+    check_vendor_prefix "$desktop_file"
+fi
 
 if [ x"$filetype" = x"menu" ] ; then
     xdg_user_dir="$XDG_CONFIG_HOME"
@@ -757,7 +756,6 @@ fi
 # echo "[using|$xdg_dir|$kde_dir|$gnome_dir]"
 
 basefile=`basename $desktop_file`
-[ -z $vendor ] || basefile="$vendor-$basefile"
 
 DEBUG 1 "$action $desktop_file in $xdg_dir $kde_dir $gnome_dir"
 

@@ -394,6 +394,7 @@ if [ "$action" = "defapp" ]; then
     exit_failure_operation_impossible "no method available for quering default application for '$mimetype'"
 fi
 
+vendor=true
 while [ $# -gt 0 ] ; do
     parm="$1"
     shift
@@ -417,6 +418,10 @@ while [ $# -gt 0 ] ; do
             ;;
         esac
         shift
+        ;;
+
+      --novendor)
+        vendor=false
         ;;
 
       -*)
@@ -448,6 +453,10 @@ fi
 
 if [ -z "$filename" ] ; then
     exit_failure_syntax "mimetypes-file argument missing"
+fi
+
+if [ "$vendor" =  "true" -a "$action" = "install" ] ; then
+    check_vendor_prefix "$filename"
 fi
 
 xdg_base_dir=

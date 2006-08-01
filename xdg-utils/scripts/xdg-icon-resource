@@ -36,164 +36,161 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-   xdg-icon-resource -- command line tool for (un)installing icon resources
+xdg-icon-resource — command line tool for (un)installing icon resources
 
 Synopsis
 
-   xdg-icon-resource install [--noupdate] [--theme theme] [--context context]
-   [--size size] [--mode mode] icon-file [icon-name]
+xdg-icon-resource install [--noupdate] [--novendor] [--theme theme] [--context
+context] [--size size] [--mode mode] icon-file [icon-name]
 
-   xdg-icon-resource uninstall [--noupdate] [--theme theme] [--context
-   context] [--size size] [--mode mode] icon-name
+xdg-icon-resource uninstall [--noupdate] [--theme theme] [--context context]
+[--size size] [--mode mode] icon-name
 
-   xdg-icon-resource forceupdate [--theme theme] [--mode mode]
+xdg-icon-resource forceupdate [--theme theme] [--mode mode]
 
-   xdg-icon-resource { --help | --manual | --version }
+xdg-icon-resource { --help | --manual | --version }
 
 Description
 
-   The xdg-icon-resource program can be used to install icon resources into
-   the desktop icon system in order to illustrate menu entries, to depict
-   desktop icons or to graphically represent file types.
+The xdg-icon-resource program can be used to install icon resources into the
+desktop icon system in order to illustrate menu entries, to depict desktop
+icons or to graphically represent file types.
 
-   The desktop icon system identifies icons by name. Depending on the
-   required size, the choice of icon theme and the context in which the icon
-   is used, the desktop icon system locates an appropriate icon resource to
-   depict an icon. Icon resources can be XPM files, PNG files or SVG files.
+The desktop icon system identifies icons by name. Depending on the required
+size, the choice of icon theme and the context in which the icon is used, the
+desktop icon system locates an appropriate icon resource to depict an icon.
+Icon resources can be XPM files, PNG files or SVG files.
 
-   The desktop icon system works according to the XDG Icon Theme
-   Specification at http://www.freedesktop.org/Standards/icon-theme-spec
+The desktop icon system works according to the XDG Icon Theme Specification at
+http://www.freedesktop.org/Standards/icon-theme-spec
 
 Commands
 
-   install
-           Installs the icon file indicated by icon-file to the desktop icon
-           system under the name icon-name. If icon-name is not provided the
-           name is derived from icon-file. The icon file must have .png, .xpm
-           or .svg as extension. If a corresponding .icon file exists in the
-           same location as icon-file it will be installed as well.
-
-   uninstall
-           Removes the icon file indicated by icon-name from the desktop icon
-           system.
-
-   forceupdate
-           Force an update of the desktop icon system. This is only useful if
-           the last call to xdg-icon-resource included the --noupdate option.
+install
+    Installs the icon file indicated by icon-file to the desktop icon system
+    under the name icon-name. If icon-name is not provided the name is derived
+    from icon-file. The icon file must have .png, .xpm or .svg as extension. If
+    a corresponding .icon file exists in the same location as icon-file it will
+    be installed as well.
+uninstall
+    Removes the icon file indicated by icon-name from the desktop icon system.
+forceupdate
+    Force an update of the desktop icon system. This is only useful if the last
+    call to xdg-icon-resource included the --noupdate option.
 
 Options
 
-   --noupdate
-           Postpone updating the desktop icon system. If multiple icons are
-           added in sequence this flag can be used to indicate that
-           additional changes will follow and that it is not necassery to
-           update the desktop icon system right away.
+--noupdate
+    Postpone updating the desktop icon system. If multiple icons are added in
+    sequence this flag can be used to indicate that additional changes will
+    follow and that it is not necassery to update the desktop icon system right
+    away.
+--novendor
 
-   --theme theme
-           Installs or removes the icon file as part of theme. If no theme is
-           specified the icons will be installed as part of the default
-           hicolor theme. Applications may install icons under multiple
-           themes but should at least install icons for the default hicolor
-           theme.
+    Normally, xdg-icon-resource checks to ensure that an icon file to be
+    installed in the apps context has a proper vendor prefix. This option can
+    be used to disable that check.
 
-   --context context
-           Specifies the context for the icon. Icons to be used in the
-           application menu and as desktop icon should use apps as context
-           which is the default context. Icons to be used as file icons
-           should use mimetypes as context. Other common contexts are
-           actions, devices, emblems, filesystems and stock.
+    A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated
+    with a dash ("-"). Companies and organizations are encouraged to use a word
+    or phrase, preferably the organizations name, for which they hold a
+    trademark as their vendor prefix. The purpose of the vendor prefix is to
+    prevent name conflicts.
 
-   --size size
-           Specifies the size of the icon (required for png and xpm icons).
-           All icons must be square. Common sizes for icons in the apps
-           context are: 16, 22, 32, 48, 64 and 128. Common sizes for icons in
-           the mimetypes context are: 16, 22, 32, 48, 64 and 128
+--theme theme
+    Installs or removes the icon file as part of theme. If no theme is
+    specified the icons will be installed as part of the default hicolor theme.
+    Applications may install icons under multiple themes but should at least
+    install icons for the default hicolor theme.
+--context context
+    Specifies the context for the icon. Icons to be used in the application
+    menu and as desktop icon should use apps as context which is the default
+    context. Icons to be used as file icons should use mimetypes as context.
+    Other common contexts are actions, devices, emblems, filesystems and stock.
+--size size
+    Specifies the size of the icon (required for png and xpm icons). All icons
+    must be square. Common sizes for icons in the apps context are: 16, 22, 32,
+    48, 64 and 128. Common sizes for icons in the mimetypes context are: 16,
+    22, 32, 48, 64 and 128
+--mode mode
 
-   --mode mode
+    mode can be user or system. In user mode the file is (un)installed for the
+    current user only. In system mode the file is (un)installed for all users
+    on the system. Usually only root is allowed to install in system mode.
 
-           mode can be user or system. In user mode the file is (un)installed
-           for the current user only. In system mode the file is
-           (un)installed for all users on the system. Usually only root is
-           allowed to install in system mode.
+    The default is to use system mode when called by root and to use user mode
+    when called by a non-root user.
 
-           The default is to use system mode when called by root and to use
-           user mode when called by a non-root user.
-
-   --help
-           Show command synopsis.
-
-   --manual
-           Show this manualpage.
-
-   --version
-           Show the xdg-utils version information.
+--help
+    Show command synopsis.
+--manual
+    Show this manualpage.
+--version
+    Show the xdg-utils version information.
 
 Environment Variables
 
-   xdg-icon-resource honours the following environment variables:
+xdg-icon-resource honours the following environment variables:
 
-   XDG_UTILS_DEBUG_LEVEL
-           Setting this environment variable to a non-zero numerical value
-           makes xdg-icon-resource do more verbose reporting on stderr.
-           Setting a higher value increases the verbosity.
+XDG_UTILS_DEBUG_LEVEL
+    Setting this environment variable to a non-zero numerical value makes
+    xdg-icon-resource do more verbose reporting on stderr. Setting a higher
+    value increases the verbosity.
 
 Exit Codes
 
-   An exit code of 0 indicates success while a non-zero exit code indicates
-   failure. The following failure codes can be returned:
+An exit code of 0 indicates success while a non-zero exit code indicates
+failure. The following failure codes can be returned:
 
-   1
-           Error in command line syntax.
-
-   2
-           One of the files passed on the command line did not exist.
-
-   3
-           A required tool could not be found.
-
-   4
-           The action failed.
-
-   5
-           No permission to read one of the files passed on the command line.
+1
+    Error in command line syntax.
+2
+    One of the files passed on the command line did not exist.
+3
+    A required tool could not be found.
+4
+    The action failed.
+5
+    No permission to read one of the files passed on the command line.
 
 See Also
 
-   xdg-desktop-icon(1), xdg-desktop-menu(1), xdg-mime(1)
+xdg-desktop-icon(1), xdg-desktop-menu(1), xdg-mime(1)
 
 Examples
 
-   To install an icon resource to depict a launcher for the application
-   myfoobar one can use:
+To install an icon resource to depict a launcher for the application myfoobar,
+the company ShinyThings Inc. can use:
 
- xdg-icon-resource install --size 64 myfoobar.png
+xdg-icon-resource install --size 64 shinythings-myfoobar.png
 
-   To install an icon for a new application/x-foobar file type one can use:
+To install an icon for a new application/x-foobar file type one can use:
 
- xdg-icon-resource install --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
- xdg-icon-resource install --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
+xdg-icon-resource install --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
+xdg-icon-resource install --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
 
-   This will install two icons with the name application-x-foobar.png but
-   with different sizes.
+This will install two icons with the name application-x-foobar.png but with
+different sizes.
+
 _MANUALPAGE
 }
 
 usage()
 {
 cat << _USAGE
-   xdg-icon-resource -- command line tool for (un)installing icon resources
+xdg-icon-resource — command line tool for (un)installing icon resources
 
 Synopsis
 
-   xdg-icon-resource install [--noupdate] [--theme theme] [--context context]
-   [--size size] [--mode mode] icon-file [icon-name]
+xdg-icon-resource install [--noupdate] [--novendor] [--theme theme] [--context
+context] [--size size] [--mode mode] icon-file [icon-name]
 
-   xdg-icon-resource uninstall [--noupdate] [--theme theme] [--context
-   context] [--size size] [--mode mode] icon-name
+xdg-icon-resource uninstall [--noupdate] [--theme theme] [--context context]
+[--size size] [--mode mode] icon-name
 
-   xdg-icon-resource forceupdate [--theme theme] [--mode mode]
+xdg-icon-resource forceupdate [--theme theme] [--mode mode]
 
-   xdg-icon-resource { --help | --manual | --version }
+xdg-icon-resource { --help | --manual | --version }
 
 _USAGE
 }
@@ -313,6 +310,22 @@ check_input_file()
     fi
 }
 
+check_vendor_prefix()
+{
+    file=`basename "$1"`
+    case "$file" in
+       [a-zA-Z]*-*)
+         return
+         ;;
+    esac
+
+    echo "xdg-icon-resource: filename '$file' does not have a proper vendor prefix" >&2
+    echo 'A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated' >&2
+    echo 'with a dash ("-"). An example filename is '"'example-$file'" >&2
+    echo "Use --novendor to override or 'xdg-icon-resource --manual' for additional info." >&2
+    exit 1
+}
+
 check_output_file()
 {
     # if the file exists, check if it is writeable
@@ -351,7 +364,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-icon-resource 1.0beta1"
+            echo "xdg-icon-resource 1.0beta2"
             exit_success
             ;;
         esac
@@ -426,7 +439,7 @@ esac
 
 shift
 
-
+vendor=true
 while [ $# -gt 0 ] ; do
     parm="$1"
     shift
@@ -478,6 +491,10 @@ while [ $# -gt 0 ] ; do
         fi
         context="$1"
         shift
+        ;;
+
+      --novendor)
+        vendor=false
         ;;
 
       -*)
@@ -674,6 +691,10 @@ need_gnome_mime=
 # End GNOME legacy workaround section
 
 [ -n "$icon_name" ] || icon_name=`basename $icon_file`
+
+if [ "$vendor" = "true" -a "$action" = "install" -a "$context" = "apps" ] ; then
+    check_vendor_prefix "$icon_name"
+fi
 
 icon_icon_file=`echo "$icon_file" | sed 's/\.[^\.]*$/.icon/'`
 icon_icon_name=`echo "$icon_name" | sed 's/\.[^\.]*$/.icon/'`
