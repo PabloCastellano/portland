@@ -13,7 +13,5 @@ xdg-open — opens a file or URL in the user's preferred application
 xdg-email — command line tool for sending mail using the user's preferred
 e-mail composer
 
-xdg-su — run a GUI program as root after prompting for the root password
-
 xdg-screensaver — command line tool for controlling the screensaver
 

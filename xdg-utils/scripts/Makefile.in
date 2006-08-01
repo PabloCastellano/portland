@@ -40,6 +40,7 @@ release:	scripts html man
 	rm -f xdg-*.in *~ HACKING generate-help-script.awk
 	rm -rf desc/
 	rm -rf xsl/
+	rm -f xdg-file-dialog xdg-su xdg-copy
 
 distclean: clean
 	rm -f Makefile
