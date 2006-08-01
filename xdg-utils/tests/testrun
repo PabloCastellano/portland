@@ -166,6 +166,10 @@ if [ -z "$XDG_TEST_SELF_LAUNCH" ] ; then # not su'd
 		EC=0
 		echo "ok"
 	fi
+	if [ -z "$*" ] ; then
+		echo "Please consider submitting your test report to"
+		echo "http://portland.freedesktop.org/testreport.html"
+	fi
 
 	exit "$EC"
 else ## Running su'd. save results.
