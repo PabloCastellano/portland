@@ -31,8 +31,8 @@ tests-userclean:
 	find ${HOME}/.kde/share/mimelnk -name 'x-xdg*.desktop' | xargs rm -f
 
 tests-clean:	tests-userclean
-	find `echo "${XDG_DATA_DIRS}:${XDG_CONFIG_DIRS}" | sed -e 's/:/ /g'` -name 'xdgtestdata*' | xargs rm -f
-	find `echo "${XDG_DATA_DIRS}:${XDG_CONFIG_DIRS}" | sed -e 's|:| |g'` -name 'x-xdgt*' | xargs rm -f
+	find `echo "${XDG_DATA_DIRS}:/usr/local/share/:/usr/share/:${XDG_CONFIG_DIRS}:/etc/xdg" | sed -e 's/:/ /g'` -name 'xdgtestdata*' | xargs rm -f
+	find `echo "${XDG_DATA_DIRS}:/usr/local/share/:/usr/share/:${XDG_CONFIG_DIRS}:/etc/xdg" | sed -e 's|:| |g'` -name 'x-xdgt*' | xargs rm -f
 
 install:
 
