@@ -4,10 +4,11 @@
 ## testrun dir1 dir2 ... 
 ## testrun t.foo t.bar ...
 ## Will find and run all files in dirs that begin with t.*
+
 usage() {
 cat << _ENDUSAGE_ 
 Usage:
-$0 [-iIcCh] [test|testgroup] [...]
+$0 [-iIcChRd:p:f:] [test|testgroup] [...]
 
 Options:
      [-h]      Show this message and exit.
@@ -21,8 +22,11 @@ Options:
      [-R]      Turn off su to root tests.
 	       You will be prompted for the root password at the beginning of the testrun.
 
-     [-f]      RESERVED -- state flag for self reference. DON'T USE.
+     [-d dir]  Set XDG_TEST_DIR to dir
 
+     [-p path] Reset PATH to path. Recommended for internal use only.
+
+     [-f pid]  RESERVED -- state flag for self reference. DON'T USE.
 
 Arguments:
 
@@ -33,6 +37,25 @@ Supplied testgroups can be a list of directories or a list of individual tests.
 _ENDUSAGE_
 exit 1
 }
+MYARGS="$@"
+
+## Read options
+while getopts "iIcChRf:d:p:" opt; do
+	case $opt in
+		I ) export XDG_TEST_NO_INTERACTIVE="set" ;;
+		i ) unset XDG_TEST_NO_INTERACTIVE ;;
+		C ) export XDG_TEST_DONT_CLEANUP="set" ;;
+		c ) unset XDG_TEST_DONT_CLEANUP ;;
+		R ) XDG_TEST_DONT_SU="set" ;;
+		f ) XDG_TEST_SELF_LAUNCH="$OPTARG" ;;
+		d ) export XDG_TEST_DIR="$OPTARG" ;;
+		p ) export PATH="$OPTARG" ;;
+		h ) usage ;;
+		\? ) usage ;;
+	esac
+done
+shift $(($OPTIND - 1))
+
 ## Set up prerequisites
 if [ -z "$XDG_TEST_DIR" ] ; then
 	export XDG_TEST_DIR="$PWD"
@@ -42,24 +65,6 @@ if [ -z `which xdg-mime 2>/dev/null` ] && [ -d "$XDG_TEST_DIR/../scripts" ] ; th
 	export PATH="$PATH:$XDG_TEST_DIR/../scripts"
 	echo "WARNING: modified PATH to add '$XDG_TEST_DIR/../scripts'"
 fi
-
-MYARGS="$@"
-
-## Read options
-while getopts "iIcChRf:" opt; do
-	case $opt in
-		I ) export XDG_TEST_NO_INTERACTIVE="set" ;;
-		i ) unset XDG_TEST_NO_INTERACTIVE ;;
-		C ) export XDG_TEST_DONT_CLEANUP="set" ;;
-		c ) unset XDG_TEST_DONT_CLEANUP ;;
-		R ) XDG_TEST_DONT_SU="set" ;;
-		f ) XDG_TEST_SELF_LAUNCH="$OPTARG" ;;
-		h ) usage ;;
-		\? ) usage ;;
-	esac
-done
-shift $(($OPTIND - 1))
-
 if [ `whoami` == root ] ; then
 	XDG_TEST_DONT_SU="set"
 fi
@@ -85,14 +90,18 @@ for t in $TEST_FILES; do
 	. "$t"
 done
 
-if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then
+if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then  # not self launched
 	echo "======================================================" >> "$TEST_LOG"
  	echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
 	"$XDG_TEST_DIR/include/system_info" >>"$TEST_LOG"
 
 	if [ -z "$XDG_TEST_DONT_SU" ] ; then
-		echo "Please enter the root password for system tests."
-		su -l -c "cd $PWD && $0 -f $$ $MYARGS"
+		SUCMD=`which sudo 2>/dev/null`
+		echo "Running ${SUCMD-su} for system tests. Please enter admin password if requested."
+		# Note if sudo is not found, $SUCMD will be blank, so run su directly.
+		# We cannot assume su works since systems like Ubuntu require sudo
+		# Yet, systems like Debian do not ship with sudo by default.
+		$SUCMD su - -c "cd $PWD && $0 -f $$ -d '$XDG_TEST_DIR' -p '$PATH' $MYARGS"
 	fi
 
 	TEST_STATUS_FILE="$XDG_TEST_DIR/tmp/xdgtest_status-$$"
