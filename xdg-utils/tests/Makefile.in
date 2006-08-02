@@ -19,7 +19,8 @@ release:
 	rm -f xdg-test.log *~
 
 test:
-	./testrun -IR
+	./testrun -IRC
+	rm -rf tmp/xdgt*
 
 distclean: clean
 	rm -f Makefile

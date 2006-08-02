@@ -2,3 +2,4 @@
 Type=Application
 Name=EXTRA ITEM
 Exec=touch xdgtestdata-dummy.tmp
+X-KDE-StartupNotify=false

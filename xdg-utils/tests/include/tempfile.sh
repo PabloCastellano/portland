@@ -42,6 +42,6 @@ get_shortid() {
 
 	SHORTID="$today+$seq"
 	echo "$SHORTID" > "$seqfile"
-
+	
 }
 
