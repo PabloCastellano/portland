@@ -63,6 +63,7 @@
 #			print $0
 #		}
                 gsub("`","'")
+                gsub("—","-")
                 print $0
 	}
 	close (txtfile)
@@ -90,6 +91,7 @@
 			break
 		}
 		else if (txtfile_print != 0) {
+	                gsub("—","-")
 			print $0
 		}
 	}
