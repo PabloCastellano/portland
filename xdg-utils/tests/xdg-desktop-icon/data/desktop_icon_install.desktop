@@ -6,4 +6,4 @@ Type=Application
 Exec=touch xdg-test-desktop-icon-install.tmp
 
 Name=Desktop_Icon
-X-KDE-StartupNotify=false
+StartupNotify=false
