@@ -34,7 +34,7 @@
 usage()
 {
 cat << _USAGE
-xdg-desktop-icon — command line tool for (un)installing icons to the desktop
+xdg-desktop-icon - command line tool for (un)installing icons to the desktop
 
 Synopsis
 
@@ -52,7 +52,7 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-xdg-desktop-icon — command line tool for (un)installing icons to the desktop
+xdg-desktop-icon - command line tool for (un)installing icons to the desktop
 
 Synopsis
 
@@ -477,10 +477,22 @@ case $desktop_file in
 esac
 
 my_umask=077
-desktop_dir=$HOME/Desktop
-[ -w $desktop_dir ] || desktop_dir=
-
-# echo "[using|$desktop_dir]"
+desktop_dir="$HOME/Desktop"
+desktop_dir_kde=`kde-config --userpath desktop 2> /dev/null`
+if [ -n "$desktop_dir_kde" ]; then
+    if [ ! -d "$desktop_dir_kde" ]; then
+        save_umask=`umask`
+        umask $my_umask
+        mkdir -p $desktop_dir_kde
+        umask $save_umask
+    fi
+    # Is the KDE desktop dir != $HOME/Desktop ?
+    if [ x`readlink -f "$desktop_dir"` != x`readlink -f "$desktop_dir_kde"` ]; then
+        # If so, don't create $HOME/Desktop if it doesn't exist
+        [ -w $desktop_dir ] || desktop_dir=
+        desktop_dir="$desktop_dir $desktop_dir_kde"
+    fi
+fi
 
 basefile=`basename $desktop_file`
 
