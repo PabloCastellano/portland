@@ -65,6 +65,15 @@ test_procedure() {
 		test_result NORESULT "Initilization failed!"
 	fi
 }
+
+## Must be within test_procedure
+test_dont_fail() {
+	STAT=${1-WARN}
+	if [ "$TEST_STATUS" == FAIL ] ; then
+		FAIL=N
+		test_status "$STAT"
+	fi
+}
 	
 ## Report the test's result.
 test_result() {
@@ -101,6 +110,9 @@ test_result() {
 			[ -z "$USING_TET" ] && echo -ne " $FAIL_MESSAGE" 
 			;;
 		NORESULT ) RESULT=7
+			[ -z "$USING_TET" ] && echo -ne " $FAIL_MESSAGE"
+			;;
+		WARN ) RESULT=10
 			[ -z "$USING_TET" ] && echo -ne " $FAIL_MESSAGE"
 			;;
 		*) 	RESULT=1
