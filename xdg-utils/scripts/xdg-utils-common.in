@@ -195,5 +195,18 @@ detectDE()
 }
 
 #----------------------------------------------------------------------------
+# kfmclient exec/openURL can give bogus exit value in KDE <= 3.5.4
+# It also always returns 1 in KDE 3.4 and earlier
+# Simply return 0 in such case
 
-
+kfmclient_fix_exit_code()
+{
+    version=`kde-config --version 2>/dev/null | grep KDE`
+    major=`echo $version | sed 's/KDE: \([0-9]\).*/\1/'`
+    minor=`echo $version | sed 's/KDE: [0-9]*\.\([0-9]\).*/\1/'`
+    release=`echo $version | sed 's/KDE: [0-9]*\.[0-9]*\.\([0-9]\).*/\1/'`
+    test "$major" -gt 3 && return $1
+    test "$minor" -gt 5 && return $1
+    test "$release" -gt 4 && return $1
+    return 0
+}
