@@ -30,7 +30,7 @@ clean:	tests-clean
 tests-userclean:
 	rm -rf tmp/xdgt*
 	find ${HOME} -name 'xdgtestdata*' | xargs rm -f
-	find ${HOME} -name 'x-xdgt*.xml' | xargs rm -f
+	find ${HOME} -name 'x-xdg*.xml' | xargs rm -f
 	find ${HOME}/.kde/share/mimelnk -name 'x-xdg*.desktop' | xargs rm -f
 
 tests-clean:	tests-userclean

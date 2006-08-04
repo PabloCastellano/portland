@@ -165,7 +165,7 @@ for t in $TEST_LIST; do
 		* ) RESULT="UNKNOWN($CODE)";;
 	esac
 	echo "$RESULT"
-	test "$RESULT" == FAIL && echo "" >2
+	test "$RESULT" == FAIL && echo "" >> "$TEST_LOG"
 done
 
 echo -n "[`date`] ---- " >> "$TEST_LOG"
