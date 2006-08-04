@@ -35,7 +35,7 @@ assert_interactive "Is the cc: line '$ADDR_CC'?" y
 assert_interactive "Is the bcc: line '$ADDR_BCC'?" y
 assert_interactive "Is the subject: line '$SUBJ'?" y
 assert_interactive "Is the body '$BODY'?" y
-assert_interactive "Please close any email windows opened by the test."
+assert_interactive "Please close any email windows opened by the test." C
 
 test_result
 }
