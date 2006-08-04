@@ -7,7 +7,7 @@ USER_TEST_GROUPS="$ROOT_TEST_GROUPS xdg-email xdg-open xdg-screensaver"
 usage() {
 cat << _ENDUSAGE_ 
 Usage:
-$0 [-iIcChRd:p:f:a] [test|testgroup] [...]
+$0 [-iIcChRdS:p:f:a] [test|testgroup] [...]
 
 Options:
      [-h]      Show this message and exit.
@@ -22,6 +22,8 @@ Options:
 	       You will be prompted for the root password at the beginning of the testrun.
 
      [-a]      Run all tests. (i.e xdg-*/) Has no effect if tests are specified explicitly.
+
+     [-S]      Don't use sudo. (Defaults to sudo, if sudo is present.)
 
      [-d dir]  Set XDG_TEST_DIR to dir
 
@@ -43,18 +45,21 @@ MYARGS="$@"
 if [ `whoami` == root ] ; then
 	XDG_TEST_DONT_SU="set"
 	DEFAULT_TEST_GROUPS="$ROOT_TEST_GROUPS"
+	RUNNING_AS="root"
 else
 	DEFAULT_TEST_GROUPS="$USER_TEST_GROUPS"
+	RUNNING_AS="normal"
 fi
 
 ## Read options
-while getopts "iIcChRf:d:p:a" opt; do
+while getopts "iIcChRaSf:d:p:" opt; do
 	case $opt in
 		I ) export XDG_TEST_NO_INTERACTIVE="set" ;;
 		i ) unset XDG_TEST_NO_INTERACTIVE ;;
 		C ) export XDG_TEST_DONT_CLEANUP="set" ;;
 		c ) unset XDG_TEST_DONT_CLEANUP ;;
 		R ) XDG_TEST_DONT_SU="set" ;;
+		S ) SUMETH="su" ;;
 		f ) XDG_TEST_SELF_LAUNCH="$OPTARG" ;;
 		d ) export XDG_TEST_DIR="$OPTARG" ;;
 		p ) export PATH="$OPTARG" ;;
@@ -101,12 +106,18 @@ if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then  # not self launched
 	touch "$XDG_TEST_DIR/tmp/shortid"
 	chmod 666 "$XDG_TEST_DIR/tmp/shortid"
 
+	if [ "$RUNNING_AS" == root -a -z "$*" ] ; then
+		echo "WARNING: Tests are incomplete unless run as a normal (non-root) user."
+		echo "The test runner will SU as needed to run root cases."
+	fi
+
 	echo "======================================================" >> "$TEST_LOG"
  	echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
 	"$XDG_TEST_DIR/include/system_info" >>"$TEST_LOG"
 
 	if [ -z "$XDG_TEST_DONT_SU" ] ; then
 		SUCMD=`which sudo 2>/dev/null`
+		test "$SUMETH" == su && unset SUCMD
 		echo "Running ${SUCMD-su} for system tests. Please enter admin password if requested."
 		# Note if sudo is not found, $SUCMD will be blank, so run su directly.
 		# We cannot assume su works since systems like Ubuntu require sudo
@@ -154,6 +165,7 @@ for t in $TEST_LIST; do
 		* ) RESULT="UNKNOWN($CODE)";;
 	esac
 	echo "$RESULT"
+	test "$RESULT" == FAIL && echo "" >2
 done
 
 echo -n "[`date`] ---- " >> "$TEST_LOG"
