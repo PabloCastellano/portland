@@ -38,7 +38,7 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-xdg-su — run a GUI program as root after prompting for the root password
+xdg-su - run a GUI program as root after prompting for the root password
 
 Synopsis
 
@@ -96,7 +96,7 @@ _MANUALPAGE
 usage()
 {
 cat << _USAGE
-xdg-su — run a GUI program as root after prompting for the root password
+xdg-su - run a GUI program as root after prompting for the root password
 
 Synopsis
 

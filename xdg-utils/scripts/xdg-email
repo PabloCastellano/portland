@@ -37,7 +37,7 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-xdg-email — command line tool for sending mail using the user's preferred
+xdg-email - command line tool for sending mail using the user's preferred
 e-mail composer
 
 Synopsis
@@ -144,7 +144,7 @@ _MANUALPAGE
 usage()
 {
 cat << _USAGE
-xdg-email — command line tool for sending mail using the user's preferred
+xdg-email - command line tool for sending mail using the user's preferred
 e-mail composer
 
 Synopsis
@@ -355,16 +355,29 @@ detectDE()
 }
 
 #----------------------------------------------------------------------------
+# kfmclient exec/openURL can give bogus exit value in KDE <= 3.5.4
+# It also always returns 1 in KDE 3.4 and earlier
+# Simply return 0 in such case
 
-
+kfmclient_fix_exit_code()
+{
+    version=`kde-config --version 2>/dev/null | grep KDE`
+    major=`echo $version | sed 's/KDE: \([0-9]\).*/\1/'`
+    minor=`echo $version | sed 's/KDE: [0-9]*\.\([0-9]\).*/\1/'`
+    release=`echo $version | sed 's/KDE: [0-9]*\.[0-9]*\.\([0-9]\).*/\1/'`
+    test "$major" -gt 3 && return $1
+    test "$minor" -gt 5 && return $1
+    test "$release" -gt 4 && return $1
+    return 0
+}
 
 open_kde()
 {
     DEBUG 1 "Running kfmclient exec \"$1\""
     kfmclient exec "$1"
+    kfmclient_fix_exit_code $?
 
-    # kfmclient exec always returns 1 in KDE 3.4 and earlier
-    if [ $? -lt 2 ]; then
+    if [ $? -eq 0 ]; then
         exit_success
     else
         exit_failure_operation_failed
