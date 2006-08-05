@@ -41,6 +41,7 @@
       <command>xdg-screensaver</command>
       <group choice="req">
         <arg choice="plain"><option>activate</option></arg>
+        <arg choice="plain"><option>lock</option></arg>
         <arg choice="plain"><option>reset</option></arg>
         <arg choice="plain"><option>status</option></arg>
       </group>
@@ -116,12 +117,20 @@
       </varlistentry>
 
       <varlistentry>
+        <term><option>lock</option></term>
+        <listitem>
+          <simpara>
+            Lock the screen immediately.
+          </simpara>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
         <term><option>reset</option></term>
         <listitem>
           <simpara>
-            Turns the screensaver off immediately. On some systems the
-            user may be asked to authenticate first before the screen is
-            unlocked.
+            Turns the screensaver off immediately. If the screen was locked
+            the user may be asked to authenticate first.
           </simpara>
         </listitem>
       </varlistentry>

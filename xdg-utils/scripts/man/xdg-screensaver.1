@@ -2,7 +2,7 @@
 .\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
 .\" Instead of manually editing it, you probably should edit the DocBook XML
 .\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "XDG\-SCREENSAVER" "1" "07/31/2006" "xdg\-utils 1.0 beta2" ""
+.TH "XDG\-SCREENSAVER" "1" "08/04/2006" "xdg\-utils 1.0 beta2" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -15,7 +15,7 @@ xdg\-screensaver \- command line tool for controlling the screensaver
 .HP 16
 \fBxdg\-screensaver\fR \fBresume\ \fR\fB\fIWindowID\fR\fR
 .HP 16
-\fBxdg\-screensaver\fR {\fBactivate\fR \fBreset\fR \fBstatus\fR}
+\fBxdg\-screensaver\fR {\fBactivate\fR \fBlock\fR \fBreset\fR \fBstatus\fR}
 .HP 16
 \fBxdg\-screensaver\fR {\fB\-\-help\fR \fB\-\-manual\fR \fB\-\-version\fR}
 .SH "DESCRIPTION"
@@ -45,8 +45,11 @@ must be the same X Window ID that was passed to a previous call of
 \fBactivate\fR
 Turns the screensaver on immediately. This may result in the screen getting locked, depending on existing system policies.
 .TP
+\fBlock\fR
+Lock the screen immediately.
+.TP
 \fBreset\fR
-Turns the screensaver off immediately. On some systems the user may be asked to authenticate first before the screen is unlocked.
+Turns the screensaver off immediately. If the screen was locked the user may be asked to authenticate first.
 .TP
 \fBstatus\fR
 Prints

@@ -244,6 +244,11 @@ screensaver_kde()
         dcop kdesktop KScreensaverIface save > /dev/null
         result=$?
         ;;
+
+        lock)
+        dcop kdesktop KScreensaverIface lock > /dev/null
+        result=$?
+        ;;
         
         reset)
         # Turns the screensaver off right now
@@ -321,6 +326,11 @@ screensaver_gnome()
         result=$?
         ;;
         
+        lock)
+        gnome-screensaver-command --lock > /dev/null 2> /dev/null
+        result=$?
+        ;;
+        
         reset)
         # Turns the screensaver off right now
         gnome-screensaver-command --deactivate > /dev/null 2> /dev/null
@@ -361,6 +371,11 @@ screensaver_xscreensaver()
         
         activate)
         xscreensaver-command -activate > /dev/null 2> /dev/null
+        result=$?
+        ;;
+
+        lock)
+        xscreensaver-command -lock > /dev/null 2> /dev/null
         result=$?
         ;;
         
@@ -422,6 +437,10 @@ case $1 in
     action="$1"
     ;;
 
+  lock)
+    action="$1"
+    ;;
+
   reset)
     action="$1"
     ;;
@@ -453,8 +472,8 @@ fi
 
 if [ $result -eq 0 ]; then
     exit_success
-elif [ $xset_err -eq 0 ]; then
-    exit_success
+#elif [ $xset_err -eq 0 ]; then
+#    exit_success
 else
     exit_failure_operation_failed
 fi

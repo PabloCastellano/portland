@@ -43,7 +43,7 @@ xdg-screensaver suspend WindowID
 
 xdg-screensaver resume WindowID
 
-xdg-screensaver { activate | reset | status }
+xdg-screensaver { activate | lock | reset | status }
 
 xdg-screensaver { --help | --manual | --version }
 
@@ -77,9 +77,11 @@ resume WindowID
 activate
     Turns the screensaver on immediately. This may result in the screen getting
     locked, depending on existing system policies.
+lock
+    Lock the screen immediately.
 reset
-    Turns the screensaver off immediately. On some systems the user may be
-    asked to authenticate first before the screen is unlocked.
+    Turns the screensaver off immediately. If the screen was locked the user
+    may be asked to authenticate first.
 status
     Prints enabled to stdout if the screensaver is enabled to turn on after a
     period of inactivity and prints disabled if the screensaver is not enabled.
@@ -126,7 +128,7 @@ xdg-screensaver suspend WindowID
 
 xdg-screensaver resume WindowID
 
-xdg-screensaver { activate | reset | status }
+xdg-screensaver { activate | lock | reset | status }
 
 xdg-screensaver { --help | --manual | --version }
 
@@ -565,6 +567,11 @@ screensaver_kde()
         dcop kdesktop KScreensaverIface save > /dev/null
         result=$?
         ;;
+
+        lock)
+        dcop kdesktop KScreensaverIface lock > /dev/null
+        result=$?
+        ;;
         
         reset)
         # Turns the screensaver off right now
@@ -642,6 +649,11 @@ screensaver_gnome()
         result=$?
         ;;
         
+        lock)
+        gnome-screensaver-command --lock > /dev/null 2> /dev/null
+        result=$?
+        ;;
+        
         reset)
         # Turns the screensaver off right now
         gnome-screensaver-command --deactivate > /dev/null 2> /dev/null
@@ -682,6 +694,11 @@ screensaver_xscreensaver()
         
         activate)
         xscreensaver-command -activate > /dev/null 2> /dev/null
+        result=$?
+        ;;
+
+        lock)
+        xscreensaver-command -lock > /dev/null 2> /dev/null
         result=$?
         ;;
         
@@ -743,6 +760,10 @@ case $1 in
     action="$1"
     ;;
 
+  lock)
+    action="$1"
+    ;;
+
   reset)
     action="$1"
     ;;
@@ -774,8 +795,8 @@ fi
 
 if [ $result -eq 0 ]; then
     exit_success
-elif [ $xset_err -eq 0 ]; then
-    exit_success
+#elif [ $xset_err -eq 0 ]; then
+#    exit_success
 else
     exit_failure_operation_failed
 fi
