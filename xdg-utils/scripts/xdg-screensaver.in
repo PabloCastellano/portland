@@ -82,6 +82,10 @@ perform_action()
     gnome)
       screensaver_gnome "$1"
       ;;
+
+    xscreensaver)
+      screensaver_xscreensaver "$1"
+      ;;
   esac
 }
 
@@ -290,7 +294,7 @@ screensaver_suspend_loop()
   fi
   $MV "$tmpfile" "$screensaver_file"
   unlockfile
-  (while [ -f "$screensaver_file" ]; do echo $*; sleep 5; done) &
+  (while [ -f "$screensaver_file" ]; do $*; sleep 59; done) &
 }
 
 screensaver_gnome()
@@ -332,6 +336,46 @@ screensaver_gnome()
         else
             # Something is wrong
             echo "disabled"
+        fi
+        ;;
+
+        *)
+        echo "ERROR:  Unknown command '$1" >&2
+        return 1
+        ;;
+    esac
+}
+
+screensaver_xscreensaver()
+{
+    case "$1" in
+        suspend) 
+        screensaver_suspend_loop xscreensaver-command -deactivate
+        result=0
+        ;;
+
+        resume)
+        # Automatic resume when $screensaver_file disappears
+        result=0
+        ;;
+        
+        activate)
+        xscreensaver-command -activate > /dev/null 2> /dev/null
+        result=$?
+        ;;
+        
+        reset)
+        # Turns the screensaver off right now
+        xscreensaver-command -deactivate > /dev/null 2> /dev/null
+        result=$?
+        ;;
+
+        status)
+        result=0
+        if [ -f "$screensaver_file" ] ; then
+            echo "disabled"
+        else
+            echo "enabled"
         fi
         ;;
 
@@ -391,9 +435,9 @@ case $1 in
     ;;
 esac
 
-
-
 detectDE
+# Consider "xscreensaver" a separate DE
+xscreensaver-command -version > /dev/null 2> /dev/null && DE="xscreensaver"
 
 if [ "$action" = "resume" ] ; then
     do_resume
