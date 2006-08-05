@@ -20,11 +20,11 @@ assert_stdout
 mv out.stdout out.stat
 
 assert_interactive "Are you normally required to enter your password to de-activate the screensaver?" s USEPASS
-assert_interactive "Screensaver will activate 1sec after you press enter, then deactivate in 1sec. Please be careful not to deactivate it manually."
+assert_interactive "Screensaver will activate 1sec after you press enter, then deactivate in 2 secs. Please be careful not to deactivate it manually."
 
 sleep 1
 assert_exit 0 xdg-screensaver activate
-sleep 1
+sleep 2
 test_procedure
 
 assert_exit 0 xdg-screensaver reset
