@@ -108,7 +108,7 @@ if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then  # not self launched
 		echo "The test runner will SU as needed to run root cases."
 	fi
 
-	echo "======================================================" | >> "$TEST_LOG"
+	echo "======================================================"  >> "$TEST_LOG"
  	echo "[`date`] TEST RUN START: $*" >> "$TEST_LOG"
 	"$XDG_TEST_DIR/include/system_info" >>"$TEST_LOG"
 
