@@ -67,7 +67,7 @@ test_procedure() {
 }
 
 ## Must be within test_procedure
-test_dont_fail() {
+test_failoverride() {
 	STAT=${1-WARN}
 	if [ "$TEST_STATUS" == FAIL ] ; then
 		FAIL=N
