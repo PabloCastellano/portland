@@ -47,6 +47,7 @@ assert_file_not_in_path "$DESKTOP" "$USERPATH"
 
 assert_interactive_notroot "Is the menu item '$ITEM_TEXT' still present?" n
 
+test_failoverride WARN
 test_result
 } 
 

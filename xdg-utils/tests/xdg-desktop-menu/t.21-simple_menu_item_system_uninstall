@@ -41,6 +41,8 @@ assert_file_not_in_path "$DESKTOP" "$USERPATH"
 
 assert_interactive "Is the menu item '$ITEM_TEXT' still present?\n(NOTE: see above about KDE)" n
 
+# Desktop file not totally OK.
+test_failoverride WARN
 test_result
 } 
 

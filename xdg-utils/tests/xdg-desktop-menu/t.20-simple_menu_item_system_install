@@ -49,6 +49,8 @@ fi
 ## Cleanup
 xdg-desktop-menu uninstall --mode system "$DESKTOP" >/dev/null 2>&1
 
+## This test installs a questionalble .desktop file.
+test_failoverride WARN
 test_result
 } 
 

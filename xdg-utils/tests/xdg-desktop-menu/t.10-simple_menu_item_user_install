@@ -55,6 +55,7 @@ fi
 ## Cleanup
 xdg-desktop-menu uninstall --mode user "$DESKTOP" >/dev/null 2>&1
 
+test_failoverride WARN
 test_result
 } 
 
