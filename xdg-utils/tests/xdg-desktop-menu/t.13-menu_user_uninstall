@@ -47,12 +47,7 @@ assert_file_in_path "$DESKTOP" "$USERPATH2"
 assert_file_in_path "$DIRECTORY" "$USERPATH"
 assert_file_in_path "$MENU" "$USERPATH"
 
-if [ "$GDMSESSION" = "kde" ] ; then
-	# TODO: HACK: this shouldn't be necessary.
-	assert_interactive_notroot "You are running KDE. Please note that KDE takes time to update it's menus. Please refresh the menu several times prior to answering the following questions."
-fi
-
-assert_interactive_notroot "Is the menu '<main>/$MENU_NAME present with items 'EXTRA_ITEM' and '$ITEM_TEXT'" y
+assert_interactive_notroot "Is the menu '<main>/$MENU_NAME present with items 'EXTRA_ITEM' and '$ITEM_TEXT'\n\t(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
 
 # Test steps section
 test_procedure

@@ -13,13 +13,15 @@ test_start "$FUNCNAME: verify $FILE is uninstalled correctly from the desktop"
 test_init
 
 INSFILE="xdgtestdata-$XDG_TEST_SHORTID.txt"
+DESKTOP=`find $HOME -type d -a -name Desktop`
+
 set_no_display
 echo "Some more boring text" > "$INSFILE"
 assert_file "$INSFILE" 
 
 # Verify the test icon is not installed already.
 assert_exit 0 xdg-desktop-icon install  "$INSFILE"
-assert_file_in_path "$INSFILE" "$HOME/Desktop"
+assert_file_in_path "$INSFILE" "$DESKTOP"
 assert_interactive_notroot "Is an icon named '$INSFILE' present on the desktop?" y
 
 # Test steps section
@@ -29,7 +31,7 @@ assert_exit 0 xdg-desktop-icon uninstall "$INSFILE"
 assert_nostdout
 assert_nostderr
 
-assert_file_not_in_path "$INSFILE" "$HOME/Desktop"
+assert_file_not_in_path "$INSFILE" "$DESKTOP"
 assert_interactive_notroot "Is an icon named '$INSFILE' still present on the desktop?" n
 
 test_result

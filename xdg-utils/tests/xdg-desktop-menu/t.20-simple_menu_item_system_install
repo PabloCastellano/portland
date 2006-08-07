@@ -38,7 +38,7 @@ assert_nostderr
 assert_file_in_path "$DESKTOP" "$USERPATH"
 
 if [ -z "$XDG_TEST_NO_INTERACTIVE" ]; then
-assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?\n(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
+assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?\n\t(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
 assert_interactive "Please select the menu item '$ITEM_TEXT'"
 
 ## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run

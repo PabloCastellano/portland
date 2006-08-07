@@ -18,9 +18,10 @@ set_no_display
 echo "Some more boring text. $XDG_TEST_ID" > "$INSFILE"
 assert_file "$INSFILE" 
 
+DESKTOP=`find $HOME -type d -a -name Desktop`
 
 # Verify the test icon is not installed already.
-assert_file_not_in_path "$INSFILE" "$HOME/Desktop"
+assert_file_not_in_path "$INSFILE" "$DESKTOP"
 
 # Test steps section
 test_procedure
@@ -29,7 +30,7 @@ assert_exit 0 xdg-desktop-icon install "$INSFILE"
 assert_nostdout
 assert_nostderr
 
-assert_file_in_path "$INSFILE" "$HOME/Desktop"
+assert_file_in_path "$INSFILE" "$DESKTOP"
 
 assert_interactive_notroot "Is there an icon on the desktop with name '$INSFILE'?" y
 

@@ -27,14 +27,8 @@ assert_exit 0 xdg-desktop-menu install --mode user "$DESKTOP"
 
 assert_file_in_path "$DESKTOP" "$USERPATH"
 
-# TODO: HACK: this shouldn't be necessary.
-assert_exit 0 xdg-desktop-menu forceupdate --mode user 
-if [ "$GDMSESSION" = "kde" ] ; then
-	assert_interactive_notroot "You are running KDE. Please note that KDE takes time to update it's menus. Please refresh the menu several times prior to answering the following questions."
-fi
-# end HACK
 
-assert_interactive_notroot "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?" y
+assert_interactive_notroot "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?\n\t(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
 
 # Test steps section
 test_procedure
@@ -45,7 +39,7 @@ assert_nostderr
 
 assert_file_not_in_path "$DESKTOP" "$USERPATH"
 
-assert_interactive_notroot "Is the menu item '$ITEM_TEXT' still present?" n
+assert_interactive_notroot "Is the menu item '$ITEM_TEXT' still present?\n\t(NOTE: If you are using KDE, it may take a few seconds to disappear.)" n
 
 test_failoverride WARN
 test_result

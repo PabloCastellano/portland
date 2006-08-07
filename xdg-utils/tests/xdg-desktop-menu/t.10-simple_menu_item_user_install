@@ -38,14 +38,7 @@ assert_file_in_path "$DESKTOP" "$USERPATH"
 
 if [ -z "$XDG_TEST_NO_INTERACTIVE" -a `whoami` != 'root' ]; then
 
-# TODO: HACK: this shouldn't be necessary.
-assert_exit 0 xdg-desktop-menu forceupdate --mode user 
-if [ "$GDMSESSION" = "kde" ] ; then
-	assert_interactive_notroot "You are running KDE. Please note that KDE takes time to update it's menus. Please refresh the menu several times prior to answering the following questions."
-fi
-# end HACK
-
-assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?" y
+assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, possibly in a generic location?\n\t(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
 assert_interactive "Please select the menu item '$ITEM_TEXT'"
 
 ## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
