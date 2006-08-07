@@ -15,7 +15,7 @@ our @ISA = qw(Exporter);
 
 our @EXPORT_OK = qw( distribution_name distribution_version );
 
-our $VERSION = '0.14';
+our $VERSION = '0.14.1';
 
 our $standard_release_file = 'lsb-release';
 
@@ -25,6 +25,7 @@ our %release_files = (
     'turbolinux-release'    => 'turbolinux',
     'mandrake-release'      => 'mandrake',
     'mandrakelinux-release' => 'mandrakelinux',
+    'mandriva-release'      => 'mandriva',
     'debian_version'        => 'debian',
     'debian_release'        => 'debian',
     'SuSE-release'          => 'suse',
@@ -43,7 +44,7 @@ our %release_files = (
     'yoper-release'         => 'yoper',
     'arch-release'          => 'arch',
     'libranet_version'      => 'libranet',
-    'va-release'            => 'va-linux'
+    'va-release'            => 'va-linux',
 );
 
 our %version_match = (
@@ -53,7 +54,8 @@ our %version_match = (
     'fedora'                => 'Fedora Core release (\d+) \(',
     'redflag'               => 'Red Flag (?:Desktop|Linux) (?:release |\()(.*?)(?: \(.+)?\)',
     'redhat'                => 'Red Hat Linux release (.*) \(',
-    'slackware'             => '^Slackware (.+)$'
+    'slackware'             => '^Slackware (.+)$',
+    'mandriva'              => 'Mandriva Linux release (\d+.\d+) \(',
 );
 
 
