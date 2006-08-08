@@ -5,7 +5,7 @@
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
-test_user_mime_uninstall() {
+test_user_mime_uninstall2in1() {
 
 ## Begin the test.
 test_start "$FUNCNAME: uninstall user mime type"
@@ -63,4 +63,4 @@ assert_stdout out.save2
 
 test_result
 } 
-run_test test_user_mime_uninstall 
+run_test test_user_mime_uninstall2in1

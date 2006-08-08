@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Defaults.
-ROOT_TEST_GROUPS="xdg-desktop-icon xdg-desktop-menu xdg-icon-resource xdg-mime"
+ROOT_TEST_GROUPS="xdg-desktop-icon xdg-desktop-menu xdg-icon-resource xdg-mime xdg-utils-usecases"
 USER_TEST_GROUPS="$ROOT_TEST_GROUPS xdg-email xdg-open xdg-screensaver"
 
 usage() {

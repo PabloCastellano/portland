@@ -110,8 +110,10 @@ assert_file_not_in_path() {
 assert_file() {
 	if [ ! -e "$1" ] ; then
 		test_fail "'$1' does not exist"
+		return 
 	elif [ ! -f "$1" ] ; then
 		test_fail "'$1' is not a regular file"
+		return
 	fi
 	if [ -f "$2" ] ; then
 		compare=`diff -wB "$1" "$2"`
@@ -155,15 +157,13 @@ assert_stderr() # check that stderr matches expected error
     # $1 is file containing regexp for expected error
     # if no argument supplied, just check out.stderr is not empty
 
-    case "$1" in
-    "")
 	if [ ! -s out.stderr ]
 	then
 	    test_infoline "Expected output from '$LASTCOMMAND' to stderr, but none written"
 	    test_fail
+	    return
 	fi
-	;;
-    *)
+    if [ ! -z "$1" ] ; then
 	expfile="$1"
 	OK=Y
 	exec 4<&0 0< "$expfile" 3< out.stderr
@@ -190,8 +190,7 @@ assert_stderr() # check that stderr matches expected error
 	    infofile out.stderr "received stderr:"
 	    test_fail
 	fi
-	;;
-    esac
+    fi 
 }
 
 assert_stdout() # check that stderr matches expected error
@@ -199,23 +198,19 @@ assert_stdout() # check that stderr matches expected error
     # $1 is file containing regexp for expected error
     # if no argument supplied, just check out.stderr is not empty
 
-    case "$1" in
-    "")
 	if [ ! -s out.stdout ]
 	then
 	    test_infoline "Expected output from '$LASTCOMMAND' to stdout, but none written"
 	    test_fail
+	    return
 	fi
-	;;
-    *)
+    if [ ! -z "$1" ] ; then 
 	expfile="$1"
 
 	if [ ! -e "$expfile" ] ; then
 		test_status NORESULT "Could not find file '$expfile' to look up expected pattern!"
 		return
 	fi
-	#expline="$*"
-	#expfile="out.stdout"
 	OK=Y
 	exec 4<&0 0< "$expfile" 3< out.stdout
 	while read expline
@@ -241,8 +236,7 @@ assert_stdout() # check that stderr matches expected error
 	    infofile out.stdout "received stdout:"
 	    test_fail
 	fi
-	;;
-    esac
+    fi
 }
 
 

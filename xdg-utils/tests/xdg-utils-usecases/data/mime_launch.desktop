@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Mime Launch Test
-Exec=echo "file: %F" >exec.out
+Exec=echo "file: %f" >exec.out
 Path=/tmp
 StartupNotify=false
 MimeType=text/x-xdg-testpattern
