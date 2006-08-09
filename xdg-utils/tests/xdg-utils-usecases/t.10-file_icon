@@ -30,7 +30,7 @@ test_procedure
 
 # install icons of all sizes
 for i in $ICON_SIZES; do
-	assert_exit 0 xdg-icon-resource install --size "$i" "xdgtestdata-$XDG_TEST_ID-red-$i.png" "xdgtestdata-$MIME_MINOR.png"
+	assert_exit 0 xdg-icon-resource install --context mimetypes --size "$i" "xdgtestdata-$XDG_TEST_ID-red-$i.png" "xdgtestdata-$MIME_MINOR.png"
 	assert_nostdout
 	assert_nostderr
 done
