@@ -55,7 +55,7 @@ assert_exit 0 xdg-open "$TEST_FILE"
 assert_nostdout
 assert_nostderr
 
-echo "$TEST_FILE" >out.expect
+echo "file: $XDG_TEST_TMPDIR/$TEST_FILE" >out.expect
 
 # exec.out is created by xdg-open
 assert_file 'exec.out' 'out.expect'
