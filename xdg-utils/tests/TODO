@@ -1,0 +1,20 @@
+TODO:
+
+Test the following not-called options:
+xdg-desktop-icon
+	--novendor
+xdg-desktop-menu
+	--novendor
+xdg-email
+	--utf8
+xdg-icon-resource
+	--novendor
+	--theme
+	--context
+
+
+Better test the following poorly tested options:
+xdg-desktop-menu
+	--noupdate
+xdg-icon-resource
+	--noupdate
