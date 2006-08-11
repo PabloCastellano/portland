@@ -38,7 +38,7 @@ assert_nostderr
 
 #if [ -z "$XDG_TEST_NO_INTERACTIVE" -a `whoami` != 'root' ]; then
 
-assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, (probably under 'Development')?\n\t(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
+assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree?\n\tThe item is probably in a menu that is related to 'Development'\n\t(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
 assert_interactive "Please select the menu item '$ITEM_TEXT'"
 
 ## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
@@ -46,7 +46,9 @@ assert_file "$WORK_DIR/$CREATEFILE"
 #fi
 
 ## Cleanup
-xdg-desktop-menu uninstall "$DESKTOP" >/dev/null 2>&1
+assert_exit 0 xdg-desktop-menu uninstall "$DESKTOP"
+assert_nostdout
+assert_nostderr
 
 test_result
 } 
