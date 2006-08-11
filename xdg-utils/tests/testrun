@@ -7,7 +7,7 @@ USER_TEST_GROUPS="$ROOT_TEST_GROUPS xdg-email xdg-open xdg-screensaver"
 usage() {
 cat << _ENDUSAGE_ 
 Usage:
-$0 [-iIcChRd:p:f:a] [test|testgroup] [...]
+$0 [-iIcChRSd:p:f:a] [test|testgroup] [...]
 
 Options:
      [-h]      Show this message and exit.
@@ -19,7 +19,9 @@ Options:
                (overrides XDG_TEST_DONT_CLEANUP)
 
      [-R]      Turn off su to root tests.
-	       You will be prompted for the root password at the beginning of the testrun.
+	       You will not be prompted for the root password at the beginning of the testrun.
+
+     [-S]      Use sudo instead of su.
 
      [-a]      Run all tests. (i.e xdg-*/) Has no effect if tests are specified explicitly.
 
@@ -50,13 +52,14 @@ else
 fi
 
 ## Read options
-while getopts "iIcChRf:d:p:a" opt; do
+while getopts "iIcChRSf:d:p:a" opt; do
 	case $opt in
 		I ) export XDG_TEST_NO_INTERACTIVE="set" ;;
 		i ) unset XDG_TEST_NO_INTERACTIVE ;;
 		C ) export XDG_TEST_DONT_CLEANUP="set" ;;
 		c ) unset XDG_TEST_DONT_CLEANUP ;;
 		R ) XDG_TEST_DONT_SU="set" ;;
+		S ) XDG_TEST_USE_SUDO="set" ;;
 		f ) XDG_TEST_SELF_LAUNCH="$OPTARG" ;;
 		d ) export XDG_TEST_DIR="$OPTARG" ;;
 		p ) export PATH="$OPTARG" ;;
@@ -113,8 +116,15 @@ if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then  # not self launched
 	"$XDG_TEST_DIR/include/system_info" >>"$TEST_LOG"
 
 	if [ -z "$XDG_TEST_DONT_SU" ] ; then
-		SUCMD=`which sudo 2>/dev/null`
-		echo "Running ${SUCMD-su} for system tests. Please enter admin password if requested."
+		if [ -z "$XDG_TEST_USE_SUDO" ] ; then
+			SUCMD=
+			echo "Running su for system tests. (Use testrun -S to use sudo instead)"
+			echo "Please enter the root password when requested."
+		else
+			SUCMD=`which sudo 2>/dev/null`
+			echo "Running ${SUCMD-su} for system tests."
+			echo "Please enter an apropriate password if requested."
+		fi
 		# Note if sudo is not found, $SUCMD will be blank, so run su directly.
 		# We cannot assume su works since systems like Ubuntu require sudo
 		# Yet, systems like Debian do not ship with sudo by default.
