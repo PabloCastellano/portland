@@ -1,0 +1,54 @@
+#!/bin/bash
+
+## Include utility functions.
+. "$XDG_TEST_DIR/include/testassertions.sh"
+. "$XDG_TEST_DIR/include/testcontrol.sh"
+
+## Test function
+test_menu_install_category() {
+## Begin the test.
+test_start "$FUNCNAME: verify a desktop file is installed in the correct category"
+
+# Dependencies section
+test_init
+
+# Generate .desktop file
+#USERPATH="$HOME/.local"
+
+set_no_display
+
+use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_item_test.desktop" DESKTOP
+edit_file "$DESKTOP" 'xdg-test-menu-item-install.tmp' CREATEFILE
+edit_file "$DESKTOP" 'Test Menu Categories' ITEM_TEXT "TEST $XDG_TEST_SHORTID"
+edit_file "$DESKTOP" '/tmp' WORK_DIR "$XDG_TEST_TMPDIR"
+
+assert_file "$DESKTOP"
+
+# Verify the test icon is not installed already.
+#assert_file_not_in_path "$DESKTOP" "$USERPATH"
+
+# Test steps section
+test_procedure
+
+assert_exit 0 xdg-desktop-menu install "$DESKTOP"
+assert_nostdout
+assert_nostderr
+
+#assert_file_in_path "$DESKTOP" "$USERPATH"
+
+#if [ -z "$XDG_TEST_NO_INTERACTIVE" -a `whoami` != 'root' ]; then
+
+assert_interactive "Is an item called '$ITEM_TEXT' somewhere in the menu tree, (probably under 'Development')?\n\t(NOTE: If you are using KDE, it may take a few seconds to appear.)" y
+assert_interactive "Please select the menu item '$ITEM_TEXT'"
+
+## Double clicking will result in the command 'touch xdg-test-menu-item-install.tmp' to be run
+assert_file "$WORK_DIR/$CREATEFILE"
+#fi
+
+## Cleanup
+xdg-desktop-menu uninstall --mode user "$DESKTOP" >/dev/null 2>&1
+
+test_result
+} 
+
+run_test test_menu_install_category
