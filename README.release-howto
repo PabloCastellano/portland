@@ -1,7 +1,10 @@
 Release guide for xdg-utils:
 
+cvs tag RELEASE_1_0_BETA_3 xdg-utils
 cd xdg-utils
+./configure
+make scripts-clean
 make release
 cd ..
-mv xdg-utils xdg-utils-0.1
-tar -cvzf xdg-utils-0.1.tgz --exclude CVS --exclude .cvsignore xdg-utils-0.1
+cp -a xdg-utils xdg-utils-1.0beta3
+tar -cvzf xdg-utils-1.0beta3.tgz --exclude CVS --exclude .cvsignore xdg-utils-1.0beta3
