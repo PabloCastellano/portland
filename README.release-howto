@@ -1,10 +1,14 @@
 Release guide for xdg-utils:
 
-cvs tag RELEASE_1_0_BETA_3 xdg-utils
-cd xdg-utils
+cd xdg-utils/scripts/desc
+for a in *.xml; do sed -e 's^ beta2^ beta3^' $a > $a.new && mv $a.new $a; done
+cd ../..
+cvs tag -R RELEASE_1_0_BETA_3
 ./configure
+cd scripts
 make scripts-clean
+cd ..
 make release
 cd ..
 cp -a xdg-utils xdg-utils-1.0beta3
-tar -cvzf xdg-utils-1.0beta3.tgz --exclude CVS --exclude .cvsignore xdg-utils-1.0beta3
+tar -cvzf xdg-utils-1.0beta3.tgz --exclude CVS --exclude .cvsignore --exclude 'index.html.p*' xdg-utils-1.0beta3
