@@ -517,7 +517,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-desktop-menu 1.0beta2"
+            echo "xdg-desktop-menu 1.0beta3"
             exit_success
             ;;
         esac

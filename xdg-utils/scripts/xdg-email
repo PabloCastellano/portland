@@ -326,7 +326,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-email 1.0beta2"
+            echo "xdg-email 1.0beta3"
             exit_success
             ;;
         esac

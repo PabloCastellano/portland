@@ -304,7 +304,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-screensaver 1.0beta2"
+            echo "xdg-screensaver 1.0beta3"
             exit_success
             ;;
         esac
