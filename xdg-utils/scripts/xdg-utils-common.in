@@ -166,7 +166,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "@NAME@ 1.0beta2"
+            echo "@NAME@ 1.0beta3"
             exit_success
             ;;
         esac
