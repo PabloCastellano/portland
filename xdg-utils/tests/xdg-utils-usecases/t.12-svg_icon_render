@@ -35,6 +35,7 @@ if [ `whoami` != 'root' ] ; then
 	assert_exit 0 xdg-open "$TEST_DIR"
 	assert_nostdout
 	assert_nostderr
+	assert_interactive "Did the file browser open the '$TEST_DIR' directory?" y
 else
 	assert_interactive "Please open '$TEST_DIR' in the file browser."
 fi
@@ -42,10 +43,14 @@ fi
 # ask user to cycle through sizes & ensure correct icons are displayed.
 assert_interactive "Is a file named 'Icon Test' present in the directory?" y
 assert_interactive "Does the icon consist of the red text 'SVG'?\n\t(You may need to select something like 'View->As Icons')" y
-assert_interactive "Does the text change size appropriately when the display size is changed?" y
+# assert_interactive "Does the text change size appropriately when the display size is changed?" y
 
 ## cleanup
-assert_interactive "Please close any windows opened by this test." C
+if [ `whoami` != 'root' ] ; then
+	assert_interactive "Please close any windows opened by this test." C
+else
+	assert_interactive "You may close the file browser window." C
+fi
 
 # remove icons
 assert_exit 0 xdg-icon-resource uninstall  "$ICON_NAME.svg"

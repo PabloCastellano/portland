@@ -47,6 +47,7 @@ if [ `whoami` != 'root' ] ; then
 	assert_exit 0 xdg-open "$TEST_DIR"
 	assert_nostdout
 	assert_nostderr
+	assert_interactive "Did the file browser open the '$TEST_DIR' directory?" y
 else
 	assert_interactive "Please open '$TEST_DIR' in the file browser."
 fi
@@ -54,10 +55,14 @@ fi
 # ask user to cycle through sizes & ensure correct icons are displayed.
 assert_interactive "Is a file named '$TEST_FILE' present in the directory?" y
 assert_interactive "Does the icon consist of a red number in the list {$ICON_SIZES}?\n\tThe number should roughly correspond to the icon size.\n\t(You may need to select something like 'View->As Icons')" y
-assert_interactive "Does the number change appropriately when you increase or decrease the view size?" y
+# assert_interactive "Does the number change appropriately when you increase or decrease the view size?" y
 
 ## cleanup
-assert_interactive "Please close any windows opened by this test." C
+if [ `whoami` != 'root' ] ; then
+	assert_interactive "Please close any windows opened by this test." C
+else
+	assert_interactive "You may close the file browser window." C
+fi
 
 # remove icons
 for i in $ICON_SIZES; do
