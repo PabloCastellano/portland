@@ -125,6 +125,10 @@ case "$DE" in
     open_gnome "$url"
     ;;
 
+    xfce)
+    open_xfce "$url"
+    ;;
+
     generic)
     open_generic "$url"
     ;;
