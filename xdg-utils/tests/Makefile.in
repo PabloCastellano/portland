@@ -42,3 +42,4 @@ install:
 uninstall:
 
 doc:
+	perl doc_gen.pl

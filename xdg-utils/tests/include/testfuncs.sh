@@ -41,8 +41,9 @@ test_purpose() {
 	# TODO: generate a manpage or something.
 }
 test_note() {
-	verify_test_context
+	#verify_test_context
 	# TODO: generate even more docs.
+	tmp=1
 }
 
 ## Used for setup/dependency verification.
@@ -124,56 +125,14 @@ test_result() {
 	exit "$RESULT"
 }
 
-use_file() {
-	src="$1"
-	file=${src##/*/}
-	varname="$2"
+infofile() # write file to journal using tet_infoline
+{
+    # $1 is file name, $2 is prefix for tet_infoline
 
-	if [ $# -lt 2 ] ; then
-		echo "TEST SYNTAX ERROR: use_file must have two arguments" >&2
-		exit 255 
-	fi
-
-	assert_file "$src"
-
-	outfile="xdgtestdata-$XDG_TEST_ID-$file"
-	eval "$varname=$outfile"
-	
-	cp "$src" "$XDG_TEST_TMPDIR/$outfile"
+    prefix="$2"
+    while read line
+    do
+	test_infoline "$prefix$line"
+    done < "$1"
 }
-
-get_unique_name() {
-	varname="$1"
-	file="$2"
-	if [ -z "$varname" ] ; then
-		echo "TEST SYNAX ERROR: get_unique_name requries a variable name"
-		exit 255
-	fi
-
-	outfile="xdgtestdata-$XDG_TEST_ID-$file"
-	eval "$varname=$outfile"
-}
-
-edit_file() {
-	file="$1"
-	origstr="$2"
-	varname="$3"
-	newstr="$4"
-
-	if [ $# -lt 3 ] ; then
-		echo "TEST SYNTAX ERROR: edit_file must have at least 3 arguments."
-		exit 255
-	fi
-	
-	assert_file "$file"
-
-	if [ -z "$newstr" ] ; then
-		newstr="xdgtestdata-$XDG_TEST_ID-$origstr"
-	fi
-
-	eval "$varname=\"$newstr\""
-
-	sed -i -e "s|$origstr|$newstr|g" "$file"
-}
-
 

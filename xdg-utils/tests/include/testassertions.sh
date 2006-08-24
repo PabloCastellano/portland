@@ -4,8 +4,14 @@
 
 . "$XDG_TEST_DIR/include/testfuncs.sh"
 
-assert_exit() # execute command (saving output) and check exit code
-{
+## NOTE: Documentation is generated AUTOMATICALLY from this file
+## Function usage must immediately follow function delcaration
+
+assert_exit() {
+# execute command (saving output) and check exit code
+# Usage: assert_exit N command ...
+# where N is a number or a literal 'N' (for non-zero)
+# command can be an unquoted string, but be careful.
     EXPECT="$1"
     shift 1
 
@@ -89,6 +95,12 @@ assert_interactive() {
 		
 
 assert_file_in_path() {
+# Assert that some file is present in a path.
+# 
+# Usage:
+# assert_file_in_path FILENAME PATH
+# where FILE is the exact name of the file and 
+# PATH is a ':' separated list of directories
 	search_dirs=`echo "$2" | tr ':' ' '`
 	found_files=`find $search_dirs -name "$1" 2>/dev/null`
 
@@ -98,6 +110,8 @@ assert_file_in_path() {
 }
 
 assert_file_not_in_path() {
+# Assert the some file is NOT present in a path.
+# Opposite of 'assert_file_in_path'
 	search_dirs=`echo "$2" | tr ':' ' '`
 	found_files=`find $search_dirs -name "$1" 2>/dev/null`
 
@@ -108,6 +122,8 @@ assert_file_not_in_path() {
 
 
 assert_file() {
+# Assert the existance of an exact filename
+# Usage: assert_file FILE
 	if [ ! -e "$1" ] ; then
 		test_fail "'$1' does not exist"
 		return 
@@ -124,14 +140,17 @@ assert_file() {
 }
 
 assert_nofile() {
+# Assert the non existance of an exact filename.
+# Opposite of 'assert_file'
 	if [ -e "$1" ] ; then
 		test_fail "'$1' exists."
 	fi
 }
 
 
-assert_nostdout() # check that nothing went to stdout
-{
+assert_nostdout() {
+# assert nothing was written to a stdout.
+# NOTE: Failing this assertion will WARN rather than FAIL
     if [ -s out.stdout ]
     then
 	test_infoline "Unexpected output from '$LASTCOMMAND' written to stdout, as shown below:"
@@ -140,8 +159,9 @@ assert_nostdout() # check that nothing went to stdout
     fi
 }
 
-assert_nostderr() # check that nothing went to stderr
-{
+assert_nostderr() {
+# assert nothing was written to stderr.
+# NOTE: Failing this assertion will WARN rather than FAIL
     if [ ! -z "$XDG_UTILS_DEBUG_LEVEL" ] ; then
 	test_infoline "not checking STDERR from '$LASTCOMMAND' because XDG_UTILS_DEBUG_LEVEL=$XDG_UTILS_DEBUG_LEVEL"
 	test_infoline out.stderr stderr:
@@ -152,10 +172,10 @@ assert_nostderr() # check that nothing went to stderr
     fi
 }
 
-assert_stderr() # check that stderr matches expected error
-{
-    # $1 is file containing regexp for expected error
-    # if no argument supplied, just check out.stderr is not empty
+assert_stderr() {
+# check that stderr matches expected error
+# $1 is file containing regexp for expected error
+# if no argument supplied, just check out.stderr is not empty
 
 	if [ ! -s out.stderr ]
 	then
@@ -193,10 +213,10 @@ assert_stderr() # check that stderr matches expected error
     fi 
 }
 
-assert_stdout() # check that stderr matches expected error
-{
-    # $1 is file containing regexp for expected error
-    # if no argument supplied, just check out.stderr is not empty
+assert_stdout() {
+# check that stderr matches expected error
+# $1 is file containing regexp for expected error
+# if no argument supplied, just check out.stderr is not empty
 
 	if [ ! -s out.stdout ]
 	then
@@ -239,49 +259,116 @@ assert_stdout() # check that stderr matches expected error
     fi
 }
 
-
-infofile() # write file to journal using tet_infoline
-{
-    # $1 is file name, $2 is prefix for tet_infoline
-
-    prefix="$2"
-    while read line
-    do
-	test_infoline "$prefix$line"
-    done < "$1"
-}
-
 require_interactive() {
+# if $XDG_TEST_NO_INTERACTIVE is set, test result becomes UNTESTED
     if [ ! -z "$XDG_TEST_NO_INTERACTIVE" ] ; then
 	test_result UNTESTED "XDG_TEST_NO_INTERACTIVE is set, but this test needs interactive"
     fi
 }
 
 require_root() {
+# if the test is not being run as root, test result is UNTESTED
     if [ `whoami` != 'root' ] ; then
 	test_result UNTESTED "not running as root, but test requires root privileges"
     fi
 }
 
 require_notroot() {
+# if the test is being run as root, the test result is UNTESTED
+# opposite of 'require_root'
     if [ `whoami` = 'root' ] ; then
 	test_result UNTESTED "running as root, but test must be run as a normal user"
     fi
 }
 
 set_no_display() {
+# Clear $DISPLAY
 	unset DISPLAY
 }
 
 assert_display() {
+# Assert that the $DISPLAY variable is set.
 	if [ -z "$DISPLAY" ] ; then 
 		test_fail "DISPLAY not set!"
 	fi
 }
 
 assert_util_var() {
+# Assert that the $XDGUTIL varilable is set.
+# DEPRICATED. Only used by generic tests.
 if [ "x$XDGUTIL" = x ]; then
 	test_fail "XDGUTIL variable not set"
 fi
+}
+
+use_file() {
+# Copy a datafile from it's defult location into the test directory
+# Usage:
+# use_file ORIG_FILE VAR
+# Where ORIG_FILE is the name of the file, and VAR is the name of the
+# variable to create that will contain the new (unique) filename.
+# DO NOT put a '$' in front of VAR. VAR will be created via eval.
+#
+# $VAR will be set to 'xdgtestdata-$XDG_TEST_ID-$file' after the 
+# directory is stripped from $file.
+	src="$1"
+	file=${src##/*/}
+	varname="$2"
+
+	if [ $# -lt 2 ] ; then
+			echo "TEST SYNTAX ERROR: use_file must have two arguments" >&2
+		exit 255 
+	fi
+
+	assert_file "$src"
+
+	outfile="xdgtestdata-$XDG_TEST_ID-$file"
+	eval "$varname=$outfile"
+	
+	cp "$src" "$XDG_TEST_TMPDIR/$outfile"
+}
+
+get_unique_name() {
+# Get a unique name for a file, similar to 'use_file'
+# except that no file is copied. You are left to create file $VAR.
+	varname="$1"
+	file="$2"
+	if [ -z "$varname" ] ; then
+		echo "TEST SYNAX ERROR: get_unique_name requries a variable name"
+		exit 255
+	fi
+
+	outfile="xdgtestdata-$XDG_TEST_ID-$file"
+	eval "$varname=$outfile"
+}
+
+edit_file() {
+# Edit file via sed. 
+# Usage:
+# edit_file $FILE origstr VARNAME [newstr]
+# Where:
+# $FILE    is a file, probably copied from 'use_file' 
+# VARNAME  is created via 'eval' to contain the newstr
+# newstr   is the optional substitution. If newstr is not present,
+#          it will become 'xdgtestdata-$XDG_TEST_ID-$origstr'
+	file="$1"
+	origstr="$2"
+	varname="$3"
+	newstr="$4"
+
+	if [ $# -lt 3 ] ; then
+		echo "TEST SYNTAX ERROR: edit_file must have at least 3 arguments."
+		exit 255
+	fi
+	
+	assert_file "$file"
+
+	if [ -z "$newstr" ] ; then
+		newstr="xdgtestdata-$XDG_TEST_ID-$origstr"
+	fi
+
+	eval "$varname=\"$newstr\""
+
+	sed -i -e "s|$origstr|$newstr|g" "$file"
 }
 

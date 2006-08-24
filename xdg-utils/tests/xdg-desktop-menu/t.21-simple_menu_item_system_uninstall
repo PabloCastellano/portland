@@ -8,6 +8,9 @@
 test_simple_menu_item_system_uninstall() {
 ## Begin the test.
 test_start "$FUNCNAME: verify a desktop file is uninstalled from the system applications menu"
+test_purpose "A basic desktop file (no category defined) is installed into the menu. It should show up somewhere, but this behavior is not well defined by the spec. This test fails for many systems. This is the corresponding uninstall test."
+test_note "Because this behavior is not well defined this test will WARN instead of FAIL"
+
 
 # Dependencies section
 test_init

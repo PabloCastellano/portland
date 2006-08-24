@@ -7,7 +7,9 @@
 ## Test function
 test_simple_menu_item_user_install() {
 ## Begin the test.
-test_start "$FUNCNAME: verify a desktop file is installed in the user's applications menu"
+test_start "$FUNCNAME: verify a basic desktop file is installed in the user's applications menu"
+test_purpose "A basic desktop file (no category defined) is installed into the menu. It should show up somewhere, but this behavior is not well defined by the spec. This test fails for many systems."
+test_note "Because this behavior is not well defined this test will WARN instead of FAIL"
 
 # Dependencies section
 test_init
