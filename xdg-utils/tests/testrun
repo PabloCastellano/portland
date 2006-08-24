@@ -97,8 +97,8 @@ TEST_LOG="$XDG_TEST_DIR/xdg-test.log"
 
 export USING_TEST_RUNNER="true"
 
-for t in $TEST_FILES; do
-	. "$t"
+for MY_TEST_FILE in $TEST_FILES; do
+	. "$MY_TEST_FILE" 
 done
 
 if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then  # not self launched

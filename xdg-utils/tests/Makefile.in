@@ -41,3 +41,4 @@ install:
 
 uninstall:
 
+doc:

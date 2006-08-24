@@ -1,8 +1,6 @@
 #!/bin/bash
-
 ## Include utility functions.
 . "$XDG_TEST_DIR/include/testassertions.sh"
-
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
 ## Test function
@@ -10,21 +8,20 @@ test_icon_svg_user_install() {
 ICON="red-SVG.svg"
 test_start "$FUNCNAME: verify $ICON is installed correctly"
 
-## Begin the test.
 icondir="$XDG_TEST_DIR/icons"
 userpath="$HOME/.icons:$HOME/.local:$XDG_DATA_HOME"
 
-# Dependencies section
+## Initalize - check the prerequisates 
 test_init
 
 set_no_display
 use_file "$XDG_TEST_DIR/icons/$ICON" ICONFILE
 assert_file "$ICONFILE"
 
-# Verify the test icon is not installed already.
+## Verify the test icon is not installed already.
 assert_file_not_in_path "$ICONFILE" "$userpath"
 
-# Test steps section
+## Main test procedure
 test_procedure
 
 assert_exit 0 xdg-icon-resource install --mode user "$ICONFILE"
