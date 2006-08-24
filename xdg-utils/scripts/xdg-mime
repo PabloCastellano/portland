@@ -37,7 +37,7 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-xdg-mime - command line tool for querying information about file type handling
+xdg-mime ? command line tool for querying information about file type handling
 and adding descriptions for new file types
 
 Synopsis
@@ -206,7 +206,7 @@ _MANUALPAGE
 usage()
 {
 cat << _USAGE
-xdg-mime - command line tool for querying information about file type handling
+xdg-mime ? command line tool for querying information about file type handling
 and adding descriptions for new file types
 
 Synopsis
@@ -466,8 +466,9 @@ info_kde()
 
 info_gnome()
 {
-    DEBUG 1 "Running gnomevfs-info \"$1\""
-    gnomevfs-info "$1" 2> /dev/null | grep MIME | cut -d ":" -f 2 | sed s/"^ "//
+    file=`readlink -f "$1"` # Normalize path
+    DEBUG 1 "Running gnomevfs-info \"$file\""
+    gnomevfs-info "$file" 2> /dev/null | grep MIME | cut -d ":" -f 2 | sed s/"^ "//
 
     exit_success
 }
