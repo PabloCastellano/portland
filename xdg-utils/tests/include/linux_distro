@@ -56,6 +56,7 @@ our %version_match = (
     'redhat'                => 'Red Hat Linux release (.*) \(',
     'slackware'             => '^Slackware (.+)$',
     'mandriva'              => 'Mandriva Linux release (\d+.\d+) \(',
+    'arch'                  => 'Arch Linux (.*) \(',
 );
 
 
