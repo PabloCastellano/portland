@@ -103,6 +103,7 @@ sub distribution_version {
          $self->distribution_name() or die 'No version because no distro.';
     }
     $self->{'pattern'} = $version_match{$self->{'DISTRIB_ID'}};
+    return "unknown" if (! $self->{'pattern'});
     $release = $self->_get_file_info();
     $self->{'DISTRIB_RELEASE'} = $release;
     return $release;
