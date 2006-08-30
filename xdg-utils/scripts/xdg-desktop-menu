@@ -659,14 +659,12 @@ BEGIN {
         # Existing files are in $orig_desktop_files
         for desktop_file in $orig_desktop_files; do
             if ! grep '^'$desktop_file'$' $tmpfile > /dev/null 2> /dev/null; then
-            	# Append
+            	# Keep this file, it's not in the uninstall list
             	new_desktop_files="$new_desktop_files $desktop_file"
             fi
         done
     fi
     rm -f "$tmpfile"
-    # TODO: install, add $desktop_files, exclude duplicates
-    # TODO: uninstall, exclude $desktop_files, delete if empty
     
     DEBUG 3 "Files to list in $menu_file: $new_desktop_files"
     
@@ -714,7 +712,33 @@ BEGIN {
         rm -f $xdg_dir/$menu_file
     fi
     
-    # TODO: Delete .directory files only if no longer referenced
+    # Uninstall .directory files only if no longer referenced
+    if [ $action = "uninstall" ] ; then
+        tmpfile=`mktemp`
+        for menu_file in $xdg_dir/*; do
+            if grep 'generated and managed by xdg-desktop-menu' $menu_file > /dev/null 2> /dev/null; then
+                awk '
+# List all files within <Directory> tags
+BEGIN {
+  RS="<"
+}
+/^Directory/ {
+  if (match($0,/>/)) {
+     print substr($0,RSTART+1)
+  }
+}' $menu_file >> $tmpfile
+            fi
+        done 
+        orig_directory_files="$directory_files"
+        directory_files=
+        for desktop_file in $orig_directory_files; do
+            if ! grep '^'$desktop_file'$' $tmpfile > /dev/null 2> /dev/null; then
+                # No longer in use, safe to delete
+               directory_files="$directory_files $desktop_file"
+            fi
+        done
+        rm -f "$tmpfile"
+    fi
 }
 
 
@@ -828,6 +852,28 @@ if [ -z "$desktop_files" ] ; then
     exit_failure_syntax "desktop-file argument missing"
 fi
 
+menu_name=
+for desktop_file in $directory_files; do
+    if [ "$vendor" =  "true" -a "$action" = "install" ] ; then
+        check_vendor_prefix "$desktop_file"
+    fi
+
+    basefilename=`basename "$desktop_file"|cut -d '.' -f 1`
+    if [ -z "$menu_name" ] ; then
+        menu_name="$basefilename"
+    else
+        menu_name="$menu_name-$basefilename"
+    fi
+done
+
+if [ -n "$menu_name" ] ; then
+    if [ x"$mode" = x"user" ] ; then
+        update_submenu "user-$menu_name.menu"
+    else
+        update_submenu "$menu_name.menu"
+    fi
+fi
+
 # Install *.directory files
 
 xdg_dir_name=desktop-directories
@@ -869,19 +915,9 @@ else
     fi
 fi
 
-menu_name=
 for desktop_file in $directory_files; do
-    if [ "$vendor" =  "true" -a "$action" = "install" ] ; then
-        check_vendor_prefix "$desktop_file"
-    fi
-
     basefile=`basename $desktop_file`
-    basefilename=`echo "$basefile"|cut -d '.' -f 1`
-    if [ -z "$menu_name" ] ; then
-        menu_name="$basefilename"
-    else
-        menu_name="$menu_name-$basefilename"
-    fi
+
     DEBUG 1 "$action $desktop_file in $xdg_dir $kde_dir $gnome_dir"
 
     case $action in
@@ -905,14 +941,6 @@ for desktop_file in $directory_files; do
             ;;
     esac
 done
-
-if [ -n "$menu_name" ] ; then
-    if [ x"$mode" = x"user" ] ; then
-        update_submenu "user-$menu_name.menu"
-    else
-        update_submenu "$menu_name.menu"
-    fi
-fi
 
 # Install *.desktop files
 xdg_dir_name=applications
