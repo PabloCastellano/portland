@@ -779,7 +779,7 @@ esac
 
 detectDE
 # Consider "xscreensaver" a separate DE
-xscreensaver-command -version > /dev/null 2> /dev/null && DE="xscreensaver"
+xscreensaver-command -version 2> /dev/null | grep XScreenSaver > /dev/null && DE="xscreensaver"
 
 if [ "$action" = "resume" ] ; then
     do_resume

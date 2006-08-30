@@ -37,7 +37,7 @@ manualpage()
 cat << _MANUALPAGE
 Name
 
-xdg-mime ? command line tool for querying information about file type handling
+xdg-mime - command line tool for querying information about file type handling
 and adding descriptions for new file types
 
 Synopsis
@@ -206,7 +206,7 @@ _MANUALPAGE
 usage()
 {
 cat << _USAGE
-xdg-mime ? command line tool for querying information about file type handling
+xdg-mime - command line tool for querying information about file type handling
 and adding descriptions for new file types
 
 Synopsis
@@ -577,78 +577,6 @@ defapp_generic()
     exit_success
 }
 
-
-install_xsl_listmime()
-{
-# Dump script to file, can't pipe into xsltproc directly
-xsl_file=`mktemp` || return
-DEBUG 2 "Creating temporary XSL file to list mimetypes: $xsl_file"
-cat > $xsl_file << _XSL
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0"
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
-<xsl:output method="text"
-            encoding="UTF-8"
-            indent="no"/>
-<xsl:template match="/">
-      <xsl:for-each select='mime:mime-info/mime:mime-type'>
-        <xsl:value-of select="@type"/><xsl:text>&#10;</xsl:text>
-      </xsl:for-each>
-</xsl:template>
-</xsl:stylesheet>
-_XSL
-}
-
-install_xsl_shared2mimelnk()
-{
-# Dump script to file, can't pipe into xsltproc directly
-xsl_file=`mktemp` || return
-DEBUG 2 "Creating temporary XSL file to convert XML mimetype file: $xsl_file"
-cat > $xsl_file << _XSL
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<xsl:stylesheet version="1.0"
-xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-xmlns:mime="http://www.freedesktop.org/standards/shared-mime-info">
-<xsl:output method="text"
-            encoding="UTF-8"
-            indent="no"/>
-<xsl:template match="/">
-      <xsl:for-each select='mime:mime-info/mime:mime-type[@type=\$type]'>
-        <xsl:text>[Desktop Entry]&#10;</xsl:text>
-        <xsl:text># Installed by xdg-mime from </xsl:text><xsl:value-of select="\$source"/><xsl:text>&#10;</xsl:text>
-        <xsl:text>Type=MimeType&#10;</xsl:text>
-        <xsl:text>MimeType=</xsl:text><xsl:value-of select="@type"/><xsl:text>&#10;</xsl:text>
-        <xsl:text>Icon=</xsl:text><xsl:value-of select="translate(@type,'/','-')"/><xsl:text>&#10;</xsl:text>
-        <xsl:if test="mime:sub-class-of">
-           <xsl:text>X-KDE-IsAlso=</xsl:text><xsl:value-of select="mime:sub-class-of/@type"/><xsl:text>&#10;</xsl:text>
-        </xsl:if>
-        <xsl:if test="mime:glob">
-          <xsl:text>Patterns=</xsl:text>
-          <xsl:for-each select='mime:glob[@pattern]'>
-            <xsl:value-of select="@pattern"/><xsl:text>;</xsl:text>
-          </xsl:for-each>
-          <xsl:text>&#10;</xsl:text>
-        </xsl:if>
-        <xsl:text>Comment=</xsl:text><xsl:value-of select="mime:comment[not(@xml:lang)]"/><xsl:text>&#10;</xsl:text>
-        <xsl:for-each select='mime:comment[@xml:lang]'>
-          <xsl:sort select='@xml:lang'/>
-          <xsl:text>Comment[</xsl:text><xsl:value-of select="@xml:lang"/><xsl:text>]=</xsl:text><xsl:value-of select="."/><xsl:text>&#10;</xsl:text>
-        </xsl:for-each>
-     </xsl:for-each>
-</xsl:template>
-</xsl:stylesheet>
-_XSL
-}
-
-uninstall_xsl()
-{
-  DEBUG 2 "Cleaning up temporary XSL file: $xsl_file"
-  rm -f "$xsl_file"
-  xsl_file=
-}
-
-
 [ x"$1" != x"" ] || exit_failure_syntax
 
 mode=
@@ -942,10 +870,48 @@ basefile=`basename "$filename"`
 mimetypes=
 if [ -n "$kde_dir" ] ; then
     DEBUG 2 "KDE3 mimelnk directory found, extracting mimetypes from XML file"
-    install_xsl_listmime
-    DEBUG 1 "Running xsltproc \"$xsl_file\" \"$filename\""
-    mimetypes=`xsltproc "$xsl_file" "$filename"`
-    uninstall_xsl
+
+    mimetypes=`awk < "$filename" '
+# Strip XML comments
+BEGIN {
+ supress=0
+}
+{
+ do 
+    if (supress) {
+       if (match($0,/-->/)) {
+           $0=substr($0,RSTART+RLENGTH)
+           supress=0
+       }
+       else {
+           break
+       }
+    }
+    else {
+       if (match($0,/<!--/)) {
+           if (RSTART>1) print substr($0,0,RSTART)
+           $0=substr($0,RSTART+RLENGTH)
+           supress=1
+       }
+       else {
+           if ($0) print $0
+           break
+       }
+    }
+ while(1)
+}
+' | awk '
+# List MIME types listed in <mime-type> tags
+BEGIN {
+  RS="<"
+}
+/^mime-info/, /^\/mime-info/ {
+  if (match($0,/^mime-type/)) {
+    if (match($0,/type="[^"]*/) || match($0,/type='"'"'[^'"'"']*/)) {
+      print substr($0,RSTART+6,RLENGTH-6)
+    }
+  }
+}'`
 fi  
 
 DEBUG 1 "$action mimetype in $xdg_dir"
@@ -961,16 +927,123 @@ case $action in
         done
 
         if [ -n "$mimetypes" ] ; then
-            install_xsl_shared2mimelnk
-        
             # No quotes around $mimetypes
             for x in $mimetypes ; do 
                 DEBUG 1 "Installing $kde_dir/$x.desktop (KDE 3.x support)"
                 mkdir -p `dirname $kde_dir/$x.desktop`
-                xsltproc --stringparam type $x --stringparam source $basefile $xsl_file $filename > $kde_dir/$x.desktop
-            done
+                awk < "$filename" '
+# Strip XML comments
+BEGIN {
+ supress=0
+}
+{
+ do 
+    if (supress) {
+       if (match($0,/-->/)) {
+           $0=substr($0,RSTART+RLENGTH)
+           supress=0
+       }
+       else {
+           break
+       }
+    }
+    else {
+       if (match($0,/<!--/)) {
+           if (RSTART>1) print substr($0,0,RSTART)
+           $0=substr($0,RSTART+RLENGTH)
+           supress=1
+       }
+       else {
+           if ($0) print $0
+           break
+       }
+    }
+ while(1)
+}
+' | awk > $kde_dir/$x.desktop '
+# Extract mimetype $x from the XML file $filename
+# Note that bash requires us to escape a single quote as '"'"' 
+BEGIN {
+  the_type=ARGV[1]
+  the_source=ARGV[2]
+  ARGC=1
+  RS="<"
+  found=0
+  glob_patterns=""
+}
+/^mime-info/, /^\/mime-info/ {
+  if (match($0,/^mime-type/)) {
+    if (match($0,/type="[^"]*/) || match($0,/type='"'"'[^'"'"']*/)) {
+      if (substr($0,RSTART+6,RLENGTH-6) == the_type) {
+        found=1
+        print "[Desktop Entry]"
+        print "# Installed by xdg-mime from " the_source
+        print "Type=MimeType"
+        print "MimeType=" the_type
+        the_icon=the_type
+        sub("/", "-", the_icon)
+        print "Icon=" the_icon 
+      }
+    }
+  }
+  else if (found) {
+    if (match($0,/^\/mime-type/)) {
+      if (glob_patterns)
+         print "Patterns=" glob_patterns
+      exit 0
+    }
 
-            uninstall_xsl
+    if (match($0,/^sub-class-of/)) {
+      if (match($0,/type="[^"]*/) || match($0,/type='"'"'[^'"'"']*/)) {    
+        print "X-KDE-IsAlso=" substr($0,RSTART+6,RLENGTH-6)
+      }
+      else {
+        print "Error: '"'"'type'"'"' argument missing in " RS $0
+        exit 1 
+      }
+    }
+    if (match($0,/^glob/)) {
+      if (match($0,/pattern="[^"]*/) || match($0,/pattern='"'"'[^'"'"']*/)) {    
+        glob_patterns = glob_patterns substr($0,RSTART+9,RLENGTH-9) ";"
+      }
+      else {
+        print "Error: '"'"'pattern'"'"' argument missing in " RS $0
+        exit 1 
+      }
+    }
+    if (match($0,/^comment/)) {
+      if (match($0,/xml:lang="[^"]*/) || match($0,/xml:lang='"'"'[^'"'"']*/)) {    
+        lang=substr($0,RSTART+10,RLENGTH-10)
+      }
+      else {
+        lang=""
+      }
+      if (match($0,/>/)) {
+        comment=substr($0,RSTART+1)
+        sub("&lt;", "<", comment)
+        sub("&gt;", ">", comment)
+        sub("&amp;", "\\&", comment)
+        if (lang)
+           print "Comment[" lang "]=" comment
+        else
+           print "Comment=" comment
+      }
+    }
+  }
+}
+END {
+  if (!found) {
+    print "Error: Mimetype '"'"'" the_type "'"'"' not found"
+    exit 1
+  }
+}
+' $x $basefile
+                if [ "$?" = "1" ] ; then
+                    grep -A 10 "^Error:" $kde_dir/$x.desktop >&2
+                    rm $kde_dir/$x.desktop
+                    exit 1  
+                fi
+            done
         fi
 
         umask $save_umask
