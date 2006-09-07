@@ -619,6 +619,18 @@ update_submenu()
         fi
     fi
 
+    if [ -z "$menu_file" ] ; then
+        # Work around for SUSE/gnome 2.12 to pick up new ~/.local/share/applications
+        save_umask=`umask`
+        umask $my_umask
+
+        mkdir -p $xdg_dir
+        touch $xdg_dir/xdg-desktop-menu-dummy.menu
+
+        umask $save_umask
+        return
+    fi
+
     orig_menu_file=$xdg_dir/$menu_file
 
     DEBUG 1 "Updating $orig_menu_file ($action)"
@@ -672,8 +684,8 @@ BEGIN {
         # Install/update
         tmpfile=`mktemp`
         (
-            echo '<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 0.8//EN"'
-            echo '    "http://www.freedesktop.org/standards/menu-spec/menu-0.8.dtd">'
+            echo '<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"'
+            echo '    "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">'
             echo '<!-- Do not edit manually - generated and managed by xdg-desktop-menu -->'
             echo '<Menu>'
             echo '    <Name>Applications</Name>'
@@ -871,6 +883,11 @@ if [ -n "$menu_name" ] ; then
         update_submenu "user-$menu_name.menu"
     else
         update_submenu "$menu_name.menu"
+    fi
+else
+    # Work around for SUSE/gnome 2.12 to pick up new ~/.local/share/applications
+    if [ x"$mode" = x"user" ] ; then
+        update_submenu
     fi
 fi
 
