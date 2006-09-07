@@ -495,6 +495,8 @@ make_default_kde()
     default_file="$HOME/.kde/share/config/profilerc"
     DEBUG 2 "make_default_kde $1 $2"
     DEBUG 1 "Updating $default_file"
+    mkdir -p "$HOME/.kde/share/config"
+    [ -f $default_file ] || touch $default_file
     awk -v application="$1" -v mimetype="$2" '
     BEGIN {
         header_start="[" mimetype " - "
