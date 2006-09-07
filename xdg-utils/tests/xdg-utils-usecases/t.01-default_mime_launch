@@ -15,10 +15,13 @@ use_file "$XDG_TEST_DIR/xdg-utils-usecases/data/mime_launch.xml" MIME_FILE
 edit_file "$MIME_FILE" "x-xdg-testpattern" MIME2ND "x-$XDG_TEST_ID"
 edit_file "$MIME_FILE" xdgtest EXTEN "xdgt-$XDG_TEST_SHORTID"
 
+use_file "$XDG_TEST_DIR/xdg-utils-usecases/data/mime_launch.sh" SHELL_FILE
+
 use_file "$XDG_TEST_DIR/xdg-utils-usecases/data/mime_launch.desktop" DESKTOP_FILE
 edit_file "$DESKTOP_FILE" "x-xdg-testpattern" TMP "$MIME2ND"
 edit_file "$DESKTOP_FILE" '/tmp' TMP "$XDG_TEST_TMPDIR"
 edit_file "$DESKTOP_FILE" 'include' TMP "$XDG_TEST_DIR/include"
+edit_file "$DESKTOP_FILE" 'mime_launch.sh' TMP "$XDG_TEST_TMPDIR/$SHELL_FILE"
 
 TEST_FILE="testfile.$EXTEN"
 echo "Some text to make the textfile not empty" >"$TEST_FILE"
@@ -34,6 +37,11 @@ assert_nostderr
 
 # Install Mime file
 assert_exit 0 xdg-mime install "$MIME_FILE"
+assert_nostdout
+assert_nostderr
+
+# Set default handler
+assert_exit 0 xdg-mime default "$DESKTOP_FILE" "$MIME_TYPE"
 assert_nostdout
 assert_nostderr
 
@@ -58,7 +66,7 @@ assert_nostderr
 echo "file: $XDG_TEST_TMPDIR/$TEST_FILE" >out.expect
 
 # exec.out is created by xdg-open
-assert_file 'exec.out' 'out.expect'
+assert_file "$XDG_TEST_TMPDIR/exec.out" 'out.expect'
 
 #cleanup
 assert_exit 0 xdg-desktop-menu uninstall "$DESKTOP_FILE"
