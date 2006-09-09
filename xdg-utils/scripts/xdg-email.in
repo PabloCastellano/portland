@@ -66,6 +66,26 @@ open_xfce()
     fi
 }
 
+open_generic()
+{
+    IFS=":"
+    for browser in $BROWSER; do
+        if [ x"$browser" != x"" ]; then
+
+            browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
+
+            if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
+            else $browser_with_arg;
+            fi
+
+            if [ $? -eq 0 ]; then exit_success;
+            fi
+        fi
+    done
+
+    exit_failure_operation_impossible "no method available for opening '$1'"
+}
+
 url_encode()
 {
 result=$(echo "$1" | $utf8 | awk '
@@ -217,6 +237,14 @@ mailto=`echo "${mailto}"| sed 's/[?&]$//'`
 
 detectDE
 
+if [ x"$DE" = x"" ]; then
+    # if BROWSER variable is not set, check some well known browsers instead
+    if [ x"$BROWSER" = x"" ]; then
+        BROWSER=firefox:mozilla:netscape
+    fi
+    DE=generic
+fi
+
 case "$DE" in
     kde)
     open_kde "${mailto}"
@@ -228,6 +256,10 @@ case "$DE" in
 
     xfce)
     open_xfce "${mailto}"
+    ;;
+
+    generic)
+    open_generic "${mailto}"
     ;;
 
     *)
