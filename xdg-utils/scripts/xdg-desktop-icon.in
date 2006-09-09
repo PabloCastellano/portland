@@ -99,6 +99,11 @@ esac
 my_umask=077
 desktop_dir="$HOME/Desktop"
 desktop_dir_kde=`kde-config --userpath desktop 2> /dev/null`
+if gconftool-2 -g /apps/nautilus/preferences/desktop_is_home_dir 2> /dev/null | grep true > /dev/null; then
+    desktop_dir_gnome="$HOME"
+    # Don't create $HOME/Desktop if it doesn't exist
+    [ -w $desktop_dir ] || desktop_dir=
+fi
 if [ -n "$desktop_dir_kde" ]; then
     if [ ! -d "$desktop_dir_kde" ]; then
         save_umask=`umask`
@@ -110,9 +115,11 @@ if [ -n "$desktop_dir_kde" ]; then
     if [ x`readlink -f "$desktop_dir"` != x`readlink -f "$desktop_dir_kde"` ]; then
         # If so, don't create $HOME/Desktop if it doesn't exist
         [ -w $desktop_dir ] || desktop_dir=
-        desktop_dir="$desktop_dir $desktop_dir_kde"
+    else
+        desktop_dir_kde=
     fi
 fi
+desktop_dir="$desktop_dir $desktop_dir_kde $desktop_dir_gnome"
 
 basefile=`basename $desktop_file`
 
