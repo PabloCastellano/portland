@@ -411,6 +411,9 @@ kfmclient_fix_exit_code()
 
 update_icon_database()
 {
+   # Don't create a cache if there wan't one already
+   [ -f "$1/icon-theme.cache" ] || return
+
    for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
       DEBUG 3 "Checking $x for gtk-update-icon-cache"
       if [ -x $x/gtk-update-icon-cache ] ; then
