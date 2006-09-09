@@ -25,10 +25,10 @@ test:
 distclean: clean
 	rm -f Makefile
 
-clean:	tests-clean
+clean:
+	rm -rf tmp/xdgt*
 
 tests-userclean:
-	rm -rf tmp/xdgt*
 	find ${HOME} -name 'xdgtestdata*' | xargs rm -rf
 	find ${HOME} -name 'x-xdg*.xml' | xargs rm -f
 	find ${HOME}/.kde/share/mimelnk -name 'x-xdg*.desktop' | xargs rm -f
