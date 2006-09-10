@@ -52,6 +52,10 @@ assert_interactive_notroot "Is the menu '<main>/$MENU_NAME' still present?" n
 assert_interactive_notroot "Is '$ITEM_TEXT' present anywhere in the menu tree?" n
 
 test_result
+
+# Cleanup
+xdg-desktop-menu uninstall --mode user "$DIRECTORY" "$DESKTOP" "$DESKTOP2" > /dev/null 2> /dev/null
+
 } 
 
 run_test test_menu_user_uninstall
