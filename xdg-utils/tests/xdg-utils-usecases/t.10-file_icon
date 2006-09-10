@@ -40,7 +40,7 @@ assert_exit 0 xdg-mime install "$MIME_FILE"
 assert_nostdout
 assert_nostderr
 
-echo "Some text" >"$TEST_DIR/$TEST_FILE"
+cp "$XDG_TEST_DIR/xdg-utils-usecases/data/testfile" "$TEST_DIR/$TEST_FILE"
 
 # open directory with test file
 if [ `whoami` != 'root' ] ; then
