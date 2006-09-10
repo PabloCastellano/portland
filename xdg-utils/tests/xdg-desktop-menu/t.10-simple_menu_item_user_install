@@ -20,7 +20,7 @@ set_no_display
 
 use_file "$XDG_TEST_DIR/xdg-desktop-menu/data/menu_item_category.desktop" DESKTOP
 edit_file "$DESKTOP" 'xdg-test-menu-item-install.tmp' CREATEFILE
-edit_file "$DESKTOP" 'Test Menu Item Install' ITEM_TEXT "TEST $XDG_TEST_SHORTID"
+edit_file "$DESKTOP" 'Test Menu Categories' ITEM_TEXT "TEST $XDG_TEST_SHORTID"
 edit_file "$DESKTOP" '/tmp' WORK_DIR "$XDG_TEST_TMPDIR"
 
 assert_file "$DESKTOP"
