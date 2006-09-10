@@ -87,7 +87,7 @@ else
 	TEST_GROUPS="$@"
 fi
 
-TEST_FILES=`find $TEST_GROUPS -name 't.*' | sort`
+TEST_FILES=`find $TEST_GROUPS -name 't.*[^~]' | sort`
 
 declare -i PASS=0
 declare -i FAILCOUNT=0
