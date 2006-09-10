@@ -28,7 +28,7 @@ assert_nostdout
 assert_nostderr
 
 assert_interactive "Did an email open to '$ADDR'?" y
-assert_interactive "Is there an attachment?\n\tNote that some email clients (eg Evolution) do not show the attachment until after one is added manually. Please add an attachment manually if you don't see one.\n\t" y
+assert_interactive "Is there an attachment?" y
 
 assert_interactive "Please close any email windows opened by the test." C
 
