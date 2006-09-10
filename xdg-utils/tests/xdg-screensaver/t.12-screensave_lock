@@ -30,6 +30,8 @@ assert_exit 0 xdg-screensaver lock
 assert_nostdout
 assert_nostderr
 
+sleep 1
+
 assert_interactive "Did the screensaver activate?" y
 assert_interactive "Were you required to enter your password to de-activate it?" y
 

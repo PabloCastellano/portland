@@ -17,7 +17,6 @@ assert_display
 
 test_procedure
 
-assert_interactive "Do you normally need to enter your password to de-activate the screensaver?" s USEPASSWD
 assert_interactive "I will activate the screensaver 1 second after you press enter. Please press shift after it does."
 
 assert_exit 0 xdg-screensaver status
@@ -31,8 +30,9 @@ assert_exit 0 xdg-screensaver activate
 assert_nostdout
 assert_nostderr
 
+sleep 1
+
 assert_interactive "Did the screensaver activate?" y
-assert_interactive "Were you required to enter your password to de-activate it?" "$USEPASSWD"
 
 assert_exit 0 xdg-screensaver status
 assert_stdout out.stat
