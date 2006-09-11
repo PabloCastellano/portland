@@ -54,7 +54,7 @@ assert_nostderr
 
 # Verify application is as expected
 echo "$DESKTOP_FILE" >out.expected
-assert_exit 0 xdg-mime query default "$MIME_INPUT"
+assert_exit 0 xdg-mime query default "$MIME_TYPE"
 assert_stdout out.expected
 assert_nostderr
 

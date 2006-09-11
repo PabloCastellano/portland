@@ -30,7 +30,7 @@ test_procedure
 
 # install icons of all sizes
 for i in $ICON_SIZES; do
-	assert_exit 0 xdg-icon-resource install --context mimetypes --size "$i" "xdgtestdata-$XDG_TEST_ID-red-$i.png" "xdgtestdata-$MIME_MINOR.png"
+	assert_exit 0 xdg-icon-resource install --context mimetypes --size "$i" "xdgtestdata-$XDG_TEST_ID-red-$i.png" "xdgtestdata-$MIME_MINOR"
 	assert_nostdout
 	assert_nostderr
 done
@@ -54,7 +54,7 @@ fi
 
 # ask user to cycle through sizes & ensure correct icons are displayed.
 assert_interactive "Is a file named '$TEST_FILE' present in the directory?" y
-assert_interactive "Does the icon consist of a red number in the list {$ICON_SIZES}?\n\tThe number should roughly correspond to the icon size.\n\t(You may need to select something like 'View->As Icons')" y
+assert_interactive "Does the icon consist of a red number in the list {$ICON_SIZES}?\n\t(You may need to select something like 'View->As Icons')" y
 # assert_interactive "Does the number change appropriately when you increase or decrease the view size?" y
 
 ## cleanup
@@ -66,7 +66,7 @@ fi
 
 # remove icons
 for i in $ICON_SIZES; do
-	assert_exit 0 xdg-icon-resource uninstall --size "$i" "xdgtestdata-$MIME_MINOR.png"
+	assert_exit 0 xdg-icon-resource uninstall --context mimetypes --size "$i" "xdgtestdata-$MIME_MINOR"
 	assert_nostdout
 	assert_nostderr
 done

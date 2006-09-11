@@ -29,17 +29,21 @@ _USAGE
 
 update_icon_database()
 {
-   # Don't create a cache if there wan't one already
-   [ -f "$1/icon-theme.cache" ] || return
+   # Touch me, I'm dirty
+   touch "$1/.@NAME@-dummy"
+   rm -f "$1/.@NAME@-dummy"
 
-   for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
-      DEBUG 3 "Checking $x for gtk-update-icon-cache"
-      if [ -x $x/gtk-update-icon-cache ] ; then
-         DEBUG 1 "Running $x/gtk-update-icon-cache -f -t \"$1\""
-         eval '$x/gtk-update-icon-cache -f -t "$1"'$xdg_redirect_output
-         return
-      fi
-   done
+   # Don't create a cache if there wan't one already
+   if [ -f "$1/icon-theme.cache" ] ; then
+      for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
+         DEBUG 3 "Checking $x for gtk-update-icon-cache"
+         if [ -x $x/gtk-update-icon-cache ] ; then
+            DEBUG 1 "Running $x/gtk-update-icon-cache -f -t \"$1\""
+            eval '$x/gtk-update-icon-cache -f -t "$1"'$xdg_redirect_output
+            return
+         fi
+      done
+   fi
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
@@ -213,45 +217,53 @@ if [ -z "$icon_file" ] ; then
     fi
 fi
 
-filetype=
 xdg_size_name=
-case $icon_file in
-  *.xpm)
-     filetype=bitmap
-     if [ -z "$size" ] ; then
-         exit_failure_syntax "*.xpm icons must have the icon size specified with --size"
-     fi
-     xdg_size_name="${size}x${size}"
-     ;;
-  *.png)
-     filetype=bitmap
-     if [ -z "$size" ] ; then
-         exit_failure_syntax "*.png icons must have the icon size specified with --size"
-     fi
-     xdg_size_name="${size}x${size}"
-     ;;
-  *.svg)
-     fileype=svg
-     if [ -n "$size" ] ; then
-         echo "@NAME@: Warning, no icon size should be specified for .svg icons"
-     fi
-     xdg_size_name=scalable
-     ;;
-  *)
-     exit_failure_syntax "icon file to $action must be a *.png, *.xpm or *.svg file"
-     ;;
-esac
+extension=
+if [ x"$action" = x"install" ] ; then
+    case $icon_file in
+      *.xpm)
+        if [ -z "$size" ] ; then
+            exit_failure_syntax "*.xpm icons must have the icon size specified with --size"
+        fi
+        xdg_size_name="${size}x${size}"
+        extension="xpm"
+        ;;
+      *.png)
+        if [ -z "$size" ] ; then
+            exit_failure_syntax "*.png icons must have the icon size specified with --size"
+        fi
+        xdg_size_name="${size}x${size}"
+        extension="png"
+        ;;
+      *.svg)
+        if [ -n "$size" ] ; then
+            echo "@NAME@: Warning, no icon size should be specified for .svg icons"
+        fi
+        xdg_size_name="scalable"
+        extension="svg"
+        ;;
+      *)
+        exit_failure_syntax "icon file to install must be a *.png, *.xpm or *.svg file"
+        ;;
+    esac
+else
+    if [ -n "$size" ] ; then
+        xdg_size_name="${size}x${size}"
+    else
+        xdg_size_name="scalable"
+    fi
+fi
 
 if [ -n "$icon_name" ] ; then
     case $icon_name in
-      *.xpm)
-         ;;
       *.png)
+         exit_failure_syntax "icon name should not include an extension"
+         ;;
+      *.xpm)
+         exit_failure_syntax "icon name should not include an extension"
          ;;
       *.svg)
-         ;;
-      *)
-         exit_failure_syntax "icon name must have a .png, .xpm or .svg extension"
+         exit_failure_syntax "icon name should not include an extension"
          ;;
     esac
 fi
@@ -324,14 +336,14 @@ need_gnome_mime=
 [ $context = "mimetypes" ] && need_gnome_mime=true 
 # End GNOME legacy workaround section
 
-[ -n "$icon_name" ] || icon_name=`basename $icon_file`
+[ -n "$icon_name" ] || icon_name=`basename $icon_file | sed 's/\.[a-z][a-z][a-z]$//'`
 
 if [ "$vendor" = "true" -a "$action" = "install" -a "$context" = "apps" ] ; then
-    check_vendor_prefix "$icon_name"
+    check_vendor_prefix "$icon_name" "icon name"
 fi
 
-icon_icon_file=`echo "$icon_file" | sed 's/\.[^\.]*$/.icon/'`
-icon_icon_name=`echo "$icon_name" | sed 's/\.[^\.]*$/.icon/'`
+icon_icon_file=`echo "$icon_file" | sed 's/\.[a-z][a-z][a-z]$/.icon/'`
+icon_icon_name="$icon_name.icon"
 
 DEBUG 1 "$action icon in $xdg_dir"
 [ $action = "install" -a -f $icon_icon_file ] && DEBUG 1 "install $icon_icon_name meta file in $xdg_dir"
@@ -344,29 +356,31 @@ case $action in
         umask $my_umask
 
         mkdir -p $xdg_dir
-        eval 'cp $icon_file $xdg_dir/$icon_name'$xdg_redirect_output
+        eval 'cp $icon_file $xdg_dir/$icon_name.$extension'$xdg_redirect_output
         if [ -f "$icon_icon_file" ] ; then
             eval 'cp $icon_icon_file $xdg_dir/$icon_icon_name'$xdg_redirect_output
         fi
         if [ -n "$kde_dir" ] ; then
             mkdir -p $kde_dir
-            eval 'ln -s $xdg_dir/$icon_name $kde_dir/$icon_name'$xdg_redirect_output
+            eval 'ln -s $xdg_dir/$icon_name.$extension $kde_dir/$icon_name.$extension'$xdg_redirect_output
         fi
         if [ -n "$need_gnome_mime" ] ; then
-            eval 'ln -s $xdg_dir/$icon_name $xdg_dir/gnome-mime-$icon_name'$xdg_redirect_output
+            eval 'ln -s $xdg_dir/$icon_name.$extension $xdg_dir/gnome-mime-$icon_name.$extension'$xdg_redirect_output
         fi
 
         umask $save_umask
         ;;
 
     uninstall)
-        rm -f $xdg_dir/$icon_name
-        rm -f $xdg_dir/$icon_icon_name
+        rm -f "$xdg_dir/$icon_name.xpm" "$xdg_dir/$icon_name.png" "$xdg_dir/$icon_name.svg"
+        rm -f "$xdg_dir/$icon_icon_name"
         if [ -n "$kde_dir" ] ; then
-            rm -f $kde_dir/$icon_name
+            rm -f "$kde_dir/$icon_name.xpm" "$kde_dir/$icon_name.png" "$kde_dir/$icon_name.svg"
         fi
         if [ -n "$need_gnome_mime" ] ; then
-            rm -f $xdg_dir/gnome-mime-$icon_name
+            rm -f "$xdg_dir/gnome-mime-$icon_name.xpm" 
+            rm -f "$xdg_dir/gnome-mime-$icon_name.png" 
+            rm -f "$xdg_dir/gnome-mime-$icon_name.svg" 
         fi
 
         ;;
