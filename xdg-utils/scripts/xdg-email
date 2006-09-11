@@ -274,6 +274,8 @@ check_input_file()
 
 check_vendor_prefix()
 {
+    filename="$2"
+    [ -n "$filename" ] || filename="filename"
     file=`basename "$1"`
     case "$file" in
        [a-zA-Z]*-*)
@@ -281,9 +283,9 @@ check_vendor_prefix()
          ;;
     esac
 
-    echo "xdg-email: filename '$file' does not have a proper vendor prefix" >&2
+    echo "xdg-email: $filename '$file' does not have a proper vendor prefix" >&2
     echo 'A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated' >&2
-    echo 'with a dash ("-"). An example filename is '"'example-$file'" >&2
+    echo 'with a dash ("-"). An example '"$filename"' is '"'example-$file'" >&2
     echo "Use --novendor to override or 'xdg-email --manual' for additional info." >&2
     exit 1
 }
@@ -326,7 +328,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-email 1.0beta3"
+            echo "xdg-email 1.0beta4"
             exit_success
             ;;
         esac

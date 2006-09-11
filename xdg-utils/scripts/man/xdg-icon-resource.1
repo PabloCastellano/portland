@@ -2,7 +2,7 @@
 .\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
 .\" Instead of manually editing it, you probably should edit the DocBook XML
 .\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "XDG\-ICON\-RESOURCE" "1" "08/11/2006" "xdg\-utils 1.0 beta3" ""
+.TH "XDG\-ICON\-RESOURCE" "1" "09/11/2006" "xdg\-utils 1.0 beta4" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -31,7 +31,7 @@ install
 Installs the icon file indicated by
 \fIicon\-file\fR
 to the desktop icon system under the name
-\fIicon\-name\fR. If
+\fIicon\-name\fR. Icon names do not have an extension. If
 \fIicon\-name\fR
 is not provided the name is derived from
 \fIicon\-file\fR. The icon file must have
@@ -46,9 +46,9 @@ file exists in the same location as
 it will be installed as well.
 .TP
 uninstall
-Removes the icon file indicated by
+Removes the icon indicated by
 \fIicon\-name\fR
-from the desktop icon system.
+from the desktop icon system. Note that icon names do not have an extension.
 .TP
 forceupdate
 Force an update of the desktop icon system. This is only useful if the last call to xdg\-icon\-resource included the
@@ -148,11 +148,11 @@ xdg\-icon\-resource install \-\-size 64 shinythings\-myfoobar.png
 To install an icon for a new application/x\-foobar file type one can use:
 .sp
 .nf
-xdg\-icon\-resource install \-\-context mimetypes \-\-size 48 ./mime\-foobar\-48.png application\-x\-foobar.png
-xdg\-icon\-resource install \-\-context mimetypes \-\-size 64 ./mime\-foobar\-64.png application\-x\-foobar.png
+xdg\-icon\-resource install \-\-context mimetypes \-\-size 48 ./mime\-foobar\-48.png application\-x\-foobar
+xdg\-icon\-resource install \-\-context mimetypes \-\-size 64 ./mime\-foobar\-64.png application\-x\-foobar
 .fi
 .sp
-This will install two icons with the name application\-x\-foobar.png but with different sizes.
+This will install two icons with the name application\-x\-foobar but with different sizes.
 .SH "AUTHOR"
 Kevin Krammer, Jeremy White. 
 .br

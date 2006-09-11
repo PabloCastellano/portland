@@ -316,12 +316,12 @@ webmirror-admin and webmirror-menu which should also be installed. In this
 example the icons are installed in two different sizes, once with a size of
 22x22 pixels and once with a size of 64x64 pixels:
 
-xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror.png
-xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu.png
-xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin.png
-xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror.png
-xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu.png
-xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin.png
+xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror
+xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu
+xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin
+xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror
+xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu
+xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin
 
 _MANUALPAGE
 }
@@ -463,6 +463,8 @@ check_input_file()
 
 check_vendor_prefix()
 {
+    filename="$2"
+    [ -n "$filename" ] || filename="filename"
     file=`basename "$1"`
     case "$file" in
        [a-zA-Z]*-*)
@@ -470,9 +472,9 @@ check_vendor_prefix()
          ;;
     esac
 
-    echo "xdg-desktop-menu: filename '$file' does not have a proper vendor prefix" >&2
+    echo "xdg-desktop-menu: $filename '$file' does not have a proper vendor prefix" >&2
     echo 'A vendor prefix consists of alpha characters ([a-zA-Z]) and is terminated' >&2
-    echo 'with a dash ("-"). An example filename is '"'example-$file'" >&2
+    echo 'with a dash ("-"). An example '"$filename"' is '"'example-$file'" >&2
     echo "Use --novendor to override or 'xdg-desktop-menu --manual' for additional info." >&2
     exit 1
 }
@@ -515,7 +517,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-desktop-menu 1.0beta3"
+            echo "xdg-desktop-menu 1.0beta4"
             exit_success
             ;;
         esac

@@ -2,7 +2,7 @@
 .\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
 .\" Instead of manually editing it, you probably should edit the DocBook XML
 .\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "XDG\-DESKTOP\-MENU" "1" "08/11/2006" "xdg\-utils 1.0 beta3" ""
+.TH "XDG\-DESKTOP\-MENU" "1" "09/11/2006" "xdg\-utils 1.0 beta4" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -11,41 +11,47 @@
 xdg\-desktop\-menu \- command line tool for (un)installing desktop menu items
 .SH "SYNOPSIS"
 .HP 17
-\fBxdg\-desktop\-menu\fR install [\fB\-\-noupdate\fR] [\fB\-\-novendor\fR] [\fB\-\-mode\ \fR\fB\fImode\fR\fR] {\fIdesktop\-file\fR \fImenu\-file\fR \fIdirectory\-file\fR}
+\fBxdg\-desktop\-menu\fR install [\fB\-\-noupdate\fR] [\fB\-\-novendor\fR] [\fB\-\-mode\ \fR\fB\fImode\fR\fR] \fIdirectory\-file(s)\fR \fIdesktop\-file(s)\fR
 .HP 17
-\fBxdg\-desktop\-menu\fR uninstall [\fB\-\-noupdate\fR] [\fB\-\-mode\ \fR\fB\fImode\fR\fR] {\fIdesktop\-file\fR \fImenu\-file\fR \fIdirectory\-file\fR}
+\fBxdg\-desktop\-menu\fR uninstall [\fB\-\-noupdate\fR] [\fB\-\-mode\ \fR\fB\fImode\fR\fR] \fIdirectory\-file(s)\fR \fIdesktop\-file(s)\fR
 .HP 17
 \fBxdg\-desktop\-menu\fR forceupdate [\fB\-\-mode\ \fR\fB\fImode\fR\fR]
 .HP 17
 \fBxdg\-desktop\-menu\fR {\fB\-\-help\fR \fB\-\-manual\fR \fB\-\-version\fR}
 .SH "DESCRIPTION"
 .PP
-The xdg\-desktop\-menu program can be used to install new items to the desktop's application menu.
+The xdg\-desktop\-menu program can be used to install new menu entries to the desktop's application menu.
 .PP
 The application menu works according to the XDG Desktop Menu Specification at http://www.freedesktop.org/Standards/menu\-spec
 .SH "COMMANDS"
 .TP
 install
-Install applications or submenus into the desktop menu system.
+Install one or more applications in a submenu of the desktop menu system.
 .sp
-\fIdesktop\-file\fR: Installs the *.desktop file indicated by
-\fIdesktop\-file\fR
-to the menu system. A desktop file represents a single application in the menu. Desktop files are defined by the freedesktop.org Desktop Entry Specification. The most important aspects of *.desktop files are summarized below.
-.sp
-\fImenu\-file\fR: Installs the *.menu file indicated by
-\fImenu\-file\fR
-to the menu system. A menu file describes the location and contents for one or more new submenus. Each submenu must reference a *.directory file.
-.sp
-\fIdirectory\-file\fR: Installs the *.directory file indicated by
+\fIdirectory\-file\fR: The *.directory file indicated by
 \fIdirectory\-file\fR
-to the menu system. A directory file provides the name and icon for a submenu.
+represents a submenu. The directory file provides the name and icon for a submenu. The name of the directory file is used to identify the submenu.
+.sp
+If multiple directory files are provided each file will represent a submenu within the menu that preceeds it, creating a nested menu hierarchy (sub\-sub\-menus). The menu entries themselves will be added to the last submenu.
+.sp
+Directory files follow the syntax defined by the freedesktop.org Desktop Entry Specification.
+.sp
+\fIdesktop\-file\fR: A desktop file represents a single application in the menu. Desktop files are defined by the freedesktop.org Desktop Entry Specification. The most important aspects of *.desktop files are summarized below.
+.sp
+If multiple desktop\-files are specified, multiple entries will be added to the same menu. If entries are installed to a menu that has been created with a previous call to
+\fBxdg\-desktop\-menu\fR
+the entries will be installed in addition to any already existing entries.
 .TP
 uninstall
 Remove applications or submenus from the desktop menu system previously installed with
 \fBxdg\-desktop\-menu install\fR.
+.sp
+A submenu and the associated directory file is only removed when the submenu no longer contains any menu entries.
 .TP
 forceupdate
-Force an update of the menu system. This is only useful if the last call to xdg\-desktop\-menu included the
+Force an update of the menu system.
+.sp
+This command is only useful if the last call to xdg\-desktop\-menu included the
 \fB\-\-noupdate\fR
 option.
 .SH "OPTIONS"
@@ -54,7 +60,7 @@ option.
 Postpone updating the menu system. If multiple updates to the menu system are made in sequence this flag can be used to indicate that additional changes will follow and that it is not necassery to update the menu system right away.
 .TP
 \fB\-\-novendor\fR
-Normally, xdg\-desktop\-menu checks to ensure that any *.desktop, *.directory and *.menu files to be installed has a vendor prefix. This option can be used to disable that check.
+Normally, xdg\-desktop\-menu checks to ensure that any *.directory and *.desktop files to be installed has a vendor prefix. This option can be used to disable that check.
 .sp
 A vendor prefix consists of alpha characters ([a\-zA\-Z]) and is terminated with a dash ("\-"). Companies and organizations are encouraged to use a word or phrase, preferably the organizations name, for which they hold a trademark as their vendor prefix. The purpose of the vendor prefix is to prevent name conflicts.
 .TP
@@ -75,6 +81,38 @@ Show this manualpage.
 .TP
 \fB\-\-version\fR
 Show the xdg\-utils version information.
+.SH "DIRECTORY FILES"
+.PP
+The appearance of submenu in the application menu is provided by a *.directory file. In particular it provides the title of the submenu and a possible icon. A *.directory file consists of a
+\fI[Desktop Entry]\fR
+header followed by several
+\fIKey\fR=\fIValue\fR
+lines.
+.PP
+A *.directory file can provide a title (name) for the submenu in several different languages. This is done by adding a language code as used by LC_MESSAGES in square brackets behind the
+\fIKey\fR. This way one can specify different values for the same
+\fIKey\fR
+depending on the currently selected language.
+.PP
+The following keys are relevqnt for submenus:
+.TP
+Value=1.0
+This is a mandatory field to indicate that the *.directory file follows the 1.0 version of the Desktop Entry specification.
+.TP
+Type=Directory
+This is a mandatory field that indicates that the *.directory file describes a submenu.
+.TP
+Name=\fIMenu Name\fR
+The title of submenu. For example
+\fIMozilla\fR
+.TP
+Comment=\fIComment\fR
+Optional field to specify a tooltip for the submenu.
+.TP
+Icon=\fIIcon File\fR
+The icon to use for the submenu. This can either be an absolute path to an image file or an icon\-name. If an icon\-name is provided an image lookup by name is done in the user's current icon theme. The
+\fBxdg\-icon\-resource\fR
+command can be used to install image files into icon themes. The advantage of using an icon\-name instead of an absolute path is that with an icon\-name the submenu icon can be provided in several different sizes as well as in several differently themed styles.
 .SH "DESKTOP FILES"
 .PP
 An application item in the application menu is represented by a *.desktop file. A *.desktop file consists of a
@@ -116,9 +154,6 @@ command can be used to install image files into icon themes. The advantage of us
 Exec=\fICommand Line\fR
 The command line to start the application. If the application can open files the %f placeholder should be specified. When a file is dropped on the application launcher the %f is replaced with the file path of the dropped file. If multiple files can be specified on the command line the %F placeholder should be used instead of %f. If the application is able to open URLs in addition to local files then %u or %U can be used instead of %f or %F.
 .TP
-Categories=\fICategories\fR
-A list of categories separated by semi\-colons. A category is a keyword that describes and classifies the application. By default applications are organized in the application menu based on category. The XDG Desktop Menu Specification defines a large number of predefined categories.
-.TP
 MimeType=\fIMimetypes\fR
 A list of mimetypes separated by semi\-colons. This field is used to indicate which file types the application is able to open.
 .PP
@@ -154,39 +189,9 @@ No permission to read one of the files passed on the command line.
 \fBxdg\-mime\fR(1)
 .SH "EXAMPLES"
 .PP
-The company ShinyThings Inc. has developed an application named "WebMirror" and would like to add it to the application menu. The company will use "shinythings" as its vendor id. In order to add the application to the menu there needs to be a .desktop file with a suitable
-\fICategories\fR
-entry:
-.sp
-.nf
-shinythings\-webmirror.desktop:
-
-  [Desktop Entry]
-  Encoding=UTF\-8
-  Type=Application
-
-  Exec=webmirror
-  Icon=webmirror
-
-  Name=WebMirror
-  Name[nl]=WebSpiegel
-
-  Categories=Network;WebDevelopment;
-.fi
-.sp
+The company ShinyThings Inc. has developed an application named "WebMirror" and would like to add it to the application menu. The company will use "shinythings" as its vendor id. In this example the company ShinyThings Inc. will add its own submenu to the desktop application menu consisting of a "WebMirror" menu item and a "WebMirror Admin Tool" menu item.
 .PP
-Now the xdg\-desktop\-menu tool can be used to add the shinythings\-webmirror.desktop file to the desktop application menu:
-.sp
-.nf
-xdg\-desktop\-menu install ./shinythings\-webmirror.desktop
-.fi
-.sp
-.PP
-Note that for the purpose of this example the menu items are available in two languages, English and Dutch. The language code for Dutch is nl.
-.PP
-In the next example the company ShinyThings Inc. wants to add its own submenu to the desktop application menu consisting of a "WebMirror" menu item and a "WebMirror Admin Tool" menu item.
-.PP
-First the company needs to create two .desktop files that describe the two menu items, this time no Categories item is needed:
+First the company needs to create two .desktop files that describe the two menu items:
 .sp
 .nf
 shinythings\-webmirror.desktop:
@@ -216,18 +221,6 @@ shinythings\-webmirror\-admin.desktop:
 .fi
 .sp
 .PP
-The files can be installed with:
-.sp
-.nf
-xdg\-desktop\-menu install \-\-noupdate ./shinythings\-webmirror.desktop
-xdg\-desktop\-menu install \-\-noupdate ./shinythings\-webmirror\-admin.desktop
-.fi
-.sp
-.PP
-Because multiple items are added the
-\fB\-\-noupdate\fR
-option has been used.
-.PP
 In addition a .directory file needs to be created to provide a title and icon for the sub\-menu itself:
 .sp
 .nf
@@ -243,59 +236,36 @@ shinythings\-webmirror.directory:
 .fi
 .sp
 .PP
-This webmirror.directory file can be installed with:
+These file can now be installed with:
 .sp
 .nf
-xdg\-desktop\-menu install \-\-noupdate ./shinythings\-webmirror.directory
+xdg\-desktop\-menu install ./shinythings\-webmirror.directory \\
+      ./shinythings\-webmirror.desktop ./shinythings\-webmirror\-admin.desktop
 .fi
 .sp
+.PP
+The menu entries could also be installed one by one:
+.sp
+.nf
+xdg\-desktop\-menu install \-\-noupdate ./shinythings\-webmirror.directory \\
+      ./shinythings\-webmirror.desktop
+xdg\-desktop\-menu install \-\-noupdate ./shinythings\-webmirror.directory \\
+      ./shinythings\-webmirror\-admin.desktop
+xdg\-desktop\-menu forceupdate
+.fi
+.sp
+.PP
+Although the result is the same it is slightly more efficient to install all files at the same time.
 .PP
 The *.desktop and *.directory files reference icons with the names webmirror, webmirror\-admin and webmirror\-menu which should also be installed. In this example the icons are installed in two different sizes, once with a size of 22x22 pixels and once with a size of 64x64 pixels:
 .sp
 .nf
-xdg\-icon\-resource install \-\-size 22 ./wmicon\-22.png shinythings\-webmirror.png
-xdg\-icon\-resource install \-\-size 22 ./wmicon\-menu\-22.png shinythings\-webmirror\-menu.png
-xdg\-icon\-resource install \-\-size 22 ./wmicon\-admin\-22.png shinythings\-webmirror\-admin.png
-xdg\-icon\-resource install \-\-size 64 ./wmicon\-64.png shinythings\-webmirror.png
-xdg\-icon\-resource install \-\-size 64 ./wmicon\-menu\-64.png shinythings\-webmirror\-menu.png
-xdg\-icon\-resource install \-\-size 64 ./wmicon\-admin\-64.png shinythings\-webmirror\-admin.png
-.fi
-.sp
-.PP
-The last step is to provide a .menu file that links it all togther:
-.sp
-.nf
-shinythings\-webmirror.menu:
-
-  <!DOCTYPE Menu PUBLIC "\-//freedesktop//DTD Menu 1.0//EN"
-     "http://www.freedesktop.org/standards/menu\-spec/menu\-1.0.dtd">
-  <Menu>
-    <Name>Applications</Name>
-    <Menu>
-      <Name>WebMirror</Name>
-      <Directory>shinythings\-webmirror.directory</Directory>
-      <Include>
-        <Filename>shinythings\-webmirror.desktop</Filename>
-        <Filename>shinythings\-webmirror\-admin.desktop</Filename>
-      </Include>
-    </Menu>
-  </Menu>
-.fi
-.sp
-.PP
-The shinythings\-webmirror.menu file can be installed with:
-.sp
-.nf
-xdg\-desktop\-menu install \-\-noupdate ./shinythings\-webmirror.menu
-.fi
-.sp
-.PP
-After installing multiple files with
-\fB\-\-noupdate\fR
-make sure to force an update:
-.sp
-.nf
-xdg\-desktop\-menu forceupdate
+xdg\-icon\-resource install \-\-size 22 ./wmicon\-22.png shinythings\-webmirror
+xdg\-icon\-resource install \-\-size 22 ./wmicon\-menu\-22.png shinythings\-webmirror\-menu
+xdg\-icon\-resource install \-\-size 22 ./wmicon\-admin\-22.png shinythings\-webmirror\-admin
+xdg\-icon\-resource install \-\-size 64 ./wmicon\-64.png shinythings\-webmirror
+xdg\-icon\-resource install \-\-size 64 ./wmicon\-menu\-64.png shinythings\-webmirror\-menu
+xdg\-icon\-resource install \-\-size 64 ./wmicon\-admin\-64.png shinythings\-webmirror\-admin
 .fi
 .sp
 .SH "AUTHOR"

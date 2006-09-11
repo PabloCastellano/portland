@@ -1,40 +1,57 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-desktop-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-desktop-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-desktop-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--novendor</code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>] { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>] { <em class="replaceable"><code>desktop-file</code></em>  |   <em class="replaceable"><code>menu-file</code></em>  |   <em class="replaceable"><code>directory-file</code></em> }</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   forceupdate  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
-      The xdg-desktop-menu program can be used to install new items to the
-      desktop's application menu.
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xdg-desktop-menu</title><meta name="generator" content="DocBook XSL Stylesheets V1.69.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" lang="en"><a name="xdg-desktop-menu"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>xdg-desktop-menu &#8212; command line tool for (un)installing desktop menu items</p></div><div class="refsynopsisdiv"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   install  [<code class="option">--noupdate</code>] [<code class="option">--novendor</code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>directory-file(s)</code></em>   <em class="replaceable"><code>desktop-file(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   uninstall  [<code class="option">--noupdate</code>] [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]  <em class="replaceable"><code>directory-file(s)</code></em>   <em class="replaceable"><code>desktop-file(s)</code></em> </p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>   forceupdate  [<code class="option">--mode <em class="replaceable"><code>mode</code></em></code>]</p></div><div class="cmdsynopsis"><p><code class="command">xdg-desktop-menu</code>  { <code class="option">--help</code>  |   <code class="option">--manual</code>  |   <code class="option">--version</code> }</p></div></div><div class="refsect1" lang="en"><a name="description"></a><h2>Description</h2><p>
+      The xdg-desktop-menu program can be used to install new menu entries
+      to the desktop's application menu.
     </p><p>
       The application menu works according to the
       XDG Desktop Menu Specification at
       http://www.freedesktop.org/Standards/menu-spec
     </p></div><div class="refsect1" lang="en"><a name="commands"></a><h2>Commands</h2><div class="variablelist"><dl><dt><span class="term">install</span></dt><dd><p>
-	    Install applications or submenus into the desktop menu system.
+	    Install one or more applications in a submenu of
+	    the desktop menu system.
+	  </p><p><em class="replaceable"><code>directory-file</code></em>:
+	    The *.directory file indicated by
+	    <em class="replaceable"><code>directory-file</code></em> represents a submenu.
+	    The directory file provides the name and icon for a submenu. The
+	    name of the directory file is used to identify the submenu. 
+	  </p><p>
+	    If multiple directory files are provided each file will
+	    represent a submenu within the menu that preceeds it, creating
+	    a nested menu hierarchy (sub-sub-menus).
+	    The menu entries themselves will be added to the last submenu.
+	  </p><p>
+            Directory files follow the syntax defined by the freedesktop.org
+            Desktop Entry Specification.
 	  </p><p><em class="replaceable"><code>desktop-file</code></em>:
-	    Installs the *.desktop file indicated by <em class="replaceable"><code>desktop-file</code></em>
-            to the menu system. A desktop file represents a single application in the menu.
+            A desktop file represents a single application in the menu.
             Desktop files are defined by the freedesktop.org Desktop Entry
             Specification. The most important aspects of *.desktop
             files are summarized below.
-	  </p><p><em class="replaceable"><code>menu-file</code></em>:
-	    Installs the *.menu file indicated by <em class="replaceable"><code>menu-file</code></em>
-            to the menu system. A menu file describes the location and contents for
-            one or more new submenus. Each submenu must reference a *.directory file.
-	  </p><p><em class="replaceable"><code>directory-file</code></em>:
-	    Installs the *.directory file indicated by <em class="replaceable"><code>directory-file</code></em>
-            to the menu system. A directory file provides the name and icon for a submenu.
-	  </p></dd><dt><span class="term">uninstall</span></dt><dd>
+	  </p><p>
+            If multiple desktop-files are specified, multiple entries will
+            be added to the same menu. If entries are installed to a menu
+            that has been created with a previous call to
+            <span><strong class="command">xdg-desktop-menu</strong></span> the entries will be
+            installed in addition to any already existing entries.
+	  </p></dd><dt><span class="term">uninstall</span></dt><dd><p>
 	    Remove applications or submenus from the desktop menu system
             previously installed with <span><strong class="command">xdg-desktop-menu install</strong></span>.
-	  </dd><dt><span class="term">forceupdate</span></dt><dd>
-	    Force an update of the menu system. This is only useful if
-	    the last call to xdg-desktop-menu included the <code class="option">--noupdate</code> option.
-	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--noupdate</code></span></dt><dd>
+	  </p><p>
+	    A submenu and the associated directory file is only removed
+	    when the submenu no longer contains any menu entries.
+	  </p></dd><dt><span class="term">forceupdate</span></dt><dd><p>
+	    Force an update of the menu system.
+	  </p><p>
+	    This command is only useful if the last call to
+	    xdg-desktop-menu included the <code class="option">--noupdate</code> option.
+	  </p></dd></dl></div></div><div class="refsect1" lang="en"><a name="options"></a><h2>Options</h2><div class="variablelist"><dl><dt><span class="term"><code class="option">--noupdate</code></span></dt><dd>
 	    Postpone updating the menu system. If multiple updates to the
             menu system are made in sequence this flag can be used to
             indicate that additional changes will follow and that it is not
             necassery to update the menu system right away.
 	  </dd><dt><span class="term"><code class="option">--novendor</code></span></dt><dd><p>
-	    Normally, xdg-desktop-menu checks to ensure that any *.desktop,
-            *.directory and *.menu files to be installed has
-            a vendor prefix. This option can be used to disable that check.
+	    Normally, xdg-desktop-menu checks to ensure that any *.directory
+	    and *.desktop files to be installed has a vendor prefix.
+	    This option can be used to disable that check.
 	  </p><p>
             A vendor prefix consists of alpha characters ([a-zA-Z]) and is
             terminated with a dash ("-").
@@ -57,7 +74,44 @@
 	    Show this manualpage.
 	  </dd><dt><span class="term"><code class="option">--version</code></span></dt><dd>
             Show the xdg-utils version information.
-          </dd></dl></div></div><div class="refsect1" lang="en"><a name="desktopfiles"></a><h2>Desktop Files</h2><p>
+          </dd></dl></div></div><div class="refsect1" lang="en"><a name="directoryfiles"></a><h2>Directory Files</h2><p>
+      The appearance of submenu in the application menu is
+      provided by a *.directory file. In particular it provides the title
+      of the submenu and a possible icon. A *.directory file consists of a
+      <span class="emphasis"><em>[Desktop Entry]</em></span> header followed by several
+      <em class="replaceable"><code>Key</code></em>=<em class="replaceable"><code>Value</code></em> lines.
+    </p><p>
+      A *.directory file can provide a title (name) for the submenu
+      in several different languages. This is done by adding a language
+      code as used by LC_MESSAGES in square brackets behind the 
+      <em class="replaceable"><code>Key</code></em>. This way one can specify different
+      values for the same <em class="replaceable"><code>Key</code></em> depending on the
+      currently selected language.
+    </p><p>
+      The following keys are relevqnt for submenus:
+    </p><div class="variablelist"><dl><dt><span class="term">Value=1.0</span></dt><dd>
+	    This is a mandatory field to indicate that the *.directory file
+	    follows the 1.0 version of the Desktop Entry specification.
+	  </dd><dt><span class="term">Type=Directory</span></dt><dd>
+	    This is a mandatory field that indicates that the *.directory file
+	    describes a submenu.
+	  </dd><dt><span class="term">Name=<em class="replaceable"><code>Menu Name</code></em></span></dt><dd>
+	    The title of submenu.
+	    For example <span class="emphasis"><em>Mozilla</em></span>
+	  </dd><dt><span class="term">Comment=<em class="replaceable"><code>Comment</code></em></span></dt><dd>
+	    Optional field to specify a tooltip for the submenu. 
+	  </dd><dt><span class="term">Icon=<em class="replaceable"><code>Icon File</code></em></span></dt><dd>
+	    The icon to use for the submenu. This can either be
+	    an absolute path to an image file or an icon-name.
+	    If an icon-name is provided an image lookup by name is done
+	    in the user's current icon theme.
+	    The <span><strong class="command">xdg-icon-resource</strong></span>
+	    command can be used to install image files into icon themes.
+	    The advantage of using an icon-name instead of an absolute
+	    path is that with an icon-name the submenu icon can be
+	    provided in several different sizes as well as in several
+	    differently themed styles.
+	  </dd></dl></div></div><div class="refsect1" lang="en"><a name="desktopfiles"></a><h2>Desktop Files</h2><p>
       An application item in the application menu is represented by a
       *.desktop file. A *.desktop file consists of a
       <span class="emphasis"><em>[Desktop Entry]</em></span> header followed by several
@@ -105,12 +159,6 @@
 	    be used instead of %f. If the application is able to open URLs
 	    in addition to local files then  %u or %U can be used instead
 	    of %f or %F.
-	  </dd><dt><span class="term">Categories=<em class="replaceable"><code>Categories</code></em></span></dt><dd>
-	    A list of categories separated by semi-colons. A category is
-	    a keyword that describes and classifies the application.
-	    By default applications are organized in the application menu
-            based on category. The XDG Desktop Menu Specification defines
-            a large number of predefined categories.
 	  </dd><dt><span class="term">MimeType=<em class="replaceable"><code>Mimetypes</code></em></span></dt><dd>
 	    A list of mimetypes separated by semi-colons. This field is
 	    used to indicate which file types the application is able to
@@ -145,40 +193,13 @@
       The company ShinyThings Inc. has developed an application named
       "WebMirror" and would like to add it to the application menu.
       The company will use "shinythings" as its vendor id.
-      In order to add the application to the menu there needs to be a
-      .desktop file with a suitable <span class="emphasis"><em>Categories</em></span> entry:
-</p><pre class="programlisting">
-shinythings-webmirror.desktop:
-
-  [Desktop Entry]
-  Encoding=UTF-8
-  Type=Application
-
-  Exec=webmirror
-  Icon=webmirror
-
-  Name=WebMirror
-  Name[nl]=WebSpiegel
-
-  Categories=Network;WebDevelopment;
-</pre><p>
-    </p><p>Now the xdg-desktop-menu tool can be used to add the
-    shinythings-webmirror.desktop file to the desktop application menu:
-</p><pre class="programlisting">
-xdg-desktop-menu install ./shinythings-webmirror.desktop
-</pre><p>
-    </p><p>
-      Note that for the purpose of this example the menu items are available
-      in two languages, English and Dutch.
-      The language code for Dutch is nl.
-    </p><p>
-      In the next example the company ShinyThings Inc. wants to add its own
+      In this example the company ShinyThings Inc. will add its own
       submenu to the desktop application menu consisting of a
       "WebMirror" menu item and a
       "WebMirror Admin Tool" menu item.
     </p><p>
       First the company needs to create two .desktop files that describe
-      the two menu items, this time no Categories item is needed:
+      the two menu items:
 </p><pre class="programlisting">
 shinythings-webmirror.desktop:
 
@@ -206,15 +227,6 @@ shinythings-webmirror-admin.desktop:
   Name[nl]=WebSpiegel Administratie Tool
 </pre><p>
     </p><p>
-      The files can be installed with:
-</p><pre class="programlisting">
-xdg-desktop-menu install --noupdate ./shinythings-webmirror.desktop
-xdg-desktop-menu install --noupdate ./shinythings-webmirror-admin.desktop
-</pre><p>
-    </p><p>
-      Because multiple items are added the <code class="option">--noupdate</code>
-      option has been used.
-    </p><p>
       In addition a .directory file needs to be created to provide a title and icon
       for the sub-menu itself:
 </p><pre class="programlisting">
@@ -229,10 +241,23 @@ shinythings-webmirror.directory:
   Name[nl]=WebSpiegel
 </pre><p>
     </p><p>
-      This webmirror.directory file can be installed with:
+      These file can now be installed with:
 </p><pre class="programlisting">
-xdg-desktop-menu install --noupdate ./shinythings-webmirror.directory
+xdg-desktop-menu install ./shinythings-webmirror.directory \
+      ./shinythings-webmirror.desktop ./shinythings-webmirror-admin.desktop
 </pre><p>
+    </p><p>
+      The menu entries could also be installed one by one:
+</p><pre class="programlisting">
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.directory \
+      ./shinythings-webmirror.desktop
+xdg-desktop-menu install --noupdate ./shinythings-webmirror.directory \
+      ./shinythings-webmirror-admin.desktop
+xdg-desktop-menu forceupdate
+</pre><p>
+    </p><p>
+      Although the result is the same it is slightly more efficient to
+      install all files at the same time.
     </p><p>
       The *.desktop and *.directory files reference icons with the names
       webmirror, webmirror-admin and webmirror-menu which should also be
@@ -240,42 +265,11 @@ xdg-desktop-menu install --noupdate ./shinythings-webmirror.directory
       sizes, once with a size of 22x22 pixels and once with a size
       of 64x64 pixels:
 </p><pre class="programlisting">
-xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror.png
-xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu.png
-xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin.png
-xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror.png
-xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu.png
-xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin.png
-</pre><p>
-    </p><p>
-      The last step is to provide a .menu file that links it all
-      togther:
-</p><pre class="programlisting">
-shinythings-webmirror.menu:
-
-  &lt;!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
-     "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd"&gt;
-  &lt;Menu&gt;
-    &lt;Name&gt;Applications&lt;/Name&gt;
-    &lt;Menu&gt;
-      &lt;Name&gt;WebMirror&lt;/Name&gt;
-      &lt;Directory&gt;shinythings-webmirror.directory&lt;/Directory&gt;
-      &lt;Include&gt;
-        &lt;Filename&gt;shinythings-webmirror.desktop&lt;/Filename&gt;
-        &lt;Filename&gt;shinythings-webmirror-admin.desktop&lt;/Filename&gt;
-      &lt;/Include&gt;
-    &lt;/Menu&gt;
-  &lt;/Menu&gt;
-</pre><p>
-    </p><p>
-      The shinythings-webmirror.menu file can be installed with:
-</p><pre class="programlisting">
-xdg-desktop-menu install --noupdate ./shinythings-webmirror.menu
-</pre><p>
-    </p><p>
-      After installing multiple files with <code class="option">--noupdate</code> make sure
-      to force an update:
-</p><pre class="programlisting">
-xdg-desktop-menu forceupdate
+xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror
+xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu
+xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin
+xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror
+xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu
+xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin
 </pre><p>
     </p></div></div></body></html>
