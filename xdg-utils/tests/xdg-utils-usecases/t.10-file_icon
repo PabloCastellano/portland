@@ -42,6 +42,9 @@ assert_nostderr
 
 cp "$XDG_TEST_DIR/xdg-utils-usecases/data/testfile" "$TEST_DIR/$TEST_FILE"
 
+# Wait a little for caches to update
+sleep 1
+
 # open directory with test file
 if [ `whoami` != 'root' ] ; then
 	assert_exit 0 xdg-open "$TEST_DIR"

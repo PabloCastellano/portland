@@ -5,7 +5,7 @@
 
 test_default_mime_launch() {
 
-test_start "$FUNCNAME: verify we can install a mime type & associate it with an applciation"
+test_start "$FUNCNAME: verify we can install a mime type & associate it with an application"
 
 test_init
 require_notroot

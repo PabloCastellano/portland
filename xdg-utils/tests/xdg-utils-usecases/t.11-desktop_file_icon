@@ -32,6 +32,8 @@ for i in $ICON_SIZES; do
 	assert_nostderr
 done
 
+# Wait a little for caches to update
+sleep 1
 
 # open directory with test file
 if [ `whoami` != 'root' ] ; then

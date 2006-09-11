@@ -21,14 +21,15 @@ TEST_DIR="$XDG_TEST_TMPDIR"
 #assert_exit 0 mkdir -p "$TEST_DIR"
 #assert_exit 0 cp "$DESKTOP_FILE" "$TEST_DIR/"
 
-
-
 test_procedure
 
 # install icons of all sizes
 assert_exit 0 xdg-icon-resource install "$ICON_FILE" "$ICON_NAME"
 assert_nostdout
 assert_nostderr
+
+# Wait a little for caches to update
+sleep 1
 
 # open directory with test file
 if [ `whoami` != 'root' ] ; then
