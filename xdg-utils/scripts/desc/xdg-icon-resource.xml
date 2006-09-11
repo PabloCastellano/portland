@@ -101,8 +101,9 @@
 	  <simpara>
 	    Installs the icon file indicated by <replaceable>icon-file</replaceable>
             to the desktop icon system under the name 
-            <replaceable>icon-name</replaceable>. If  
-            <replaceable>icon-name</replaceable> is not provided the name is
+            <replaceable>icon-name</replaceable>. 
+            Icon names do not have an extension.
+            If <replaceable>icon-name</replaceable> is not provided the name is
             derived from <replaceable>icon-file</replaceable>.
             The icon file must have
             <emphasis>.png</emphasis>, <emphasis>.xpm</emphasis> or
@@ -117,8 +118,9 @@
 	<term>uninstall</term>
 	<listitem>
 	  <simpara>
-	    Removes the icon file indicated by <replaceable>icon-name</replaceable>
-            from the desktop icon system.
+	    Removes the icon indicated by <replaceable>icon-name</replaceable>
+            from the desktop icon system. Note that icon names do not have
+            an extension.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -351,9 +353,9 @@ xdg-icon-resource install --size 64 shinythings-myfoobar.png
     <para>
 To install an icon for a new application/x-foobar file type one can use:
 <programlisting>
-xdg-icon-resource install --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar.png
-xdg-icon-resource install --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar.png
-</programlisting>This will install two icons with the name application-x-foobar.png
+xdg-icon-resource install --context mimetypes --size 48 ./mime-foobar-48.png application-x-foobar
+xdg-icon-resource install --context mimetypes --size 64 ./mime-foobar-64.png application-x-foobar
+</programlisting>This will install two icons with the name application-x-foobar
 but with different sizes.
     </para>
   </refsect1>

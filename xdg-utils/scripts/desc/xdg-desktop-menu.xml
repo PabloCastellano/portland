@@ -643,12 +643,12 @@ xdg-desktop-menu forceupdate
       sizes, once with a size of 22x22 pixels and once with a size
       of 64x64 pixels:
 <programlisting>
-xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror.png
-xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu.png
-xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin.png
-xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror.png
-xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu.png
-xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin.png
+xdg-icon-resource install --size 22 ./wmicon-22.png shinythings-webmirror
+xdg-icon-resource install --size 22 ./wmicon-menu-22.png shinythings-webmirror-menu
+xdg-icon-resource install --size 22 ./wmicon-admin-22.png shinythings-webmirror-admin
+xdg-icon-resource install --size 64 ./wmicon-64.png shinythings-webmirror
+xdg-icon-resource install --size 64 ./wmicon-menu-64.png shinythings-webmirror-menu
+xdg-icon-resource install --size 64 ./wmicon-admin-64.png shinythings-webmirror-admin
 </programlisting>
     </para>
   </refsect1>

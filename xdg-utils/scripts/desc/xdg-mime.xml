@@ -355,7 +355,7 @@ shinythings-shiny.xml:
 </programlisting>An icon for this new file type must also be installed, for
 example with:
 <programlisting>
-xdg-icon-resource install --context mimetypes --size 64 text-x-shiny.png
+xdg-icon-resource install --context mimetypes --size 64 shiny-file-icon.png text-x-shiny
 </programlisting>
     </para>
   </refsect1>
