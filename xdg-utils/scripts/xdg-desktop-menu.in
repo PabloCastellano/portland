@@ -99,6 +99,14 @@ update_submenu()
         return
     fi
 
+    if [ $action = "install" -a x"$mode" = x"user" -a -d "/etc/xdg/menus/kde-applications-merged" ] ; then
+        # Work around for Fedora Core 5 + patched KDE
+        kde_xdg_dir=`echo "$xdg_dir" | sed -e 's^/applications-merged^/kde-applications-merged^'`
+        DEBUG 1 "Fedora Workaround: Link '$xdg_dir' to '$kde_xdg_dir'"
+        eval 'ln -s "applications-merged" "$kde_xdg_dir"'$xdg_redirect_output
+    fi        
+        
+
     orig_menu_file=$xdg_dir/$menu_file
 
     DEBUG 1 "Updating $orig_menu_file ($action)"
