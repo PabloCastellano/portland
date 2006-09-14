@@ -105,7 +105,7 @@ sub distribution_version {
     }
     $self->{'pattern'} = $version_match{$self->{'DISTRIB_ID'}};
     return "unknown" if (! $self->{'pattern'});
-    $release = $self->_get_file_info();
+    return "unknown" if (! ($release = $self->_get_file_info()));
     $self->{'DISTRIB_RELEASE'} = $release;
     return $release;
 }
