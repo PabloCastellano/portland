@@ -53,7 +53,7 @@ our %version_match = (
     'suse'                  => 'VERSION = (.*)',
     'fedora'                => 'Fedora Core release (\d+) \(',
     'redflag'               => 'Red Flag (?:Desktop|Linux) (?:release |\()(.*?)(?: \(.+)?\)',
-    'redhat'                => 'Red Hat Linux release (.*) \(',
+    'redhat'                => 'Red Hat (?:Desktop|Linux) release (.*) \(',
     'slackware'             => '^Slackware (.+)$',
     'mandriva'              => 'Mandriva Linux release (\d+.\d+) \(',
     'arch'                  => 'Arch Linux (.*) \(',
