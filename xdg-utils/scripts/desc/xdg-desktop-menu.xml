@@ -88,6 +88,33 @@
 	    Install one or more applications in a submenu of
 	    the desktop menu system.
 	  </simpara>
+	  <simpara><replaceable>desktop-file</replaceable>:
+            A desktop file represents a single menu entry in the menu.
+            Desktop files are defined by the freedesktop.org Desktop Entry
+            Specification. The most important aspects of *.desktop
+            files are summarized below.
+	  </simpara>
+	  <simpara>
+            Menu entries can be added to the menu system in two different
+            ways. They can either be added to a predefined submenu in the
+            menu system based on one or more category keywords, or they can
+            be added to a new submenu. 
+	  </simpara>
+	  <simpara>
+	    To add a menu entry to a predefined submenu the desktop file
+	    that represents the menu entry must have a Categories= entry
+	    that lists one or more keywords. The menu item will be included
+	    in an appropriate submenu based on the included keywords.
+	  </simpara>
+	  <simpara>
+            To add menu items to a new submenu the desktop-files must be
+            preceded by a directory-file that describes the submenu.
+            If multiple desktop-files are specified, all entries will
+            be added to the same menu. If entries are installed to a menu
+            that has been created with a previous call to
+            <command>xdg-desktop-menu</command> the entries will be
+            installed in addition to any already existing entries.
+	  </simpara>
 	  <simpara><replaceable>directory-file</replaceable>:
 	    The *.directory file indicated by
 	    <replaceable>directory-file</replaceable> represents a submenu.
@@ -103,19 +130,6 @@
 	  <simpara>
             Directory files follow the syntax defined by the freedesktop.org
             Desktop Entry Specification.
-	  </simpara>
-	  <simpara><replaceable>desktop-file</replaceable>:
-            A desktop file represents a single application in the menu.
-            Desktop files are defined by the freedesktop.org Desktop Entry
-            Specification. The most important aspects of *.desktop
-            files are summarized below.
-	  </simpara>
-	  <simpara>
-            If multiple desktop-files are specified, multiple entries will
-            be added to the same menu. If entries are installed to a menu
-            that has been created with a previous call to
-            <command>xdg-desktop-menu</command> the entries will be
-            installed in addition to any already existing entries.
 	  </simpara>
 	</listitem>
       </varlistentry>
@@ -228,86 +242,6 @@
 
     </variablelist>
   </refsect1>
-  <refsect1 id="directoryfiles">
-    <title>Directory Files</title>
-    <para>
-      The appearance of submenu in the application menu is
-      provided by a *.directory file. In particular it provides the title
-      of the submenu and a possible icon. A *.directory file consists of a
-      <emphasis>[Desktop Entry]</emphasis> header followed by several
-      <replaceable>Key</replaceable>=<replaceable>Value</replaceable> lines.
-    </para>
-    <para>
-      A *.directory file can provide a title (name) for the submenu
-      in several different languages. This is done by adding a language
-      code as used by LC_MESSAGES in square brackets behind the 
-      <replaceable>Key</replaceable>. This way one can specify different
-      values for the same <replaceable>Key</replaceable> depending on the
-      currently selected language.
-    </para>
-    <para>
-      The following keys are relevqnt for submenus:
-    </para>
-    <variablelist>
-      <varlistentry>
-	<term>Value=1.0</term>
-	<listitem>
-	  <simpara>
-	    This is a mandatory field to indicate that the *.directory file
-	    follows the 1.0 version of the Desktop Entry specification.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term>Type=Directory</term>
-	<listitem>
-	  <simpara>
-	    This is a mandatory field that indicates that the *.directory file
-	    describes a submenu.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term>Name=<replaceable>Menu Name</replaceable></term>
-	<listitem>
-	  <simpara>
-	    The title of submenu.
-	    For example <emphasis>Mozilla</emphasis>
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term>Comment=<replaceable>Comment</replaceable></term>
-	<listitem>
-	  <simpara>
-	    Optional field to specify a tooltip for the submenu. 
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-      <varlistentry>
-	<term>Icon=<replaceable>Icon File</replaceable></term>
-	<listitem>
-	  <simpara>
-	    The icon to use for the submenu. This can either be
-	    an absolute path to an image file or an icon-name.
-	    If an icon-name is provided an image lookup by name is done
-	    in the user's current icon theme.
-	    The <command>xdg-icon-resource</command>
-	    command can be used to install image files into icon themes.
-	    The advantage of using an icon-name instead of an absolute
-	    path is that with an icon-name the submenu icon can be
-	    provided in several different sizes as well as in several
-	    differently themed styles.
-	  </simpara>
-	</listitem>
-      </varlistentry>
-
-    </variablelist>
-  </refsect1>
   <refsect1 id="desktopfiles">
     <title>Desktop Files</title>
     <para>
@@ -411,7 +345,6 @@
 	</listitem>
       </varlistentry>
 
-<!--
       <varlistentry>
 	<term>Categories=<replaceable>Categories</replaceable></term>
 	<listitem>
@@ -419,12 +352,23 @@
 	    A list of categories separated by semi-colons. A category is
 	    a keyword that describes and classifies the application.
 	    By default applications are organized in the application menu
-            based on category. The XDG Desktop Menu Specification defines
-            a large number of predefined categories.
+            based on category. When menu entries are explicitly assigned
+            to a new submenu it is not necassery to list any categories.
+          </simpara>
+          <simpara>
+            When using categories it is recommended to include
+            one of the following categories:
+            AudioVideo, Development, Education, Game, Graphics, Network, 
+            Office, Settings, System, Utility.
+          </simpara>
+          <simpara>
+            See Appendix A of the XDG Desktop Menu Specification
+            for information about additional categories. 
+            http://standards.freedesktop.org/menu-spec/menu-spec-1.0.html
 	  </simpara>
 	</listitem>
       </varlistentry>
--->
+
       <varlistentry>
 	<term>MimeType=<replaceable>Mimetypes</replaceable></term>
 	<listitem>
@@ -441,7 +385,86 @@
       visit http://www.freedesktop.org/wiki/Standards/desktop-entry-spec
     </para>
   </refsect1>
+  <refsect1 id="directoryfiles">
+    <title>Directory Files</title>
+    <para>
+      The appearance of submenu in the application menu is
+      provided by a *.directory file. In particular it provides the title
+      of the submenu and a possible icon. A *.directory file consists of a
+      <emphasis>[Desktop Entry]</emphasis> header followed by several
+      <replaceable>Key</replaceable>=<replaceable>Value</replaceable> lines.
+    </para>
+    <para>
+      A *.directory file can provide a title (name) for the submenu
+      in several different languages. This is done by adding a language
+      code as used by LC_MESSAGES in square brackets behind the 
+      <replaceable>Key</replaceable>. This way one can specify different
+      values for the same <replaceable>Key</replaceable> depending on the
+      currently selected language.
+    </para>
+    <para>
+      The following keys are relevqnt for submenus:
+    </para>
+    <variablelist>
+      <varlistentry>
+	<term>Value=1.0</term>
+	<listitem>
+	  <simpara>
+	    This is a mandatory field to indicate that the *.directory file
+	    follows the 1.0 version of the Desktop Entry specification.
+	  </simpara>
+	</listitem>
+      </varlistentry>
 
+      <varlistentry>
+	<term>Type=Directory</term>
+	<listitem>
+	  <simpara>
+	    This is a mandatory field that indicates that the *.directory file
+	    describes a submenu.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Name=<replaceable>Menu Name</replaceable></term>
+	<listitem>
+	  <simpara>
+	    The title of submenu.
+	    For example <emphasis>Mozilla</emphasis>
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Comment=<replaceable>Comment</replaceable></term>
+	<listitem>
+	  <simpara>
+	    Optional field to specify a tooltip for the submenu. 
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+      <varlistentry>
+	<term>Icon=<replaceable>Icon File</replaceable></term>
+	<listitem>
+	  <simpara>
+	    The icon to use for the submenu. This can either be
+	    an absolute path to an image file or an icon-name.
+	    If an icon-name is provided an image lookup by name is done
+	    in the user's current icon theme.
+	    The <command>xdg-icon-resource</command>
+	    command can be used to install image files into icon themes.
+	    The advantage of using an icon-name instead of an absolute
+	    path is that with an icon-name the submenu icon can be
+	    provided in several different sizes as well as in several
+	    differently themed styles.
+	  </simpara>
+	</listitem>
+      </varlistentry>
+
+    </variablelist>
+  </refsect1>
   <refsect1 id="env_vars">
     <title>Environment Variables</title>
     <para>
@@ -526,7 +549,7 @@
   </refsect1>
   <refsect1 id="examples">
     <title>Examples</title>
-<!--
+
     <para>
       The company ShinyThings Inc. has developed an application named
       "WebMirror" and would like to add it to the application menu.
@@ -560,19 +583,15 @@ xdg-desktop-menu install ./shinythings-webmirror.desktop
       in two languages, English and Dutch.
       The language code for Dutch is nl.
     </para>
--->
     <para>
-      The company ShinyThings Inc. has developed an application named
-      "WebMirror" and would like to add it to the application menu.
-      The company will use "shinythings" as its vendor id.
-      In this example the company ShinyThings Inc. will add its own
+      In the next example the company ShinyThings Inc. will add its own
       submenu to the desktop application menu consisting of a
-      "WebMirror" menu item and a
-      "WebMirror Admin Tool" menu item.
+      "WebMirror" menu item and a "WebMirror Admin Tool" menu item.
     </para>
     <para>
       First the company needs to create two .desktop files that describe
-      the two menu items:
+      the two menu items. Since the items are to be added to a new submenu
+      it is not necassery to include a Categories= line:
 <programlisting>
 shinythings-webmirror.desktop:
 
