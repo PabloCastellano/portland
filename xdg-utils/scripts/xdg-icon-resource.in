@@ -356,16 +356,16 @@ case $action in
         umask $my_umask
 
         mkdir -p $xdg_dir
-        eval 'cp $icon_file $xdg_dir/$icon_name.$extension'$xdg_redirect_output
+        eval 'cp "$icon_file" "$xdg_dir/$icon_name.$extension"'$xdg_redirect_output
         if [ -f "$icon_icon_file" ] ; then
-            eval 'cp $icon_icon_file $xdg_dir/$icon_icon_name'$xdg_redirect_output
+            eval 'cp "$icon_icon_file" "$xdg_dir/$icon_icon_name"'$xdg_redirect_output
         fi
         if [ -n "$kde_dir" ] ; then
             mkdir -p $kde_dir
-            eval 'ln -s $xdg_dir/$icon_name.$extension $kde_dir/$icon_name.$extension'$xdg_redirect_output
+            eval 'ln -s "$xdg_dir/$icon_name.$extension" "$kde_dir/$icon_name.$extension"'$xdg_redirect_output
         fi
         if [ -n "$need_gnome_mime" ] ; then
-            eval 'ln -s $xdg_dir/$icon_name.$extension $xdg_dir/gnome-mime-$icon_name.$extension'$xdg_redirect_output
+            eval 'ln -s "$icon_name.$extension" "$xdg_dir/gnome-mime-$icon_name.$extension"'$xdg_redirect_output
         fi
 
         umask $save_umask
