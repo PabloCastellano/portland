@@ -7,7 +7,7 @@
 ## Test function
 FILE=testfile.html
 test_open_abs_path_html() {
-test_start "$FUNCNAME: open absalute path of the form '$PRE/path/file.html'"
+test_start "$FUNCNAME: open absolute path of the form '$PRE/path/file.html'"
 
 test_init
 
