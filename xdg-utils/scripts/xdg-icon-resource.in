@@ -27,6 +27,24 @@ _USAGE
 
 #@xdg-utils-common@
 
+# Set GTK_UPDATE_ICON_CACHE to gtk-update-icon-cache executable path or
+# to "-" if not found.
+GTK_UPDATE_ICON_CACHE=
+find_gtk_update_icon_cache()
+{
+    [ -n "$GTK_UPDATE_ICON_CACHE" ] && return;
+ 
+    GTK_UPDATE_ICON_CACHE="-"   
+    for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
+        DEBUG 3 "Checking $x for gtk-update-icon-cache"
+        if [ -x "$x/gtk-update-icon-cache" ] ; then
+            DEBUG 1 "Found $x/gtk-update-icon-cache"
+            GTK_UPDATE_ICON_CACHE="$x/gtk-update-icon-cache"
+            return
+        fi
+    done
+}
+
 update_icon_database()
 {
    # Touch me, I'm dirty
@@ -35,14 +53,12 @@ update_icon_database()
 
    # Don't create a cache if there wan't one already
    if [ -f "$1/icon-theme.cache" ] ; then
-      for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
-         DEBUG 3 "Checking $x for gtk-update-icon-cache"
-         if [ -x $x/gtk-update-icon-cache ] ; then
-            DEBUG 1 "Running $x/gtk-update-icon-cache -f -t \"$1\""
-            eval '$x/gtk-update-icon-cache -f -t "$1"'$xdg_redirect_output
-            return
-         fi
-      done
+      find_gtk_update_icon_cache
+      if [ "$GTK_UPDATE_ICON_CACHE" != "-" ] ; then 
+         DEBUG 1 "Running $GTK_UPDATE_ICON_CACHE -f -t \"$1\""
+         eval '$GTK_UPDATE_ICON_CACHE -f -t "$1"'$xdg_redirect_output
+         return
+      fi
    fi
 }
 
@@ -268,6 +284,17 @@ if [ -n "$icon_name" ] ; then
     esac
 fi
 
+# Start GNOME legacy workaround section
+function need_dot_icon_path()
+{
+  # GTK < 2.6 uses ~/.icons but not XDG_DATA_HOME/icons
+  # The availability of gtk-update-icon-cache is used as indication
+  # of whether the system is using GTK 2.6 or later
+  find_gtk_update_icon_cache
+  [ "$GTK_UPDATE_ICON_CACHE" != "-" ] && return 1; 
+  return 0;
+}
+
 # Start KDE legacy workaround section
 function need_kde_icon_path()
 {
@@ -308,6 +335,7 @@ function need_kde_icon_path()
 }
 
 kde_dir=
+dot_icon_dir=
 if [ x"$mode" = x"user" ] ; then
     xdg_dir="$xdg_base_dir/$xdg_size_name/$context"
     #KDE 3.x doesn't support XDG_DATA_HOME for icons
@@ -316,6 +344,15 @@ if [ x"$mode" = x"user" ] ; then
     if need_kde_icon_path "$xdg_user_prefix" ; then
         kde_user_dir="$HOME/.kde/share/icons/$theme"
         kde_dir="$kde_user_dir/$xdg_size_name/$context"
+    fi
+    #Gnome 2.8 supports ~/.icons but not XDG_DATA_HOME
+    if need_dot_icon_path ; then
+        dot_icon_dir="$HOME/.icons"
+        if [ ! -d "$dot_icon_dir" ] ; then
+            # Symlink if it doesn't exist
+            eval 'ln -s ".local/share/icons" "$dot_icon_dir"'$xdg_redirect_output
+            dot_icon_dir=
+        fi
     fi
     my_umask=077
 else
@@ -348,39 +385,44 @@ icon_icon_name="$icon_name.icon"
 DEBUG 1 "$action icon in $xdg_dir"
 [ $action = "install" -a -f $icon_icon_file ] && DEBUG 1 "install $icon_icon_name meta file in $xdg_dir"
 [ -n "$kde_dir" ] && DEBUG 1 "$action symlink in $kde_dir (KDE 3.x support)"
-[ -n "$need_gnome_mime" ] && DEBUG 1 "$action gnome-mime-$icon_name symlink  (GNOME 2.x support)"
+[ -n "$need_gnome_mime" ] && DEBUG 1 "$action gnome-mime-$icon_name symlink (GNOME 2.x support)"
+[  $action = "install" -a -n "$dot_icon_dir" ] && DEBUG 1 "$action ~/.icons symlink (GNOME 2.8 support)"
 
 case $action in
     install)
         save_umask=`umask`
         umask $my_umask
 
-        mkdir -p $xdg_dir
-        eval 'cp "$icon_file" "$xdg_dir/$icon_name.$extension"'$xdg_redirect_output
-        if [ -f "$icon_icon_file" ] ; then
-            eval 'cp "$icon_icon_file" "$xdg_dir/$icon_icon_name"'$xdg_redirect_output
-        fi
+        for icon_dir in $xdg_dir $dot_icon_dir; do
+            mkdir -p $icon_dir
+            eval 'cp "$icon_file" "$icon_dir/$icon_name.$extension"'$xdg_redirect_output
+            if [ -f "$icon_icon_file" ] ; then
+                eval 'cp "$icon_icon_file" "$icon_dir/$icon_icon_name"'$xdg_redirect_output
+            fi
+            if [ -n "$need_gnome_mime" ] ; then
+                eval 'ln -s "$icon_name.$extension" "$icon_dir/gnome-mime-$icon_name.$extension"'$xdg_redirect_output
+            fi
+        done
         if [ -n "$kde_dir" ] ; then
             mkdir -p $kde_dir
             eval 'ln -s "$xdg_dir/$icon_name.$extension" "$kde_dir/$icon_name.$extension"'$xdg_redirect_output
-        fi
-        if [ -n "$need_gnome_mime" ] ; then
-            eval 'ln -s "$icon_name.$extension" "$xdg_dir/gnome-mime-$icon_name.$extension"'$xdg_redirect_output
         fi
 
         umask $save_umask
         ;;
 
     uninstall)
-        rm -f "$xdg_dir/$icon_name.xpm" "$xdg_dir/$icon_name.png" "$xdg_dir/$icon_name.svg"
-        rm -f "$xdg_dir/$icon_icon_name"
+        for icon_dir in $xdg_dir $dot_icon_dir; do
+            rm -f "$icon_dir/$icon_name.xpm" "$icon_dir/$icon_name.png" "$icon_dir/$icon_name.svg"
+            rm -f "$icon_dir/$icon_icon_name"
+            if [ -n "$need_gnome_mime" ] ; then
+                rm -f "$icon_dir/gnome-mime-$icon_name.xpm" 
+                rm -f "$icon_dir/gnome-mime-$icon_name.png" 
+                rm -f "$icon_dir/gnome-mime-$icon_name.svg" 
+            fi
+        done
         if [ -n "$kde_dir" ] ; then
             rm -f "$kde_dir/$icon_name.xpm" "$kde_dir/$icon_name.png" "$kde_dir/$icon_name.svg"
-        fi
-        if [ -n "$need_gnome_mime" ] ; then
-            rm -f "$xdg_dir/gnome-mime-$icon_name.xpm" 
-            rm -f "$xdg_dir/gnome-mime-$icon_name.png" 
-            rm -f "$xdg_dir/gnome-mime-$icon_name.svg" 
         fi
 
         ;;
