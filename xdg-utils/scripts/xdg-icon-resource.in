@@ -445,6 +445,11 @@ esac
 
 if [ x"$update" = x"yes" ] ; then
     update_icon_database "$xdg_base_dir"
+    if [ -n "$dot_icon_dir" ] ; then
+        if [ -d "$dot_icon_dir/" -a ! -L "$dot_icon_dir" ] ; then
+            update_icon_database $dot_base_dir
+        fi
+    fi
 fi
 
 exit_success
