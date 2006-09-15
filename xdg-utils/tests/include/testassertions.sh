@@ -56,7 +56,7 @@ assert_interactive() {
 	expect=$2
 # It seems valuable to see what happens even if the test has failed. 
 # (eg fail on stdout.)
-	if [ "$TEST_STATUS" = 'FAIL' -a -z "$XDG_UTILS_DEBUG_LEVEL" -a "$expect" != C ] ; then
+	if [ "$TEST_STATUS" = 'FAIL' -a "$expect" != C ] ; then
 		## Don't waste user's time if test has already failed.
 		test_infoline "Test has already failed. Not bothering to ask '$query'" 
 		return
@@ -162,9 +162,10 @@ assert_nostdout() {
 assert_nostderr() {
 # assert nothing was written to stderr.
 # NOTE: Failing this assertion will WARN rather than FAIL
-    if [ ! -z "$XDG_UTILS_DEBUG_LEVEL" ] ; then
-	test_infoline "not checking STDERR from '$LASTCOMMAND' because XDG_UTILS_DEBUG_LEVEL=$XDG_UTILS_DEBUG_LEVEL"
-	test_infoline out.stderr stderr:
+    if [ -n "$XDG_UTILS_DEBUG_LEVEL" ] ; then
+        if [ -s out.stderr ] ; then
+	    infofile out.stderr debug:
+	fi
     elif [ -s out.stderr ] ; then
 	test_infoline "Unexpected output from '$LASTCOMMAND' written to stderr, as shown below:"
 	infofile out.stderr stderr:

@@ -128,7 +128,7 @@ if [ -z "$XDG_TEST_SELF_LAUNCH"  ] ; then  # not self launched
 		# Note if sudo is not found, $SUCMD will be blank, so run su directly.
 		# We cannot assume su works since systems like Ubuntu require sudo
 		# Yet, systems like Debian do not ship with sudo by default.
-		$SUCMD su - -c "cd $PWD && $0 -f $$ -d '$XDG_TEST_DIR' -p '$PATH' $MYARGS"
+		$SUCMD su - -c "cd $PWD && XDG_UTILS_DEBUG_LEVEL=$XDG_UTILS_DEBUG_LEVEL $0 -f $$ -d '$XDG_TEST_DIR' -p '$PATH' $MYARGS"
 	fi
 
 	TEST_STATUS_FILE="$XDG_TEST_DIR/tmp/xdgtest_status-$$"
