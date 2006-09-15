@@ -3,7 +3,7 @@
 . "$XDG_TEST_DIR/include/testassertions.sh"
 . "$XDG_TEST_DIR/include/testcontrol.sh"
 
-test_desktop_file_icon() {
+test_desktop_file_svg_icon() {
 
 test_start "$FUNCNAME: ensure that associations with filetypes is correct."
 
@@ -15,6 +15,7 @@ test_init
 for i in $ICON_SIZES; do
 	use_file "$XDG_TEST_DIR/icons/red-$i.png" TMP
 done
+use_file "$XDG_TEST_DIR/icons/red-SVG.svg" TMP
 
 # get & edit desktop file
 use_file "$XDG_TEST_DIR/xdg-utils-usecases/data/icon_test.desktop" DESKTOP_FILE
@@ -31,6 +32,7 @@ for i in $ICON_SIZES; do
 	assert_nostdout
 	assert_nostderr
 done
+assert_exit 0 xdg-icon-resource install "xdgtestdata-$XDG_TEST_ID-red-SVG.svg" "$ICON_NAME"
 
 # Wait a little for caches to update
 sleep 1
@@ -47,7 +49,7 @@ fi
 
 # ask user to cycle through sizes & ensure correct icons are displayed.
 assert_interactive "Is a file named either 'Icon Test' or 'IconTest.desktop' present in the directory?" y
-assert_interactive "Does the icon consist of a red number?\n\t(You may need to select something like 'View->As Icons')" y
+assert_interactive "Does the icon consist of either a red number or the red text SVG?\n\t(You may need to select something like 'View->As Icons')" y
 # assert_interactive "Does the number change appropriately when you increase or decrease the view size?" y
 
 ## cleanup
@@ -61,8 +63,9 @@ fi
 for i in $ICON_SIZES; do
 	xdg-icon-resource uninstall --size "$i" "$ICON_NAME" > /dev/null 2> /dev/null
 done
+xdg-icon-resource uninstall "$ICON_NAME" > /dev/null 2> /dev/null
 
 test_result
 }
 
-run_test test_desktop_file_icon
+run_test test_desktop_file_svg_icon
