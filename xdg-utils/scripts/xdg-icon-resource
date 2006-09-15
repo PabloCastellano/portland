@@ -204,7 +204,8 @@ _USAGE
 
 DEBUG()
 {
-  [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt $1 ] && return 0;
+  [ -z "${XDG_UTILS_DEBUG_LEVEL}" ] && return 0;
+  [ ${XDG_UTILS_DEBUG_LEVEL} -lt $1 ] && return 0;
   shift
   echo "$@" >&2
 }
@@ -375,6 +376,8 @@ check_common_commands()
 }
 
 check_common_commands "$@"
+
+[ -z "${XDG_UTILS_DEBUG_LEVEL}" ] && unset XDG_UTILS_DEBUG_LEVEL;
 if [ ${XDG_UTILS_DEBUG_LEVEL-0} -lt 1 ]; then
     # Be silent
     xdg_redirect_output=" > /dev/null 2> /dev/null"
