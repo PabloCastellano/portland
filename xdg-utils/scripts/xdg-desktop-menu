@@ -691,11 +691,21 @@ update_submenu()
         return
     fi
 
+    if [ $action = "install" -a -d "/etc/xdg/menus/gnome-applications.menu" ] ; then
+        # Work around for Debian Gnome
+        gnome_xdg_dir=`echo "$xdg_dir" | sed -e 's^/applications-merged^/gnome-applications-merged^'`
+        if [ ! -e "$gnome_xdg_dir" ] ; then
+            DEBUG 1 "Debian Workaround: Link '$xdg_dir' to '$gnome_xdg_dir'"
+            eval 'ln -s "applications-merged" "$gnome_xdg_dir"'$xdg_redirect_output
+        fi
+    fi        
     if [ $action = "install" -a x"$mode" = x"user" -a -d "/etc/xdg/menus/kde-applications-merged" ] ; then
         # Work around for Fedora Core 5 + patched KDE
         kde_xdg_dir=`echo "$xdg_dir" | sed -e 's^/applications-merged^/kde-applications-merged^'`
-        DEBUG 1 "Fedora Workaround: Link '$xdg_dir' to '$kde_xdg_dir'"
-        eval 'ln -s "applications-merged" "$kde_xdg_dir"'$xdg_redirect_output
+        if [ ! -e "$kde_xdg_dir" ] ; then
+            DEBUG 1 "Fedora Workaround: Link '$xdg_dir' to '$kde_xdg_dir'"
+            eval 'ln -s "applications-merged" "$kde_xdg_dir"'$xdg_redirect_output
+        fi
     fi        
         
 
