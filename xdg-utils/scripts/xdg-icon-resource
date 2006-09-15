@@ -733,10 +733,12 @@ if [ x"$mode" = x"user" ] ; then
     #Gnome 2.8 supports ~/.icons but not XDG_DATA_HOME
     if need_dot_icon_path ; then
         dot_icon_dir="$HOME/.icons"
-        if [ ! -d "$dot_icon_dir" ] ; then
+        if [ ! -d "$dot_icon_dir/" ] ; then
             # Symlink if it doesn't exist
             eval 'ln -s ".local/share/icons" "$dot_icon_dir"'$xdg_redirect_output
             dot_icon_dir=
+        else
+            dot_icon_dir="$dot_icon_dir/$theme/$xdg_size_name/$context"
         fi
     fi
     my_umask=077
