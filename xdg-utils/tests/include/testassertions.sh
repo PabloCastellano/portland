@@ -155,7 +155,9 @@ assert_nostdout() {
     then
 	test_infoline "Unexpected output from '$LASTCOMMAND' written to stdout, as shown below:"
 	infofile out.stdout stdout:
-	test_status WARN
+	if [ "$TEST_STATUS" = "PASS" ]; then
+		test_status WARN
+	fi
     fi
 }
 
@@ -169,7 +171,9 @@ assert_nostderr() {
     elif [ -s out.stderr ] ; then
 	test_infoline "Unexpected output from '$LASTCOMMAND' written to stderr, as shown below:"
 	infofile out.stderr stderr:
-	test_status WARN
+	if [ "$TEST_STATUS" = "PASS" ]; then
+		test_status WARN
+	fi
     fi
 }
 
