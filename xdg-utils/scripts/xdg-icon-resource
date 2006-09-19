@@ -533,6 +533,11 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "size argument missing for --size"
         fi
+        case "$1" in
+          *[^0-9]*)
+            exit_failure_syntax "size argument must be numeric"
+            ;;
+        esac
         size="$1"
         shift
         ;;
