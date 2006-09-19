@@ -85,7 +85,7 @@ assert_interactive() {
 			fi
 			eval "$3=$result"
 		elif [ "$result" != "$expect" ] ; then
-			test_fail "User indicated '$result' instead of '$expect' in respnonse to '$query'"
+			test_fail "User indicated '$result' instead of '$expect' in response to '$query'"
 		fi
 	else
 		echo -ne "\n\t$query [enter to continue] " >&2
