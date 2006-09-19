@@ -36,4 +36,5 @@ assert_file_not_in_path "$ICONFILE" "$systempath"
 test_result
 } 
 
-repeat_test test_icon_system_uninstall 2 ICON SIZE 'red-16.png' 'red-22.png' 'red-24.png' 'red-32.png' 'red-48.png' 'red-64.png' 'red-128.png' 16 22 24 32 48 64 128
+repeat_test test_icon_system_uninstall 2 ICON SIZE 'red-16.png' 'red-22.png' 'red-24.png' 'red-32.png' 16 22 24 32
+repeat_test test_icon_system_uninstall 2 ICON SIZE 'red-48.png' 'red-64.png' 'red-128.png' 48 64 128
