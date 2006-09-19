@@ -41,8 +41,8 @@
       <arg><option>--novendor</option></arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
-      <arg><option>--size <replaceable>size</replaceable></option></arg>
       <arg><option>--mode <replaceable>mode</replaceable></option></arg>
+      <arg choice="plain"><option>--size <replaceable>size</replaceable></option></arg>
       <arg choice="plain"><replaceable>icon-file</replaceable></arg>
       <arg><replaceable>icon-name</replaceable></arg>
     </cmdsynopsis>
@@ -52,8 +52,8 @@
       <arg><option>--noupdate</option></arg>
       <arg><option>--theme <replaceable>theme</replaceable></option></arg>
       <arg><option>--context <replaceable>context</replaceable></option></arg>
-      <arg><option>--size <replaceable>size</replaceable></option></arg>
       <arg><option>--mode <replaceable>mode</replaceable></option></arg>
+      <arg choice="plain"><option>--size <replaceable>size</replaceable></option></arg>
       <arg choice="plain"><replaceable>icon-name</replaceable></arg>
     </cmdsynopsis>
     <cmdsynopsis>
@@ -106,9 +106,9 @@
             If <replaceable>icon-name</replaceable> is not provided the name is
             derived from <replaceable>icon-file</replaceable>.
             The icon file must have
-            <emphasis>.png</emphasis>, <emphasis>.xpm</emphasis> or
-            <emphasis>.svg</emphasis> as extension. If a corresponding
-            <emphasis>.icon</emphasis> file exists in the same location as <replaceable>icon-file</replaceable>
+            <emphasis>.png</emphasis> or <emphasis>.xpm</emphasis>
+            as extension. If a corresponding <emphasis>.icon</emphasis>
+            file exists in the same location as <replaceable>icon-file</replaceable>
             it will be installed as well.
 	  </simpara>
 	</listitem>
@@ -203,8 +203,7 @@
 	<term><option>--size</option> <replaceable>size</replaceable></term>
 	<listitem>
 	  <simpara>
-	    Specifies the size of the icon (required for png and xpm icons).
-	    All icons must be square.
+	    Specifies the size of the icon. All icons must be square.
 	    Common sizes for icons in the apps context are:
 	    16, 22, 32, 48, 64 and 128.  
 	    Common sizes for icons in the mimetypes context are:
