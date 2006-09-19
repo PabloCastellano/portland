@@ -25,7 +25,7 @@ assert_exit 2 xdg-email --attach "$TARG" "$ADDR"
 assert_nostdout
 assert_stderr
 
-assert_interactive "Did a new email open?" n
+assert_interactive "Did an email open to '$ADDR'?" n
 assert_interactive "Please close any email windows opened by the test." C
 
 test_result
