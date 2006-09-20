@@ -583,6 +583,15 @@ mailto=`echo "${mailto}"| sed 's/[?&]$//'`
 # Shouldn't happen
 [ x"${mailto}" != x"" ] || exit_failure_syntax
 
+if which xdg-email-hook.sh > /dev/null 2> /dev/null; then
+    xdg-email-hook.sh "${mailto}"
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+fi
+
 detectDE
 
 if [ x"$DE" = x"" ]; then
