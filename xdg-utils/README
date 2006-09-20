@@ -93,7 +93,7 @@ in $INSTALL_DIR/xdg-utils.
     Then a simple post install script could look like this:
 
         export PATH=$PATH:$INSTALL_DIR/xdg-utils
-        xdg-menu --create $INSTALL_DIR/icon.desktop
+        xdg-desktop-menu install $INSTALL_DIR/mycompany-myapp.desktop
 
     And now your product has a menu on any XDG compliant desktop!
 
