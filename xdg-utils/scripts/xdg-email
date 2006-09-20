@@ -122,9 +122,10 @@ failure. The following failure codes can be returned:
 5
     No permission to read one of the files passed on the command line.
 
-See Also
+Configuration
 
-http://portland.freedesktop.org/EmailConfig
+Visit http://portland.freedesktop.org/EmailConfig for information how to
+configure xdg-email to use the email client of your choice.
 
 Examples
 
@@ -329,7 +330,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-email 1.0beta4"
+            echo "xdg-email 1.0"
             exit_success
             ;;
         esac

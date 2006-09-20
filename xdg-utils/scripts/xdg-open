@@ -277,7 +277,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-open 1.0beta4"
+            echo "xdg-open 1.0"
             exit_success
             ;;
         esac

@@ -367,7 +367,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-icon-resource 1.0beta4"
+            echo "xdg-icon-resource 1.0"
             exit_success
             ;;
         esac
