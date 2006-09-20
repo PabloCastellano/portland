@@ -9,7 +9,7 @@
 test_notexist_file_uninstall() {
 ## Begin the test.
 FILE="pain_file_uninstall.txt"
-test_start "$FUNCNAME: verify uninstalling $FILE does not cause an error if it is not installed."
+test_start "$FUNCNAME: verify uninstalling file does not cause an error if it is not installed."
 
 # Dependencies section
 test_init

@@ -13,7 +13,7 @@ test_start "$FUNCNAME: verify $FILE is uninstalled correctly from the desktop"
 test_init
 
 INSFILE="xdgtestdata-$XDG_TEST_SHORTID.txt"
-DESKTOP=`find $HOME -type d -a -name Desktop`
+DESKTOP="$HOME/Desktop"
 
 set_no_display
 echo "Some more boring text" > "$INSFILE"

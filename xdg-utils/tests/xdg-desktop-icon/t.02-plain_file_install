@@ -8,7 +8,7 @@
 ## Test function
 test_plain_file_install() {
 ## Begin the test.
-test_start "$FUNCNAME: verify $FILE is installed correctly on the desktop"
+test_start "$FUNCNAME: verify text file is installed correctly on the desktop"
 
 # Dependencies section
 test_init
@@ -18,7 +18,7 @@ set_no_display
 echo "Some more boring text. $XDG_TEST_ID" > "$INSFILE"
 assert_file "$INSFILE" 
 
-DESKTOP=`find $HOME -type d -a -name Desktop`
+DESKTOP="$HOME/Desktop"
 
 # Verify the test icon is not installed already.
 assert_file_not_in_path "$INSFILE" "$DESKTOP"

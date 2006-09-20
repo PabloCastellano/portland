@@ -17,7 +17,7 @@ use_file "$XDG_TEST_DIR/xdg-desktop-icon/data/desktop_icon_install.desktop" DESK
 edit_file "$DESK_FILE" 'xdg-test-desktop-icon-install.tmp' CREATE_FILE
 edit_file "$DESK_FILE" 'Desktop_Icon' ICON_TEXT "Install $XDG_TEST_SHORTID"
 assert_file "$DESK_FILE"
-DESKTOP=`find $HOME -type d -a -name Desktop`
+DESKTOP="$HOME/Desktop"
 
 set_no_display
 
