@@ -132,25 +132,8 @@ make_default_generic()
     mv ${default_file}.new $default_file
 }
 
-
-defapp_kde()
-{
-    MIME="$1"
-    DEBUG 1 "Running ktradertest \"$MIME\" Application"
-    trader_result=`ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
-            | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2`
-    if [ -n "$trader_result" ] ; then
-        basename "$trader_result"
-        exit_success
-    else
-        exit_failure_operation_failed
-    fi
-}
-
 defapp_generic()
 {
-# FIXME:
-# Find XDG-DATA-DIRS/applications/defaults.list
     MIME="$1"
     xdg_user_dir="$XDG_DATA_HOME"
     [ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
@@ -167,6 +150,25 @@ defapp_generic()
        fi
     done
     exit_success
+}
+
+defapp_kde()
+{
+    MIME="$1"
+    ktradertest=`which ktradertest 2> /dev/null`
+    if [ -n "$ktradertest" ] ; then
+        DEBUG 1 "Running ktradertest \"$MIME\" Application"
+        trader_result=`ktradertest "$MIME" Application 2>/dev/null | grep DesktopEntryPath \
+            | head -n 1 | cut -d ':' -f 2 | cut -d \' -f 2`
+        if [ -n "$trader_result" ] ; then
+            basename "$trader_result"
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    else
+        defapp_generic "$1"
+    fi
 }
 
 [ x"$1" != x"" ] || exit_failure_syntax
