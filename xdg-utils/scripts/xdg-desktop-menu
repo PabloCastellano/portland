@@ -252,6 +252,9 @@ XDG_UTILS_DEBUG_LEVEL
     Setting this environment variable to a non-zero numerical value makes
     xdg-desktop-menu do more verbose reporting on stderr. Setting a higher
     value increases the verbosity.
+XDG_UTILS_INSTALL_MODE
+    This environment variable can be used by the user or administrator to
+    override the installation mode. Valid values are user and system.
 
 Exit Codes
 
@@ -879,11 +882,11 @@ while [ $# -gt 0 ] ; do
         fi
         case "$1" in
           user)
-            mode=user
+            mode="user"
             ;;
 
           system)
-            mode=system
+            mode="system"
             ;;
             
           *)
@@ -928,11 +931,19 @@ if [ -z "$action" ] ; then
     exit_failure_syntax "command argument missing"
 fi
 
+if [ -n "$XDG_UTILS_INSTALL_MODE" ] ; then
+    if [ "$XDG_UTILS_INSTALL_MODE" = "system" ] ; then
+        mode="system"
+    elif [ "$XDG_UTILS_INSTALL_MODE" = "user" ] ; then
+        mode="user"
+    fi
+fi
+
 if [ -z "$mode" ] ; then
     if [ `whoami` = "root" ] ; then
-       mode=system
+       mode="system"
     else
-       mode=user
+       mode="user"
     fi
 fi
 

@@ -481,6 +481,17 @@
 	  </simpara>
 	</listitem>
       </varlistentry>
+      <varlistentry>
+	<term>XDG_UTILS_INSTALL_MODE</term>
+	<listitem>
+	  <simpara>
+	    This environment variable can be used by the user or
+            administrator to override the installation mode.
+	    Valid values are <emphasis>user</emphasis> and
+            <emphasis>system</emphasis>.  
+	  </simpara>
+	</listitem>
+      </varlistentry>
     </variablelist>
   </refsect1>
 

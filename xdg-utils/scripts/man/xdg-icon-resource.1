@@ -2,7 +2,7 @@
 .\" It was generated using the DocBook XSL Stylesheets (version 1.69.1).
 .\" Instead of manually editing it, you probably should edit the DocBook XML
 .\" source for it and then use the DocBook XSL Stylesheets to regenerate it.
-.TH "XDG\-ICON\-RESOURCE" "1" "09/20/2006" "xdg\-utils 1.0" ""
+.TH "XDG\-ICON\-RESOURCE" "1" "09/29/2006" "xdg\-utils 1.0" ""
 .\" disable hyphenation
 .nh
 .\" disable justification (adjust text to left margin only)
@@ -112,6 +112,12 @@ xdg\-icon\-resource honours the following environment variables:
 .TP
 XDG_UTILS_DEBUG_LEVEL
 Setting this environment variable to a non\-zero numerical value makes xdg\-icon\-resource do more verbose reporting on stderr. Setting a higher value increases the verbosity.
+.TP
+XDG_UTILS_INSTALL_MODE
+This environment variable can be used by the user or administrator to override the installation mode. Valid values are
+\fIuser\fR
+and
+\fIsystem\fR.
 .SH "EXIT CODES"
 .PP
 An exit code of 0 indicates success while a non\-zero exit code indicates failure. The following failure codes can be returned:
