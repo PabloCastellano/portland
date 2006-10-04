@@ -75,6 +75,63 @@ BEGIN {
     mv $1.new $1
 }
 
+# Make application $1/$2 the default for all the mimetypes it support,
+# iff such mimetype didn't had a default application already.
+# $1 Install dir for desktop file
+# $2 base name of desktop file
+make_lazy_default()
+{
+    local mimetypes
+    local xdg_user_dir
+    local xdg_default_dirs
+    
+    DEBUG 1 "make_lazy_default $1/$2"
+    mimetypes=`awk '
+{
+    if (match($0,/MimeType=/)) {
+        split(substr($0,RSTART+9),mimetypes,";")
+        for (n in mimetypes)
+        {
+               if (mimetypes[n])
+                 print mimetypes[n]
+        }
+    }
+}' "$1/$2" 2> /dev/null`
+    
+    for MIME in $mimetypes ; do
+        xdg_default_dirs="$XDG_DATA_DIRS"
+        [ -n "$xdg_default_dirs" ] || xdg_default_dirs=/usr/local/share/:/usr/share/
+        if [ x"$mode" = x"user" ] ; then
+            xdg_user_dir="$XDG_DATA_HOME"
+            [ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
+            xdg_default_dirs="$xdg_user_dir:$xdg_default_dirs"
+        fi
+        local default_app
+        for x in `echo "$xdg_default_dirs" | sed 's/:/ /g'`; do
+            DEBUG 2 "Checking $x/applications/defaults.list"
+            default_app=`grep "$MIME=" $x/applications/defaults.list 2> /dev/null | cut -d '=' -f 2`
+            if [ -n "$default_app" ] ; then
+                DEBUG 2 "Found default apps for $MIME: $default_app"
+                default_app="$default_app;"
+                break;
+            fi
+        done
+        DEBUG 2 "Current default apps for $MIME: $default_app"
+        if echo "$default_app" | grep "$2" ; then
+            # App already listed as default
+            continue;
+        fi
+        default_file="$1/defaults.list"
+        DEBUG 1 "Updating $default_file"
+        grep -v "$MIME=" $default_file > ${default_file}.new 2> /dev/null
+        if ! grep "[Default Applications]" ${default_file}.new > /dev/null; then
+            echo "[Default Applications]" >> ${default_file}.new
+        fi
+        echo $MIME="$default_app$2" >> ${default_file}.new
+        mv ${default_file}.new $default_file
+    done
+}
+
 update_submenu()
 {
     DEBUG 1 "update_submenu $1"
@@ -572,6 +629,8 @@ for desktop_file in $desktop_files; do
             if [ -f $gnome_dir/$basefile ] ; then
                 echo "OnlyShowIn=Old;" >> $gnome_dir/$basefile
             fi
+            
+            make_lazy_default "$xdg_dir" "$basefile"
 
             umask $save_umask
             ;;
