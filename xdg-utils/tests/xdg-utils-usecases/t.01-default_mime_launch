@@ -40,11 +40,6 @@ assert_exit 0 xdg-mime install "$MIME_FILE"
 assert_nostdout
 assert_nostderr
 
-# Set default handler
-assert_exit 0 xdg-mime default "$DESKTOP_FILE" "$MIME_TYPE"
-assert_nostdout
-assert_nostderr
-
 # Verify mimetype 
 echo "$MIME_TYPE" >out.expected
 assert_exit 0 xdg-mime query filetype "$TEST_FILE"
