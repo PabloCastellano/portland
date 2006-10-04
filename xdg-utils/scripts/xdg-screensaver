@@ -396,12 +396,22 @@ unlockfile()
 
 perform_action()
 {
-  # Always set the Xorg screensaver first
-  #screensaver_xset "$1"
-  #xset_err=$?
-  xset_err=0
   result=1
-  
+
+  if [ "$1" == "resume" ] ; then
+      # Restore DPMS state
+      if [ -f "$screensaver_file.dpms" ]; then
+          rm "$screensaver_file.dpms"
+          # Re-enable DPMS
+          xset +dpms
+      fi
+  fi
+  if [ "$1" == "reset" ] ; then
+      if xset -q | grep 'DPMS is Enabled' > /dev/null 2> /dev/null; then
+          xset dpms force on
+      fi
+  fi
+
   case "$DE" in
     kde)
       screensaver_kde "$1"
@@ -415,6 +425,17 @@ perform_action()
       screensaver_xscreensaver "$1"
       ;;
   esac
+
+  if [ "$1" == "suspend" ] ; then
+      # Save DPMS state
+      if xset -q | grep 'DPMS is Enabled' > /dev/null 2> /dev/null; then
+          tmpfile=`mktemp`
+          $MV "$tmpfile" "$screensaver_file.dpms"
+          # Disable DPMS
+          xset -dpms
+      fi
+  fi
+
 }
 
 cleanup_suspend()
@@ -509,50 +530,6 @@ track_window()
   wait $xprop_pid
   # Clean up the administration and resume the screensaver
   cleanup_suspend
-}
-
-screensaver_xset()
-{
-    TIMEOUT=`xset q | /bin/grep -A 2 ^Screen | /bin/grep timeout | awk '{print $2}'` 
-    DPMS=`xset q | /bin/grep 'DPMS is' | awk '{print $3}'` 
-
-    if [ "$DPMS" = "Enabled" ]; then
-        DPMS="+dpms"
-    else
-        DPMS="-dpms"
-    fi
-
-    case "$1" in
-        # New arg Window ID, create lockfile with $WINDOWID
-        suspend)
-        xset s off -dpms
-        ;;
-
-        resume)
-        # Restores screensaver to its default settings
-        xset s default "$DPMS"
-        ;;
-
-        activate)
-        # Turns the screensaver on right now
-        xset s activate
-        ;;
-
-        reset)
-        # Turns the screensaver off right now
-        xset s reset
-        ;;
-
-        status)
-        if [ ${TIMEOUT:0} -eq 0 ]; then
-            echo "disabled"
-        else
-            echo "enabled"
-        fi
-        ;;
-    esac
-
-    return $?
 }
 
 screensaver_kde()
@@ -800,8 +777,6 @@ fi
 
 if [ $result -eq 0 ]; then
     exit_success
-#elif [ $xset_err -eq 0 ]; then
-#    exit_success
 else
     exit_failure_operation_failed
 fi
