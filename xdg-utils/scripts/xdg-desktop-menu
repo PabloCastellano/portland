@@ -640,14 +640,15 @@ fixup_mandriva_categories()
     DEBUG 1 "fixup_mandriva_categories $1"
     awk '
 BEGIN {
-    xlat["AudioVideo"]="X-MandrivaLinux-Multimedia"
-    xlat["Development"]="X-MandrivaLinux-MoreApplications-Development"
-    xlat["Education"]="X-MandrivaLinux-MoreApplications-Education"
-    xlat["Game"]="X-MandrivaLinux-MoreApplications-Games"
-    xlat["Network"]="X-MandrivaLinux-Internet"
-    xlat["Office"]="X-MandrivaLinux-Office"
-    xlat["System"]="X-MandrivaLinux-System"
-    xlat["Utility"]="X-MandrivaLinux-Office-Accessories"
+    xlat["AudioVideo"]="X-Mandrakelinux-Multimedia;X-MandrivaLinux-Multimedia"
+    xlat["Development"]="X-Mandrakelinux-MoreApplications-Development;X-MandrivaLinux-MoreApplications-Development"
+    xlat["Education"]="X-Mandrakelinux-MoreApplications;X-MandrivaLinux-MoreApplications-Education"
+    xlat["Game"]="X-Mandrakelinux-MoreApplications;X-MandrivaLinux-MoreApplications-Games"
+    xlat["Graphics"]="X-Mandrakelinux-Multimedia-Graphics"
+    xlat["Network"]="X-Mandrakelinux-Internet;X-MandrivaLinux-Internet"
+    xlat["Office"]="X-Mandrakelinux-Office;X-MandrivaLinux-Office"
+    xlat["System"]="X-Mandrakelinux-System;X-MandrivaLinux-System"
+    xlat["Utility"]="X-Mandrakelinux-Office-Accessories;X-MandrivaLinux-Office-Accessories"
 }
 {
     if (match($0,/Categories=/)) {
@@ -794,7 +795,16 @@ update_submenu()
             mkdir -p `dirname "$gnome_xdg_dir"`
             eval 'ln -s "applications-merged" "$gnome_xdg_dir"'$xdg_redirect_output
         fi
-    fi        
+    fi
+    if [ $action = "install" -a -f "/etc/mandrake-release" ] ; then
+        # Work around for Mandriva 2006
+        mandrake_xdg_dir=`echo "$xdg_dir" | sed -e 's^/applications-merged^/applications-mdk-merged^'`
+        if [ ! -e "$mandrake_xdg_dir" ] ; then
+            DEBUG 1 "Mandriva Workaround: Link '$xdg_dir' to '$mandrake_xdg_dir'"
+            mkdir -p `dirname "$mandrake_xdg_dir"`
+            eval 'ln -s "applications-merged" "$mandrake_xdg_dir"'$xdg_redirect_output
+        fi
+    fi
     if [ $action = "install" -a x"$mode" = x"user" -a -d "/etc/xdg/menus/kde-applications-merged" ] ; then
         # Work around for Fedora Core 5 + patched KDE
         kde_xdg_dir=`echo "$xdg_dir" | sed -e 's^/applications-merged^/kde-applications-merged^'`
