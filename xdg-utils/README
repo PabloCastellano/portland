@@ -30,10 +30,7 @@ means that:
 OVERVIEW:
 ---------
 
-    The following scripts are provided at this time.
-This is an early release of xdg-utils, and we hope to rapidly
-add more utilities.
-
+    The following tools are included in xdg-utils 1.0:
 
 xdg-desktop-menu	Install desktop menu items
 xdg-desktop-icon	Install icons to the desktop
@@ -48,17 +45,8 @@ xdg-screensaver		Control the screensaver
 BUILD:
 ------
 
-    Building the xdg-utils should be very simple.  First,
-you need to obtain the source and extract it to a directory
-on your system.  Change directories to that directory and
-run the following commands:
-
-        ./configure
-        make
-
-    This will make all of the xdg-utils scripts; they
-will be located in the scripts/ subdirectory and will
-have names such as 'xdg-menu', or 'xdg-mime', and so on.
+    Building is not required, all tools are located in the
+scripts/ subdirectory and are ready to be used.
 
     You can optionally choose to install the scripts
 to a target directory.  To do this, you could issue
@@ -102,12 +90,11 @@ putting your copy of the xdg-utils at the end of the path,
 and then invoking them without a specific path name.
 
 That will allow your users and their system providers to
-use custom versions of the xdg-utils which should work better
-for them.
+use custom versions of the xdg-utils to adjust for system spsecific
+differences.
 
 If you wish to absolutely force the issue and only use the versions
 you shipped, you could instead hard code the path to the version
 you bundle with your application.  We strongly recommend against
 this, as it will make your product obsolete more quickly than is
 necessary.
-
