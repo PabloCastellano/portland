@@ -379,6 +379,19 @@ kfmclient_fix_exit_code()
 
 open_kde()
 {
+    local client
+    if [ -f /etc/SuSE-release ] ; then
+        # Workaround for SUSE 10.0
+        client=`kreadconfig --file emaildefaults --group PROFILE_Default --key EmailClient| cut -d ' ' -f 1`
+        [ -z $client ] && client="kmail"
+        if ! which $client > /dev/null 2> /dev/null; then
+            DEBUG 3 "KDE has $client configured as email client which isn't installed"
+            if which gnome-open > /dev/null 2> /dev/null && which evolution > /dev/null 2> /dev/null; then
+               DEBUG 3 "Try gnome-open instead"
+               open_gnome "$1"
+            fi
+        fi
+    fi
     DEBUG 1 "Running kfmclient exec \"$1\""
     kfmclient exec "$1"
     kfmclient_fix_exit_code $?
