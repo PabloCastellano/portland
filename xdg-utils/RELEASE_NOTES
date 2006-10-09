@@ -2,10 +2,10 @@ Release notes for xdg-utils 1.0
 ===============================
 
 xdg-utils 1.0 has been tested under the Gnome and KDE desktop environments
-on Debian, Fedora, Mandriva, Redhat RHEL4, SUSE and Xandros based Linux
-distributions. These release notes reflect test findings. Despite extensive
-testing it should be pointed out that xdg-utils is provided AS IS without
-warranty of any kind. See the LICENSE file for details.
+on Debian, Fedora, Kubuntu, Mandriva, Redhat RHEL4, SUSE, Ubuntu and Xandros
+based Linux systems. These release notes reflect test findings. Despite
+extensive testing it should be pointed out that xdg-utils is provided AS IS
+without warranty of any kind. See the LICENSE file for details.
 
 * general:
     - When installing applications or file types for the current user only
