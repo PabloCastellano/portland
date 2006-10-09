@@ -219,7 +219,12 @@ update_submenu()
             eval 'ln -s "applications-merged" "$kde_xdg_dir"'$xdg_redirect_output
         fi
     fi        
-        
+    if [ $action = "install" -a x"$mode" = x"system" -a -d "/etc/xdg/menus/kde-applications-merged" -a ! -d "/etc/xdg/menus/applications-merged" ] ; then
+        # Work around for Kubuntu 6.06
+        kde_xdg_dir=`echo "$xdg_dir" | sed -e 's^/applications-merged^/kde-applications-merged^'`
+        DEBUG 1 "Kubuntu Workaround: Link '$xdg_dir' to 'kde-applications-merged'"
+        eval 'ln -s "kde-applications-merged" "$xdg_dir"'$xdg_redirect_output
+    fi
 
     orig_menu_file=$xdg_dir/$menu_file
 
