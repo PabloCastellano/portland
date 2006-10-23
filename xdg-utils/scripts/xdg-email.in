@@ -103,23 +103,24 @@ url_encode()
 {
 result=$(echo "$1" | $utf8 | awk '
     BEGIN {
-	for ( i=1; i<=255; ++i ) ord [ sprintf ("%c", i) "" ] = i + 0
-	e = ""
-	linenr = 1
+        for ( i=1; i<=255; ++i ) ord [ sprintf ("%c", i) "" ] = i + 0
+        e = ""
+        linenr = 1
     }
     {
         if ( linenr++ != 1 ) {
             e = e "%0D%0A"
         }
-	for ( i=1; i<=length ($0); ++i ) {
-	    c = substr ($0, i, 1)
-	    if ( c ~ /[@a-zA-Z0-9.-]/ ) {
-		e = e c
-	    } else {
-		e = e "%" sprintf("%02X", ord [c])
-	    }
-	}
-	
+        for ( i=1; i<=length ($0); ++i ) {
+            c = substr ($0, i, 1)
+            if ( ord [c] > 127 ) {
+                e = e "%" sprintf("%02X", ord [c])
+            } else if ( c ~ /[@a-zA-Z0-9.-]/ ) {
+                e = e c
+            } else {
+                e = e "%" sprintf("%02X", ord [c])
+            }
+        }
     }
     END {
         print e
