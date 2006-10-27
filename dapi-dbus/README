@@ -1,0 +1,53 @@
+About Dapi-GNOME:
+=================
+Dapi-GNOME is a daemon that implements the Dapi commands for GNOME. 
+
+Requirements:
+=============
+
+* GLib2 >= 2.10.0
+* Gtk+ >= 2.8.0
+* GnomeVFS >= 2.0.0
+* GConf >= 1.2.0
+* EBook >= 1.6.1
+* D-BUS >= 0.60
+* D-BUS Glib >= 0.71
+
+For unit tests Check 0.9.0 is required.
+
+D-Bus:
+======
+You can use the D-Bus interface in the dapi-daemon with the dbus-send command.
+
+For example:
+
+  $ dbus-send --print-reply --dest=org.freedesktop.dapi /org/freedesktop/dapi \
+    org.freedesktop.dapi.OpenUrl string:'http://www.imendio.com' \
+    variant:string:''
+
+    method return sender=:1.49 -> dest=:1.55
+
+D-BUS Protocol:
+===============
+The protocol XML file can be found in data/dapi-command.xml
+
+Activation:
+===========
+We currently install a service file to activate the daemon. This isn't feasible
+when we have more than one implementation of the Dapi Daemon, instead the
+desktop should be responsible for starting the correct daemon which will
+register under the org.freedesktop.dapi namespace.
+
+Running Tests:
+==============
+When running the tests/test-api application (which makes use of the
+Check test suite) to extensively test the API over DBus, one of the address book
+tests may fail on a cleanly built machine. This happens because the
+"About Me" dialog in Gnome which is used to configure your personal
+information will add the contact needed in Evolution Data Server for
+all tests to succeed.
+
+The upload-file API in DBus is not covered by these tests because it
+doesn't test anything locally and so making a test case for that is
+difficult.
+

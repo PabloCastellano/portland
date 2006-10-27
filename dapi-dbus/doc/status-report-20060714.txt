@@ -1,0 +1,29 @@
+GNOME Integration for Project Portland:
+=======================================
+
+REPORTING PERIOD:
+July 3rd 2006 - July 14th 2006
+
+ACHIEVEMENTS/CLOSED ISSUES:
+The daemon is implemented and all the functionality is in place. A few comments
+have been brought up and are listed in the MISC section and will pasted in the
+report email for discussion.
+
+We have currently put the GNOME daemon in it's own package outside of the
+generic/KDE build tree for easier split out and putting it in the GnomeCVS. If
+it would be better to keep it in the Portland source tree for now it can be
+adapted for that.
+
+NEXT WEEKS/ISSUES IN PROGRESS:
+
+Next week both Mikael Hallendal and Martyn Russell will be on vacation. The
+week leading up to delivery will be used for testing and debugging of the
+daemon.
+
+PROBLEMS:
+None.
+
+MISC:
+The OpenUrl and ExecuteUrl functionality is a bit odd, or at least the naming.
+Suggestions would be OpenUrl (for the current ExecuteUrl functionality) and
+OpenUrlInBrowser (for doing what OpenUrl does right now).
