@@ -78,7 +78,11 @@ terminal_gnome()
 
 terminal_xfce()
 {
-    exo-open --launch TerminalEmulator "$1"
+    if [ x"$1" == x"" ]; then
+        exo-open --launch TerminalEmulator
+    else
+        exo-open --launch TerminalEmulator "$1"
+    fi
 
     if [ $? -eq 0 ]; then
         exit_success
