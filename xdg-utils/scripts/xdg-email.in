@@ -43,8 +43,9 @@ open_kde()
             fi
         fi
     fi
-    DEBUG 1 "Running kfmclient exec \"$1\""
-    kfmclient exec "$1"
+    DEBUG 1 "Running kmailservice \"$1\""
+    # KDE uses locale's encoding when decoding the URI, so set it to UTF-8
+    LC_ALL=C.UTF-8 kmailservice "$1"
     kfmclient_fix_exit_code $?
 
     if [ $? -eq 0 ]; then
