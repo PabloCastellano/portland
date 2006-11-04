@@ -118,7 +118,7 @@ make_lazy_default()
             fi
         done
         DEBUG 2 "Current default apps for $MIME: $default_app"
-        if echo "$default_app" | grep "$2" ; then
+        if echo "$default_app" | grep "$2" > /dev/null 2> /dev/null; then
             # App already listed as default
             continue;
         fi
