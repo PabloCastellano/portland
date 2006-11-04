@@ -378,7 +378,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-desktop-icon 1.0"
+            echo "xdg-desktop-icon 1.0.1"
             exit_success
             ;;
         esac
