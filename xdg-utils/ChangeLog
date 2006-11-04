@@ -1,5 +1,18 @@
+=== xdg-utils 1.0.1 ====
+
+2006-11-03 Waldo Bastian <waldo.bastian@intel.com>
+    * Fixed spurious output on stdout by xdg-desktop-menu
+    * Cleaned up shell syntax for xdg-screensaver and xdg-icon-resource
+      (fixes Ubuntu 6.10)
+
+2006-10-29 Kevin Krammer <kevin.krammer@gmx.at>
+    * Fixed non-ascii mailto URI handling of xdg-emial on non-UTF8 locales 
+      under KDE
+
+=== xdg-utils 1.0 ====
+
 2006-05-10 Bryce Harrington <bryce@osdl.org>
-	* Created xdg-screensaver
+    * Created xdg-screensaver
 
 2006-04-24 Kevin Krammer <kevin.krammer@gmx.at>
     * Applied patch provided by Benedikt Meurer <benedikt.meurer@unix-ag.uni-siegen.de>

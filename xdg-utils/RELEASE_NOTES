@@ -1,3 +1,11 @@
+Release notes for xdg-utils 1.0.1
+=================================
+
+This release fixes:
+* Several shell syntax issues causing failures on Ubuntu 6.10
+* Spurious output on stdout when running xdg-desktop-menu
+* Non-ascii mailto URI handling of xdg-emial on non-UTF8 locales under KDE
+
 Release notes for xdg-utils 1.0
 ===============================
 
