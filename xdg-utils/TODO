@@ -6,15 +6,8 @@ xdg-icon-resource
 xdg-email
 * revisit decision to disable &attach= in mailto URLs
 
-xdg-mime
-* Change "xdg-mime query default" to take a MIMETYPE as argument
-instead of a file
- 
 xdg-screensaver
 * Return error when WindowID doesn't exist
-* Fix interaction between xset and gnome/kde specific hacks
-* gnome-screensaver may get started on resume when it wasn't running
-previously
 
 General
 * Support XDG_DATA_INSTALL
@@ -29,12 +22,3 @@ root which is incorrect according to the main body of the document.
 * It would be useful if it was possible to distinguish between a failure
 because of a bad password or some other failure.
 * use sudo style syntax, drop -c option
-
-Website
-* Add bugs / feedback landing page
-* Add xdg-utils overview page.
-* Add "How to configure e-mail client" landing page
-* Add page to submit test reports
-
-Release:
-* Update ChangeLog
