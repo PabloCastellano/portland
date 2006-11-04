@@ -436,7 +436,7 @@ find_gtk_update_icon_cache()
 }
 
 # Start GNOME legacy workaround section
-function need_dot_icon_path()
+need_dot_icon_path()
 {
   # GTK < 2.6 uses ~/.icons but not XDG_DATA_HOME/icons
   # The availability of gtk-update-icon-cache is used as indication
@@ -536,11 +536,9 @@ while [ $# -gt 0 ] ; do
         if [ -z "$1" ] ; then
             exit_failure_syntax "size argument missing for --size"
         fi
-        case "$1" in
-          *[^0-9]*)
+        if echo "$1" | grep '[^0-9]' > /dev/null 2> /dev/null; then
             exit_failure_syntax "size argument must be numeric"
-            ;;
-        esac
+        fi
         size="$1"
         shift
         ;;
@@ -693,7 +691,7 @@ if [ -n "$icon_name" ] ; then
 fi
 
 # Start KDE legacy workaround section
-function need_kde_icon_path()
+need_kde_icon_path()
 {
   local path
   path=`readlink -f "$1" 2> /dev/null` # Normalize path

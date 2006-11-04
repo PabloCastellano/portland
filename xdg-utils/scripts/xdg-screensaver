@@ -398,7 +398,7 @@ perform_action()
 {
   result=1
 
-  if [ "$1" == "resume" ] ; then
+  if [ "$1" = "resume" ] ; then
       # Restore DPMS state
       if [ -f "$screensaver_file.dpms" ]; then
           rm "$screensaver_file.dpms"
@@ -406,7 +406,7 @@ perform_action()
           xset +dpms
       fi
   fi
-  if [ "$1" == "reset" ] ; then
+  if [ "$1" = "reset" ] ; then
       if xset -q | grep 'DPMS is Enabled' > /dev/null 2> /dev/null; then
           xset dpms force on
       fi
@@ -426,7 +426,7 @@ perform_action()
       ;;
   esac
 
-  if [ "$1" == "suspend" ] ; then
+  if [ "$1" = "suspend" ] ; then
       # Save DPMS state
       if xset -q | grep 'DPMS is Enabled' > /dev/null 2> /dev/null; then
           tmpfile=`mktemp`
