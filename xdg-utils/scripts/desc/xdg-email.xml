@@ -42,7 +42,7 @@
       <arg><option>--subject</option> <replaceable>text</replaceable></arg>
       <arg><option>--body</option> <replaceable>text</replaceable></arg>
       <arg><option>--attach</option> <replaceable>file</replaceable></arg>
-      <group choice="req">
+      <group choice="opt">
         <arg choice="plain"><replaceable>mailto-uri</replaceable></arg>
         <arg choice="plain"><replaceable>address(es)</replaceable></arg>
       </group>
