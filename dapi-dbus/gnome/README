@@ -33,21 +33,29 @@ The protocol XML file can be found in data/dapi-command.xml
 
 Activation:
 ===========
-We currently install a service file to activate the daemon. This isn't feasible
-when we have more than one implementation of the Dapi Daemon, instead the
-desktop should be responsible for starting the correct daemon which will
-register under the org.freedesktop.dapi namespace.
+We currently install a service file to activate the daemon. This isn't
+feasible when we have more than one implementation of the Dapi Daemon,
+instead the desktop should be responsible for starting the correct
+daemon which will register under the org.freedesktop.dapi namespace.
 
 Running Tests:
 ==============
 When running the tests/test-api application (which makes use of the
-Check test suite) to extensively test the API over DBus, one of the address book
-tests may fail on a cleanly built machine. This happens because the
-"About Me" dialog in Gnome which is used to configure your personal
-information will add the contact needed in Evolution Data Server for
-all tests to succeed.
+Check test suite) to extensively test the API over DBus, one of the
+address book tests may fail on a cleanly built machine. This happens
+because the "About Me" dialog in Gnome which is used to configure your
+personal information will add the contact needed in Evolution Data
+Server for all tests to succeed.
 
 The upload-file API in DBus is not covered by these tests because it
 doesn't test anything locally and so making a test case for that is
 difficult.
 
+You may find while running the tests or 'make check' that this error
+is produced: 
+   
+  WARNING **: FIXME: wait for completion unimplemented
+
+This is detailed in the bug link below and seems to be harmless:
+     
+  http://bugzilla.gnome.org/show_bug.cgi?id=314544
