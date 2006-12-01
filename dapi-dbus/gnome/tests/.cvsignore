@@ -1,0 +1,8 @@
+Makefile
+Makefile.in
+.deps
+.libs
+dapi-command-bindings.h
+test-api
+test-client
+test-ebook-async-get-contact

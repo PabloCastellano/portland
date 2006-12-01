@@ -1,0 +1,6 @@
+Makefile
+Makefile.in
+.deps
+.libs
+dapi-command-glue.h
+dapi_gnome
