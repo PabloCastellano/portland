@@ -1,3 +1,0 @@
-Example sending an email:
-
-./test-daemon -m martyn@imendio.com --mail-subject sliff --mail-body sloff --mail-cc richard@imendio.com --mail-bcc micke@imendio.com --mail-attachment /etc/fstab --mail-attachment /etc/hosts
