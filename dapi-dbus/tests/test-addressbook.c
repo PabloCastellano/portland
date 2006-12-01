@@ -38,12 +38,62 @@
 #define CONTACT_EMAIL_2     "TestUser@test-user.com"
 #define CONTACT_EMAIL_3     "DapiTestUser@test-user.com"
 
-static const gchar *new_contact_id = NULL;
+static gchar *new_contact_id = NULL;
 
 /* FIXME: I have noticed that if a test fails that the post condition
  * is NEVER run, which means you end up with a lot of new contacts
  * which don't get deleted!  
  */
+
+static void
+remove_known_test_contacts (void)
+{
+	DBusGProxy  *proxy;
+	gchar      **ids, **p;
+	gint         count;
+	gboolean     found;
+	gboolean     success;
+        EBook       *book;
+	GError      *error = NULL;
+
+        /* Remove the added test contact from the addressbook here */
+        book = e_book_new_system_addressbook (NULL);
+        g_return_if_fail (book != NULL);
+
+        proxy = tests_get_dbus_proxy ();
+
+        /* Expected successes */
+        success = org_freedesktop_dapi_address_book_find_by_name (proxy, CONTACT_FULL_NAME, &ids, NULL);
+	if (!success) {
+		return;
+	}
+	
+	/* Remove all found */
+        success = e_book_open (book, FALSE, &error);
+        if (!success) {
+                g_warning ("Could not open address book, %s",
+                           error ? error->message : "no error given");
+                g_clear_error (&error);
+                g_object_unref (book);
+                return;
+        }
+
+        for (p = ids, found = FALSE, count = 0;
+             *p && !found;
+             p++, count++) {
+        	success = e_book_remove_contact (book, *p, &error);
+	        if (!success) {
+        	        g_warning ("Could not remove new contact with ID:'%s', %s",
+                	           *p,
+                        	   error ? error->message : "no error given");
+	                g_clear_error (&error);
+        	} else {
+                	d(g_print ("Removed new contact with ID is '%s'\n", *p));
+	        }
+        }
+	
+	g_object_unref (book);
+}
 
 static void
 pre_test (void)
@@ -55,6 +105,8 @@ pre_test (void)
 	GError      *error = NULL;
 	const gchar *str;
 	gboolean     success;
+
+	remove_known_test_contacts ();
 
 	if (new_contact_id) {
 		g_warning ("Contact ID is already set, it looks like "
@@ -138,41 +190,9 @@ pre_test (void)
 static void
 post_test (void)
 {
-	EBook    *book;
-	GError   *error = NULL;
-	gboolean  success;
+	remove_known_test_contacts ();
 
-	if (!new_contact_id) {
-		g_warning ("Contact ID was NULL, it looks like "
-			   "the test was not set up correctly");
-		return;
-	}
-
-	/* Remove the added test contact from the addressbook here */
-	book = e_book_new_system_addressbook (NULL);
-	g_return_if_fail (book != NULL);
-
-	success = e_book_open (book, FALSE, &error);
-	if (!success) {
-		g_warning ("Could not open address book, %s", 
-			   error ? error->message : "no error given");
-		g_clear_error (&error);
-		g_object_unref (book); 
-		return;
-	}
-
-	success = e_book_remove_contact (book, new_contact_id, &error);
-	if (!success) {
-		g_warning ("Could not remove new contact with ID:'%s', %s", 
-			   new_contact_id,
-			   error ? error->message : "no error given");
-		g_clear_error (&error);
-	} else {
-		d(g_print ("Removed new contact with ID is '%s'\n", new_contact_id));
-	}
-
-	g_object_unref (book); 
-
+	g_free (new_contact_id);
 	new_contact_id = NULL;
 }
 
