@@ -52,18 +52,22 @@ terminal_kde()
 terminal_gnome()
 {
     term_exec_key="/desktop/gnome/applications/terminal/exec"
-    term_exec_arg_key="/desktop/gnome/applications/termina/exec_arg"
+    term_exec_arg_key="/desktop/gnome/applications/terminal/exec_arg"
 
     term_exec=`gconftool-2 --get ${term_exec_key}`
     term_exec_arg=`gconftool-2 --get ${term_exec_arg_key}`
 
-    terminal_exec=`which $term_exec >/dev/null 2>/dev/null`
+    terminal_exec=`which $term_exec 2>/dev/null`
 
     if [ -x "$terminal_exec" ]; then
         if [ x"$1" == x"" ]; then
             $terminal_exec
         else
-            $terminal_exec "$TERM_EXEC_ARG" "$1"
+            if [ x"$term_exec_arg" == x"" ]; then
+                $terminal_exec "$1"
+            else
+                $terminal_exec "$term_exec_arg" "$1"
+            fi
         fi
 
         if [ $? -eq 0 ]; then
