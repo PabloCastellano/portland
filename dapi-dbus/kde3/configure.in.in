@@ -1,0 +1,93 @@
+#MIN_CONFIG(3.2.0)
+
+AM_INIT_AUTOMAKE(dapi_kde, 0.1)
+AC_C_BIGENDIAN
+AC_CHECK_KDEMAXPATHLEN
+
+AC_PATH_QT
+AC_PATH_QT_MOC_UIC
+
+########### Check for D-Bus Qt3 bindings
+
+  AC_MSG_CHECKING(for D-Bus Qt3 bindings)
+
+  qdbus_inc=NOTFOUND
+  qdbus_lib=NOTFOUND
+  qdbus=NOTFOUND
+
+  search_incs="$kde_includes $kde_extra_includes /usr/include /usr/include/dbus-1.0 /usr/local/include /usr/local/include/dbus-1.0 /usr/include/dbus-1.0/qt3  /usr/local/include/dbus-1.0/qt3"
+  AC_FIND_FILE(dbus/dbusdata.h, $search_incs, qdbus_incdir)
+
+  if test -r $qdbus_incdir/dbus/dbusdata.h ; then
+    QDBUS_INCS="-I$qdbus_incdir"
+    qdbus_inc=FOUND
+  fi
+
+  search_libs="$kde_libraries $kde_extra_libs /usr/lib$kdelibsuff /usr/local/lib$kdelibsuff"
+  AC_FIND_FILE(libdbus-1-qt3.so, $search_libs, qdbus_libdir)
+
+  if test -r $qdbus_libdir/libdbus-1-qt3.so ; then
+    QDBUS_LIBS="-L$qdbus_libdir -ldbus-1-qt3"
+    qdbus_lib=FOUND
+  fi
+
+  if test $qdbus_inc != FOUND || test $qdbus_lib != FOUND ; then
+    KDE_PKG_CHECK_MODULES( QDBUS, "dbus-1-qt3", [ QDBUS_INCS=$QDBUS_CFLAGS; qdbus_inc=FOUND; qdbus_lib=FOUND; ] , AC_MSG_RESULT( Nothing found on PKG_CONFIG_PATH ) )
+  fi
+
+  if test $qdbus_inc = FOUND && test $qdbus_lib = FOUND ; then
+    AC_MSG_RESULT(headers $QDBUS_INCS libraries $QDBUS_LIBS)
+    qdbus=FOUND
+  else
+    AC_MSG_RESULT(searched but not found)
+  fi
+
+  AC_SUBST(QDBUS_INCS)
+  AC_SUBST(QDBUS_LIBS)
+
+########### Check for D-Bus
+
+  AC_MSG_CHECKING(for D-Bus)
+
+  dbus_inc=NOTFOUND
+  dbus_lib=NOTFOUND
+  dbus=NOTFOUND
+
+  search_incs="$kde_includes $kde_extra_includes /usr/include /usr/include/dbus-1.0 /usr/local/include /usr/local/include/dbus-1.0"
+  AC_FIND_FILE(dbus/dbus.h, $search_incs, dbus_incdir)
+
+  search_incs_arch_deps="$kde_includes $kde_extra_includes /usr/lib$kdelibsuff/dbus-1.0/include /usr/local/lib$kdelibsuff/dbus-1.0/include"
+  AC_FIND_FILE(dbus/dbus-arch-deps.h, $search_incs_arch_deps, dbus_incdir_arch_deps)
+
+  if test -r $dbus_incdir/dbus/dbus.h && test -r $dbus_incdir_arch_deps/dbus/dbus-arch-deps.h ; then
+    DBUS_INCS="-I$dbus_incdir -I$dbus_incdir_arch_deps"
+    dbus_inc=FOUND
+  fi
+
+  search_libs="$kde_libraries $kde_extra_libs /usr/lib$kdelibsuff /usr/local/lib$kdelibsuff"
+  AC_FIND_FILE(libdbus-1.so, $search_libs, dbus_libdir)
+
+  if test -r $dbus_libdir/libdbus-1.so ; then
+    DBUS_LIBS="-L$dbus_libdir -ldbus-1"
+    dbus_lib=FOUND
+  fi
+
+  if test $dbus_inc != FOUND || test $dbus_lib != FOUND ; then
+    KDE_PKG_CHECK_MODULES( DBUS, "dbus-1", [ DBUS_INCS=$DBUS_CFLAGS; dbus_inc=FOUND; dbus_lib=FOUND; ] , AC_MSG_RESULT( Nothing found on PKG_CONFIG_PATH ) )
+  fi
+
+  dbus_bus_var=`pkg-config --variable=system_bus_default_address dbus-1 2>/dev/null`
+  if test -z "$dbus_bus_var"; then
+        dbus_bus_var="unix:path=/var/run/dbus/system_bus_socket"
+  fi
+  AC_DEFINE_UNQUOTED(DBUS_SYSTEM_BUS, "$dbus_bus_var", [Define the unix domain path for dbus system bus])
+
+  if test $dbus_inc = FOUND && test $dbus_lib = FOUND ; then
+    AC_MSG_RESULT(headers $DBUS_INCS libraries $DBUS_LIBS)
+    dbus=FOUND
+  else
+    AC_MSG_RESULT(searched but not found)
+  fi
+
+  AC_SUBST(DBUS_INCS)
+  AC_SUBST(DBUS_LIBS)
