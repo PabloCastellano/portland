@@ -25,6 +25,7 @@
 // Qt D-Bus includes
 #include <dbus/qdbusdata.h>
 #include <dbus/qdbuserror.h>
+#include <dbus/qdbusvariant.h>
 
 // DAPI common includes
 #include "dapi-common.h"
@@ -32,6 +33,43 @@
 // local includes
 #include "dapiimpl.h"
 #include "kabchandler.h"
+
+static WId dapiWindowID(const QDBusVariant& windowInfo)
+{
+#if defined(Q_WS_X11)
+    WId window = 0;
+    if (windowInfo.signature == "u")
+    {
+        window = windowInfo.value.toUInt32();
+    }
+    else if (windowInfo.signature == "t")
+    {
+        window = windowInfo.value.toUInt64();
+    }
+
+    return window;
+#endif
+}
+
+static QCString dapiMakeStartupInfo( const QDBusVariant& windowInfo )
+{
+#if defined(Q_WS_X11)
+    WId window = dapiWindowID(windowInfo);
+
+    if( window != 0 )
+    {
+        // TODO for the window !=0 case KStartupInfo API needs to be
+        // extended to accept external timestamp for creating new startup info
+        KApplication::kApplication()->updateUserTimestamp();
+    }
+    else
+    {
+        KApplication::kApplication()->updateUserTimestamp();
+    }
+#endif
+
+    return KStartupInfo::createNewStartupId();
+}
 
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -85,7 +123,9 @@ bool DAPIImpl::OpenUrl(const QString& url, const QDBusVariant& windowinfo,
 
     if (url.isEmpty()) return false;
 
-    KApplication::kApplication()->invokeBrowser(url); // TODO use windowinfo
+    QCString startupInfo = dapiMakeStartupInfo(windowinfo);
+
+    KApplication::kApplication()->invokeBrowser(url, startupInfo);
 
     return true;
 }
@@ -101,7 +141,15 @@ bool DAPIImpl::ExecuteUrl(const QString& url, const QDBusVariant& windowinfo,
 
     if (url.isEmpty()) return false;
 
-    KRun* run = new KRun(url); // TODO use windowinfo
+    KRun* run = new KRun(url);
+
+    WId windowID = dapiWindowID(windowinfo);
+    if (windowID != 0)
+    {
+        KDapiFakeWidget* widget = new KDapiFakeWidget(windowID);
+
+        QObject::connect(run, SIGNAL(destroyed()), widget, SLOT(deleteLater()));
+    }
 
     return !run->hasError();
 }
@@ -163,9 +211,11 @@ bool DAPIImpl::MailTo(const QString& subject, const QString& body,
     Q_UNUSED(error);
     Q_UNUSED(windowinfo);
 
-    // TODO use windowinfo
+    QCString startupInfo = dapiMakeStartupInfo(windowinfo);
+
     KApplication::kApplication()->invokeMailer(to, cc, bcc, subject, body,
-                                               QString::null, attachments);
+                                               QString::null, attachments,
+                                               startupInfo);
 
     return true;
 }
@@ -309,6 +359,22 @@ KABCHandler* DAPIImpl::addressBook()
         m_addressBook = new KABCHandler(0, "DAPI Addressbook Handler");
 
     return m_addressBook;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+// some KDE APIs accept only QWidget* instead of WId
+
+KDapiFakeWidget::KDapiFakeWidget(WId window)
+{
+    create(window, false); // don't init
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+KDapiFakeWidget::~KDapiFakeWidget()
+{
+    destroy(false); // no cleanup
 }
 
 // End of File

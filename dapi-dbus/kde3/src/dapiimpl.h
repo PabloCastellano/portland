@@ -19,6 +19,9 @@
 #if !defined(DAPIIMPL_H_INCLUDED)
 #define DAPIIMPL_H_INCLUDED
 
+// Qt includes
+#include <qwidget.h>
+
 // Qt D-Bus includes
 #include <dbus/qdbusconnection.h>
 
@@ -82,6 +85,14 @@ protected:
     virtual void handleMethodReply(const QDBusMessage& reply);
 
     KABCHandler* addressBook();
+};
+
+class KDapiFakeWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    KDapiFakeWidget( WId window );
+    virtual ~KDapiFakeWidget();
 };
 
 #endif
