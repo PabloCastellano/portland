@@ -20,29 +20,31 @@
 #define DAPIIMPL_H_INCLUDED
 
 // Qt includes
+#include <qmap.h>
 #include <qwidget.h>
 
 // Qt D-Bus includes
 #include <dbus/qdbusconnection.h>
+#include <dbus/qdbusmessage.h>
 
 // local includes
 #include "dapi.h"
 
 // forward declarations
 class KABCHandler;
+class QDBusProxy;
 
-class DAPIImpl : public org::freedesktop::dapi
+typedef QMap<QString, bool> StringSet;
+
+class DAPIImpl : public QObject, public org::freedesktop::dapi
 {
+    Q_OBJECT
 public:
     DAPIImpl();
 
     virtual ~DAPIImpl();
 
-    void setConnection(const QDBusConnection& connection)
-    {
-        m_connection = connection;
-    }
-
+    void setConnection(const QDBusConnection& connection);
 
 protected:
     QDBusConnection m_connection;
@@ -84,7 +86,23 @@ protected:
 
     virtual void handleMethodReply(const QDBusMessage& reply);
 
+    virtual bool handleMethodCall(const QDBusMessage& message);
+
+protected:
     KABCHandler* addressBook();
+
+private:
+    QDBusProxy* m_proxyForBus;
+
+    StringSet m_screenSaverSuspendConnections;
+
+    QDBusMessage m_currentMethodCall;
+
+private:
+    void updateScreenSaverSuspend();
+
+private slots:
+    void slotDBusSignal(const QDBusMessage& message);
 };
 
 class KDapiFakeWidget : public QWidget

@@ -32,6 +32,13 @@ QDBusMessage dapi::callCapabilities(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::Capabilities returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.Capabilities execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -52,6 +59,13 @@ QDBusMessage dapi::callOpenUrl(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::OpenUrl returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.OpenUrl execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -72,6 +86,13 @@ QDBusMessage dapi::callExecuteUrl(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::ExecuteUrl returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.ExecuteUrl execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -92,6 +113,13 @@ QDBusMessage dapi::callButtonOrder(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::ButtonOrder returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.ButtonOrder execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -113,6 +141,13 @@ QDBusMessage dapi::callRunAsUser(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::RunAsUser returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.RunAsUser execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -133,6 +168,13 @@ QDBusMessage dapi::callSuspendScreenSaving(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::SuspendScreenSaving returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.SuspendScreenSaving execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -158,6 +200,13 @@ QDBusMessage dapi::callMailTo(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::MailTo returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.MailTo execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -182,6 +231,13 @@ QDBusMessage dapi::callLocalFile(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::LocalFile returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.LocalFile execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -204,6 +260,13 @@ QDBusMessage dapi::callUploadFile(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::UploadFile returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.UploadFile execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -223,6 +286,13 @@ QDBusMessage dapi::callRemoveTemporaryLocalFile(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::RemoveTemporaryLocalFile returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.RemoveTemporaryLocalFile execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -239,10 +309,17 @@ QDBusMessage dapi::callAddressBookList(const QDBusMessage& message)
     if (AddressBookList(_contact_ids, error))
     {
         reply = QDBusMessage::methodReply(message);
-        reply << QDBusData::fromList(QDBusDataList(_contact_ids));
+        reply << QDBusData::fromList((_contact_ids));
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::AddressBookList returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.AddressBookList execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -263,6 +340,13 @@ QDBusMessage dapi::callAddressBookOwner(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::AddressBookOwner returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.AddressBookOwner execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -280,10 +364,17 @@ QDBusMessage dapi::callAddressBookFindByName(const QDBusMessage& message)
     if (AddressBookFindByName(_name, _contact_ids, error))
     {
         reply = QDBusMessage::methodReply(message);
-        reply << QDBusData::fromList(QDBusDataList(_contact_ids));
+        reply << QDBusData::fromList((_contact_ids));
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::AddressBookFindByName returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.AddressBookFindByName execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -309,6 +400,13 @@ QDBusMessage dapi::callAddressBookGetName(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::AddressBookGetName returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.AddressBookGetName execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -326,10 +424,17 @@ QDBusMessage dapi::callAddressBookGetEmails(const QDBusMessage& message)
     if (AddressBookGetEmails(_contact_id, _email_addresses, error))
     {
         reply = QDBusMessage::methodReply(message);
-        reply << QDBusData::fromList(QDBusDataList(_email_addresses));
+        reply << QDBusData::fromList((_email_addresses));
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::AddressBookGetEmails returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.AddressBookGetEmails execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -351,6 +456,13 @@ QDBusMessage dapi::callAddressBookGetVCard30(const QDBusMessage& message)
     }
     else
     {
+        if (!error.isValid())
+        {
+            qWarning("Call to implementation of org::freedesktop::dapi::AddressBookGetVCard30 returned 'false' but error object is not valid!");
+
+            error = QDBusError("org.freedesktop.DBus.Error.Failed", "org.freedesktop.dapi.AddressBookGetVCard30 execution failed");
+        }
+
         reply = QDBusMessage::methodError(message, error);
     }
 
@@ -491,6 +603,7 @@ bool dapi::handleMethodCall(const QDBusMessage& message)
 
     return false; 
 }
+
 }; // namespace freedesktop
 
 }; // namespace org

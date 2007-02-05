@@ -7,6 +7,13 @@ AC_CHECK_KDEMAXPATHLEN
 AC_PATH_QT
 AC_PATH_QT_MOC_UIC
 
+
+########### Check for availability of DPMS
+
+KDE_CHECK_HEADERS(X11/extensions/dpms.h,
+    AC_DEFINE(HAVE_DPMS, 1, [Set if DPMS is available]),,
+    [#include <X11/Xlib.h>])
+
 ########### Check for D-Bus Qt3 bindings
 
   AC_MSG_CHECKING(for D-Bus Qt3 bindings)

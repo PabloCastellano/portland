@@ -17,6 +17,7 @@
 //
 
 // KDE includes
+#include <dcopref.h>
 #include <kapplication.h>
 #include <kglobalsettings.h>
 #include <kprocess.h>
@@ -25,6 +26,7 @@
 // Qt D-Bus includes
 #include <dbus/qdbusdata.h>
 #include <dbus/qdbuserror.h>
+#include <dbus/qdbusproxy.h>
 #include <dbus/qdbusvariant.h>
 
 // DAPI common includes
@@ -33,6 +35,11 @@
 // local includes
 #include "dapiimpl.h"
 #include "kabchandler.h"
+
+#ifdef HAVE_DPMS
+#include <X11/Xlib.h>
+#include <X11/extensions/dpms.h>
+#endif
 
 static WId dapiWindowID(const QDBusVariant& windowInfo)
 {
@@ -74,8 +81,16 @@ static QCString dapiMakeStartupInfo( const QDBusVariant& windowInfo )
 ///////////////////////////////////////////////////////////////////////////////
 
 DAPIImpl::DAPIImpl() : org::freedesktop::dapi(),
-    m_addressBook(0)
+    m_addressBook(0), m_proxyForBus(0)
 {
+    m_proxyForBus = new QDBusProxy(this, "ProxyForBus");
+
+    m_proxyForBus->setService("org.freedesktop.DBus");
+    m_proxyForBus->setInterface("org.freedesktop.DBus");
+    m_proxyForBus->setPath("/org/freedesktop/DBus");
+
+    QObject::connect(m_proxyForBus, SIGNAL(dbusSignal(const QDBusMessage&)),
+                     this, SLOT(slotDBusSignal(const QDBusMessage&)));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -83,6 +98,15 @@ DAPIImpl::DAPIImpl() : org::freedesktop::dapi(),
 DAPIImpl::~DAPIImpl()
 {
     delete m_addressBook;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void DAPIImpl::setConnection(const QDBusConnection& connection)
+{
+    m_connection = connection;
+
+    m_proxyForBus->setConnection(connection);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -97,7 +121,7 @@ bool DAPIImpl::Capabilities(Q_INT32& capabilities, QDBusError& error)
     capabilities |= DAPI_CAP_EXECUTEURL;
     capabilities |= DAPI_CAP_BUTTONORDER;
     capabilities |= DAPI_CAP_RUNASUSER;
-    //capabilities |= DAPI_CAP_SUSPENDSCREENSAVING;
+    capabilities |= DAPI_CAP_SUSPENDSCREENSAVING;
     capabilities |= DAPI_CAP_MAILTO;
     //capabilities |= DAPI_CAP_LOCALFILE;
     //capabilities |= DAPI_CAP_UPLOADFILE;
@@ -194,11 +218,16 @@ bool DAPIImpl::SuspendScreenSaving(Q_UINT32 client_id, bool suspend,
                                    QDBusError& error)
 {
     Q_UNUSED(client_id);
-    Q_UNUSED(suspend);
+    Q_UNUSED(error);
 
-    error = QDBusError("org.freedesktop.dapi.Error", "NotImplementedYet");
+    if (suspend)
+        m_screenSaverSuspendConnections.insert(m_currentMethodCall.sender(), true);
+    else
+        m_screenSaverSuspendConnections.remove(m_currentMethodCall.sender());
 
-    return false;
+    updateScreenSaverSuspend();
+
+    return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -353,12 +382,61 @@ void DAPIImpl::handleMethodReply(const QDBusMessage& reply)
 
 ///////////////////////////////////////////////////////////////////////////////
 
+bool DAPIImpl::handleMethodCall(const QDBusMessage& message)
+{
+    // some method calls need the context data from the call, e.g.
+    // SuspendScreenSaving needs the sender name, so we store the the
+    // message before calling the generated method handler
+    m_currentMethodCall = message;
+
+    return org::freedesktop::dapi::handleMethodCall(message);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 KABCHandler* DAPIImpl::addressBook()
 {
     if (m_addressBook == 0)
         m_addressBook = new KABCHandler(0, "DAPI Addressbook Handler");
 
     return m_addressBook;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void DAPIImpl::updateScreenSaverSuspend()
+{
+    // as long as there are connections left which have requested suspend
+    bool suspend = !m_screenSaverSuspendConnections.isEmpty();
+
+    // TODO get default state from KDE config
+#ifdef HAVE_DPMS
+    if( suspend )
+        DPMSDisable(qt_xdisplay());
+    else
+        DPMSEnable(qt_xdisplay());
+#endif
+    DCOPRef ref( "kdesktop", "KScreensaverIface" );
+    ref.call( "enable", !suspend );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+void DAPIImpl::slotDBusSignal(const QDBusMessage& message)
+{
+    if (message.sender() != m_proxyForBus->service()) return;
+    if (message.member() != "NameOwnerChanged") return;
+
+    QString name     = message[0].toString();
+    QString oldOwner = message[1].toString();
+    QString newOwner = message[2].toString();
+
+    // if a unique name "gets lost" it means the connection has been closed
+    if (newOwner.isEmpty() && name.startsWith(":") && name == oldOwner)
+    {
+        m_screenSaverSuspendConnections.remove(oldOwner);
+        updateScreenSaverSuspend();
+    }
 }
 
 ///////////////////////////////////////////////////////////////////////////////

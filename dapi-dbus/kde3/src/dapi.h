@@ -23,7 +23,6 @@ public:
     virtual ~dapi() {}
 
 protected:
-
     virtual bool Capabilities(Q_INT32& capabilities, QDBusError& error) = 0;
 
     virtual bool OpenUrl(const QString& url, const QDBusVariant& windowinfo, QDBusError& error) = 0;
@@ -56,9 +55,12 @@ protected:
 
     virtual bool AddressBookGetVCard30(const QString& contact_id, QString& vcard, QDBusError& error) = 0;
 
+protected: // implement sending replies
     virtual void handleMethodReply(const QDBusMessage& reply) = 0;
 
-private:
+protected: // usually no need to reimplement
+    virtual bool handleMethodCall(const QDBusMessage& message);
+
     QDBusMessage callCapabilities(const QDBusMessage& mesage);
 
     QDBusMessage callOpenUrl(const QDBusMessage& mesage);
@@ -91,7 +93,6 @@ private:
 
     QDBusMessage callAddressBookGetVCard30(const QDBusMessage& mesage);
 
-    virtual bool handleMethodCall(const QDBusMessage& message);
 }; // class dapi
 
 }; // namespace freedesktop
