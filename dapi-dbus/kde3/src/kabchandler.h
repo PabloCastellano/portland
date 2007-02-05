@@ -50,7 +50,7 @@ public:
 
     QString owner() const;
 
-    QString vcard30(const QString& uid) const;
+    QString vcard30(const QString& uid, bool& found) const;
 
 private:
     KABC::StdAddressBook* m_addressBook;

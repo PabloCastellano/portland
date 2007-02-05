@@ -119,12 +119,17 @@ QString KABCHandler::owner() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-QString KABCHandler::vcard30(const QString& uid) const
+QString KABCHandler::vcard30(const QString& uid, bool& found) const
 {
     Addressee contact = m_addressBook->findByUid(uid);
 
-    if (contact.isEmpty()) return QString::null;
+    if (contact.isEmpty())
+    {
+        found = false;
+        return QString::null;
+    }
 
+    found = true;
     return m_vcardConverter->createVCard(contact, VCardConverter::v3_0);
 }
 

@@ -96,6 +96,8 @@ private:
 
     StringSet m_screenSaverSuspendConnections;
 
+    QMap<QString, QString> m_temporaryFiles;
+
     QDBusMessage m_currentMethodCall;
 
 private:
