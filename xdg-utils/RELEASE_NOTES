@@ -4,6 +4,8 @@ Release notes for xdg-utils 1.0.2
 This release fixes:
 * SVG icons are not supported but documentation still mentioned SVG
 * xdg-email can now be used without any e-mail address
+* Don't use mktemp without arguments, it breaks on systems with certain
+  older versions of mktemp (xdg-desktop-menu, xdg-screensaver)
 
 Release notes for xdg-utils 1.0.1
 =================================
