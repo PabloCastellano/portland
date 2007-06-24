@@ -59,7 +59,7 @@ icons or to graphically represent file types.
 The desktop icon system identifies icons by name. Depending on the required
 size, the choice of icon theme and the context in which the icon is used, the
 desktop icon system locates an appropriate icon resource to depict an icon.
-Icon resources can be XPM files, PNG files or SVG files.
+Icon resources can be XPM files or PNG files.
 
 The desktop icon system works according to the XDG Icon Theme Specification at
 http://www.freedesktop.org/Standards/icon-theme-spec
