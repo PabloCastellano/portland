@@ -101,7 +101,8 @@ perform_action()
   if [ "$1" = "suspend" ] ; then
       # Save DPMS state
       if xset -q | grep 'DPMS is Enabled' > /dev/null 2> /dev/null; then
-          tmpfile=`mktemp`
+          test "${TMPDIR+set}" = set || TMPDIR=/tmp
+          tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
           $MV "$tmpfile" "$screensaver_file.dpms"
           # Disable DPMS
           xset -dpms
@@ -113,7 +114,8 @@ perform_action()
 cleanup_suspend()
 {
   lockfile
-  tmpfile=`mktemp`
+  test "${TMPDIR+set}" = set || TMPDIR=/tmp
+  tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
   grep -v "$window_id:" "$screensaver_file" > "$tmpfile" 2> /dev/null
   $MV "$tmpfile" "$screensaver_file"
   if [ ! -s "$screensaver_file" ] ; then
@@ -164,7 +166,8 @@ track_window()
   fi
   lockfile
 
-  tmpfile=`mktemp`
+  test "${TMPDIR+set}" = set || TMPDIR=/tmp
+  tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
   # Filter stale entries from the xdg-screensaver status file
   # Return if $window_id is being tracked already
   (
@@ -256,7 +259,8 @@ screensaver_kde()
 screensaver_suspend_loop()
 {
   lockfile
-  tmpfile=`mktemp`
+  test "${TMPDIR+set}" = set || TMPDIR=/tmp
+  tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
   # Filter stale entries from the xdg-screensaver status file
   cat "$screensaver_file" 2> /dev/null | (
     IFS_save="$IFS"

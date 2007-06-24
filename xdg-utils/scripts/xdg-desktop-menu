@@ -825,7 +825,8 @@ update_submenu()
 
     DEBUG 1 "Updating $orig_menu_file ($action)"
 
-    tmpfile=`mktemp`
+    test "${TMPDIR+set}" = set || TMPDIR=/tmp
+    tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
     orig_desktop_files=
     if [ -r "$orig_menu_file" ] ; then
         awk '
@@ -872,7 +873,8 @@ BEGIN {
     
     if [ -n "$new_desktop_files" ] ; then
         # Install/update
-        tmpfile=`mktemp`
+        test "${TMPDIR+set}" = set || TMPDIR=/tmp
+        tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
         (
             echo '<!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"'
             echo '    "http://www.freedesktop.org/standards/menu-spec/menu-1.0.dtd">'
@@ -917,7 +919,8 @@ BEGIN {
     
     # Uninstall .directory files only if no longer referenced
     if [ $action = "uninstall" ] ; then
-        tmpfile=`mktemp`
+        test "${TMPDIR+set}" = set || TMPDIR=/tmp
+        tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
         for menu_file in $xdg_dir/*; do
             if grep 'generated and managed by xdg-desktop-menu' $menu_file > /dev/null 2> /dev/null; then
                 awk '
