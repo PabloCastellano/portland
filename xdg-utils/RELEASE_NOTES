@@ -1,3 +1,10 @@
+Release notes for xdg-utils 1.0.2
+=================================
+
+This release fixes:
+* SVG icons are not supported but documentation still mentioned SVG
+* xdg-email can now be used without any e-mail address
+
 Release notes for xdg-utils 1.0.1
 =================================
 
