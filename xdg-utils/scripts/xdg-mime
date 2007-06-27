@@ -723,7 +723,7 @@ if [ "$action" = "info" ]; then
         info_gnome "$filename"
         ;;
 
-        generic)
+        *)
         info_generic "$filename"
         ;;
     esac
