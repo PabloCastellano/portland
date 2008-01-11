@@ -369,6 +369,19 @@ open_generic()
         fi
     fi
 
+    if which run-mailcap 2>/dev/null 1>&2 &&
+       (echo "$1" | grep -q '^file://' ||
+        ! echo "$1" | egrep -q '^[a-zA-Z+\.\-]+:'); then
+
+        local file=$(echo "$1" | sed 's%^file://%%')
+        run-mailcap --action=view "$file"
+        if [ $? -eq 0 ]; then
+            exit_success
+        else
+            exit_failure_operation_failed
+        fi
+    fi
+
     IFS=":"
     for browser in $BROWSER; do
         if [ x"$browser" != x"" ]; then
