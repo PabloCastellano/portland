@@ -364,8 +364,6 @@ open_generic()
         mimeopen -n "$1"
         if [ $? -eq 0 ]; then
             exit_success
-        else
-            exit_failure_operation_failed
         fi
     fi
 
@@ -377,8 +375,6 @@ open_generic()
         run-mailcap --action=view "$file"
         if [ $? -eq 0 ]; then
             exit_success
-        else
-            exit_failure_operation_failed
         fi
     fi
 
