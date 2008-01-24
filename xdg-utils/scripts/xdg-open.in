@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #---------------------------------------------
 #   xdg-open
 #
@@ -85,7 +85,8 @@ open_generic()
     for browser in $BROWSER; do
         if [ x"$browser" != x"" ]; then
 
-            browser_with_arg=`echo "$browser" | sed s#%s#"$1"#`
+            IFS=' '
+            browser_with_arg=${browser//'%s'/"$1"}
 
             if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
             else $browser_with_arg;
