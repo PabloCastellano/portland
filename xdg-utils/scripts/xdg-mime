@@ -436,7 +436,7 @@ detectDE()
 
 kfmclient_fix_exit_code()
 {
-    version=`kde-config --version 2>/dev/null | grep KDE`
+    version=`kde${KDE_SESSION_VERSION}-config --version 2>/dev/null | grep KDE`
     major=`echo $version | sed 's/KDE: \([0-9]\).*/\1/'`
     minor=`echo $version | sed 's/KDE: [0-9]*\.\([0-9]\).*/\1/'`
     release=`echo $version | sed 's/KDE: [0-9]*\.[0-9]*\.\([0-9]\).*/\1/'`
@@ -842,7 +842,7 @@ DEBUG 3 "xdg_global_dir: $xdg_global_dir"
 # Find KDE3 mimelnk directory
 kde_user_dir=
 kde_global_dir=
-kde_global_dirs=`kde-config --path mime 2> /dev/null`
+kde_global_dirs=`kde${KDE_SESSION_VERSION}-config --path mime 2> /dev/null`
 DEBUG 3 "kde_global_dirs: $kde_global_dirs"
 first=
 for x in `echo $kde_global_dirs | sed 's/:/ /g'` ; do

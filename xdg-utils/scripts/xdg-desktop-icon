@@ -415,7 +415,7 @@ detectDE()
 
 kfmclient_fix_exit_code()
 {
-    version=`kde-config --version 2>/dev/null | grep KDE`
+    version=`kde${KDE_SESSION_VERSION}-config --version 2>/dev/null | grep KDE`
     major=`echo $version | sed 's/KDE: \([0-9]\).*/\1/'`
     minor=`echo $version | sed 's/KDE: [0-9]*\.\([0-9]\).*/\1/'`
     release=`echo $version | sed 's/KDE: [0-9]*\.[0-9]*\.\([0-9]\).*/\1/'`
@@ -496,7 +496,7 @@ esac
 
 my_umask=077
 desktop_dir="$HOME/Desktop"
-desktop_dir_kde=`kde-config --userpath desktop 2> /dev/null`
+desktop_dir_kde=`kde${KDE_SESSION_VERSION}-config --userpath desktop 2> /dev/null`
 if gconftool-2 -g /apps/nautilus/preferences/desktop_is_home_dir 2> /dev/null | grep true > /dev/null; then
     desktop_dir_gnome="$HOME"
     # Don't create $HOME/Desktop if it doesn't exist

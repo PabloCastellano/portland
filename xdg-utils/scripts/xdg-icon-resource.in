@@ -312,10 +312,10 @@ need_kde_icon_path()
   fi
 
   # if kde-config not found... return 0
-  kde_icon_dirs=`kde-config --path icon 2> /dev/null |sed 's/:/ /g'`
+  kde_icon_dirs=`kde${KDE_SESSION_VERSION}-config --path icon 2> /dev/null |sed 's/:/ /g'`
   DEBUG 3 "kde_icon_dirs: $kde_icon_dirs"
   if [ -z "$kde_icon_dirs" ] ; then
-     DEBUG 3 "no result from kde-config --path icon"
+     DEBUG 3 "no result from kde${KDE_SESSION_VERSION}-config --path icon"
      DEBUG 2 "need_kde_icon_path RETURN 1 (not needed, no kde icon path)"
      return 1; # Not needed
   fi
