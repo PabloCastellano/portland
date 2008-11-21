@@ -1,6 +1,12 @@
-2008-01-24 Kevin Krammer <kevin.krammer@gmx.at>
+
+2008-08-11 Rex Dieter <rdieter@fedoraproject.org>
+    * initial support for kde4
+
+ 2008-01-24 Kevin Krammer <kevin.krammer@gmx.at>
     * Fixing security issue in xdg-email and xdg-open at replacing
       parameter in $BROWSER
+
+=== xdg-utils 1.0.2 ====
 
 === xdg-utils 1.0.1 ====
 
