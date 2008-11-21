@@ -8,6 +8,7 @@ xdg-email
 
 xdg-screensaver
 * Return error when WindowID doesn't exist
+* support dbus org.freedesktop.ScreenSaver methods
 
 General
 * Support XDG_DATA_INSTALL
