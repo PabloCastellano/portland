@@ -207,6 +207,55 @@ track_window()
   cleanup_suspend
 }
 
+screensaver_freedesktop()
+{
+    case "$1" in
+        suspend)
+        #FIXME (get/store cookie)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Inhibit $window_id xdg-screensaver  > /dev/null
+        result=$?
+        ;;
+
+        resume)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null
+        result=$?
+        ;;
+
+        activate)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null
+        result=$?
+        ;;
+
+        lock)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock > /dev/null
+        ;;
+
+        reset)
+        #FIXME (cookies?)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit $window_id > /dev/null
+        result=$?
+        ;;
+
+        status)
+        status=`qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.GetActive`
+        result=$?
+        if [ x"$status" = "xtrue" ]; then
+            echo "enabled"
+        elif [ x"$status" = "xfalse" ]; then
+            echo "disabled"
+        else
+            echo "ERROR: dbus org.freedesktop.ScreenSaver.GetActive returned '$status'" >&2
+            return 1
+        fi
+        ;;
+
+        *)
+        echo "ERROR:  Unknown command '$1'" >&2
+        return 1
+        ;;
+    esac
+}
+
 screensaver_kde()
 {
     case "$1" in
