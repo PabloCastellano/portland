@@ -329,7 +329,7 @@ screensaver_suspend_loop()
   fi
   $MV "$tmpfile" "$screensaver_file"
   unlockfile
-  (while [ -f "$screensaver_file" ]; do $*; sleep 59; done) > /dev/null 2> /dev/null &
+  (while [ -f "$screensaver_file" ]; do $*; sleep 50; done) > /dev/null 2> /dev/null &
 }
 
 screensaver_gnome()
