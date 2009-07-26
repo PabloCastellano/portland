@@ -116,7 +116,7 @@ cleanup_suspend()
   lockfile
   test "${TMPDIR+set}" = set || TMPDIR=/tmp
   tmpfile=`mktemp $TMPDIR/tmp.XXXXXXXXXX`
-  grep -v "$window_id:" "$screensaver_file" > "$tmpfile" 2> /dev/null
+  grep -v "$window_id:$xprop_pid\$" "$screensaver_file" > "$tmpfile" 2> /dev/null
   $MV "$tmpfile" "$screensaver_file"
   if [ ! -s "$screensaver_file" ] ; then
       rm "$screensaver_file"

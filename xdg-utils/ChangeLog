@@ -1,6 +1,9 @@
 === xdg-utils 1.x.x ====
 
 2009-07-26 Fathi Boudra <fabo@debian.org>
+    * Fix a race condition in xdg-screensaver (BR19382)
+
+2009-07-26 Fathi Boudra <fabo@debian.org>
     * Fix basename usage when filename contains spaces (BR18567)
 
 2009-07-26 Fathi Boudra <fabo@debian.org>
