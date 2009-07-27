@@ -1,5 +1,8 @@
 === xdg-utils 1.x.x ====
 
+2009-07-27 Fathi Boudra <fabo@debian.org>
+    * Add KDE 4 support to xdg-email (BR17268)
+
 2009-07-26 Fathi Boudra <fabo@debian.org>
     * Sleep for 50s instead of 59s to avoid to froze the seesion (BR19414)
 
