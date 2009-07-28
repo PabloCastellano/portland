@@ -48,12 +48,14 @@ update_mime_database()
 
 info_kde()
 {
-    if which "kmimetypefinder" > /dev/null 2>/dev/null; then
+    if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
         DEBUG 1 "Running kmimetypefinder \"$1\""
-        kmimetypefinder "$1" 2>/dev/null | head -n 1
+        KMIMETYPEFINDER=`which kmimetypefinder 2>/dev/null`
+        $KMIMETYPEFINDER "$1" 2>/dev/null | head -n 1
     else
         DEBUG 1 "Running kfile \"$1\""
-        kfile "$1" 2> /dev/null | head -n 1 | cut -d "(" -f 2 | cut -d ")" -f 1
+        KFILE=`which kfile 2>/dev/null`
+        $KFILE "$1" 2> /dev/null | head -n 1 | cut -d "(" -f 2 | cut -d ")" -f 1
     fi
 
     exit_success
