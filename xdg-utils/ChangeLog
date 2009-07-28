@@ -1,6 +1,9 @@
 === xdg-utils 1.x.x ====
 
 2009-07-28 Fathi Boudra <fabo@freedesktop.org>
+    * Use kbuildsycoca4 under KDE 4 and kbuildsycoca under KDE 3.
+
+2009-07-28 Fathi Boudra <fabo@freedesktop.org>
     * Use kmimetypefinder under KDE 4 and kfile under KDE 3.
 
 2009-07-28 Fathi Boudra <fabo@freedesktop.org>

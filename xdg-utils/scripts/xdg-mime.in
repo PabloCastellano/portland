@@ -34,7 +34,11 @@ update_mime_database()
       detectDE
       if [ x"$DE" = x"kde" ] ; then
          DEBUG 1 "Running kbuildsycoca"
-         eval 'kbuildsycoca'$xdg_redirect_output
+         if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
+             eval 'kbuildsycoca4'$xdg_redirect_output
+         else
+             eval 'kbuildsycoca'$xdg_redirect_output
+         fi
       fi
    fi
    for x in `echo "$PATH:/opt/gnome/bin" | sed 's/:/ /g'`; do
