@@ -72,7 +72,7 @@ info_gnome()
 
 info_generic()
 {
-    DEBUG 1 "Running /usr/bin/file -i \"$1\""
+    DEBUG 1 "Running file -i \"$1\""
     /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | sed s/"^ "//
 
     exit_success
