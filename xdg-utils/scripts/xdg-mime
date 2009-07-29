@@ -494,7 +494,7 @@ info_gnome()
 
 info_generic()
 {
-    DEBUG 1 "Running /usr/bin/file -i \"$1\""
+    DEBUG 1 "Running file -i \"$1\""
     /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | sed s/"^ "//
 
     exit_success
@@ -504,24 +504,46 @@ make_default_kde()
 {
     # $1 is vendor-name.desktop
     # $2 is mime/type
-    # Add to $KDE_HOME/share/config/profilerc:
+    #
+    # On KDE 3, add to $KDE_CONFIG_PATH/profilerc:
     # [$2 - 1]
     # Application=$1
     #
     # Remove all [$2 - *] sections, or even better,
     # renumber [$2 - *] sections and remove duplicate
+    #
+    # On KDE 4, add $2=$1 to $XDG_DATA_APPS/mimeapps.list
+    #
+    # Example file:
+    #
+    # [Added Associations]
+    # text/plain=kde4-kate.desktop;kde4-kwrite.desktop;
+    #
+    # [Removed Associations]
+    # text/plain=gnome-gedit.desktop;gnu-emacs.desktop;
+    vendor="$1"
+    mimetype="$2"
     if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
-        default_dir=kde4-config --path xdgdata-apps | cut -d ':' -f 1
+        default_dir=`kde4-config --path xdgdata-apps | cut -d ':' -f 1`
         default_file="$default_dir/mimeapps.list"
     else
         default_dir=`kde-config --path config | cut -d ':' -f 1`
         default_file="$default_dir/profilerc"
     fi
-    DEBUG 2 "make_default_kde $1 $2"
+    DEBUG 2 "make_default_kde $vendor $mimetype"
     DEBUG 1 "Updating $default_file"
     mkdir -p "$default_dir"
     [ -f $default_file ] || touch $default_file
-    awk -v application="$1" -v mimetype="$2" '
+    if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
+#    FIXME update the required section ""[Added Associations]""
+#        grep -v "$2=" $default_file > ${default_file}.new 2> /dev/null
+#        if ! grep "[Added Associations]" ${default_file}.new > /dev/null; then
+#           echo "[Added Associations]" >> ${default_file}.new
+#        fi
+#        echo $mimetype="$vendor;" >> ${default_file}.new
+#        mv ${default_file}.new $default_file
+    else
+        awk -v application="$vendor" -v mimetype="$mimetype" '
     BEGIN {
         header_start="[" mimetype " - "
         supress=0
@@ -546,6 +568,7 @@ make_default_kde()
         print "ServiceType=" mimetype
     }
 ' $default_file > ${default_file}.new && mv ${default_file}.new $default_file
+    fi
 }
 
 make_default_generic()
