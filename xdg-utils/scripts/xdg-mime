@@ -510,11 +510,16 @@ make_default_kde()
     #
     # Remove all [$2 - *] sections, or even better,
     # renumber [$2 - *] sections and remove duplicate
-
-    default_file="$HOME/.kde/share/config/profilerc"
+    if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
+        default_dir=kde4-config --path xdgdata-apps | cut -d ':' -f 1
+        default_file="$default_dir/mimeapps.list"
+    else
+        default_dir=`kde-config --path config | cut -d ':' -f 1`
+        default_file="$default_dir/profilerc"
+    fi
     DEBUG 2 "make_default_kde $1 $2"
     DEBUG 1 "Updating $default_file"
-    mkdir -p "$HOME/.kde/share/config"
+    mkdir -p "$default_dir"
     [ -f $default_file ] || touch $default_file
     awk -v application="$1" -v mimetype="$2" '
     BEGIN {
@@ -553,6 +558,8 @@ make_default_generic()
     default_file="$xdg_user_dir/applications/defaults.list"
     DEBUG 2 "make_default_generic $1 $2"
     DEBUG 1 "Updating $default_file"
+    mkdir -p "$xdg_user_dir/applications"
+    [ -f $default_file ] || touch $default_file
     grep -v "$2=" $default_file > ${default_file}.new 2> /dev/null
     if ! grep "[Default Applications]" ${default_file}.new > /dev/null; then
        echo "[Default Applications]" >> ${default_file}.new
