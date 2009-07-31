@@ -117,13 +117,8 @@ make_default_kde()
     mkdir -p "$default_dir"
     [ -f $default_file ] || touch $default_file
     if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
-#    FIXME update the required section ""[Added Associations]""
-#        grep -v "$2=" $default_file > ${default_file}.new 2> /dev/null
-#        if ! grep "[Added Associations]" ${default_file}.new > /dev/null; then
-#           echo "[Added Associations]" >> ${default_file}.new
-#        fi
-#        echo $mimetype="$vendor;" >> ${default_file}.new
-#        mv ${default_file}.new $default_file
+        # FIXME update the required section "[Added Associations]"
+        DEBUG 1 "NOT IMPLEMENTED YET"
     else
         awk -v application="$vendor" -v mimetype="$mimetype" '
     BEGIN {
