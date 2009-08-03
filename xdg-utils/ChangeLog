@@ -20,7 +20,7 @@
 
 2009-07-28 Fathi Boudra <fabo@freedesktop.org>
     * Add KDE 4 support to xdg-mime. kdetradertest was replaced by
-      ktraderclient under KDE 4.
+      ktraderclient under KDE 4. (BR22975)
 
 2009-07-27 Fathi Boudra <fabo@freedesktop.org>
     * Remove -u option from su. It doesn't have it.
