@@ -414,7 +414,11 @@ perform_action()
 
   case "$DE" in
     kde)
-      screensaver_kde "$1"
+      if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
+          screensaver_freedesktop "$1"
+      else
+          screensaver_kde "$1"
+      fi
       ;;
 
     gnome)
