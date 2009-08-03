@@ -40,42 +40,6 @@ update_desktop_database()
     fi
 }
 
-fixup_mandriva_categories()
-{
-    DEBUG 1 "fixup_mandriva_categories $1"
-    awk '
-BEGIN {
-    xlat["AudioVideo"]="X-Mandrakelinux-Multimedia;X-MandrivaLinux-Multimedia"
-    xlat["Development"]="X-Mandrakelinux-MoreApplications-Development;X-MandrivaLinux-MoreApplications-Development"
-    xlat["Education"]="X-Mandrakelinux-MoreApplications;X-MandrivaLinux-MoreApplications-Education"
-    xlat["Game"]="X-Mandrakelinux-MoreApplications;X-MandrivaLinux-MoreApplications-Games"
-    xlat["Graphics"]="X-Mandrakelinux-Multimedia-Graphics"
-    xlat["Network"]="X-Mandrakelinux-Internet;X-MandrivaLinux-Internet"
-    xlat["Office"]="X-Mandrakelinux-Office;X-MandrivaLinux-Office"
-    xlat["System"]="X-Mandrakelinux-System;X-MandrivaLinux-System"
-    xlat["Utility"]="X-Mandrakelinux-Office-Accessories;X-MandrivaLinux-Office-Accessories"
-}
-{
-    if (match($0,/Categories=/)) {
-        split(substr($0,RSTART+11),categories,";")
-        result=""
-        for (n in categories)
-        {
-               if (categories[n] in xlat)
-                 categories[n]=categories[n] ";" xlat[categories[n]]
-               if (categories[n])
-                 result=result categories[n] ";"
-        }
-        print "Categories=" result
-    }
-    else
-    {
-        print $0
-    }
-}' $1 > $1.new
-    mv $1.new $1
-}
-
 # Make application $1/$2 the default for all the mimetypes it support,
 # iff such mimetype didn't had a default application already.
 # $1 Install dir for desktop file
@@ -591,9 +555,6 @@ gnome_user_dir="$HOME/.gnome/apps"
 gnome_global_dir="/usr/share/gnome/apps"
 [ -w $gnome_global_dir ] || gnome_global_dir=
 
-[ -f /etc/mandriva-release ] && need_mandriva_fix=true
-[ -n "$need_mandriva_fix" ] && DEBUG 1 "Fixing up .desktop categories (Mandriva work around)"
-
 DEBUG 3 "Install locations for *.desktop files:" 
 DEBUG 3 "xdg_user_dir: $xdg_user_dir"
 DEBUG 3 "xdg_global_dir: $xdg_global_dir"
@@ -635,10 +596,6 @@ for desktop_file in $desktop_files; do
                 mkdir -p $x
                 eval 'cp $desktop_file $x/$basefile'$xdg_redirect_output
             done
-
-            if [ -n "$need_mandriva_fix" ] ; then
-            	fixup_mandriva_categories $xdg_dir/$basefile
-            fi
 
             if [ -f $kde_dir/$basefile ] ; then
                 echo "OnlyShowIn=Old;" >> $kde_dir/$basefile
