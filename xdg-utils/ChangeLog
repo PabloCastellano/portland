@@ -1,5 +1,9 @@
 === xdg-utils 1.x.x ====
 
+2009-08-10 Fathi Boudra <fabo@freedesktop.org>
+    * Replace kfmclient by kioclient usage unde KDE 4.
+	  Thanks to Nicolas Lécureil <neoclust@mandriva.org>
+
 2009-07-28 Fathi Boudra <fabo@freedesktop.org>
     * Remove fixup_mandriva_categories() function. It is not needed anymore
 	  since a year. Thanks to Nicolas Lécureil <neoclust@mandriva.org>
