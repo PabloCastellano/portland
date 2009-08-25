@@ -1,6 +1,9 @@
 === xdg-utils 1.x.x ====
 
 2009-08-25 Fathi Boudra <fabo@freedesktop.org>
+   * Fix hardcoded KDE home directory. Use kde(4)-config to get path.
+
+2009-08-25 Fathi Boudra <fabo@freedesktop.org>
    * Apply patch form Mike Mammarella <mdm@chromium.org> to fix 2 issues:
      - skip invisible desktop files when looking up the default web browser in
        GNOME. (http://codereview.chromium.org/159738)
