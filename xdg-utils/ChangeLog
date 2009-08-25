@@ -1,12 +1,19 @@
 === xdg-utils 1.x.x ====
 
+2009-08-25 Fathi Boudra <fabo@freedesktop.org>
+   * Apply patch form Mike Mammarella <mdm@chromium.org> to fix 2 issues:
+     - skip invisible desktop files when looking up the default web browser in
+       GNOME. (http://codereview.chromium.org/159738)
+     - check for localized settings by hand in xdg-settings if kreadconfig
+       fails. (http://codereview.chromium.org/160376)
+
 2009-08-10 Fathi Boudra <fabo@freedesktop.org>
     * Replace kfmclient by kioclient usage under KDE 4.
-	  Thanks to Nicolas Lécureil <neoclust@mandriva.org>
+      Thanks to Nicolas Lécureil <neoclust@mandriva.org>
 
 2009-08-03 Fathi Boudra <fabo@freedesktop.org>
     * Remove fixup_mandriva_categories() function. It is not needed anymore
-	  since a year. Thanks to Nicolas Lécureil <neoclust@mandriva.org>
+      since a year. Thanks to Nicolas Lécureil <neoclust@mandriva.org>
 
 2009-07-29 Fathi Boudra <fabo@freedesktop.org>
     * Merge xdg-settings utility: a script to get various settings from
