@@ -547,8 +547,8 @@ for x in `echo $xdg_system_dirs | sed 's/:/ /g'` ; do
     fi
 done
 
-kde_user_dir=`kde${KDE_SESSION_VERSION}-config --path apps | cut -d ':' -f 1`
-kde_global_dir=`kde${KDE_SESSION_VERSION}-config --path apps | cut -d ':' -f 2`
+kde_user_dir=`kde${KDE_SESSION_VERSION}-config --path apps 2> /dev/null | cut -d ':' -f 1`
+kde_global_dir=`kde${KDE_SESSION_VERSION}-config --path apps 2> /dev/null | cut -d ':' -f 2`
 [ -w $kde_global_dir ] || kde_global_dir=
 
 gnome_user_dir="$HOME/.gnome/apps"
