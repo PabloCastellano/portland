@@ -29,8 +29,12 @@ _USAGE
 
 open_kde()
 {
-    kfmclient exec "$1"
-    kfmclient_fix_exit_code $?
+    if kde-open -v 2>/dev/null 1>&2; then
+      kde-open "$1"
+    else
+      kfmclient exec "$1"
+      kfmclient_fix_exit_code $?
+    fi
 
     if [ $? -eq 0 ]; then
         exit_success
