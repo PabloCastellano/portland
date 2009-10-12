@@ -7,6 +7,15 @@
      (It resolves forward and compares binaries rather than resolving backward
      to a .desktop file from a binary.)
 
+2009-09-28 Rex Dieter <rdieter@fedoraproject.org>
+   * use kde-open, if available (ie, kde4)
+
+2009-09-13 Rex Dieter <rdieter@fedoraproject.org> 
+   * detect_de: suppress xprop stderr
+
+2009-08-25 Rex Dieter <rdieter@fedoraproject.org>
+   * fix build for missing manpages (eg. xdg-settings)
+
 2009-08-25 Fathi Boudra <fabo@freedesktop.org>
    * Fix hardcoded KDE home directory. Use kde(4)-config to get path.
 
