@@ -1,11 +1,17 @@
 === xdg-utils 1.x.x ====
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
+   * Fix xdg-open to handle URL with '#' symbol. (BR23319, BR24375)
+
+2009-10-12 Fathi Boudra <fabo@freedesktop.org>
+   * Remove bash requirement to xdg-open and xdg-email. (BR20015)
+
+2009-10-12 Fathi Boudra <fabo@freedesktop.org>
    * Update xdg-settings - Thanks to Mike Mammarella:
      This fixes some issues where user-generated icons would be detected as
      the official .desktop file for a binary, rather than the actual version.
      (It resolves forward and compares binaries rather than resolving backward
-     to a .desktop file from a binary.)
+     to a .desktop file from a binary)
 
 2009-09-28 Rex Dieter <rdieter@fedoraproject.org>
    * use kde-open, if available (ie, kde4)
