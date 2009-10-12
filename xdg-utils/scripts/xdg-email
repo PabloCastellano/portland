@@ -536,7 +536,7 @@ result=$(echo "$1" | $utf8 | awk '
             c = substr ($0, i, 1)
             if ( ord [c] > 127 ) {
                 e = e "%" sprintf("%02X", ord [c])
-            } else if ( c ~ /[@a-zA-Z0-9.-]/ ) {
+            } else if ( c ~ /[@a-zA-Z0-9.-\\/]/ ) {
                 e = e c
             } else {
                 e = e "%" sprintf("%02X", ord [c])

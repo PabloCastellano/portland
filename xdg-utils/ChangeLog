@@ -1,6 +1,10 @@
 === xdg-utils 1.x.x ====
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
+    * Fix xdg-email --attach failure with Evolution. (BR23007)
+      Thanks to Dwayne Bailey <dwayne@translate.org.za>
+
+2009-10-12 Fathi Boudra <fabo@freedesktop.org>
     * Handle KDE 4 using kfmclient openURL in xdg-open, instead of kde-open.
       Thanks to Nicolas Lécureil <neoclust@mandriva.org>
 
