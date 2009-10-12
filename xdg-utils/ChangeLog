@@ -1,6 +1,10 @@
 === xdg-utils 1.x.x ====
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
+   * Add email attachments support to Thunderbird from xdg-email. (BR13435)
+     Thanks to Lei Zhang <thestig@google.com>
+
+2009-10-12 Fathi Boudra <fabo@freedesktop.org>
    * Fix xdg-open to handle URL with '#' symbol. (BR23319, BR24375)
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>

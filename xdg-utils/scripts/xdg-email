@@ -377,14 +377,71 @@ kfmclient_fix_exit_code()
     return 0
 }
 
+run_thunderbird()
+{
+    local THUNDERBIRD MAILTO NEWMAILTO TO CC BCC SUBJECT BODY ATTACH
+    THUNDERBIRD="$1"
+    MAILTO=$(echo "$2" | sed 's/^mailto://')
+    echo "$MAILTO" | grep -qs "^?"
+    if [ "$?" = "0" ] ; then
+        MAILTO=$(echo "$MAILTO" | sed 's/^?//')
+    else
+        MAILTO=$(echo "$MAILTO" | sed 's/^/to=/' | sed 's/?/\&/')
+    fi
+
+    MAILTO=$(echo "$MAILTO" | sed 's/&/\n/g')
+    TOqul=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
+    CC=$(echo "$MAILTO" | grep '^cc=' | sed 's/^cc=//' | awk '{ printf "%s,",$0 }')
+    BCC=$(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//' | awk '{ printf "%s,",$0 }')
+    SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
+    BODY=$(echo "$MAILTO" | grep '^body=' | tail -n 1)
+    ATTACH=$(echo "$MAILTO" | sed 's/^attach=/\n\nfile:\/\//g' | awk '/^file:/ { printf "%s,",$0 }')
+
+    if [ -z "$TO" ] ; then
+        NEWMAILTO=
+    else
+        NEWMAILTO="to='$TO'"
+    fi
+    if [ -n "$CC" ] ; then
+        NEWMAILTO="${NEWMAILTO},cc='$CC'"
+    fi
+    if [ -n "$BCC" ] ; then
+        NEWMAILTO="${NEWMAILTO},bcc='$BCC'"
+    fi
+    if [ -n "$SUBJECT" ] ; then
+        NEWMAILTO="${NEWMAILTO},$SUBJECT"
+    fi
+    if [ -n "$BODY" ] ; then
+        NEWMAILTO="${NEWMAILTO},$BODY"
+    fi
+
+    if [ -n "$ATTACH" ] ; then
+        NEWMAILTO="${NEWMAILTO},attachment='${ATTACH}'"
+    fi
+
+    NEWMAILTO=$(echo "$NEWMAILTO" | sed 's/^,//')
+    DEBUG 1 "Running $THUNDERBIRD -compose \"$NEWMAILTO\""
+    "$THUNDERBIRD" -compose "$NEWMAILTO"
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
+}
+
 open_kde()
 {
     local client
+    client=`kreadconfig --file emaildefaults --group PROFILE_Default --key EmailClient | cut -d ' ' -f 1`
+    echo $client | grep thunderbird > /dev/null 2>&1
+    if [ $? -eq 0 ] ; then
+        run_thunderbird "$client" "$1"
+    fi
+
     if [ -f /etc/SuSE-release ] ; then
         # Workaround for SUSE 10.0
-        client=`kreadconfig --file emaildefaults --group PROFILE_Default --key EmailClient| cut -d ' ' -f 1`
-        [ -z $client ] && client="kmail"
-        if ! which $client > /dev/null 2> /dev/null; then
+        [ -z "$client" ] && client="kmail"
+        if ! which "$client" > /dev/null 2> /dev/null; then
             DEBUG 3 "KDE has $client configured as email client which isn't installed"
             if which gnome-open > /dev/null 2> /dev/null && which evolution > /dev/null 2> /dev/null; then
                DEBUG 3 "Try gnome-open instead"
@@ -411,6 +468,13 @@ open_kde()
 
 open_gnome()
 {
+    local client
+    client=`gconftool --get /desktop/gnome/url-handlers/mailto/command | cut -d ' ' -f 1`
+    echo $client | grep thunderbird > /dev/null 2>&1
+    if [ $? -eq 0 ] ; then
+        run_thunderbird "$client" "$1"
+    fi
+
     DEBUG 1 "Running gnome-open \"$1\""
     gnome-open "$1"
 
