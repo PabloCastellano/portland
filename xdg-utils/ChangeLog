@@ -5,40 +5,40 @@
       Thanks to Nicolas Lécureil <neoclust@mandriva.org>
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
-   * Add email attachments support to Thunderbird from xdg-email. (BR13435)
-     Thanks to Lei Zhang <thestig@google.com>
+    * Add email attachments support to Thunderbird from xdg-email. (BR13435)
+      Thanks to Lei Zhang <thestig@google.com>
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
-   * Fix xdg-open to handle URL with '#' symbol. (BR23319, BR24375)
+    * Fix xdg-open to handle URL with '#' symbol. (BR23319, BR24375)
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
-   * Remove bash requirement to xdg-open and xdg-email. (BR20015)
+    * Remove bash requirement to xdg-open and xdg-email. (BR20015)
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
-   * Update xdg-settings - Thanks to Mike Mammarella:
-     This fixes some issues where user-generated icons would be detected as
-     the official .desktop file for a binary, rather than the actual version.
-     (It resolves forward and compares binaries rather than resolving backward
-     to a .desktop file from a binary)
+    * Update xdg-settings - Thanks to Mike Mammarella:
+      This fixes some issues where user-generated icons would be detected as
+      the official .desktop file for a binary, rather than the actual version.
+      (It resolves forward and compares binaries rather than resolving backward
+      to a .desktop file from a binary)
 
 2009-09-28 Rex Dieter <rdieter@fedoraproject.org>
-   * use kde-open, if available (ie, kde4)
+    * Use kde-open, if available (ie, KDE 4)
 
 2009-09-13 Rex Dieter <rdieter@fedoraproject.org> 
-   * detect_de: suppress xprop stderr
+    * detect_de: suppress xprop stderr.
 
 2009-08-25 Rex Dieter <rdieter@fedoraproject.org>
-   * fix build for missing manpages (eg. xdg-settings)
+    * fix build for missing manpages (eg. xdg-settings)
 
 2009-08-25 Fathi Boudra <fabo@freedesktop.org>
-   * Fix hardcoded KDE home directory. Use kde(4)-config to get path.
+    * Fix hardcoded KDE home directory. Use kde(4)-config to get path.
 
 2009-08-25 Fathi Boudra <fabo@freedesktop.org>
-   * Apply patch from Mike Mammarella <mdm@chromium.org> to fix 2 issues:
-     - skip invisible desktop files when looking up the default web browser in
-       GNOME. (http://codereview.chromium.org/159738)
-     - check for localized settings by hand in xdg-settings if kreadconfig
-       fails. (http://codereview.chromium.org/160376)
+    * Apply patch from Mike Mammarella <mdm@chromium.org> to fix 2 issues:
+      - skip invisible desktop files when looking up the default web browser in
+        GNOME. (http://codereview.chromium.org/159738)
+      - check for localized settings by hand in xdg-settings if kreadconfig
+        fails. (http://codereview.chromium.org/160376)
 
 2009-08-10 Fathi Boudra <fabo@freedesktop.org>
     * Replace kfmclient by kioclient usage under KDE 4.
