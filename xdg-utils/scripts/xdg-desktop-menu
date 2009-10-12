@@ -574,7 +574,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-desktop-menu 1.0.1"
+            echo "xdg-desktop-menu 1.0.2"
             exit_success
             ;;
         esac
@@ -600,7 +600,7 @@ detectDE()
 {
     if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
     elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
-    elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+    elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
 
@@ -1142,8 +1142,8 @@ for x in `echo $xdg_system_dirs | sed 's/:/ /g'` ; do
     fi
 done
 
-kde_user_dir=`kde${KDE_SESSION_VERSION}-config --path apps | cut -d ':' -f 1`
-kde_global_dir=`kde${KDE_SESSION_VERSION}-config --path apps | cut -d ':' -f 2`
+kde_user_dir=`kde${KDE_SESSION_VERSION}-config --path apps 2> /dev/null | cut -d ':' -f 1`
+kde_global_dir=`kde${KDE_SESSION_VERSION}-config --path apps 2> /dev/null | cut -d ':' -f 2`
 [ -w $kde_global_dir ] || kde_global_dir=
 
 gnome_user_dir="$HOME/.gnome/apps"

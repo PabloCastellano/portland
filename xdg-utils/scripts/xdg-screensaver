@@ -307,7 +307,7 @@ check_common_commands()
             ;;
 
             --version)
-            echo "xdg-screensaver 1.0.1"
+            echo "xdg-screensaver 1.0.2"
             exit_success
             ;;
         esac
@@ -333,7 +333,7 @@ detectDE()
 {
     if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
     elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
-    elif xprop -root _DT_SAVE_MODE | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
+    elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
 
@@ -539,36 +539,36 @@ track_window()
   cleanup_suspend
 }
 
-screensaver_freedesktop()                                                                                  
-{                                                                                                          
-    case "$1" in                                                                                           
-        suspend)                                                                                           
-        #FIXME (get/store cookie)                                                                          
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Inhibit $window_id xdg-screensaver  > /dev/null                                                                                           
-        result=$?                                                                                             
-        ;;                                                                                                    
-                                                                                                              
-        resume)                                                                                               
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null 
-        result=$?                                                                                             
-        ;;                                                                                                    
-                                                                                                              
-        activate)                                                                                             
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null 
-        result=$?                                                                                             
-        ;;                                                                                                    
-                                                                                                              
-        lock)                                                                                                 
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock > /dev/null           
-        ;;                                                                                                    
-                                                                                                              
-        reset)                                                                                                
-        #FIXME (cookies?)                                                                                     
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit $window_id > /dev/null                                                                                                          
-        result=$?                                                                                             
-        ;;                                                                                                    
-                                                                                                              
-        status)                                                                                               
+screensaver_freedesktop()
+{
+    case "$1" in
+        suspend)
+        #FIXME (get/store cookie)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Inhibit $window_id xdg-screensaver  > /dev/null
+        result=$?
+        ;;
+
+        resume)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null
+        result=$?
+        ;;
+
+        activate)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null
+        result=$?
+        ;;
+
+        lock)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock > /dev/null
+        ;;
+
+        reset)
+        #FIXME (cookies?)
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit $window_id > /dev/null
+        result=$?
+        ;;
+
+        status)
         status=`qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.GetActive`
         result=$?
         if [ x"$status" = "xtrue" ]; then
