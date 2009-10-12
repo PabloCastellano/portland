@@ -5,8 +5,8 @@
       Thanks to Dwayne Bailey <dwayne@translate.org.za>
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
-    * Handle KDE 4 using kfmclient openURL in xdg-open, instead of kde-open.
-      Thanks to Nicolas Lécureil <neoclust@mandriva.org>
+    * Add an extra check in xdg-open and call kfmclient openURL as a fallback
+	  on KDE 4. Thanks to Nicolas Lécureil <neoclust@mandriva.org>
 
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
     * Add email attachments support to Thunderbird from xdg-email. (BR13435)
