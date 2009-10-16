@@ -1,5 +1,9 @@
 === xdg-utils 1.x.x ====
 
+2009-10-16 Rex Dieter <rdieter@fedoraproject.org>
+    * prefer gvfs-open over gnome-open
+    * DE=gnome, if org.gnome.SessionManager exists on dbus
+
 2009-10-12 Fathi Boudra <fabo@freedesktop.org>
     * Fix xdg-email --attach failure with Evolution. (BR23007)
       Thanks to Dwayne Bailey <dwayne@translate.org.za>

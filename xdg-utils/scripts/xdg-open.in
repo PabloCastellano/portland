@@ -49,7 +49,11 @@ open_kde()
 
 open_gnome()
 {
-    gnome-open "$1"
+    if gvfs-open 2>/dev/null 1>&2; then
+        gvfs-open "$1"
+    else
+        gnome-open "$1"
+    fi
 
     if [ $? -eq 0 ]; then
         exit_success

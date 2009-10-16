@@ -126,8 +126,13 @@ open_gnome()
         run_thunderbird "$client" "$1"
     fi
 
-    DEBUG 1 "Running gnome-open \"$1\""
-    gnome-open "$1"
+    if gvfs-open 2>/dev/null 1>&2; then
+        DEBUG 1 "Running gvfs-open \"$1\"" 
+        gvfs-open "$1"
+    else
+        DEBUG 1 "Running gnome-open \"$1\""
+        gnome-open "$1"
+    fi
 
     if [ $? -eq 0 ]; then
         exit_success
