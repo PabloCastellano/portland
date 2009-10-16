@@ -126,7 +126,7 @@ open_gnome()
         run_thunderbird "$client" "$1"
     fi
 
-    if gvfs-open 2>/dev/null 1>&2; then
+    if gvfs-open --help 2>/dev/null 1>&2; then
         DEBUG 1 "Running gvfs-open \"$1\"" 
         gvfs-open "$1"
     else
