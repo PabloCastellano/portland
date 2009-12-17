@@ -106,11 +106,15 @@ make_default_kde()
     vendor="$1"
     mimetype="$2"
     if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
-        default_dir=`kde4-config --path xdgdata-apps | cut -d ':' -f 1`
+        default_dir=`kde4-config --path xdgdata-apps 2> /dev/null | cut -d ':' -f 1`
         default_file="$default_dir/mimeapps.list"
     else
-        default_dir=`kde-config --path config | cut -d ':' -f 1`
+        default_dir=`kde-config --path config 2> /dev/null | cut -d ':' -f 1`
         default_file="$default_dir/profilerc"
+    fi
+    if [ -z "$default_dir" ]; then
+        DEBUG 2 "make_default_kde: No kde runtime detected"
+        return
     fi
     DEBUG 2 "make_default_kde $vendor $mimetype"
     DEBUG 1 "Updating $default_file"
