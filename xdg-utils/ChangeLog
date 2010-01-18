@@ -1,5 +1,8 @@
 === xdg-utils 1.x.x ====
 
+2010-01-18 Rex Dieter <rdieter@fedoraproject.org> 
+    * xdg-screensaver resume activates the screensaver on KDE4 (BR26085)
+
 2009-10-16 Rex Dieter <rdieter@fedoraproject.org>
     * prefer gvfs-open over gnome-open
     * DE=gnome, if org.gnome.SessionManager exists on dbus

@@ -215,13 +215,13 @@ screensaver_freedesktop()
 {
     case "$1" in
         suspend)
-        #FIXME (get/store cookie)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Inhibit $window_id xdg-screensaver  > /dev/null
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Inhibit $window_id xdg-screensaver >| "$screensaver_file.cookie" 2> /dev/null
         result=$?
         ;;
 
         resume)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit `cat "$screensaver_file.cookie"` > /dev/null
+        rm -f "$screensaver_file.cookie"
         result=$?
         ;;
 
@@ -235,8 +235,8 @@ screensaver_freedesktop()
         ;;
 
         reset)
-        #FIXME (cookies?)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit $window_id > /dev/null
+        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit `cat "$screensaver_file.cookie"` > /dev/null
+        rm -f "$screensaver_file.cookie"
         result=$?
         ;;
 
