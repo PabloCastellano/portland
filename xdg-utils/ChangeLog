@@ -1,9 +1,12 @@
 === xdg-utils 1.x.x ====
 
-2010-01-27 Rex Dieter <rdieter@fedoraproject.org> 
+2010-02-20 Fathi Boudra <fabo@freedesktop.org>
+    * Add gvfs-copy and gvfs-info support. (BR15828)
+
+2010-01-27 Rex Dieter <rdieter@fedoraproject.org>
     * xdg-settings: Add %s to the command in the Gnome url handlers (BR26284)
 
-2010-01-18 Rex Dieter <rdieter@fedoraproject.org> 
+2010-01-18 Rex Dieter <rdieter@fedoraproject.org>
     * xdg-screensaver resume activates the screensaver on KDE4 (BR26085)
 
 2009-10-16 Rex Dieter <rdieter@fedoraproject.org>
