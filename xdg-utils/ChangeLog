@@ -1,5 +1,10 @@
 === xdg-utils 1.x.x ====
 
+2010-02-21 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-open: in open_generic, use xdg-mime to lookup mime type and
+      association before the alternatives methods (mimeopen and run-mailcap).
+      (BR23280)
+
 2010-02-20 Fathi Boudra <fabo@freedesktop.org>
     * Add gvfs-copy and gvfs-info support. (BR15828)
 

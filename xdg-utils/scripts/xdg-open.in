@@ -27,6 +27,13 @@ _USAGE
 
 #@xdg-utils-common@
 
+# This handles backslashes but not quote marks.
+first_word()
+{
+    read first rest
+    echo "$first"
+}
+
 open_kde()
 {
     if kde-open -v 2>/dev/null 1>&2; then
@@ -75,6 +82,30 @@ open_xfce()
 
 open_generic()
 {
+    filetype=`xdg-mime query filetype "$1" | sed "s/;.*//"`
+    default=`xdg-mime query default "$filetype"`
+    if [ -n "$default" ] ; then
+        xdg_user_dir="$XDG_DATA_HOME"
+        [ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
+
+        xdg_system_dirs="$XDG_DATA_DIRS"
+        [ -n "$xdg_system_dirs" ] || xdg_system_dirs=/usr/local/share/:/usr/share/
+
+        for x in `echo "$xdg_user_dir:$xdg_system_dirs" | sed 's/:/ /g'`; do
+            file="$x/applications/$default"
+            if [ -r "$file" ] ; then
+                command="`grep -E "^Exec(\[[^]=]*])?=" "$file" | cut -d= -f 2- | first_word`"
+                command_exec=`which $command 2>/dev/null`
+                if [ -x "$command_exec" ] ; then
+                    $command_exec $1
+                    if [ $? -eq 0 ]; then
+                        exit_success
+                    fi
+                fi
+            fi
+        done
+    fi
+
     if mimeopen -v 2>/dev/null 1>&2; then
         mimeopen -n "$1"
         if [ $? -eq 0 ]; then
