@@ -98,14 +98,17 @@ open_generic()
         if [ x"$browser" != x"" ]; then
 
             browser_with_arg=`printf "$browser" "$1" 2>/dev/null`
-            if [ $? -ne 0 ]; then browser_with_arg=$browser;
+            if [ $? -ne 0 ]; then
+                browser_with_arg=$browser;
             fi
 
-            if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
+            if [ x"$browser_with_arg" = x"$browser" ]; then
+                "$browser" "$1";
             else $browser_with_arg;
             fi
 
-            if [ $? -eq 0 ]; then exit_success;
+            if [ $? -eq 0 ]; then
+                exit_success;
             fi
         fi
     done
