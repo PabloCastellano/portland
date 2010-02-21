@@ -303,6 +303,7 @@ detectDE()
 {
     if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
     elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
     elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
@@ -322,6 +323,13 @@ kfmclient_fix_exit_code()
     test "$minor" -gt 5 && return $1
     test "$release" -gt 4 && return $1
     return 0
+}
+
+# This handles backslashes but not quote marks.
+first_word()
+{
+    read first rest
+    echo "$first"
 }
 
 open_kde()
@@ -346,7 +354,11 @@ open_kde()
 
 open_gnome()
 {
-    gnome-open "$1"
+    if gvfs-open --help 2>/dev/null 1>&2; then
+        gvfs-open "$1"
+    else
+        gnome-open "$1"
+    fi
 
     if [ $? -eq 0 ]; then
         exit_success
@@ -368,6 +380,30 @@ open_xfce()
 
 open_generic()
 {
+    filetype=`xdg-mime query filetype "$1" | sed "s/;.*//"`
+    default=`xdg-mime query default "$filetype"`
+    if [ -n "$default" ] ; then
+        xdg_user_dir="$XDG_DATA_HOME"
+        [ -n "$xdg_user_dir" ] || xdg_user_dir="$HOME/.local/share"
+
+        xdg_system_dirs="$XDG_DATA_DIRS"
+        [ -n "$xdg_system_dirs" ] || xdg_system_dirs=/usr/local/share/:/usr/share/
+
+        for x in `echo "$xdg_user_dir:$xdg_system_dirs" | sed 's/:/ /g'`; do
+            file="$x/applications/$default"
+            if [ -r "$file" ] ; then
+                command="`grep -E "^Exec(\[[^]=]*])?=" "$file" | cut -d= -f 2- | first_word`"
+                command_exec=`which $command 2>/dev/null`
+                if [ -x "$command_exec" ] ; then
+                    $command_exec $1
+                    if [ $? -eq 0 ]; then
+                        exit_success
+                    fi
+                fi
+            fi
+        done
+    fi
+
     if mimeopen -v 2>/dev/null 1>&2; then
         mimeopen -n "$1"
         if [ $? -eq 0 ]; then
@@ -391,14 +427,17 @@ open_generic()
         if [ x"$browser" != x"" ]; then
 
             browser_with_arg=`printf "$browser" "$1" 2>/dev/null`
-            if [ $? -ne 0 ]; then browser_with_arg=$browser;
+            if [ $? -ne 0 ]; then
+                browser_with_arg=$browser;
             fi
 
-            if [ x"$browser_with_arg" = x"$browser" ]; then "$browser" "$1";
+            if [ x"$browser_with_arg" = x"$browser" ]; then
+                "$browser" "$1";
             else $browser_with_arg;
             fi
 
-            if [ $? -eq 0 ]; then exit_success;
+            if [ $? -eq 0 ]; then
+                exit_success;
             fi
         fi
     done

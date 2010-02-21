@@ -356,6 +356,7 @@ detectDE()
 {
     if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
     elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
     elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
@@ -469,14 +470,19 @@ open_kde()
 open_gnome()
 {
     local client
-    client=`gconftool --get /desktop/gnome/url-handlers/mailto/command | cut -d ' ' -f 1`
+    client=`gconftool-2 --get /desktop/gnome/url-handlers/mailto/command | cut -d ' ' -f 1` || ""
     echo $client | grep thunderbird > /dev/null 2>&1
     if [ $? -eq 0 ] ; then
         run_thunderbird "$client" "$1"
     fi
 
-    DEBUG 1 "Running gnome-open \"$1\""
-    gnome-open "$1"
+    if gvfs-open --help 2>/dev/null 1>&2; then
+        DEBUG 1 "Running gvfs-open \"$1\"" 
+        gvfs-open "$1"
+    else
+        DEBUG 1 "Running gnome-open \"$1\""
+        gnome-open "$1"
+    fi
 
     if [ $? -eq 0 ]; then
         exit_success
