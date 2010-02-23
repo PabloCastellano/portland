@@ -426,7 +426,7 @@ kfmclient_fix_exit_code()
     return 0
 }
 
-[ x"$1" != x"" ] || exit_failure_syntax 
+[ x"$1" != x"" ] || exit_failure_syntax
 
 action=
 desktop_file=

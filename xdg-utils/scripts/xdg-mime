@@ -425,6 +425,7 @@ detectDE()
 {
     if [ x"$KDE_FULL_SESSION" = x"true" ]; then DE=kde;
     elif [ x"$GNOME_DESKTOP_SESSION_ID" != x"" ]; then DE=gnome;
+    elif `dbus-send --print-reply --dest=org.freedesktop.DBus /org/freedesktop/DBus org.freedesktop.DBus.GetNameOwner string:org.gnome.SessionManager > /dev/null 2>&1` ; then DE=gnome;
     elif xprop -root _DT_SAVE_MODE 2> /dev/null | grep ' = \"xfce4\"$' >/dev/null 2>&1; then DE=xfce;
     fi
 }
@@ -530,11 +531,15 @@ make_default_kde()
     vendor="$1"
     mimetype="$2"
     if [ x"$KDE_SESSION_VERSION" = x"4" ]; then
-        default_dir=`kde4-config --path xdgdata-apps | cut -d ':' -f 1`
+        default_dir=`kde4-config --path xdgdata-apps 2> /dev/null | cut -d ':' -f 1`
         default_file="$default_dir/mimeapps.list"
     else
-        default_dir=`kde-config --path config | cut -d ':' -f 1`
+        default_dir=`kde-config --path config 2> /dev/null | cut -d ':' -f 1`
         default_file="$default_dir/profilerc"
+    fi
+    if [ -z "$default_dir" ]; then
+        DEBUG 2 "make_default_kde: No kde runtime detected"
+        return
     fi
     DEBUG 2 "make_default_kde $vendor $mimetype"
     DEBUG 1 "Updating $default_file"
