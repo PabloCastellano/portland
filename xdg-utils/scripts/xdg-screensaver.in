@@ -272,7 +272,7 @@ screensaver_kde()
         dcop kdesktop KScreensaverIface configure > /dev/null
         result=$?
         ;;
-        
+
         activate)
         dcop kdesktop KScreensaverIface save > /dev/null
         result=$?
@@ -282,7 +282,7 @@ screensaver_kde()
         dcop kdesktop KScreensaverIface lock > /dev/null
         result=$?
         ;;
-        
+
         reset)
         # Turns the screensaver off right now
         dcop kdesktop KScreensaverIface quit > /dev/null
@@ -354,17 +354,17 @@ screensaver_gnome()
         # Automatic resume when $screensaver_file disappears
         result=0
         ;;
-        
+
         activate)
         gnome-screensaver-command --activate > /dev/null 2> /dev/null
         result=$?
         ;;
-        
+
         lock)
         gnome-screensaver-command --lock > /dev/null 2> /dev/null
         result=$?
         ;;
-        
+
         reset)
         # Turns the screensaver off right now
         gnome-screensaver-command --deactivate > /dev/null 2> /dev/null
@@ -402,7 +402,7 @@ screensaver_xscreensaver()
         # Automatic resume when $screensaver_file disappears
         result=0
         ;;
-        
+
         activate)
         xscreensaver-command -activate > /dev/null 2> /dev/null
         result=$?
@@ -412,7 +412,7 @@ screensaver_xscreensaver()
         xscreensaver-command -lock > /dev/null 2> /dev/null
         result=$?
         ;;
-        
+
         reset)
         # Turns the screensaver off right now
         xscreensaver-command -deactivate > /dev/null 2> /dev/null
@@ -443,26 +443,26 @@ window_id=
 case $1 in
   suspend)
     action="$1"
-    
+
     shift
 
     if [ -z "$1" ] ; then 
         exit_failure_syntax "WindowID argument missing"
     fi
-    
+
     window_id="$1"
     check_window_id
     ;;
 
   resume)
     action="$1"
-    
+
     shift
 
     if [ -z "$1" ] ; then 
         exit_failure_syntax "WindowID argument missing"
     fi
-    
+
     window_id="$1"
     check_window_id
     ;;
@@ -482,7 +482,7 @@ case $1 in
   status)
     action="$1"
     ;;
-    
+
   *)
     exit_failure_syntax "unknown command '$1'"
     ;;
@@ -502,7 +502,7 @@ perform_action "$action"
 if [ "$action" = "suspend" ] ; then
     # Start tracking $window_id and resume the screensaver once it disappears
     ( track_window  ) 2> /dev/null > /dev/null &
-fi        
+fi
 
 if [ $result -eq 0 ]; then
     exit_success
