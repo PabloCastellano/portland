@@ -27,7 +27,7 @@ _MANUALPAGE
 
 #@xdg-utils-common@
 
-[ x"$1" != x"" ] || exit_failure_syntax 
+[ x"$1" != x"" ] || exit_failure_syntax
 
 action=
 desktop_file=

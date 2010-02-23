@@ -26,7 +26,7 @@ _USAGE
 
 #@xdg-utils-common@
 
-# Check if we can use "mv -T" 
+# Check if we can use "mv -T"
 if mv -T ... ... 2>&1 | grep '\.\.\.' > /dev/null ; then
    # We can securely move files in /tmp with mv -T
    DEBUG 1 "mv -T available"
@@ -53,7 +53,7 @@ lockfile()
      do
         sleep 1
         try=$(($try+1))
-        if [ $try -eq 3 ] ; then 
+        if [ $try -eq 3 ] ; then
             rm -f "$screensaver_file".lock || return # Can't remove lockfile
             try=0
         fi
@@ -136,13 +136,13 @@ do_resume()
 {
   lockfile # Obtain lockfile
   # Find the PID of the trackingprocess
-  xprop_pid=`grep "$window_id:" "$screensaver_file" 2> /dev/null | cut -d ':' -f 2` 
+  xprop_pid=`grep "$window_id:" "$screensaver_file" 2> /dev/null | cut -d ':' -f 2`
   unlockfile # Free lockfile
   if [ -n "$xprop_pid" ] && ps -p "$xprop_pid" 2> /dev/null | grep xprop > /dev/null; then
-     # Kill the tracking process 
+     # Kill the tracking process
      kill -s TERM $xprop_pid
   fi
-  cleanup_suspend  
+  cleanup_suspend
 }
 
 XPROP=`which xprop 2> /dev/null`
@@ -152,7 +152,7 @@ check_window_id()
   if [ -z "$XPROP" ]; then
      DEBUG 3 "xprop not found"
      return
-  fi 
+  fi
   DEBUG 2 "Running $XPROP -id $window_id"
   if $XPROP -id $window_id > /dev/null 2> /dev/null; then
      DEBUG 3 Window $window_id exists
@@ -183,7 +183,7 @@ track_window()
         echo "$wid:$pid"
         if [ $wid = $window_id ] ; then
           already_tracked=0
-        fi   
+        fi
       fi
     done
     IFS="$IFS_save"
@@ -263,7 +263,7 @@ screensaver_freedesktop()
 screensaver_kde()
 {
     case "$1" in
-        suspend) 
+        suspend)
         dcop kdesktop KScreensaverIface enable false > /dev/null
         result=$?
         ;;
@@ -329,7 +329,7 @@ screensaver_suspend_loop()
     # Suspend pending, don't do a thing
     $MV "$tmpfile" "$screensaver_file"
     unlockfile
-    return  
+    return
   fi
   $MV "$tmpfile" "$screensaver_file"
   unlockfile
@@ -345,7 +345,7 @@ screensaver_gnome()
 # A problem seems to be that Inhibit is tied to the lifetime of the DBUS appname and
 # this can not be used from a script
     case "$1" in
-        suspend) 
+        suspend)
         screensaver_suspend_loop gnome-screensaver-command --poke
         result=0
         ;;
@@ -393,7 +393,7 @@ screensaver_gnome()
 screensaver_xscreensaver()
 {
     case "$1" in
-        suspend) 
+        suspend)
         screensaver_suspend_loop xscreensaver-command -deactivate
         result=0
         ;;
@@ -446,7 +446,7 @@ case $1 in
 
     shift
 
-    if [ -z "$1" ] ; then 
+    if [ -z "$1" ] ; then
         exit_failure_syntax "WindowID argument missing"
     fi
 
@@ -459,7 +459,7 @@ case $1 in
 
     shift
 
-    if [ -z "$1" ] ; then 
+    if [ -z "$1" ] ; then
         exit_failure_syntax "WindowID argument missing"
     fi
 
