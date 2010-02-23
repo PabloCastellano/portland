@@ -62,7 +62,11 @@ info_kde()
         $KFILE "$1" 2> /dev/null | head -n 1 | cut -d "(" -f 2 | cut -d ")" -f 1
     fi
 
-    exit_success
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 info_gnome()
@@ -77,7 +81,11 @@ info_gnome()
        gnomevfs-info "$file" 2> /dev/null | grep MIME | cut -d ":" -f 2 | sed s/"^ "//
     fi
 
-    exit_success
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 info_generic()
@@ -85,7 +93,11 @@ info_generic()
     DEBUG 1 "Running file -i \"$1\""
     /usr/bin/file -i "$1" 2> /dev/null | cut -d ":" -f 2 | sed s/"^ "//
 
-    exit_success
+    if [ $? -eq 0 ]; then
+        exit_success
+    else
+        exit_failure_operation_failed
+    fi
 }
 
 make_default_kde()
