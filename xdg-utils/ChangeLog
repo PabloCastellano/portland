@@ -1,6 +1,9 @@
 === xdg-utils 1.x.x ====
 
 2010-02-23 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-mime: improve MIME string check when using gnomevfs-info. (BR12818)
+
+2010-02-23 Fathi Boudra <fabo@freedesktop.org>
     * xdg-mime: report error on failure.
 
 2010-02-21 Fathi Boudra <fabo@freedesktop.org>

@@ -78,7 +78,7 @@ info_gnome()
         gvfs-info "$file" 2> /dev/null | grep standard::content-type | cut -d' ' -f4
     else
        DEBUG 1 "Running gnomevfs-info \"$file\""
-       gnomevfs-info "$file" 2> /dev/null | grep MIME | cut -d ":" -f 2 | sed s/"^ "//
+       gnomevfs-info "$file" 2> /dev/null | grep "^MIME" | cut -d ":" -f 2 | sed s/"^ "//
     fi
 
     if [ $? -eq 0 ]; then
