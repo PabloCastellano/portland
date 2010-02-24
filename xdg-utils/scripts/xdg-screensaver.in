@@ -215,33 +215,79 @@ screensaver_freedesktop()
 {
     case "$1" in
         suspend)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Inhibit $window_id xdg-screensaver >| "$screensaver_file.cookie" 2> /dev/null
+        dbus-send --session \
+                  --dest=org.freedesktop.ScreenSaver \
+                  --type=method_call \
+                  --print-reply \
+                  --reply-timeout=2000 \
+                  /ScreenSaver \
+                  org.freedesktop.ScreenSaver.Inhibit \
+                  string:$window_id \
+                  string:xdg-screensaver \
+                  | grep uint32 | cut -d ' ' -f 5 >| "$screensaver_file.cookie" \
+                  2> /dev/null
         result=$?
         ;;
 
         resume)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit `cat "$screensaver_file.cookie"` > /dev/null
-        rm -f "$screensaver_file.cookie"
+        if [ -f "$screensaver_file.cookie" ] ; then
+            value=`cat "$screensaver_file.cookie"`
+            dbus-send --session \
+                      --dest=org.freedesktop.ScreenSaver \
+                      --type=method_call \
+                      /ScreenSaver \
+                      org.freedesktop.ScreenSaver.UnInhibit \
+                      uint32:$value \
+                      2> /dev/null
+            rm -f "$screensaver_file.cookie"
+        fi
         result=$?
         ;;
 
         activate)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.SetActive true > /dev/null
+        dbus-send --session \
+                  --dest=org.freedesktop.ScreenSaver \
+                  --type=method_call \
+                  /ScreenSaver \
+                  org.freedesktop.ScreenSaver.SetActive \
+                  boolean:true \
+                  2> /dev/null
         result=$?
         ;;
 
         lock)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.Lock > /dev/null
+        dbus-send --session \
+                  --dest=org.freedesktop.ScreenSaver \
+                  --type=method_call \
+                  /ScreenSaver \
+                  org.freedesktop.ScreenSaver.Lock \
+                  2> /dev/null
         ;;
 
         reset)
-        qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.UnInhibit `cat "$screensaver_file.cookie"` > /dev/null
-        rm -f "$screensaver_file.cookie"
+        if [ -f "$screensaver_file.cookie" ] ; then
+            value=`cat "$screensaver_file.cookie"`
+            dbus-send --session \
+                      --dest=org.freedesktop.ScreenSaver \
+                      --type=method_call \
+                      /ScreenSaver \
+                      org.freedesktop.ScreenSaver.UnInhibit \
+                      uint32:$value \
+                      2> /dev/null
+            rm -f "$screensaver_file.cookie"
+        fi
         result=$?
         ;;
 
         status)
-        status=`qdbus org.freedesktop.ScreenSaver /ScreenSaver org.freedesktop.ScreenSaver.GetActive`
+        status=`dbus-send --session \
+                          --dest=org.freedesktop.ScreenSaver \
+                          --type=method_call \
+                          --print-reply \
+                          --reply-timeout=2000 \
+                          /ScreenSaver \
+                          org.freedesktop.ScreenSaver.GetActive \
+                          | grep boolean | cut -d ' ' -f 5`
         result=$?
         if [ x"$status" = "xtrue" ]; then
             echo "enabled"

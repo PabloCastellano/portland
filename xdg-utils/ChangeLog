@@ -1,5 +1,9 @@
 === xdg-utils 1.x.x ====
 
+2010-02-24 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-screensaver: use dbus-send instead of qdbus for freedesktop
+      screensaver.
+
 2010-02-23 Fathi Boudra <fabo@freedesktop.org>
     * xdg-mime: improve MIME string check when using gnomevfs-info. (BR12818)
 
