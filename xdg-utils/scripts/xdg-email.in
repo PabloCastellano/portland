@@ -41,7 +41,7 @@ run_thunderbird()
     fi
 
     MAILTO=$(echo "$MAILTO" | sed 's/&/\n/g')
-    TOqul=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
+    TO=$(echo "$MAILTO" | grep '^to=' | sed 's/^to=//' | awk '{ printf "%s,",$0 }')
     CC=$(echo "$MAILTO" | grep '^cc=' | sed 's/^cc=//' | awk '{ printf "%s,",$0 }')
     BCC=$(echo "$MAILTO" | grep '^bcc=' | sed 's/^bcc=//' | awk '{ printf "%s,",$0 }')
     SUBJECT=$(echo "$MAILTO" | grep '^subject=' | tail -n 1)
