@@ -1,5 +1,9 @@
 === xdg-utils 1.x.x ====
 
+2010-02-28 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-open: try console mode browsers and update the browser list.
+      Thanks to Ville Skyttä and Pablo Castellano. (BR14361)
+
 2010-02-24 Fathi Boudra <fabo@freedesktop.org>
     * xdg-screensaver: use dbus-send instead of qdbus for freedesktop
       screensaver.

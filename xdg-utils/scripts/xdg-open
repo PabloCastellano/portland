@@ -475,7 +475,10 @@ detectDE
 if [ x"$DE" = x"" ]; then
     # if BROWSER variable is not set, check some well known browsers instead
     if [ x"$BROWSER" = x"" ]; then
-        BROWSER=firefox:mozilla:netscape
+        BROWSER=links2:links:lynx:w3m
+        if [ -n "$DISPLAY" ]; then
+            BROWSER=firefox:mozilla:epiphany:konqueror:google-chrome:$BROWSER
+        fi
     fi
     DE=generic
 fi
