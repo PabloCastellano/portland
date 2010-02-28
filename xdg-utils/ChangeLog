@@ -1,6 +1,10 @@
 === xdg-utils 1.x.x ====
 
 2010-02-28 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-open: fix failure if $BROWSER has arguments. (BR14374)
+      Thanks to Johannes Wegener.
+
+2010-02-28 Fathi Boudra <fabo@freedesktop.org>
     * xdg-open: try console mode browsers and update the browser list.
       Thanks to Ville Skyttä and Pablo Castellano. (BR14361)
 

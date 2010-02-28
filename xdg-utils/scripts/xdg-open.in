@@ -135,7 +135,7 @@ open_generic()
 
             if [ x"$browser_with_arg" = x"$browser" ]; then
                 "$browser" "$1";
-            else $browser_with_arg;
+            else eval '$browser_with_arg'$xdg_redirect_output;
             fi
 
             if [ $? -eq 0 ]; then
