@@ -378,7 +378,7 @@ open_xfce()
     fi
 }
 
-open_generic()
+open_generic_xdg_mime()
 {
     filetype=`xdg-mime query filetype "$1" | sed "s/;.*//"`
     default=`xdg-mime query default "$filetype"`
@@ -403,22 +403,34 @@ open_generic()
             fi
         done
     fi
+}
 
-    if mimeopen -v 2>/dev/null 1>&2; then
-        mimeopen -n "$1"
-        if [ $? -eq 0 ]; then
-            exit_success
-        fi
-    fi
-
-    if which run-mailcap 2>/dev/null 1>&2 &&
-       (echo "$1" | grep -q '^file://' ||
+open_generic()
+{
+    # Paths or file:// URLs
+    if (echo "$1" | grep -q '^file://' ||
         ! echo "$1" | egrep -q '^[a-zA-Z+\.\-]+:'); then
 
         local file=$(echo "$1" | sed 's%^file://%%')
-        run-mailcap --action=view "$file"
-        if [ $? -eq 0 ]; then
-            exit_success
+
+        check_input_file "$file"
+
+        open_generic_xdg_mime "$file"
+
+        if mimeopen -v 2>/dev/null 1>&2; then
+            mimeopen -n "$1"
+            if [ $? -eq 0 ]; then
+                exit_success
+            fi
+        fi
+
+        if [ -f /etc/debian_version ] ; then
+            if which run-mailcap 2>/dev/null 1>&2; then
+                run-mailcap --action=view "$file"
+                if [ $? -eq 0 ]; then
+                    exit_success
+                fi
+            fi
         fi
     fi
 

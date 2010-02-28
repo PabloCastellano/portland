@@ -1,6 +1,12 @@
 === xdg-utils 1.x.x ====
 
 2010-02-28 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-open: fix regression in open_generic as xdg-mime doesn't handle
+	  URLs (mimeopen and run-mailcap as well). Move xdg-mime call into
+	  a new function (open_generic_xdg_mime). Check input file before
+	  trying to open them with non-browsers.
+
+2010-02-28 Fathi Boudra <fabo@freedesktop.org>
     * xdg-open: fix failure if $BROWSER has arguments. (BR14374)
       Thanks to Johannes Wegener.
 
