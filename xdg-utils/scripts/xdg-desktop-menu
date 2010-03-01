@@ -497,7 +497,7 @@ exit_failure_file_permission_read()
 }
 
 #------------------------------------------------------------
-# Exit script on insufficient permission to read a specified file
+# Exit script on insufficient permission to write a specified file
 
 exit_failure_file_permission_write()
 {
