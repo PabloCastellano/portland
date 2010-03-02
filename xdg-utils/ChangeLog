@@ -1,5 +1,8 @@
 === xdg-utils 1.x.x ====
 
+2010-03-02 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-open: decode file:// urls using sed. Thanks to Mickael Masson.
+
 2010-02-28 Fathi Boudra <fabo@freedesktop.org>
     * xdg-utils-common: fix the comment of exit_failure_file_permission_write
 	  function. (BR12821)
