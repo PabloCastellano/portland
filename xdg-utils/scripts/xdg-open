@@ -413,21 +413,23 @@ open_generic()
 
         local file=$(echo "$1" | sed 's%^file://%%')
 
+        # Decode URLs
+        # TODO
+
         check_input_file "$file"
 
         open_generic_xdg_mime "$file"
 
-        if [ -f /etc/debian_version ] ; then
-            if which run-mailcap 2>/dev/null 1>&2; then
-                run-mailcap --action=view "$file"
-                if [ $? -eq 0 ]; then
-                    exit_success
-                fi
+        if [ -f /etc/debian_version ] &&
+            which run-mailcap 2>/dev/null 1>&2; then
+            run-mailcap --action=view "$file"
+            if [ $? -eq 0 ]; then
+                exit_success
             fi
         fi
 
         if mimeopen -v 2>/dev/null 1>&2; then
-            mimeopen -n "$1"
+            mimeopen -n "$file"
             if [ $? -eq 0 ]; then
                 exit_success
             fi
