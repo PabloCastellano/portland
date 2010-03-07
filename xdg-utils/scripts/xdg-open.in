@@ -113,13 +113,10 @@ open_generic()
     if (echo "$1" | grep -q '^file://' ||
         ! echo "$1" | egrep -q '^[a-zA-Z+\.\-]+:'); then
 
-        local file="$1"
+        local file=$(echo "$1" | sed 's%^file://%%')
 
         # Decode URLs
-        if echo "$file" | grep -q '^file:///'; then
-            file=${file#file://}
-            file=$(echo "$file" | sed -e 's@%\([a-f0-9A-F]\{2\}\)@\\x\1@g')
-        fi
+        # TODO
 
         check_input_file "$file"
 
