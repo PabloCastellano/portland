@@ -1,5 +1,8 @@
 === xdg-utils 1.x.x ====
 
+2010-04-22 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-email: try console mode browsers and update the browser list.
+
 2010-02-28 Fathi Boudra <fabo@freedesktop.org>
     * xdg-utils-common: fix the comment of exit_failure_file_permission_write
 	  function. (BR12821)
