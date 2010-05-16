@@ -1,5 +1,8 @@
 === xdg-utils 1.x.x ====
 
+2010-05-16 Rex Dieter <rdieter@fedoraproject.org>
+    * xdg-open: Spaces in filename (BR27959)
+
 2010-04-22 Fathi Boudra <fabo@freedesktop.org>
     * xdg-email and xdg-open: perform BROWSER check in any case.
       Thanks to Andrea Florio. (BR27551)

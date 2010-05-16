@@ -97,7 +97,7 @@ open_generic_xdg_mime()
                 command="`grep -E "^Exec(\[[^]=]*])?=" "$file" | cut -d= -f 2- | first_word`"
                 command_exec=`which $command 2>/dev/null`
                 if [ -x "$command_exec" ] ; then
-                    $command_exec $1
+                    $command_exec "$1"
                     if [ $? -eq 0 ]; then
                         exit_success
                     fi
