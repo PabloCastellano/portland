@@ -429,7 +429,7 @@ open_generic()
         fi
 
         if mimeopen -v 2>/dev/null 1>&2; then
-            mimeopen -n "$file"
+            mimeopen -L -n "$file"
             if [ $? -eq 0 ]; then
                 exit_success
             fi
