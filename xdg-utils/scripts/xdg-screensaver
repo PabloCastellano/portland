@@ -422,8 +422,8 @@ perform_action()
       fi
       ;;
 
-    gnome)
-      screensaver_gnome "$1"
+    gnome_screensaver)
+      screensaver_gnome_screensaver "$1"
       ;;
 
     xscreensaver)
@@ -711,7 +711,7 @@ screensaver_suspend_loop()
   (while [ -f "$screensaver_file" ]; do $*; sleep 50; done) > /dev/null 2> /dev/null &
 }
 
-screensaver_gnome()
+screensaver_gnome_screensaver()
 {
 # TODO
 # There seems to be a DBUS interface for gnome-screensaver
@@ -866,6 +866,8 @@ esac
 detectDE
 # Consider "xscreensaver" a separate DE
 xscreensaver-command -version 2> /dev/null | grep XScreenSaver > /dev/null && DE="xscreensaver"
+# Consider "gnome-screensaver" a separate DE 
+gnome-screensaver-command -q > /dev/null 2>&1 && DE="gnome_screensaver"
 
 if [ "$action" = "resume" ] ; then
     do_resume
