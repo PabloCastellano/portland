@@ -1,4 +1,7 @@
-=== xdg-utils 1.x.x ====
+=== xdg-utils 1.x.x ===
+
+2010-07-09 Rex Dieter <rdieter@fedoraproject.org> 
+    * xdg-open.1 : add FILES, SEE ALSO sections
 
 2010-05-16 Rex Dieter <rdieter@fedoraproject.org>
     * xdg-open: Spaces in filename (BR27959)
