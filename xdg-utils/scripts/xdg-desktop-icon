@@ -496,6 +496,7 @@ case "$desktop_file" in
 esac
 
 my_umask=077
+desktop_dir="$HOME/Desktop"
 if xdg-user-dir 2>/dev/null 1>&2; then
   desktop_dir=`xdg-user-dir DESKTOP`
 fi
@@ -534,6 +535,7 @@ case $action in
             if [ -n "$x" ]; then
                 mkdir -p "$x"
                 eval 'cp "$desktop_file" "$x/$basefile"'$xdg_redirect_output 
+                chmod u+x "$x/$basefile"
             fi
         done
 
@@ -546,6 +548,7 @@ case $action in
                 rm -f "$x/$basefile"
             fi
         done
+
         ;;
 esac
 

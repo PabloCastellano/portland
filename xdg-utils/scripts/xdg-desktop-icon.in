@@ -136,6 +136,7 @@ case $action in
             if [ -n "$x" ]; then
                 mkdir -p "$x"
                 eval 'cp "$desktop_file" "$x/$basefile"'$xdg_redirect_output 
+                chmod u+x "$x/$basefile"
             fi
         done
 
