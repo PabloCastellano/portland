@@ -1,6 +1,10 @@
 === xdg-utils 1.x.x ===
 
 2010-09-24 Fathi Boudra <fabo@freedesktop.org>
+    * xdg-email: Fix missing backslash in awk script so that it works with
+      mawk.
+
+2010-09-24 Fathi Boudra <fabo@freedesktop.org>
     * xdg-desktop-icon: set the execute bit to desktop file.
       Thanks to Damjan Jovanovic. (BR28394)
 
